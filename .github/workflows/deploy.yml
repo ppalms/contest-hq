@@ -1,4 +1,4 @@
-name: Deploy Release
+name: Production Release
 
 on:
   release:
@@ -14,6 +14,8 @@ jobs:
       RAILS_ENV: production
       RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
       KAMAL_REGISTRY_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PASSWORD }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 
     steps:
       - name: Checkout code
@@ -28,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: |
           gem install specific_install
-          gem install kamal -v 2.0
+          gem install kamal -v 2.2
 
       - uses: webfactory/ssh-agent@v0.7.0
         with:
