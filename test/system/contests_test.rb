@@ -1,6 +1,6 @@
 require "application_system_test_case"
 
-class PlantsTest < ApplicationSystemTestCase
+class ContestsTest < ApplicationSystemTestCase
   setup do
     @contest = contests(:coda)
   end
@@ -48,5 +48,17 @@ class PlantsTest < ApplicationSystemTestCase
     click_link @contest.name
 
     assert_selector "h1", text: @contest.name
+  end
+
+  test "should prevent saving end date before start date" do
+    visit contests_url
+    click_on "New contest"
+
+    fill_in "Name", with: @contest.name
+    fill_in "Contest start", with: Date.new(2024, 10, 8)
+    fill_in "Contest end", with: Date.new(2024, 10, 6)
+    click_on "Create Contest"
+
+    assert_text "date must be after start date"
   end
 end

@@ -2,12 +2,12 @@
   <h1 class="mr-14"><%= contest.name %></h1>
   
   <p class="my-5">
-    <strong class="block font-medium mb-1">Start:</strong>
-    <%= contest.contest_start %>
+    <strong class="block font-medium mb-1">Contest Start:</strong>
+    <%= contest.contest_start.strftime("%-m/%d/%Y %l:%M %p") %>
   </p>
 
   <p class="my-5">
-    <strong class="block font-medium mb-1">End:</strong>
-    <%= contest.contest_end %>
+    <strong class="block font-medium mb-1">Contest End:</strong>
+    <%= contest.contest_end.strftime("%-m/%d/%Y %l:%M %p") %>
   </p>
 </div>

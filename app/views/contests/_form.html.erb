@@ -8,14 +8,16 @@
     <%= form.text_field :name, class: "text-field", autofocus: true %>
   </div>
   
-  <div class="my-5">
-    <%= form.label :contest_start %>
-    <%= form.text_field :contest_start, class: "text-field" %>
-  </div>
+  <div class="my-5 flex justify-center space-x-2">
+    <div class="w-full">
+      <%= form.label :contest_start %>
+      <%= form.datetime_field :contest_start, class: "text-field" %>
+    </div>
   
-  <div class="my-5">
-    <%= form.label :contest_end %>
-    <%= form.text_field :contest_end, class: "text-field" %>
+    <div class="w-full">
+      <%= form.label :contest_end %>
+      <%= form.datetime_field :contest_end, class: "text-field" %>
+    </div>
   </div>
   
   <div class="inline">
