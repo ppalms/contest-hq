@@ -2,10 +2,8 @@ class CreateContests < ActiveRecord::Migration[8.1]
   def change
     create_table :contests do |t|
       t.string :name
-      t.date :start_date
-      t.time :start_time
-      t.date :end_date
-      t.time :end_time
+      t.datetime :contest_start
+      t.datetime :contest_end
 
       t.timestamps
     end

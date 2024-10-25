@@ -1,0 +1,33 @@
+<% content_for :title, "Contests" %>
+<div id="contests">
+  <div class="flex justify-between items-center">
+    <h1>Contests</h1>
+    <div class="flex gap-2">
+      <%= link_to "New contest", new_contest_path, class: "btn-primary" %>
+    </div>
+  </div>
+
+  <div class="pt-4">
+    <%= render partial: 'search' %>
+  </div>
+
+  <div id="contest_list" class="pt-4">
+    <% if @contests.empty? %>
+      <p class="text-center">No contests found.</p>
+    <% else %>
+      <% @contests.each do |contest| %>
+        <%= link_to contest do %>
+          <div class="flex gap-2 p-2 min-h-24 rounded hover:cursor-pointer hover:bg-cyan-50 hover:outline hover:outline-1 hover:outline-cyan-100 hover:transition duration-300">
+            <div class="grow">
+              <p class="text-xl font-bold"><%= contest.name %></p>
+            </div>
+            <div class="hidden sm:block pr-2 text-right">
+              <strong>Dates</strong>
+              <p><%= contest.contest_start %> - <%= contest.contest_end %></p>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

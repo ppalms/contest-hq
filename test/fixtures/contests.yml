@@ -1,15 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: MyString
-  start_date: 2024-10-23
-  start_time: 2024-10-23 21:47:56
-  end_date: 2024-10-23
-  end_time: 2024-10-23 21:47:56
+coda:
+  name: CODA
+  contest_start: 2024-10-23 13:00:00
+  contest_end: 2024-10-23 22:00:00
 
-two:
-  name: MyString
-  start_date: 2024-10-23
-  start_time: 2024-10-23 21:47:56
-  end_date: 2024-10-23
-  end_time: 2024-10-23 21:47:56
+sand_springs:
+  name: Sand Springs
+  contest_start: 2024-10-23 14:00:00
+  contest_end: 2024-10-23 17:00:00

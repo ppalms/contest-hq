@@ -1,0 +1,24 @@
+<%= form_with(model: contest, class: "contents") do |form| %>
+  <% if contest.errors.any? %>
+    <%= render "layouts/error_messages", errors: contest.errors %>
+  <% end %>
+
+  <div class="my-5">
+    <%= form.label :name %>
+    <%= form.text_field :name, class: "text-field", autofocus: true %>
+  </div>
+  
+  <div class="my-5">
+    <%= form.label :contest_start %>
+    <%= form.text_field :contest_start, class: "text-field" %>
+  </div>
+  
+  <div class="my-5">
+    <%= form.label :contest_end %>
+    <%= form.text_field :contest_end, class: "text-field" %>
+  </div>
+  
+  <div class="inline">
+    <%= form.submit class: "btn-primary" %>
+  </div>
+<% end %>

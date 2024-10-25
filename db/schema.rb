@@ -16,10 +16,8 @@ ActiveRecord::Schema[8.1].define(version: 2024_10_24_024756) do
 
   create_table "contests", force: :cascade do |t|
     t.string "name"
-    t.date "start_date"
-    t.time "start_time"
-    t.date "end_date"
-    t.time "end_time"
+    t.datetime "contest_start"
+    t.datetime "contest_end"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
