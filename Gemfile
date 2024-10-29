@@ -1,7 +1,9 @@
 source "https://rubygems.org"
+ruby "3.3.5"
 
 # Use main development branch of Rails
-gem "rails", github: "rails/rails", branch: "main"
+# gem "rails", github: "rails/rails", branch: "main"
+gem "rails", "8.0.0.rc1"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use postgresql as the database for Active Record
