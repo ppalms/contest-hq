@@ -8,7 +8,7 @@
   </div>
 
   <div class="pt-4">
-    <%= render partial: 'search' %>
+    <%= render partial: "search" %>
   </div>
 
   <div id="contest_list" class="pt-4">
@@ -17,7 +17,13 @@
     <% else %>
       <% @contests.each do |contest| %>
         <%= link_to contest do %>
-          <div class="flex gap-2 p-2 min-h-24 rounded hover:cursor-pointer hover:bg-cyan-50 hover:outline hover:outline-1 hover:outline-cyan-100 hover:transition duration-300">
+          <div
+            class="
+              flex gap-2 p-2 min-h-24 rounded hover:cursor-pointer hover:bg-cyan-50
+              hover:outline hover:outline-1 hover:outline-cyan-100 hover:transition
+              duration-300
+            "
+          >
             <div class="grow">
               <p class="text-xl font-bold"><%= contest.name %></p>
             </div>
@@ -26,7 +32,8 @@
               <p>
                 <%= contest.contest_start.strftime("%A %-m/%d/%Y") %>
                 <% if contest.contest_start.to_date != contest.contest_end.to_date %>
-                  - <%= contest.contest_end.strftime("%A %-m/%d/%Y") %>
+                  -
+                  <%= contest.contest_end.strftime("%A %-m/%d/%Y") %>
                 <% end %>
               </p>
             </div>
