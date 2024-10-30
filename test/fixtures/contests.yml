@@ -4,8 +4,10 @@ coda:
   name: CODA
   contest_start: 2024-10-23 13:00:00
   contest_end: 2024-10-23 22:00:00
+  account: contest_hq
 
 sand_springs:
   name: Sand Springs
   contest_start: 2024-10-23 14:00:00
   contest_end: 2024-10-23 17:00:00
+  account: contest_hq

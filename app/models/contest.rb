@@ -1,4 +1,6 @@
 class Contest < ApplicationRecord
+  include AccountScoped
+
   validates :name, presence: true
 
   validate :start_date_before_end_date
