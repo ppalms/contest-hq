@@ -2,6 +2,7 @@ require "application_system_test_case"
 
 class ContestsTest < ApplicationSystemTestCase
   setup do
+    log_in_as(users(:sys_admin))
     @contest = contests(:coda)
   end
 
