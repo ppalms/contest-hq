@@ -23,6 +23,10 @@
     @apply rounded-lg py-3 px-5 text-red-800 hover:bg-red-200 border border-red-200 hover:border-red-300 transition inline-block font-semibold;
   }
 
+  .simple-form {
+    @apply flex flex-col gap-y-4 pt-4;
+  }
+
   .text-field {
     @apply block shadow rounded-md border border-gray-400 outline-none px-3 py-2 w-full;
   }
@@ -33,6 +37,10 @@
 
   .notice {
     @apply py-2 px-3 bg-green-50 text-green-500 font-medium rounded-lg inline-block;
+  }
+
+  .alert {
+    @apply py-2 px-3 bg-red-50 text-red-500 font-medium rounded-lg inline-block;
   }
 
   .timeline-container {
@@ -77,6 +85,10 @@
 
   .container {
     @apply mx-auto max-w-4xl;
+  }
+
+  .simple-form-container {
+    @apply max-w-md mx-auto pt-12 space-y-4;
   }
 
   .modal-backdrop {

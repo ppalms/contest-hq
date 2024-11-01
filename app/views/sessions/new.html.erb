@@ -1,30 +1,33 @@
-<p style="color: green"><%= notice %></p>
-<p style="color: red"><%= alert %></p>
+<div class="simple-form-container">
+  <%= render "layouts/alert_message", alert: alert %>
 
-<h1>Sign in</h1>
+  <h1>Sign in</h1>
 
-<%= form_with(url: sign_in_path) do |form| %>
+  <%= form_with(url: sign_in_path, class: "simple-form") do |form| %>
+    <div>
+      <%= form.label :email, style: "display: block" %>
+      <%= form.email_field :email,
+                       value: params[:email_hint],
+                       required: true,
+                       autofocus: true,
+                       autocomplete: "email",
+                       class: "text-field" %>
+    </div>
+
+    <div>
+      <%= form.label :password, style: "display: block" %>
+      <%= form.password_field :password,
+                          required: true,
+                          autocomplete: "current-password",
+                          class: "text-field" %>
+    </div>
+
+    <div>
+      <%= form.submit "Sign in", class: "btn-primary" %>
+    </div>
+  <% end %>
+
   <div>
-    <%= form.label :email, style: "display: block" %>
-    <%= form.email_field :email, value: params[:email_hint], required: true, autofocus: true, autocomplete: "email" %>
+    <%= link_to "Forgot your password?", new_identity_password_reset_path %>
   </div>
-
-  <div>
-    <%= form.label :password, style: "display: block" %>
-    <%= form.password_field :password, required: true, autocomplete: "current-password" %>
-  </div>
-
-  <div>
-    <%= form.submit "Sign in" %>
-  </div>
-<% end %>
-
-<br>
-
-
-<br>
-
-<div>
-  <%= link_to "Sign up", sign_up_path %> |
-  <%= link_to "Forgot your password?", new_identity_password_reset_path %>
 </div>

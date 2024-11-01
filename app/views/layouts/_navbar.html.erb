@@ -1,22 +1,43 @@
 <nav class="w-full border-b border-b-stone-300 shadow">
   <div class="flex items-center">
     <div class="mt-1.5">
-      <button class="hamburger hamburger--boring" type="button" onclick="toggleNavMenu()">
+      <button
+        class="hamburger hamburger--boring"
+        type="button"
+        onclick="toggleNavMenu()"
+      >
         <span class="hamburger-box">
           <span class="hamburger-inner"></span>
         </span>
       </button>
     </div>
     <div class="absolute left-1/2 -translate-x-1/2 font-bold">
-        <span>
-          <%= link_to "Contest HQ", root_path %>
-        </span>
+      <span>
+        <%= link_to "Contest HQ", root_path %>
+      </span>
     </div>
   </div>
-  <div id="nav_menu" class="absolute hidden w-full pl-2 bg-white border-b border-b-stone-300 shadow z-50">
-      <div class="pt-4 p-2">
-        <%= link_to "Contests", contests_path %>
-      </div>
+  <div
+    id="nav_menu"
+    class="
+      absolute hidden w-full pl-2 bg-white border-b border-b-stone-300 shadow z-50
+    "
+  >
+    <div class="pt-4 p-2">
+      <%= link_to "Contests", contests_path %>
+    </div>
+    <div class="p-2 pb-6">
+      <% if Current.session %>
+        <%= button_to sanitize("Sign out &rarr;"),
+        session_path(Current.session),
+        method: :delete,
+        data: {
+          turbo: false,
+        } %>
+      <% else %>
+        <%= button_to "Sign in", sign_in_path, method: :get %>
+      <% end %>
+    </div>
   </div>
 </nav>
 <script>
