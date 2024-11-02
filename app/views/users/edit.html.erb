@@ -1,0 +1,5 @@
+<div id="edit_<%= dom_id @user %>">
+  <h1>Editing user</h1>
+  <%= render "form", user: @user %>
+  <%= link_to "Cancel", users_path, class: "btn-secondary" %>
+</div>

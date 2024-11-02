@@ -1,0 +1,23 @@
+<%= form_with(model: user, class: "contents") do |form| %>
+  <% if user.errors.any? %>
+    <%= render "layouts/error_messages", errors: user.errors %>
+  <% end %>
+
+  <div class="my-5">
+    <strong>Email address</strong>
+    <p><%= user.email %></p>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :role_ids, "Roles" %>
+    <%= form.collection_select :role_ids,
+                           Role.all.order(:name),
+                           :id,
+                           :name,
+                           {},
+                           { multiple: true, class: "multi-select" } %>
+  </div>
+  <div class="inline">
+    <%= form.submit class: "btn-primary" %>
+  </div>
+<% end %>
