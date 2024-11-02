@@ -62,4 +62,11 @@ class ContestsTest < ApplicationSystemTestCase
 
     assert_text "date must be after start date"
   end
+
+  test "should not see other account's contests" do
+    visit contests_url
+
+    # Can't see contest belonging to OSSAA account
+    assert_no_text "All State"
+  end
 end

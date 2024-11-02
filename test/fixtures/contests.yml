@@ -11,3 +11,9 @@ sand_springs:
   contest_start: 2024-10-23 14:00:00
   contest_end: 2024-10-23 17:00:00
   account: contest_hq
+
+all_state:
+  name: All State
+  contest_start: 2024-11-01 12:00:00
+  contest_end: 2024-11-02 20:00:00
+  account: ossaa
