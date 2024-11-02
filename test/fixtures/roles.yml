@@ -1,0 +1,16 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+sys_admin_role:
+  name: SysAdmin
+
+tenant_admin:
+  name: TenantAdmin
+
+director:
+  name: Director
+
+scheduler:
+  name: Scheduler
+
+judge:
+  name: Judge

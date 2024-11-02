@@ -9,6 +9,8 @@ class User < ApplicationRecord
     password_salt.last(10)
   end
 
+  has_many :user_roles
+  has_many :roles, through: :user_roles
 
   belongs_to :account
 

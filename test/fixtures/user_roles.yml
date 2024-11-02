@@ -1,0 +1,5 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+sys_admin_roles:
+  user: sys_admin
+  role: sys_admin_role
