@@ -12,4 +12,11 @@ class UserMailer < ApplicationMailer
 
     mail to: @user.email, subject: "Verify your email"
   end
+
+  def invitation_instructions
+    @user = params[:user]
+    @signed_id = @user.generate_token_for(:password_reset)
+
+    mail to: @user.email, subject: "Invitation instructions"
+  end
 end
