@@ -1,51 +1,54 @@
-<p style="color: red"><%= alert %></p>
+<div class="simple-form-container">
+  <h1>Change your password</h1>
 
-<h1>Change your password</h1>
+  <%= form_with(url: password_path, method: :patch, class: "simple-form") do |form| %>
+    <% if @user.errors.any? %>
+      <div style="color: red">
+        <h2><%= pluralize(@user.errors.count, "error") %>
+          prohibited this user from being saved:</h2>
 
-<%= form_with(url: password_path, method: :patch) do |form| %>
-  <% if @user.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(@user.errors.count, "error") %>
-        prohibited this user from being saved:</h2>
+        <ul>
+          <% @user.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
 
-      <ul>
-        <% @user.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+    <div>
+      <%= form.label :password_challenge, style: "display: block" %>
+      <%= form.password_field :password_challenge,
+                          required: true,
+                          autofocus: true,
+                          autocomplete: "current-password",
+                          class: "text-field" %>
+    </div>
+
+    <div>
+      <%= form.label :password, "New password", style: "display: block" %>
+      <%= form.password_field :password,
+                          required: true,
+                          autocomplete: "new-password",
+                          class: "text-field" %>
+      <div>12 characters minimum.</div>
+    </div>
+
+    <div>
+      <%= form.label :password_confirmation,
+                 "Confirm new password",
+                 style: "display: block" %>
+      <%= form.password_field :password_confirmation,
+                          required: true,
+                          autocomplete: "new-password",
+                          class: "text-field" %>
+    </div>
+
+    <div>
+      <%= form.submit "Save changes", class: "btn-primary" %>
     </div>
   <% end %>
 
   <div>
-    <%= form.label :password_challenge, style: "display: block" %>
-    <%= form.password_field :password_challenge,
-                        required: true,
-                        autofocus: true,
-                        autocomplete: "current-password" %>
+    <%= link_to "Back", settings_path %>
   </div>
-
-  <div>
-    <%= form.label :password, "New password", style: "display: block" %>
-    <%= form.password_field :password, required: true, autocomplete: "new-password" %>
-    <div>12 characters minimum.</div>
-  </div>
-
-  <div>
-    <%= form.label :password_confirmation,
-               "Confirm new password",
-               style: "display: block" %>
-    <%= form.password_field :password_confirmation,
-                        required: true,
-                        autocomplete: "new-password" %>
-  </div>
-
-  <div>
-    <%= form.submit "Save changes" %>
-  </div>
-<% end %>
-
-<br>
-
-<div>
-  <%= link_to "Back", settings_path %>
 </div>

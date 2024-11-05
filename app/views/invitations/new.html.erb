@@ -1,33 +1,31 @@
-<p style="color: green"><%= notice %></p>
+<div class="simple-form-container">
+  <h1>Send invitation</h1>
 
-<h1>Send invitation</h1>
+  <%= form_with(url: invitation_path, class: "simple-form") do |form| %>
+    <% if @user.errors.any? %>
+      <div style="color: red">
+        <h2><%= pluralize(@user.errors.count, "error") %>
+          prohibited this user from being saved:</h2>
 
-<%= form_with(url: invitation_path) do |form| %>
-  <% if @user.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(@user.errors.count, "error") %>
-        prohibited this user from being saved:</h2>
+        <ul>
+          <% @user.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
 
-      <ul>
-        <% @user.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+    <div>
+      <%= form.label :email, style: "display: block" %>
+      <%= form.email_field :email, required: true, autofocus: true, class: "text-field" %>
+    </div>
+
+    <div>
+      <%= form.submit "Send an invitation", class: "btn-primary" %>
     </div>
   <% end %>
 
   <div>
-    <%= form.label :email, style: "display: block" %>
-    <%= form.email_field :email, required: true, autofocus: true %>
+    <%= link_to "Back", settings_path %>
   </div>
-
-  <div>
-    <%= form.submit "Send an invitation" %>
-  </div>
-<% end %>
-
-<br>
-
-<div>
-  <%= link_to "Back", settings_path %>
 </div>
