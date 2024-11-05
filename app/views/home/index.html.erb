@@ -1,5 +1,3 @@
-<p style="color: green"><%= notice %></p>
-
 <div>
   <%= render "home/dashboards/sysadmin" if Current.user.sysadmin? %>
   <%= render "home/dashboards/tenant_admin" if Current.user.tenant_admin? %>
