@@ -1,0 +1,28 @@
+<p style="color: green"><%= notice %></p>
+
+<p class="pb-4">Signed as
+  <%= Current.user.email %></p>
+
+<h2>Login and verification</h2>
+
+<div class="pt-2">
+  <%= link_to "Change password", edit_password_path %>
+</div>
+
+<div class="pt-2">
+  <%= link_to "Change email address", edit_identity_email_path %>
+</div>
+
+<div class="pt-2 pb-4">
+  <%= link_to "Send invitation", new_invitation_path %>
+</div>
+
+<h2>Access history</h2>
+
+<div class="pt-2">
+  <%= link_to "Devices & Sessions", sessions_path %>
+</div>
+
+<div class="pt-2">
+  <%= button_to "Sign out", Current.session, method: :delete %>
+</div>

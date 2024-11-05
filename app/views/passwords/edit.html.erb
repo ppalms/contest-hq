@@ -5,7 +5,8 @@
 <%= form_with(url: password_path, method: :patch) do |form| %>
   <% if @user.errors.any? %>
     <div style="color: red">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+      <h2><%= pluralize(@user.errors.count, "error") %>
+        prohibited this user from being saved:</h2>
 
       <ul>
         <% @user.errors.each do |error| %>
@@ -17,7 +18,10 @@
 
   <div>
     <%= form.label :password_challenge, style: "display: block" %>
-    <%= form.password_field :password_challenge, required: true, autofocus: true, autocomplete: "current-password" %>
+    <%= form.password_field :password_challenge,
+                        required: true,
+                        autofocus: true,
+                        autocomplete: "current-password" %>
   </div>
 
   <div>
@@ -27,8 +31,12 @@
   </div>
 
   <div>
-    <%= form.label :password_confirmation, "Confirm new password", style: "display: block" %>
-    <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password" %>
+    <%= form.label :password_confirmation,
+               "Confirm new password",
+               style: "display: block" %>
+    <%= form.password_field :password_confirmation,
+                        required: true,
+                        autocomplete: "new-password" %>
   </div>
 
   <div>
@@ -39,5 +47,5 @@
 <br>
 
 <div>
-  <%= link_to "Back", root_path %>
+  <%= link_to "Back", settings_path %>
 </div>

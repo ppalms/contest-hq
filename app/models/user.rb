@@ -32,4 +32,24 @@ class User < ApplicationRecord
   after_update if: :password_digest_previously_changed? do
     sessions.where.not(id: Current.session).delete_all
   end
+
+  def sysadmin?
+    roles.exists?(name: "SysAdmin")
+  end
+
+  def tenant_admin?
+    roles.exists?(name: "TenantAdmin")
+  end
+
+  def director?
+    roles.exists?(name: "Director")
+  end
+
+  def scheduler?
+    roles.exists?(name: "Scheduler")
+  end
+
+  def judge?
+    roles.exists?(name: "Judge")
+  end
 end
