@@ -1,3 +1,31 @@
-<div>
-  X Accounts X Users X New accounts in last Y days X New users in last Y days
+<div
+  class="grid grid-cols-1 space-y-4 sm:grid-cols-2 sm:space-y-0 sm:space-x-4"
+>
+  <div
+    class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow"
+  >
+    <div class="px-4 py-5 sm:px-6 bg-orange-100">
+      <strong>New Accounts</strong>
+    </div>
+    <div class="px-4 py-5 sm:p-6">
+      <% @new_accounts.each do |account| %>
+        <%= account.name %>
+      <% end %>
+    </div>
+  </div>
+
+  <div
+    class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow"
+  >
+    <div class="px-4 py-5 sm:px-6 bg-orange-100">
+      <strong>Recent Users</strong>
+    </div>
+    <div class="px-4 py-5 sm:p-6">
+      <% @recent_users.each do |user| %>
+        <%= user.email %>
+        -
+        <%= user.sessions.last.created_at %>
+      <% end %>
+    </div>
+  </div>
 </div>
