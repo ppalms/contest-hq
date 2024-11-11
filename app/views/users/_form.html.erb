@@ -1,14 +1,14 @@
-<%= form_with(model: user, class: "contents") do |form| %>
+<%= form_with(model: user, class: "simple-form") do |form| %>
   <% if user.errors.any? %>
     <%= render "layouts/error_messages", errors: user.errors %>
   <% end %>
 
-  <div class="my-5">
+  <div>
     <strong>Email address</strong>
     <p><%= user.email %></p>
   </div>
 
-  <div class="my-5">
+  <div>
     <%= form.label :role_ids, "Roles" %>
     <%= form.collection_select :role_ids,
                            Role.all.order(:name),
@@ -17,6 +17,7 @@
                            {},
                            { multiple: true, class: "multi-select" } %>
   </div>
+
   <div class="inline">
     <%= form.submit class: "btn-primary" %>
   </div>

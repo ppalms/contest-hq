@@ -14,7 +14,10 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     if @user.update(user_params)
-      redirect_to users_path, notice: "User updated successfully."
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.append("notifications", partial: "shared/notification", locals: { message: "Successfully updated user" }) }
+        format.html { redirect_to users_path, notice: "User updated successfully." }
+      end
     else
       render :edit
     end
