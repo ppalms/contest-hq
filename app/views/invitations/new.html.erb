@@ -21,11 +21,21 @@
     </div>
 
     <div>
+      <%= form.label :role_ids, "Roles" %>
+      <%= form.collection_select :role_ids,
+                             Role.all.order(:name),
+                             :id,
+                             :name,
+                             {},
+                             { multiple: true, class: "multi-select" } %>
+    </div>
+
+    <div>
       <%= form.submit "Send an invitation", class: "btn-primary" %>
     </div>
   <% end %>
 
   <div>
-    <%= link_to "Back", settings_path %>
+    <%= link_to "Cancel", users_path %>
   </div>
 </div>
