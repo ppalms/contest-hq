@@ -1,4 +1,8 @@
 <div class="simple-form-container">
+  <div>
+    <%= link_to sanitize("&larr; Back"), :back %>
+  </div>
+
   <h1>Send invitation</h1>
 
   <%= form_with(url: invitation_path, class: "simple-form") do |form| %>
@@ -34,8 +38,4 @@
       <%= form.submit "Send an invitation", class: "btn-primary" %>
     </div>
   <% end %>
-
-  <div>
-    <%= link_to "Cancel", users_path %>
-  </div>
 </div>
