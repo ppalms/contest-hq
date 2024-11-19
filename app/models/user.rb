@@ -18,6 +18,7 @@ class User < ApplicationRecord
 
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :password, allow_nil: true, length: { minimum: 12 }
+  validates :time_zone, presence: true, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }
 
   normalizes :email, with: -> { _1.strip.downcase }
 

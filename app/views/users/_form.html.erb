@@ -19,12 +19,20 @@
   </div>
 
   <div>
+    <%= form.label :time_zone, "Time zone" %>
+    <%= form.select :time_zone,
+                ActiveSupport::TimeZone.all.map { |tz| [tz.name, tz.name] },
+                { include_blank: "Select a time zone" },
+                { required: true, class: "text-field" } %>
+  </div>
+
+  <div>
     <%= form.label :role_ids, "Roles" %>
     <%= form.collection_select :role_ids,
                            Role.all.order(:name),
                            :id,
                            :name,
-                           {},
+                           { required: true },
                            { multiple: true, class: "multi-select" } %>
   </div>
 

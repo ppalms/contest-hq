@@ -43,6 +43,14 @@
     </div>
 
     <div>
+      <%= form.label :time_zone, style: "display: block" %>
+      <%= form.select :time_zone,
+                  ActiveSupport::TimeZone.all.map { |tz| [tz.name, tz.name] },
+                  { include_blank: "Select a time zone" },
+                  { required: true, class: "text-field" } %>
+    </div>
+
+    <div>
       <%= form.submit "Sign up", class: "btn-primary" %>
     </div>
   <% end %>
