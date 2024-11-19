@@ -1,0 +1,27 @@
+<%= form_with(model: user, url: identity_profile_path, class: "simple-form") do |form| %>
+  <% if user.errors.any? %>
+    <%= render "layouts/error_messages", errors: user.errors %>
+  <% end %>
+
+  <div>
+    <%= form.label :first_name, "First name" %>
+    <%= form.text_field :first_name, class: "text-field" %>
+  </div>
+
+  <div>
+    <%= form.label :last_name, "Last name" %>
+    <%= form.text_field :last_name, class: "text-field" %>
+  </div>
+
+  <div>
+    <%= form.label :time_zone, "Time zone" %>
+    <%= form.select :time_zone,
+                ActiveSupport::TimeZone.all.map { |tz| [tz.name, tz.name] },
+                { include_blank: "Select a time zone" },
+                { required: true, class: "text-field" } %>
+  </div>
+
+  <div class="inline">
+    <%= form.submit class: "btn-primary" %>
+  </div>
+<% end %>
