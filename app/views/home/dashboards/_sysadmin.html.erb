@@ -8,7 +8,7 @@
       <strong>New Accounts</strong>
     </div>
     <div class="px-4 py-5 sm:p-6">
-      <% @new_accounts.each do |account| %>
+      <% @new_accounts&.each do |account| %>
         <%= account.name %>
       <% end %>
     </div>
@@ -18,10 +18,10 @@
     class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow"
   >
     <div class="px-4 py-5 sm:px-6 bg-orange-100">
-      <strong>Recent Users</strong>
+      <strong>Recent Sessions</strong>
     </div>
     <div class="px-4 py-5 sm:p-6">
-      <% @recent_users.each do |user| %>
+      <% @recent_users&.each do |user| %>
         <%= user.email %>
         -
         <%= user.sessions.last.created_at %>
