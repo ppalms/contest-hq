@@ -11,3 +11,9 @@ tenant_admin:
   password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
   verified: true
   account: ossaa
+
+director:
+  email: hank@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  account: ossaa

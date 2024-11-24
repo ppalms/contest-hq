@@ -7,6 +7,7 @@ class RegistrationsController < ApplicationController
 
   def create
     @user = User.new(user_params)
+    @user.user_roles = Role.find_by(name: "Director")
 
     if @user.save
       session_record = @user.sessions.create!
