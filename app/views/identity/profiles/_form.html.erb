@@ -16,8 +16,11 @@
   <div>
     <%= form.label :time_zone, "Time zone" %>
     <%= form.select :time_zone,
-                ActiveSupport::TimeZone.all.map { |tz| [tz.name, tz.name] },
-                { include_blank: "Select a time zone" },
+                ActiveSupport::TimeZone
+                  .us_zones
+                  .sort_by(&:name)
+                  .map { |tz| [tz.name, tz.tzinfo.name] },
+                { include_blank: "Select a time zone", selected: @user.time_zone },
                 { required: true, class: "text-field" } %>
   </div>
 
