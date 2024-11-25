@@ -68,7 +68,6 @@
 
 <script>
   function setDefaultTimeZone() {
-    console.log('setting time zone')
     const defaultTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     document.querySelector("#time_zone").value = defaultTimeZone;
   }
