@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  belongs_to :account
+
   has_secure_password
 
   generates_token_for :email_verification, expires_in: 2.days do
@@ -11,14 +13,13 @@ class User < ApplicationRecord
 
   has_many :user_roles
   has_many :roles, through: :user_roles
-
-  belongs_to :account
-
   has_many :sessions, dependent: :destroy
 
+  validates :first_name, presence: true
+  validates :last_name, presence: true
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :password, allow_nil: true, length: { minimum: 12 }
-  validates :time_zone, presence: true, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }
+  validates :time_zone, presence: true, inclusion: { in: ActiveSupport::TimeZone.all.map { |tz| tz.tzinfo.name } }
 
   normalizes :email, with: -> { _1.strip.downcase }
 

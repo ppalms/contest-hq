@@ -1,18 +1,24 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 sys_admin:
+  first_name: Jake
+  last_name: Human
   email: sa@ppalmer.dev
   password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
   verified: true
   account: contest_hq
 
 tenant_admin:
+  first_name: Bobby
+  last_name: Hill
   email: bobby@ossaa.org
   password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
   verified: true
   account: ossaa
 
 director:
+  first_name: Hank
+  last_name: Hill
   email: hank@ossaa.org
   password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
   verified: true

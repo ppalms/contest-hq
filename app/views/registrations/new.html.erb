@@ -1,26 +1,33 @@
 <div class="simple-form-container">
   <% if @user.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(@user.errors.count, "error") %>
-        prohibited this user from being saved:</h2>
-
-      <ul>
-        <% @user.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
+    <%= render "layouts/error_messages", errors: @user.errors %>
   <% end %>
 
   <h1>Sign up</h1>
 
   <%= form_with(url: sign_up_path, class: "simple-form") do |form| %>
     <div>
+      <%= form.label :first_name %>
+      <%= form.text_field :first_name,
+                      value: @user.first_name,
+                      required: true,
+                      autofocus: true,
+                      class: "text-field" %>
+    </div>
+
+    <div>
+      <%= form.label :last_name %>
+      <%= form.text_field :last_name,
+                      value: @user.last_name,
+                      required: true,
+                      class: "text-field" %>
+    </div>
+
+    <div>
       <%= form.label :email, style: "display: block" %>
       <%= form.email_field :email,
                        value: @user.email,
                        required: true,
-                       autofocus: true,
                        autocomplete: "email",
                        class: "text-field" %>
     </div>
@@ -45,8 +52,11 @@
     <div>
       <%= form.label :time_zone, style: "display: block" %>
       <%= form.select :time_zone,
-                  ActiveSupport::TimeZone.all.map { |tz| [tz.name, tz.name] },
-                  { include_blank: "Select a time zone" },
+                  ActiveSupport::TimeZone
+                    .us_zones
+                    .sort_by(&:name)
+                    .map { |tz| [tz.name, tz.tzinfo.name] },
+                  { include_blank: "Select a time zone", selected: @user.time_zone },
                   { required: true, class: "text-field" } %>
     </div>
 
@@ -55,3 +65,13 @@
     </div>
   <% end %>
 </div>
+
+<script>
+  function setDefaultTimeZone() {
+    console.log('setting time zone')
+    const defaultTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    document.querySelector("#time_zone").value = defaultTimeZone;
+  }
+
+  document.addEventListener("DOMContentLoaded", setDefaultTimeZone);
+</script>
