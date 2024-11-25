@@ -7,6 +7,7 @@ sys_admin:
   password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
   verified: true
   account: contest_hq
+  time_zone: America/Chicago
 
 tenant_admin:
   first_name: Bobby
@@ -15,6 +16,7 @@ tenant_admin:
   password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
   verified: true
   account: ossaa
+  time_zone: America/Chicago
 
 director:
   first_name: Hank
@@ -23,3 +25,4 @@ director:
   password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
   verified: true
   account: ossaa
+  time_zone: America/Chicago
