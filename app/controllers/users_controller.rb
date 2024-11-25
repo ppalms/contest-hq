@@ -14,12 +14,11 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     if @user.update(user_params)
-      respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.append("notifications", partial: "shared/notification", locals: { message: "Successfully updated user" }) }
-        format.html { redirect_to users_path, notice: "User updated successfully." }
-      end
+      flash[:notice] = "Successfully updated user."
+      redirect_to users_path, notice: "User updated successfully."
     else
-      render :edit
+      flash[:error] = "Failed to update user."
+      render :edit, status: :unprocessable_entity
     end
   end
 
