@@ -22,6 +22,7 @@ class RegistrationsTest < ApplicationSystemTestCase
     fill_in "Email", with: @user.email
     fill_in "Password", with: @user.password
     fill_in "Password confirmation", with: @user.password
+    select "Central Time (US & Canada)", from: "Time zone"
     click_on "Sign up"
 
     assert_text "Welcome! You have signed up successfully."
