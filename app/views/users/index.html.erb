@@ -3,7 +3,7 @@
   <div class="flex justify-between items-center">
     <h1>Users</h1>
     <div class="flex gap-2">
-      <%= link_to "New user", sign_up_path, class: "btn-primary" %>
+      <%= link_to "Invite user", new_invitation_path, class: "btn-primary" %>
     </div>
   </div>
 
@@ -25,8 +25,31 @@
             "
           >
             <div class="grow">
-              <p class="text-xl font-bold"><%= user.email %></p>
-              <p class="text-neutral-900"><%= user.roles.first.name %></p>
+              <p class="text-lg font-bold"><%= user.first_name %>
+                <%= user.last_name %></p>
+              <p class="text-neutral-900">
+                <%= user.email %>
+                <% if user.verified? %>
+                  <span
+                    class="
+                      inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium
+                      text-green-700 ring-1 ring-inset ring-green-600/20
+                    "
+                  >Verified</span>
+                <% else %>
+                  <span
+                    class="
+                      inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium
+                      text-yellow-800 ring-1 ring-inset ring-yellow-600/20
+                    "
+                  >Unverified</span>
+                <% end %>
+              </p>
+            </div>
+
+            <div class="hidden sm:block pr-2 text-right">
+              <strong>Roles</strong>
+              <p><%= user.roles.order(:name).map(&:name).join(", ") %></p>
             </div>
           </div>
         <% end %>

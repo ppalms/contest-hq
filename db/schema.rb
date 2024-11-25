@@ -10,12 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_02_043829) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_18_124505) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "accounts", force: :cascade do |t|
     t.string "name", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
   end
 
   create_table "contests", force: :cascade do |t|
@@ -61,8 +63,12 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_02_043829) do
     t.bigint "account_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.string "time_zone", default: "UTC", null: false
     t.index ["account_id"], name: "index_users_on_account_id"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["last_name"], name: "index_users_on_last_name"
   end
 
   add_foreign_key "contests", "accounts"

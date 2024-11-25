@@ -21,9 +21,3 @@ roles = [
 roles.each do |role|
   Role.find_or_create_by!(role)
 end
-
-default_role = Role.find_by(name: 'Director')
-
-User.find_each do |user|
-  user.roles << default_role if user.roles.empty?
-end

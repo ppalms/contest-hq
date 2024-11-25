@@ -14,9 +14,11 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     if @user.update(user_params)
+      flash[:notice] = "Successfully updated user."
       redirect_to users_path, notice: "User updated successfully."
     else
-      render :edit
+      flash[:error] = "Failed to update user."
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -29,6 +31,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(role_ids: [])
+    params.require(:user).permit(:first_name, :last_name, :time_zone, role_ids: [])
   end
 end

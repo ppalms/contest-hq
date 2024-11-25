@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   post "users/:user_id/masquerade", to: "masquerades#create", as: :user_masquerade
-  resource :invitation, only: [:new, :create]
+  resource :invitation, only: [ :new, :create ]
   get  "sign_in", to: "sessions#new"
   post "sign_in", to: "sessions#create"
   get  "sign_up", to: "registrations#new"
@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     resource :email,              only: [ :edit, :update ]
     resource :email_verification, only: [ :show, :create ]
     resource :password_reset,     only: [ :new, :edit, :create, :update ]
+    resource :profile,            only: [ :show, :edit, :update ]
   end
   resources :users, only: [ :index, :edit, :update ]
 
@@ -26,5 +27,6 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  root "pages#home"
+  root "home#index"
+  get "settings", to: "home#settings"
 end

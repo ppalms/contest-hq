@@ -1,7 +1,10 @@
-<% if notice.present? %>
-  <div class="flex justify-center pt-4">
-    <p class="notice" id="notice"><%= notice %></p>
-  </div>
-<% end %>
+<div
+  id="notifications"
+  class="fixed bottom-0 right-0 flex flex-col items-end space-y-4 p-4"
+>
+  <% flash.each do |type, message| %>
+    <%= render "shared/notification", message: message, type: type %>
+  <% end %>
+</div>
 
 <%= yield %>

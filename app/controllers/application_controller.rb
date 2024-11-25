@@ -5,6 +5,10 @@ class ApplicationController < ActionController::Base
   before_action :set_current_request_details
   before_action :authenticate
 
+  around_action :set_time_zone, if: :current_user
+
+  helper_method :current_user
+
   private
     def authenticate
       if session_record = Session.find_by_id(cookies.signed[:session_token])
@@ -17,5 +21,13 @@ class ApplicationController < ActionController::Base
     def set_current_request_details
       Current.user_agent = request.user_agent
       Current.ip_address = request.ip
+    end
+
+    def current_user
+      Current.user
+    end
+
+    def set_time_zone(&block)
+      Time.use_zone(current_user&.time_zone, &block)
     end
 end

@@ -8,6 +8,6 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     fill_in "Email", with: user.email
     fill_in "Password", with: "Secret1*3*5*"
     click_on "Sign in"
-    assert_text "Get started"
+    assert_text "Signed in successfully"
   end
 end
