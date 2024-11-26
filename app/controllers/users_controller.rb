@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :require_sysadmin
+  before_action -> { require_role "SysAdmin" }
 
   def index
     @users = User.includes(:roles).all.order(:email)
@@ -23,12 +23,6 @@ class UsersController < ApplicationController
   end
 
   private
-
-  def require_sysadmin
-    unless Current.user&.roles&.exists?(name: "SysAdmin")
-      redirect_to root_path
-    end
-  end
 
   def user_params
     params.require(:user).permit(:first_name, :last_name, :time_zone, role_ids: [])

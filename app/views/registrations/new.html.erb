@@ -50,6 +50,25 @@
     </div>
 
     <div>
+      <%= form.label :role_ids, "Roles", style: "display: block" %>
+      <div
+        class="
+          flex flex-col space-y-2 border border-gray-300 shadow p-4 rounded-md
+        "
+      >
+        <div class="-mt-2"></div>
+        <%= form.collection_checkboxes :role_ids,
+                                 Role.where(name: %w[Director Judge]).order(:name),
+                                 :id,
+                                 :name do |helper| %>
+          <%= helper.label do %>
+            <%= helper.check_box %><span class="ml-2"><%= helper.label %></span>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <div>
       <%= form.label :time_zone, style: "display: block" %>
       <%= form.select :time_zone,
                   ActiveSupport::TimeZone

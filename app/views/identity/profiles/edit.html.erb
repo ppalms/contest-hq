@@ -1,8 +1,5 @@
 <div id="edit_<%= dom_id @user %>" class="simple-form-container">
-  <div>
-    <%= link_to sanitize("&larr; Back"), settings_path %>
-  </div>
+  <h1>User profile</h1>
 
-  <h1>My profile</h1>
   <%= render "form", user: @user %>
 </div>

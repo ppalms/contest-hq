@@ -12,19 +12,23 @@
   }
 
   .btn-primary {
-    @apply rounded-lg py-3 px-5 bg-blue-600 hover:bg-blue-500 border border-b-4 border-blue-900 transition text-white font-medium cursor-pointer;
+    @apply rounded-lg py-3 px-5 bg-blue-600 hover:bg-blue-500 border border-b-4 border-blue-900 block w-full sm:w-auto sm:inline-block hover:border-blue-600 transition text-white font-medium cursor-pointer;
   }
 
   .btn-secondary {
-    @apply rounded-lg py-3 px-5 bg-gray-100 hover:bg-gray-200 border border-gray-200 hover:border-gray-300 inline-block font-medium;
+    @apply rounded-lg py-3 px-5 bg-gray-100 hover:bg-gray-200 border border-b-4 border-gray-400 block text-center sm:inline-block hover:border-gray-500 transition font-medium;
   }
 
   .btn-danger {
-    @apply rounded-lg py-3 px-5 text-red-800 hover:bg-red-200 border border-red-200 hover:border-red-300 transition inline-block font-semibold;
+    @apply rounded-lg py-3 px-5 text-red-800 hover:bg-red-100 border border-b-4 border-red-200 block w-full sm:w-auto sm:inline-block hover:border-red-300 transition font-semibold;
   }
 
   .simple-form {
     @apply flex flex-col gap-y-4 pt-4;
+  }
+
+  .wide-form {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4 pt-4;
   }
 
   .text-field {
@@ -33,6 +37,10 @@
 
   .multi-select {
     @apply block shadow border rounded-l-md border-gray-400 outline-none px-3 py-2 w-full;
+  }
+
+  input[type='checkbox'] {
+    @apply -mt-0.5 size-4 rounded border-gray-400 text-blue-600 focus:ring-blue-600;
   }
 
   .notice {
@@ -88,7 +96,15 @@
   }
 
   .simple-form-container {
-    @apply max-w-md mx-auto space-y-4;
+    @apply max-w-md mx-auto space-y-4 pt-2 pb-4;
+  }
+
+  .wide-form-container {
+    @apply max-w-2xl mx-auto space-y-4 pt-2 pb-4;
+  }
+
+  .form-button-container {
+    @apply pt-6 sm:col-span-2 space-y-4 sm:space-y-0 sm:space-x-2 sm:flex sm:justify-end;
   }
 
   .modal-backdrop {

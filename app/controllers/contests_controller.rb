@@ -1,5 +1,6 @@
 class ContestsController < ApplicationController
   before_action :set_contest, only: %i[ show edit update destroy ]
+  before_action -> { require_role "TenantAdmin" }, except: %i[ index show ]
 
   # GET /contests or /contests.json
   def index
@@ -59,13 +60,14 @@ class ContestsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_contest
-      @contest = Contest.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def contest_params
-      params.expect(contest: [ :name, :contest_start, :contest_end ])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_contest
+    @contest = Contest.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def contest_params
+    params.expect(contest: [ :name, :contest_start, :contest_end ])
+  end
 end
