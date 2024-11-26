@@ -30,10 +30,10 @@
             <div class="hidden sm:block pr-2 text-right">
               <strong>Dates</strong>
               <p>
-                <%= contest.contest_start.strftime("%A %-m/%d/%Y") %>
-                <% if contest.contest_start.to_date != contest.contest_end.to_date %>
+                <%= contest.contest_start&.strftime("%A %-m/%d/%Y") %>
+                <% if contest.contest_start&.to_date != contest.contest_end&.to_date %>
                   -
-                  <%= contest.contest_end.strftime("%A %-m/%d/%Y") %>
+                  <%= contest.contest_end&.strftime("%A %-m/%d/%Y") %>
                 <% end %>
               </p>
             </div>

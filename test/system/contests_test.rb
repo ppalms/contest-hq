@@ -51,6 +51,16 @@ class ContestsTest < ApplicationSystemTestCase
     assert_selector "h1", text: @contest.name
   end
 
+  test "allows saving without start and end dates" do
+    visit contests_url
+    click_on "New contest"
+
+    fill_in "Name", with: @contest.name
+    click_on "Create Contest"
+
+    assert_text "Contest was successfully created"
+  end
+
   test "should prevent saving end date before start date" do
     visit contests_url
     click_on "New contest"
