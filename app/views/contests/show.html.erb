@@ -1,12 +1,12 @@
 <div id="show_<%= dom_id @contest %>">
   <div class="py-4">
-    <%= link_to sanitize("&larr; Back"), contests_path %>
+    <%= link_to sanitize("&larr; Browse Contests"), contests_path %>
   </div>
 
   <%= render @contest %>
 
   <% if current_user.tenant_admin? %>
-    <div class="form-button-container justify-center">
+    <div class="form-button-container">
       <%= link_to "Edit", edit_contest_path(@contest), class: "btn-secondary" %>
       <%= button_to "Delete",
       @contest,

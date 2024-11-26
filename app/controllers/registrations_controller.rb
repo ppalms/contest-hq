@@ -7,7 +7,12 @@ class RegistrationsController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    @user.roles = [ Role.find_by(name: "Director") ]
+
+    if params[:role_ids].nil?
+      @user.roles = [ Role.find_by(name: "Director") ]
+    else
+      @user.roles = Role.where(id: params[:role_ids])
+    end
 
     if @user.save
       session_record = @user.sessions.create!
@@ -22,7 +27,7 @@ class RegistrationsController < ApplicationController
 
   private
     def user_params
-      params.permit(:first_name, :last_name, :email, :password, :password_confirmation, :time_zone)
+      params.permit(:first_name, :last_name, :email, :password, :password_confirmation, :role_ids, :time_zone)
     end
 
     def send_email_verification

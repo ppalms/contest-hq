@@ -4,12 +4,12 @@
   <div class="grid grid-cols-1 sm:grid-cols-4 space-y-4 sm:space-y-0 pt-6">
     <div class="sm:col-span-2">
       <strong class="block font-medium mb-1">Contest Start</strong>
-      <%= contest.contest_start.strftime("%-m/%d/%Y %l:%M %p") %>
+      <%= contest.contest_start&.strftime("%-m/%d/%Y %l:%M %p") || "TBD" %>
     </div>
 
     <div class="sm:col-span-2">
       <strong class="block font-medium mb-1">Contest End</strong>
-      <%= contest.contest_end.strftime("%-m/%d/%Y %l:%M %p") %>
+      <%= contest.contest_end&.strftime("%-m/%d/%Y %l:%M %p") || "TBD" %>
     </div>
   </div>
 </div>
