@@ -7,13 +7,16 @@
     <div class="px-4 py-5 sm:px-6 bg-blue-100">
       <strong>My Contests</strong>
     </div>
+
     <div class="px-4 py-5 sm:p-6">
-      <% @upcoming_contests.each do |contest| %>
-        <%= link_to contest do %>
-          <%= contest.name %>
-          -
-          <%= contest.contest_start.strftime("%m-%d-%Y") %>
-        <% end %>
+      <% @upcoming_contests&.each do |contest| %>
+        <div>
+          <%= link_to contest do %>
+            <%= contest.name %>
+            -
+            <%= contest.contest_start&.strftime("%m-%d-%Y") || "TBD" %>
+          <% end %>
+        </div>
       <% end %>
     </div>
   </div>
@@ -24,13 +27,16 @@
     <div class="px-4 py-5 sm:px-6 bg-blue-100">
       <strong>Eligible Contests</strong>
     </div>
+
     <div class="px-4 py-5 sm:p-6">
-      <% @upcoming_contests.each do |contest| %>
-        <%= link_to contest do %>
-          <%= contest.name %>
-          -
-          <%= contest.contest_start.strftime("%m-%d-%Y") %>
-        <% end %>
+      <% @upcoming_contests&.each do |contest| %>
+        <div>
+          <%= link_to contest do %>
+            <%= contest.name %>
+            -
+            <%= contest.contest_start&.strftime("%m-%d-%Y") || "TBD" %>
+          <% end %>
+        </div>
       <% end %>
     </div>
   </div>

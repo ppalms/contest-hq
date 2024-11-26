@@ -21,7 +21,7 @@ class ContestsTest < ApplicationSystemTestCase
     click_on "Create Contest"
 
     assert_text "Contest was successfully created"
-    click_on "Back"
+    click_on "Browse Contests"
   end
 
   test "should update contest" do
@@ -32,7 +32,7 @@ class ContestsTest < ApplicationSystemTestCase
     click_on "Update Contest"
 
     assert_text "Contest was successfully updated"
-    click_on "Back"
+    click_on "Browse Contests"
   end
 
   test "should delete contest" do
@@ -59,6 +59,9 @@ class ContestsTest < ApplicationSystemTestCase
     click_on "Create Contest"
 
     assert_text "Contest was successfully created"
+
+    assert_text "Contest Start\nTBD"
+    assert_text "Contest End\nTBD"
   end
 
   test "should prevent saving end date before start date" do
