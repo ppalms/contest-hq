@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   around_action :set_time_zone, if: :current_user
 
   helper_method :current_user
+  helper_method :require_role
 
   private
     def authenticate
@@ -25,6 +26,12 @@ class ApplicationController < ActionController::Base
 
     def current_user
       Current.user
+    end
+
+    def require_role(role_name)
+      unless Current.user&.roles&.exists?(name: role_name)
+        redirect_to root_path
+      end
     end
 
     def set_time_zone(&block)

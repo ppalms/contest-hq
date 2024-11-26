@@ -1,13 +1,15 @@
 <div id="<%= dom_id contest %>">
-  <h1 class="mr-14"><%= contest.name %></h1>
+  <h1><%= contest.name %></h1>
 
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Contest Start:</strong>
-    <%= contest.contest_start.strftime("%-m/%d/%Y %l:%M %p") %>
-  </p>
+  <div class="grid grid-cols-1 sm:grid-cols-4 space-y-4 sm:space-y-0 pt-6">
+    <div class="sm:col-span-2">
+      <strong class="block font-medium mb-1">Contest Start</strong>
+      <%= contest.contest_start.strftime("%-m/%d/%Y %l:%M %p") %>
+    </div>
 
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Contest End:</strong>
-    <%= contest.contest_end.strftime("%-m/%d/%Y %l:%M %p") %>
-  </p>
+    <div class="sm:col-span-2">
+      <strong class="block font-medium mb-1">Contest End</strong>
+      <%= contest.contest_end.strftime("%-m/%d/%Y %l:%M %p") %>
+    </div>
+  </div>
 </div>

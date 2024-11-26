@@ -1,26 +1,27 @@
-<%= form_with(model: contest, class: "contents") do |form| %>
-  <% if contest.errors.any? %>
-    <%= render "layouts/error_messages", errors: contest.errors %>
-  <% end %>
-
-  <div class="my-5">
+<%= form_with(model: contest, class: "wide-form") do |form| %>
+  <div class="sm:col-span-2">
     <%= form.label :name %>
     <%= form.text_field :name, class: "text-field", autofocus: true %>
   </div>
 
-  <div class="my-5 flex justify-center space-x-2">
-    <div class="w-full">
-      <%= form.label :contest_start %>
-      <%= form.datetime_field :contest_start, class: "text-field" %>
-    </div>
-
-    <div class="w-full">
-      <%= form.label :contest_end %>
-      <%= form.datetime_field :contest_end, class: "text-field" %>
-    </div>
+  <div>
+    <%= form.label :contest_start %>
+    <%= form.datetime_field :contest_start, class: "text-field" %>
   </div>
 
-  <div class="inline">
+  <div>
+    <%= form.label :contest_end %>
+    <%= form.datetime_field :contest_end, class: "text-field" %>
+  </div>
+
+  <div class="form-button-container">
     <%= form.submit class: "btn-primary" %>
+    <%= link_to "Cancel", @contest, class: "btn-secondary", role: "button" %>
   </div>
+
+  <% if contest.errors.any? %>
+    <div class="pt-2 sm:col-span-2">
+      <%= render "layouts/error_messages", errors: contest.errors %>
+    </div>
+  <% end %>
 <% end %>

@@ -1,9 +1,5 @@
-<%= form_with(model: user, class: "simple-form") do |form| %>
-  <% if user.errors.any? %>
-    <%= render "layouts/error_messages", errors: user.errors %>
-  <% end %>
-
-  <div>
+<%= form_with(model: user, class: "wide-form") do |form| %>
+  <div class="sm:col-span-2">
     <strong>Email address</strong>
     <p><%= user.email %></p>
   </div>
@@ -18,7 +14,7 @@
     <%= form.text_field :last_name, class: "text-field" %>
   </div>
 
-  <div>
+  <div class="sm:col-span-2">
     <%= form.label :time_zone, "Time zone" %>
     <%= form.select :time_zone,
                 ActiveSupport::TimeZone
@@ -40,7 +36,12 @@
                            { multiple: true, class: "multi-select" } %>
   </div>
 
-  <div class="inline">
+  <div class="form-button-container">
     <%= form.submit class: "btn-primary" %>
+    <%= link_to "Cancel", users_path, class: "btn-secondary", role: "button" %>
   </div>
+
+  <% if user.errors.any? %>
+    <%= render "layouts/error_messages", errors: user.errors %>
+  <% end %>
 <% end %>
