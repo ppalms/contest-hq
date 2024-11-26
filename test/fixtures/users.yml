@@ -15,7 +15,7 @@ tenant_admin:
   email: bobby@ossaa.org
   password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
   verified: true
-  account: ossaa
+  account: contest_hq
   time_zone: America/Chicago
 
 director:
@@ -24,5 +24,5 @@ director:
   email: hank@ossaa.org
   password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
   verified: true
-  account: ossaa
+  account: contest_hq
   time_zone: America/Chicago
