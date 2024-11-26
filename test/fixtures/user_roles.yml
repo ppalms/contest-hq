@@ -1,5 +1,9 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-sys_admin_roles:
+sys_admin_primary_role:
   user: sys_admin
   role: sys_admin_role
+
+sys_admin_tenant_admin:
+  user: sys_admin
+  role: tenant_admin
