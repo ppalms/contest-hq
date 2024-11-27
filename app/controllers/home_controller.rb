@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   def index
-    if Current.user.sysadmin?
+    if current_user.sysadmin?
       @new_accounts = Account.order(created_at: :desc).limit(5)
 
       @recent_users = User
@@ -18,9 +18,16 @@ class HomeController < ApplicationController
         .limit(5)
     end
 
-    if Current.user.director?
+    # TODO: show contests director has registered for
+    if current_user.director?
       @upcoming_contests = Contest
-        .order("contest_start DESC")
+        .order("contest_start")
+        .limit(5)
+    end
+
+    if current_user.scheduler?
+      @managed_contests = Contest
+        .order("contest_start")
         .limit(5)
     end
   end

@@ -10,7 +10,7 @@
         text-neutral-600 font-semibold text-xs uppercase
       "
     >
-      Director
+      Scheduler
     </div>
   </div>
 
@@ -23,35 +23,12 @@
         border-neutral-200
       "
     >
-      <div class="p-4 sm:px-6 bg-blue-100">
+      <div class="p-4 sm:px-6 bg-red-100">
         <strong>My Contests</strong>
       </div>
 
-      <div class="p-4 py-5 sm:p-6">
-        <% @upcoming_contests&.each do |contest| %>
-          <div>
-            <%= link_to contest do %>
-              <%= contest.name %>
-              -
-              <%= contest.contest_start&.strftime("%m-%d-%Y") || "TBD" %>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
-    </div>
-
-    <div
-      class="
-        divide-y divide-gray-200 overflow-hidden rounded-lg bg-white border
-        border-neutral-200
-      "
-    >
-      <div class="p-4 sm:px-6 bg-blue-100">
-        <strong>Eligible Contests</strong>
-      </div>
-
       <div class="p-4 sm:p-6">
-        <% @upcoming_contests&.each do |contest| %>
+        <% @managed_contests&.each do |contest| %>
           <div>
             <%= link_to contest do %>
               <%= contest.name %>
