@@ -1,5 +1,26 @@
-<div class="space-y-4">
-  <%= render "home/dashboards/sysadmin" if Current.user.sysadmin? %>
-  <%= render "home/dashboards/tenant_admin" if Current.user.tenant_admin? %>
-  <%= render "home/dashboards/director" if Current.user.director? %>
+<% if current_user.sysadmin? || current_user.tenant_admin? %>
+<div class="space-y-8">
+  <div
+    class="
+      relative border border-neutral-300 px-4 pb-4 space-y-4 shadow-sm bg-neutral-50
+    "
+  >
+    <div class="flex justify-center">
+      <div
+        class="
+          absolute -top-2 px-2 border border-neutral-400 rounded-sm bg-white
+          text-neutral-600 font-semibold text-xs uppercase
+        "
+      >
+        Admin
+      </div>
+    </div>
+
+    <%= render "home/dashboards/sysadmin" if current_user.sysadmin? %>
+    <%= render "home/dashboards/tenant_admin" if current_user.tenant_admin? %>
+  </div>
+<% end %>
+
+  <%= render "home/dashboards/director" if current_user.director? %>
+  <%= render "home/dashboards/scheduler" if current_user.scheduler? %>
 </div>

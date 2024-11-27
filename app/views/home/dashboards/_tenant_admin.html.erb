@@ -1,10 +1,6 @@
-<div
-  class="grid grid-cols-1 space-y-4 sm:grid-cols-2 sm:space-y-0 sm:space-x-4"
->
-  <div
-    class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow"
-  >
-    <div class="px-4 py-5 sm:px-6 bg-green-100">
+<div class="grid grid-cols-1 space-y-4 sm:grid-cols-2 sm:space-y-0 sm:space-x-4">
+  <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white border border-neutral-200">
+    <div class="p-4 sm:px-6 bg-green-100">
       <strong>Upcoming Contests</strong>
     </div>
 
@@ -21,16 +17,14 @@
     </div>
   </div>
 
-  <div
-    class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow"
-  >
-    <div class="px-4 py-5 sm:px-6 bg-green-100">
+  <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white border border-neutral-200">
+    <div class="p-4 sm:px-6 bg-green-100">
       <strong>New Users</strong>
     </div>
 
     <div class="px-4 py-5 sm:p-6">
       <% @new_users&.each do |user| %>
-        <%= user.email %></br>
+        <%= link_to user.email, edit_user_path(user.id) %></br>
       <% end %>
     </div>
   </div>
