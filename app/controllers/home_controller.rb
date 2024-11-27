@@ -21,6 +21,10 @@ class HomeController < ApplicationController
     if Current.user.director?
       @upcoming_contests = Contest
         .order("contest_start DESC")
+
+    if current_user.scheduler?
+      @managed_contests = Contest
+        .order("contest_start")
         .limit(5)
     end
   end

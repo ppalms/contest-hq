@@ -1,0 +1,43 @@
+<div
+  class="
+    relative border border-neutral-300 rounded-sm p-4 shadow-sm bg-neutral-50
+  "
+>
+  <div class="flex justify-center">
+    <div
+      class="
+        absolute -top-2 px-2 border border-neutral-400 rounded-sm bg-white
+        text-neutral-600 font-semibold text-xs uppercase
+      "
+    >
+      Scheduler
+    </div>
+  </div>
+
+  <div
+    class="grid grid-cols-1 space-y-4 sm:grid-cols-2 sm:space-y-0 sm:space-x-4"
+  >
+    <div
+      class="
+        divide-y divide-gray-200 overflow-hidden rounded-lg bg-white border
+        border-neutral-200
+      "
+    >
+      <div class="p-4 sm:px-6 bg-red-100">
+        <strong>My Contests</strong>
+      </div>
+
+      <div class="p-4 sm:p-6">
+        <% @managed_contests&.each do |contest| %>
+          <div>
+            <%= link_to contest do %>
+              <%= contest.name %>
+              -
+              <%= contest.contest_start&.strftime("%m-%d-%Y") || "TBD" %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
