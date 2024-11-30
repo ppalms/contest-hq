@@ -26,3 +26,12 @@ director:
   verified: true
   account: contest_hq
   time_zone: America/Chicago
+
+director_ossaa:
+  first_name: John
+  last_name: Doe
+  email: jdoe@school.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  account: ossaa
+  time_zone: America/Chicago

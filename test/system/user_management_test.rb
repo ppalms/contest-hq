@@ -32,7 +32,7 @@ class UserManagementTest < ApplicationSystemTestCase
 
     visit root_url
 
-    assert_text "My Contests"
-    assert_text "Eligible Contests"
+    assert_text "My Entries"
+    assert_text "Contest Calendar"
   end
 end

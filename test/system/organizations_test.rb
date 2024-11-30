@@ -3,7 +3,7 @@ require "application_system_test_case"
 class OrganizationsTest < ApplicationSystemTestCase
   setup do
     log_in_as(users(:tenant_admin))
-    @organization = organizations(:five)
+    @organization = organizations(:four)
   end
 
   test "visiting the index" do

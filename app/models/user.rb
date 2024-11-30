@@ -11,10 +11,10 @@ class User < ApplicationRecord
     password_salt.last(10)
   end
 
-  has_many :user_roles
+  has_many :user_roles, dependent: :delete_all
   has_many :roles, through: :user_roles
 
-  has_many :org_memberships
+  has_many :org_memberships, dependent: :delete_all
   has_many :organizations, through: :org_memberships
 
   has_many :sessions, dependent: :destroy

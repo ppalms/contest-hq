@@ -3,14 +3,14 @@ require "application_system_test_case"
 class RegistrationsTest < ApplicationSystemTestCase
   setup do
     @user = User.new(
-      first_name: "John",
-      last_name: "Doe",
-      email: "jdoe@school.org",
+      first_name: "Test",
+      last_name: "User",
+      email: "test-user@school.org",
       password: "Secret1*3*5*"
     )
   end
 
-  test "user role should default to director" do
+  test "should register new user" do
     visit sign_up_url
 
     # TODO: get current time zone from the system

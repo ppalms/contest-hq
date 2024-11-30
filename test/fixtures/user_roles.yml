@@ -7,3 +7,11 @@ sys_admin:
 tenant_admin:
   user: tenant_admin
   role: tenant_admin
+
+director:
+  user: director
+  role: director
+
+director_ossaa:
+  user: director_ossaa
+  role: director
