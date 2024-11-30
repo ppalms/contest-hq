@@ -1,0 +1,34 @@
+one:
+  name: Lincoln High School
+  organization_type: school_ossaa
+  account: ossaa
+
+two:
+  name: Roosevelt High School
+  organization_type: school_ossaa
+  account: ossaa
+
+three:
+  name: Jefferson High School
+  organization_type: school_ossaa
+  account: ossaa
+
+four:
+  name: Washington High School
+  organization_type: school_contest_hq
+  account: contest_hq
+
+five:
+  name: Kennedy High School
+  organization_type: school_contest_hq
+  account: contest_hq
+
+six:
+  name: Memorial High School
+  organization_type: school_contest_hq
+  account: contest_hq
+
+seven:
+  name: Central High School
+  organization_type: school_contest_hq
+  account: contest_hq

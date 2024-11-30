@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_18_124505) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_28_132114) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -28,6 +28,34 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_18_124505) do
     t.datetime "updated_at", null: false
     t.bigint "account_id", null: false
     t.index ["account_id"], name: "index_contests_on_account_id"
+  end
+
+  create_table "org_memberships", id: false, force: :cascade do |t|
+    t.bigint "organization_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "account_id", null: false
+    t.index ["account_id"], name: "index_org_memberships_on_account_id"
+    t.index ["organization_id", "user_id", "account_id"], name: "idx_on_organization_id_user_id_account_id_c9f9014116", unique: true
+    t.index ["organization_id"], name: "index_org_memberships_on_organization_id"
+    t.index ["user_id"], name: "index_org_memberships_on_user_id"
+  end
+
+  create_table "organization_types", force: :cascade do |t|
+    t.string "name"
+    t.bigint "account_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_organization_types_on_account_id"
+  end
+
+  create_table "organizations", force: :cascade do |t|
+    t.string "name"
+    t.bigint "organization_type_id", null: false
+    t.bigint "account_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_organizations_on_account_id"
+    t.index ["organization_type_id"], name: "index_organizations_on_organization_type_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -72,6 +100,12 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_18_124505) do
   end
 
   add_foreign_key "contests", "accounts"
+  add_foreign_key "org_memberships", "accounts"
+  add_foreign_key "org_memberships", "organizations"
+  add_foreign_key "org_memberships", "users"
+  add_foreign_key "organization_types", "accounts"
+  add_foreign_key "organizations", "accounts"
+  add_foreign_key "organizations", "organization_types"
   add_foreign_key "sessions", "users"
   add_foreign_key "user_roles", "roles"
   add_foreign_key "user_roles", "users"

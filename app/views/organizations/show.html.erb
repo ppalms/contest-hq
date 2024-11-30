@@ -1,0 +1,22 @@
+<div id="show_<%= dom_id @organization %>">
+  <div class="py-4">
+    <%= link_to sanitize("&larr; Browse Organizations"), organizations_path %>
+  </div>
+
+  <%= render @organization %>
+
+  <% if current_user.tenant_admin? %>
+    <div class="form-button-container">
+      <%= link_to "Edit", edit_organization_path(@organization), class: "btn-secondary" %>
+      <%= button_to "Delete",
+      @organization,
+      method: :delete,
+      class: "btn-danger",
+      form: {
+        data: {
+          turbo_confirm: "Are you sure?",
+        },
+      } %>
+    </div>
+  <% end %>
+</div>
