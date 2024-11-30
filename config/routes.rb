@@ -1,10 +1,15 @@
 Rails.application.routes.draw do
-  post "users/:user_id/masquerade", to: "masquerades#create", as: :user_masquerade
+  resources :users, only: [ :index, :edit, :update ]
+  resources :contests
+  resources :organization_types, only: [ :index, :show ]
+  resources :organizations
+
   resource :invitation, only: [ :new, :create ]
   get  "sign_in", to: "sessions#new"
   post "sign_in", to: "sessions#create"
   get  "sign_up", to: "registrations#new"
   post "sign_up", to: "registrations#create"
+  post "users/:user_id/masquerade", to: "masquerades#create", as: :user_masquerade
   resources :sessions, only: [ :index, :show, :destroy ]
   resource  :password, only: [ :edit, :update ]
   namespace :identity do
@@ -13,10 +18,6 @@ Rails.application.routes.draw do
     resource :password_reset,     only: [ :new, :edit, :create, :update ]
     resource :profile,            only: [ :show, :edit, :update ]
   end
-  resources :users, only: [ :index, :edit, :update ]
-
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-  resources :contests
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

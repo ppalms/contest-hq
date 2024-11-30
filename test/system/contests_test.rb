@@ -22,17 +22,19 @@ class ContestsTest < ApplicationSystemTestCase
 
     assert_text "Contest was successfully created"
     click_on "Browse Contests"
+    assert_text @contest.name
   end
 
   test "should update contest" do
     visit contest_url(@contest)
     click_on "Edit", match: :first
 
-    fill_in "Name", with: @contest.name
+    fill_in "Name", with: "New Contest Name"
     click_on "Update Contest"
 
     assert_text "Contest was successfully updated"
     click_on "Browse Contests"
+    assert_text "New Contest Name"
   end
 
   test "should delete contest" do
@@ -42,6 +44,7 @@ class ContestsTest < ApplicationSystemTestCase
     accept_confirm
 
     assert_text "Contest was successfully deleted"
+    assert_no_text @contest.name
   end
 
   test "showing a contest" do

@@ -29,13 +29,17 @@
           <%= link_to "Home", root_path %>
         </div>
 
-        <% if Current.user.tenant_admin? %>
+        <% if current_user.tenant_admin? %>
           <div>
             <%= link_to "Contests", contests_path %>
           </div>
+
+          <div>
+            <%= link_to "Organizations", organizations_path %>
+          </div>
         <% end %>
 
-        <% if Current.user.sysadmin? %>
+        <% if current_user.sysadmin? %>
           <div>
             <%= link_to "Users", users_path %>
           </div>

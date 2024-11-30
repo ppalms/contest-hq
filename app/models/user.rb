@@ -13,6 +13,10 @@ class User < ApplicationRecord
 
   has_many :user_roles
   has_many :roles, through: :user_roles
+
+  has_many :org_memberships
+  has_many :organizations, through: :org_memberships
+
   has_many :sessions, dependent: :destroy
 
   validates :first_name, presence: true
