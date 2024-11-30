@@ -1,0 +1,14 @@
+<% content_for :title, "Organizations" %>
+<div id="organizations">
+  <div class="flex justify-between items-center">
+    <h1>Organizations</h1>
+  </div>
+
+  <div class="pt-4">
+    <%= render partial: "search" %>
+  </div>
+
+  <div id="organization_list" class="pt-4">
+    <%= render partial: "table" %>
+  </div>
+</div>
