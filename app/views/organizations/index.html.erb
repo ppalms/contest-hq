@@ -2,13 +2,22 @@
 <div id="organizations">
   <div class="flex justify-between items-center">
     <h1>Organizations</h1>
+    <div>
+      <%= button_to "New Organization",
+      new_organization_path,
+      method: :get,
+      class: "btn-primary" %>
+    </div>
   </div>
 
-  <div class="pt-4">
+  <div class="p-4">
     <%= render partial: "search" %>
   </div>
 
-  <div id="organization_list" class="pt-4">
+  <div
+    id="organization_list"
+    class="px-4 rounded-md bg-white border border-neutral-200 shadow-sm"
+  >
     <%= render partial: "table" %>
   </div>
 </div>
