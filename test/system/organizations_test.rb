@@ -47,6 +47,7 @@ class OrganizationsTest < ApplicationSystemTestCase
     accept_confirm
 
     assert_text "Organization was successfully deleted"
+    assert_no_text @organization.name
   end
 
   test "showing an organization" do
