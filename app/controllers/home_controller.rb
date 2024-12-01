@@ -12,10 +12,8 @@ class HomeController < ApplicationController
     end
 
     if current_user.tenant_admin?
-      @new_users = User
-        .select("users.id, users.email, users.created_at")
-        .order("users.created_at DESC")
-        .limit(5)
+      @new_users = User.select("users.id, users.email, users.created_at").order("users.created_at DESC").limit(5)
+      @organizations = Organization.select("organizations.id, organizations.name").order("organizations.name").limit(5)
     end
 
     # TODO: show contests director has registered for
