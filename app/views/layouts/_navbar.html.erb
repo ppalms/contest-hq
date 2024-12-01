@@ -39,7 +39,7 @@
           </div>
         <% end %>
 
-        <% if current_user.sysadmin? %>
+        <% if current_user.sysadmin? || current_user.tenant_admin? %>
           <div>
             <%= link_to "Users", users_path %>
           </div>

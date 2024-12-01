@@ -1,9 +1,9 @@
 class UsersController < ApplicationController
-  before_action -> { require_role "SysAdmin" }
+  before_action -> { require_role "SysAdmin", "TenantAdmin" }
 
   def index
-    @users = User.includes(:roles).all.order(:email)
-    @users = @users.where("email ILIKE ?", "%#{params[:email]}%") if params[:email].present?
+      @users = User.includes(:roles).where.not(roles: { name: "SysAdmin" }).order(:last_name)
+      @users = @users.where("email ILIKE ?", "%#{params[:email]}%") if params[:email].present?
   end
 
   def edit
@@ -25,6 +25,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :time_zone, role_ids: [])
+    params.require(:user).permit(:email, :first_name, :last_name, :time_zone, role_ids: [])
   end
 end

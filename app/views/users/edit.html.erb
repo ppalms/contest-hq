@@ -1,5 +1,9 @@
 <div class="wide-form-container" id="edit_<%= dom_id @user %>">
   <h1>Editing user</h1>
 
-  <%= render "form", user: @user %>
+  <%= render "form",
+  user: @user,
+  roles: Role.where(name: %w[Director Judge TenantAdmin]).order(:name),
+  url: user_path,
+  submit_text: "Update user" %>
 </div>

@@ -1,11 +1,17 @@
 class InvitationsController < ApplicationController
   def new
     @user = User.new
+    if current_user.sysadmin?
+      roles = Role.where(name: %w[Director Judge TenantAdmin]).order(:name)
+    else
+      roles = Role.where(name: %w[Director Judge]).order(:name)
+    end
+
+    render :new, locals: { roles: }
   end
 
   def create
-    @user = User.create_with(user_params).find_or_initialize_by(email: params[:email])
-
+    @user = User.create_with(user_params).find_or_initialize_by(email: user_params[:email])
     if @user.save
       send_invitation_instructions
       redirect_to new_invitation_path, notice: "An invitation email has been sent to #{@user.email}"
@@ -16,7 +22,7 @@ class InvitationsController < ApplicationController
 
   private
     def user_params
-      params.permit(:email, role_ids: []).merge(password: SecureRandom.base58, verified: true)
+      params.expect(user: [ :email, :first_name, :last_name, :time_zone, role_ids: [] ]).merge(password: SecureRandom.base58, verified: true)
     end
 
     def send_invitation_instructions

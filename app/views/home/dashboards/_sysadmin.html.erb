@@ -30,7 +30,7 @@
       <% @recent_users&.each do |user| %>
         <%= user.email %>
         -
-        <%= user.sessions.last.created_at %>
+        <%= user.sessions.last.created_at %><br/>
       <% end %>
     </div>
   </div>

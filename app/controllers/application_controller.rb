@@ -28,8 +28,8 @@ class ApplicationController < ActionController::Base
       Current.user
     end
 
-    def require_role(role_name)
-      unless Current.user&.roles&.exists?(name: role_name)
+    def require_role(*role_names)
+      unless role_names.any? { |role_name| current_user&.roles&.exists?(name: role_name) }
         redirect_to root_path
       end
     end
