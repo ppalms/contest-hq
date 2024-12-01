@@ -8,7 +8,14 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:id])
-    @roles = Role.all
+    if current_user.sysadmin?
+      @roles = Role.where(name: %w[Director Judge TenantAdmin]).order(:name)
+    else
+      @roles = Role.where(name: %w[Director Judge]).order(:name)
+    end
+    @organizations = Organization.all.order(:name)
+
+    render :edit, locals: { roles: @roles, organizations: @organizations }
   end
 
   def update
@@ -25,6 +32,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:email, :first_name, :last_name, :time_zone, role_ids: [])
+    params.expect(user: [ :email, :first_name, :last_name, :time_zone, role_ids: [], organization_ids: [] ])
   end
 end

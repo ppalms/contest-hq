@@ -2,12 +2,13 @@ class InvitationsController < ApplicationController
   def new
     @user = User.new
     if current_user.sysadmin?
-      roles = Role.where(name: %w[Director Judge TenantAdmin]).order(:name)
+      @roles = Role.where(name: %w[Director Judge TenantAdmin]).order(:name)
     else
-      roles = Role.where(name: %w[Director Judge]).order(:name)
+      @roles = Role.where(name: %w[Director Judge]).order(:name)
     end
+    @organizations = Organization.all.order(:name)
 
-    render :new, locals: { roles: }
+    render :new, locals: { roles: @roles, organizations: @organizations }
   end
 
   def create
@@ -21,11 +22,12 @@ class InvitationsController < ApplicationController
   end
 
   private
-    def user_params
-      params.expect(user: [ :email, :first_name, :last_name, :time_zone, role_ids: [] ]).merge(password: SecureRandom.base58, verified: true)
-    end
 
-    def send_invitation_instructions
-      UserMailer.with(user: @user).invitation_instructions.deliver_later
-    end
+  def user_params
+    params.expect(user: [ :email, :first_name, :last_name, :time_zone, role_ids: [], organization_ids: [] ]).merge(password: SecureRandom.base58, verified: true)
+  end
+
+  def send_invitation_instructions
+    UserMailer.with(user: @user).invitation_instructions.deliver_later
+  end
 end

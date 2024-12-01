@@ -1,9 +1,10 @@
-<div class="wide-form-container">
+<div class="wide-form-container" id="new_user_invite">
   <h1>Send invitation</h1>
 
   <%= render "users/form",
   url: invitation_path,
   user: @user,
-  roles: roles,
+  roles: @roles,
+  organizations: @organizations,
   submit_text: "Send invitation" %>
 </div>

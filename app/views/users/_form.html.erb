@@ -45,6 +45,20 @@
     </div>
   </div>
 
+  <div>
+    <div class="flex justify-between">
+      <%= form.label :organization_ids, "Organizations", style: "display: block" %>
+      <span class="text-sm text-gray-500">(Optional)</span>
+    </div>
+
+    <%= form.collection_select :organization_ids,
+                           organizations,
+                           :id,
+                           :name,
+                           { multiple: true },
+                           { class: "text-field" } %>
+  </div>
+
   <div class="sm:col-span-2">
     <%= form.label :time_zone, "Time zone" %>
     <%= form.select :time_zone,
