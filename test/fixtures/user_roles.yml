@@ -1,5 +1,3 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 sys_admin:
   user: sys_admin
   role: sys_admin
@@ -12,6 +10,10 @@ director:
   user: director
   role: director
 
-director_ossaa:
-  user: director_ossaa
+ossaa_director_john:
+  user: ossaa_director_john
+  role: director
+
+ossaa_director_jane:
+  user: ossaa_director_jane
   role: director

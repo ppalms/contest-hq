@@ -24,7 +24,8 @@ class UserManagementTest < ApplicationSystemTestCase
     visit root_url
 
     assert_text "My Entries"
-    assert_text "Contest Calendar"
+    assert_text "My Groups"
+    assert_text "Contests"
   end
 
   test "should allow multiple roles" do
@@ -85,7 +86,13 @@ class UserManagementTest < ApplicationSystemTestCase
     assert_text "Your password was reset successfully"
 
     log_in_as(new_user)
-    assert_text "My Entries"
-    assert_text "Contest Calendar"
+    # TODO: onboarding affordances in dashboard
+  end
+
+  # TODO: move to director onboarding test suite
+  test "should prompt director to create contest group" do
+  end
+
+  test "should prompt director to register for contest" do
   end
 end

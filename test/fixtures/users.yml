@@ -12,7 +12,7 @@ sys_admin:
 tenant_admin:
   first_name: Bobby
   last_name: Hill
-  email: bobby@ossaa.org
+  email: account_admin@ossaa.org
   password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
   verified: true
   account: contest_hq
@@ -27,10 +27,19 @@ director:
   account: contest_hq
   time_zone: America/Chicago
 
-director_ossaa:
+ossaa_director_john:
   first_name: John
   last_name: Doe
-  email: jdoe@school.org
+  email: johndoe@school.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  account: ossaa
+  time_zone: America/Chicago
+
+ossaa_director_jane:
+  first_name: Jane
+  last_name: Doe
+  email: janedoe@school.org
   password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
   verified: true
   account: ossaa

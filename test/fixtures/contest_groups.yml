@@ -1,0 +1,17 @@
+ossaa_symphonic:
+  name: Symphonic Band
+  contest_group_class: 6a
+  organization: one
+  account: ossaa
+
+ossaa_concert:
+  name: Concert Band
+  contest_group_class: 4a
+  organization: one
+  account: ossaa
+
+contest_hq_cantina:
+  name: Cantina Band
+  contest_group_class: contest_hq_1a
+  organization: five
+  account: contest_hq

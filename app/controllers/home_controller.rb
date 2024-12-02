@@ -18,6 +18,8 @@ class HomeController < ApplicationController
 
     # TODO: show contests director has registered for
     if current_user.director?
+      @my_groups = ContestGroup.includes(:contest_group_class)
+
       @upcoming_contests = Contest
         .order("contest_start")
         .limit(5)

@@ -1,0 +1,22 @@
+<div id="show_<%= dom_id @contest_group %>">
+  <div class="py-4">
+    <%= link_to sanitize("&larr; Browse Contest Groups"), contest_groups_path %>
+  </div>
+
+  <%= render @contest_group %>
+
+  <% if current_user.tenant_admin? %>
+    <div class="form-button-container">
+      <%= link_to "Edit", edit_contest_group_path(@contest_group), class: "btn-secondary" %>
+      <%= button_to "Delete",
+      @contest_group,
+      method: :delete,
+      class: "btn-danger",
+      form: {
+        data: {
+          turbo_confirm: "Are you sure?",
+        },
+      } %>
+    </div>
+  <% end %>
+</div>

@@ -5,5 +5,10 @@ one:
 
 two:
   organization: one
-  user: director_ossaa
+  user: ossaa_director_john
+  account: ossaa
+
+three:
+  organization: one
+  user: ossaa_director_jane
   account: ossaa

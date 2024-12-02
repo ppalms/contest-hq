@@ -1,0 +1,14 @@
+contest_hq_cantina_conductor:
+  contest_group: contest_hq_cantina
+  user: director
+  account_id: <%= ActiveRecord::FixtureSet.identify(:contest_hq) %>
+
+ossaa_symphonic_conductor:
+  contest_group: ossaa_symphonic
+  user: ossaa_director_john
+  account_id: <%= ActiveRecord::FixtureSet.identify(:ossaa) %>
+
+ossaa_concert_conductor:
+  contest_group: ossaa_concert
+  user: ossaa_director_jane
+  account_id: <%= ActiveRecord::FixtureSet.identify(:ossaa) %>
