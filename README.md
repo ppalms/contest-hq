@@ -21,6 +21,8 @@ Run `bin/setup` from the project root. The setup script will take care of the fo
 
 Run `bin/dev` to run the app at *<http://localhost:3000>*
 
+Run `bin/rails` to open the Rails console and `setup_session` to start a test session.
+
 ## Infrastructure
 
 ### DigitalOcean
