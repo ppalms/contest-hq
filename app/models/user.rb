@@ -50,6 +50,10 @@ class User < ApplicationRecord
     roles.exists?(name: "TenantAdmin")
   end
 
+  def admin?
+    sysadmin? || tenant_admin?
+  end
+
   def director?
     roles.exists?(name: "Director")
   end

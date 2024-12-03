@@ -85,4 +85,10 @@ class ContestsTest < ApplicationSystemTestCase
     # Can't see contest belonging to OSSAA account
     assert_no_text "All State"
   end
+
+  test "directors do not see new contets button" do
+    log_in_as(users(:director))
+    visit contests_url
+    assert_no_text "New contest"
+  end
 end
