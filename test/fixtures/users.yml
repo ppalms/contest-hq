@@ -53,3 +53,12 @@ ossaa_director_jane:
   verified: true
   account: ossaa
   time_zone: America/Chicago
+
+ossaa_director_noface:
+  first_name: No
+  last_name: Face
+  email: noface@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  account: ossaa
+  time_zone: America/Chicago

@@ -22,3 +22,6 @@ ossaa_tenant_admin_bob:
   user: ossaa_tenant_admin_bob
   role: tenant_admin
 
+ossaa_director_noface:
+  user: ossaa_director_noface
+  role: director

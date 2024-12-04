@@ -12,3 +12,8 @@ three:
   organization: one
   user: ossaa_director_jane
   account: ossaa
+
+four:
+  organization: one
+  user: ossaa_director_noface
+  account: ossaa

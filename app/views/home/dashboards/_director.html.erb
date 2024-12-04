@@ -10,7 +10,7 @@
         text-neutral-600 font-semibold text-xs uppercase
       "
     >
-      Director Overview
+      Overview
     </div>
   </div>
 
@@ -51,13 +51,19 @@
       </div>
 
       <div class="p-4 sm:p-6">
-        <% current_user.conducted_groups&.each do |contest_group| %>
+        <% if current_user.conducted_groups.any? %>
+          <% current_user.conducted_groups.each do |contest_group| %>
+            <div>
+              <%= link_to contest_group do %>
+                <%= contest_group.name %>
+                -
+                <%= contest_group.contest_group_class.name %>
+              <% end %>
+            </div>
+          <% end %>
+        <% else %>
           <div>
-            <%= link_to contest_group do %>
-              <%= contest_group.name %>
-              -
-              <%= contest_group.contest_group_class.name %>
-            <% end %>
+            <%= link_to "Create a contest group to get started", new_contest_group_path %>
           </div>
         <% end %>
       </div>
