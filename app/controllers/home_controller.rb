@@ -6,13 +6,22 @@ class HomeController < ApplicationController
       @recent_users = User
         .joins(:sessions)
         .select("users.id, users.email, MAX(sessions.created_at) AS last_session_created_at")
+        .where(account: current_user.account)
+        .where.not(roles: { name: "SysAdmin" })
         .group("users.id")
         .order("last_session_created_at DESC")
         .limit(5)
     end
 
     if current_user.tenant_admin?
-      @new_users = User.select("users.id, users.email, users.created_at").order("users.created_at DESC").limit(5)
+      @new_users = User
+        .includes(:roles)
+        .select("users.id, users.email, users.created_at")
+        .where(account: current_user.account)
+        .where.not(roles: { name: "SysAdmin" })
+        .order("users.created_at DESC")
+        .limit(5)
+
       @organizations = Organization.select("organizations.id, organizations.name").order("organizations.name").limit(5)
     end
 

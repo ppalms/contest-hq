@@ -13,6 +13,10 @@ class UsersController < ApplicationController
   end
 
   def edit
+    if current_user.account != @user.account
+      redirect_to root_path, status: :forbidden
+    end
+
     @roles = Role.where(name: %w[Director Judge TenantAdmin]).order(:name)
     @organizations = Organization.all.order(:name)
 

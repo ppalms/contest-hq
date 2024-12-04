@@ -86,12 +86,19 @@ class UserManagementTest < ApplicationSystemTestCase
     assert_text "Your password was reset successfully"
 
     log_in_as(new_user)
-    # TODO: onboarding affordances in dashboard
+    assert_text "Create a contest group to get started"
   end
 
   test "should only see users from own account" do
     log_in_as(users(:tenant_admin))
+    assert_no_text "ossaa.org"
+
     visit users_url
     assert_no_text "ossaa.org"
+  end
+
+  test "should not see sysadmin in dashboard or list" do
+    log_in_as(users(:tenant_admin))
+    assert_no_text "sa@contesthq.app"
   end
 end
