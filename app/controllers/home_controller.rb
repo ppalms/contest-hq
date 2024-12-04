@@ -5,8 +5,8 @@ class HomeController < ApplicationController
 
       @recent_users = User
         .joins(:sessions)
+        .joins(:roles)
         .select("users.id, users.email, MAX(sessions.created_at) AS last_session_created_at")
-        .where(account: current_user.account)
         .where.not(roles: { name: "SysAdmin" })
         .group("users.id")
         .order("last_session_created_at DESC")

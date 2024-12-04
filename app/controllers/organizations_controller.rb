@@ -6,6 +6,10 @@ class OrganizationsController < ApplicationController
   end
 
   def new
+    if !current_user.admin?
+      redirect_to organizations_path, alert: "You do not have permission to create organizations."
+    end
+
     @organization = Organization.new
   end
 

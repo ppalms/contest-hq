@@ -65,4 +65,13 @@ class OrganizationsTest < ApplicationSystemTestCase
     # Can't see organization belonging to OSSAA account
     assert_no_text "Lincoln High School"
   end
+
+  test "should not allow director to create" do
+    log_in_as(users(:director))
+    visit organizations_url
+    assert_no_text "New Organization"
+
+    visit new_organization_url
+    assert_text "You do not have permission to create organizations."
+  end
 end

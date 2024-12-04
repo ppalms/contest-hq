@@ -2,12 +2,15 @@
 <div id="organizations">
   <div class="flex justify-between items-center">
     <h1>Organizations</h1>
-    <div>
-      <%= button_to "New Organization",
-      new_organization_path,
-      method: :get,
-      class: "btn-primary" %>
-    </div>
+
+    <% if current_user.admin? %>
+      <div>
+        <%= button_to "New Organization",
+        new_organization_path,
+        method: :get,
+        class: "btn-primary" %>
+      </div>
+    <% end %>
   </div>
 
   <div class="p-4">
