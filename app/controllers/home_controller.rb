@@ -3,11 +3,9 @@ class HomeController < ApplicationController
     if current_user.sysadmin?
       @new_accounts = Account.order(created_at: :desc).limit(5)
 
-      @recent_users = User
+      @active_sessions = User
         .joins(:sessions)
-        .joins(:roles)
         .select("users.id, users.email, MAX(sessions.created_at) AS last_session_created_at")
-        .where.not(roles: { name: "SysAdmin" })
         .group("users.id")
         .order("last_session_created_at DESC")
         .limit(5)

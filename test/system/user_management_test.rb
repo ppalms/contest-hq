@@ -9,7 +9,7 @@ class UserManagementTest < ApplicationSystemTestCase
     visit root_url
 
     assert_text "New Accounts"
-    assert_text "Recent Sessions"
+    assert_text "Active Sessions"
   end
 
   test "tenant admin role should display tenant admin dashboard" do
