@@ -3,7 +3,12 @@ class UsersController < ApplicationController
   before_action :set_user, only: %i[edit update]
 
   def index
-      @users = User.includes(:roles).where.not(roles: { name: "SysAdmin" }).order(:last_name)
+      @users = User
+        .includes(:roles)
+        .where.not(roles: { name: "SysAdmin" })
+        .where(account: current_user.account)
+        .order(:last_name)
+
       @users = @users.where("email ILIKE ?", "%#{params[:email]}%") if params[:email].present?
   end
 
@@ -15,12 +20,14 @@ class UsersController < ApplicationController
   end
 
   def update
+    if current_user.account != @user.account
+      redirect_to root_path, status: :forbidden
+    end
+
     if @user.update(user_params)
-      flash[:notice] = "Successfully updated user."
       redirect_to users_path, notice: "User updated successfully."
     else
-      flash[:error] = "Failed to update user."
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_entity, error: "Failed to update user."
     end
   end
 

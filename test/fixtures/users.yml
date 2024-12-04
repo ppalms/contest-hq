@@ -3,7 +3,7 @@
 sys_admin:
   first_name: Jake
   last_name: Human
-  email: sa@ppalmer.dev
+  email: sa@contesthq.app
   password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
   verified: true
   account: contest_hq
@@ -12,7 +12,7 @@ sys_admin:
 tenant_admin:
   first_name: Bobby
   last_name: Hill
-  email: account_admin@ossaa.org
+  email: account_admin@contesthq.app
   password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
   verified: true
   account: contest_hq
@@ -21,7 +21,7 @@ tenant_admin:
 director:
   first_name: Hank
   last_name: Hill
-  email: hank@ossaa.org
+  email: hank@contesthq.app
   password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
   verified: true
   account: contest_hq

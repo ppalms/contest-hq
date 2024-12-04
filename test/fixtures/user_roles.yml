@@ -17,3 +17,8 @@ ossaa_director_john:
 ossaa_director_jane:
   user: ossaa_director_jane
   role: director
+
+ossaa_tenant_admin_bob:
+  user: ossaa_tenant_admin_bob
+  role: tenant_admin
+

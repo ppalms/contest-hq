@@ -89,10 +89,9 @@ class UserManagementTest < ApplicationSystemTestCase
     # TODO: onboarding affordances in dashboard
   end
 
-  # TODO: move to director onboarding test suite
-  test "should prompt director to create contest group" do
-  end
-
-  test "should prompt director to register for contest" do
+  test "should only see users from own account" do
+    log_in_as(users(:tenant_admin))
+    visit users_url
+    assert_no_text "ossaa.org"
   end
 end
