@@ -32,7 +32,7 @@ class UserManagementTest < ApplicationSystemTestCase
     visit edit_user_url(users(:director))
 
     check "Judge"
-    click_on "Update user"
+    click_on "Update User"
 
     assert_text "User updated successfully"
     assert users(:director).reload.judge?
@@ -46,7 +46,7 @@ class UserManagementTest < ApplicationSystemTestCase
     fill_in "Email", with: "new_tenant_admin@ppalmer.dev"
     select "Central Time (US & Canada)", from: "Time zone"
     check "TenantAdmin"
-    click_on "Send invitation"
+    click_on "Send Invitation"
 
     assert_text "An invitation email has been sent to new_tenant_admin@ppalmer.dev"
     new_user = User.find_by(email: "new_tenant_admin@ppalmer.dev")
@@ -72,7 +72,7 @@ class UserManagementTest < ApplicationSystemTestCase
     select "Central Time (US & Canada)", from: "Time zone"
     check "Director"
     assert_no_text "TenantAdmin"
-    click_on "Send invitation"
+    click_on "Send Invitation"
 
     assert_text "An invitation email has been sent to new_director@ppalmer.dev"
     new_user = User.find_by(email: "new_director@ppalmer.dev")

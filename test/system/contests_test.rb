@@ -13,7 +13,7 @@ class ContestsTest < ApplicationSystemTestCase
 
   test "should create contest" do
     visit contests_url
-    click_on "New contest"
+    click_on "New Contest"
 
     fill_in "Name", with: @contest.name
     fill_in "Contest start", with: @contest.contest_start
@@ -56,7 +56,7 @@ class ContestsTest < ApplicationSystemTestCase
 
   test "allows saving without start and end dates" do
     visit contests_url
-    click_on "New contest"
+    click_on "New Contest"
 
     fill_in "Name", with: @contest.name
     click_on "Create Contest"
@@ -69,7 +69,7 @@ class ContestsTest < ApplicationSystemTestCase
 
   test "should prevent saving end date before start date" do
     visit contests_url
-    click_on "New contest"
+    click_on "New Contest"
 
     fill_in "Name", with: @contest.name
     fill_in "Contest start", with: Date.new(2024, 10, 8)
@@ -89,6 +89,6 @@ class ContestsTest < ApplicationSystemTestCase
   test "directors do not see new contets button" do
     log_in_as(users(:director))
     visit contests_url
-    assert_no_text "New contest"
+    assert_no_text "New Contest"
   end
 end
