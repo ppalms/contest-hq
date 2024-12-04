@@ -13,7 +13,11 @@
     </div>
     <div class="absolute left-1/2 -translate-x-1/2 font-bold">
       <span>
-        <%= link_to "Contest HQ", root_path %>
+        <% if current_user %>
+          <%= link_to "#{current_user.account.name} Contest HQ", root_path %>
+        <% else %>
+          <%= link_to "Contest HQ", root_path %>
+        <% end %>
       </span>
     </div>
   </div>
