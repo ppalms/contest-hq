@@ -27,6 +27,15 @@ director:
   account: contest_hq
   time_zone: America/Chicago
 
+ossaa_tenant_admin_bob:
+  first_name: Bob
+  last_name: Belcher
+  email: ossaa_admin@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  account: ossaa
+  time_zone: America/Chicago
+
 ossaa_director_john:
   first_name: John
   last_name: Doe

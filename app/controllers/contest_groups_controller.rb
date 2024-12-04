@@ -1,10 +1,10 @@
 class ContestGroupsController < ApplicationController
-  before_action :set_contest_group, only: %i[show]
+  before_action :set_contest_group, only: %i[show edit update destroy]
 
   def index
     @empty_text = "No contest groups found"
     @empty_hint = "Create a contest group to register for contests"
-    @create_text = "Create contest group"
+    @create_text = "Create Contest Group"
     @create_path = new_contest_group_path
 
     if index_params[:filter_current_user] == "false"
@@ -17,6 +17,47 @@ class ContestGroupsController < ApplicationController
   def show
   end
 
+  def edit
+    @contest_group_classes = ContestGroupClass.all
+  end
+
+  def new
+    @contest_group = ContestGroup.new
+    @contest_group_classes = ContestGroupClass.all
+  end
+
+  def create
+    @contest_group = ContestGroup.new(contest_group_params)
+    @contest_group_classes = ContestGroupClass.all
+
+    if @contest_group.save
+      redirect_to @contest_group, notice: "Contest group was successfully created."
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    respond_to do |format|
+      if @contest_group.update(contest_group_params)
+        format.html { redirect_to @contest_group, notice: "Contest group was successfully updated." }
+        format.json { render :show, status: :ok, contest_group: @contest_group }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @contest_group.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def destroy
+    @contest_group.destroy!
+
+    respond_to do |format|
+      format.html { redirect_to contest_groups_url, notice: "Contest group was successfully deleted." }
+      format.json { head :no_content }
+    end
+  end
+
   private
 
   def set_contest_group
@@ -24,7 +65,7 @@ class ContestGroupsController < ApplicationController
   end
 
   def contest_group_params
-    params.expect(contest_group: [ :name, :contest_group_class_id ])
+    params.expect(contest_group: [ :name, :contest_group_class_id, :organization_id ])
   end
 
   def index_params

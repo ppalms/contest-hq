@@ -5,7 +5,7 @@
 
   <%= render @contest_group %>
 
-  <% if current_user.tenant_admin? %>
+  <% if current_user.director? || current_user.admin? %>
     <div class="form-button-container">
       <%= link_to "Edit", edit_contest_group_path(@contest_group), class: "btn-secondary" %>
       <%= button_to "Delete",

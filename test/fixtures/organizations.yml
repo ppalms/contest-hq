@@ -32,3 +32,8 @@ seven:
   name: Central High School
   organization_type: school_contest_hq
   account: contest_hq
+
+eight:
+  name: North High School
+  organization_type: school_ossaa
+  account: ossaa

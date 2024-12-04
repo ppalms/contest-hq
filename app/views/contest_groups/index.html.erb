@@ -2,6 +2,12 @@
 <div id="contest_groups">
   <div class="flex justify-between items-center">
     <h1>Contest Groups</h1>
+
+    <% if current_user.admin? || current_user.director? && !@contest_groups.empty? %>
+      <div class="flex gap-2">
+        <%= link_to "New Contest Group", new_contest_group_path, class: "btn-primary" %>
+      </div>
+    <% end %>
   </div>
 
   <div class="p-4">
