@@ -4,7 +4,7 @@ class SessionsController < ApplicationController
   before_action :set_session, only: :destroy
 
   def index
-    @sessions = Current.user.sessions.order(created_at: :desc)
+    @sessions = current_user.sessions.order(created_at: :desc)
   end
 
   def new
@@ -29,6 +29,6 @@ class SessionsController < ApplicationController
 
   private
     def set_session
-      @session = Current.user.sessions.find(params[:id])
+      @session = current_user.sessions.find(params[:id])
     end
 end
