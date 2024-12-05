@@ -2,8 +2,14 @@ require "application_system_test_case"
 
 class OnboardingDirectorTest < ApplicationSystemTestCase
   setup do
-    invite_new_director("noface@ossaa.org")
+    invite_new_director("newguy@ossaa.org")
     @contest_group = contest_groups(:ossaa_symphonic)
+  end
+
+  def teardown
+    if @new_director
+      @new_director.destroy
+    end
   end
 
   test "should prompt director to create contest group" do
@@ -16,11 +22,10 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
     assert_text "New Contest Group"
   end
 
-  test "should prompt director to register for contest" do
-  end
+  # test "should prompt director to register for contest" do
+  # end
 
   test "should create contest group" do
-    log_in_as(@new_director)
     visit contest_groups_url
     click_on "Create Contest Group"
     fill_in "Name", with: @contest_group.name
@@ -56,11 +61,11 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
   end
 
   test "showing a contest group" do
-    log_in_as(users(:ossaa_director_john))
+    log_in_as(users(:director))
     visit contest_groups_url
     click_on "View", match: :first
 
-    assert_selector "h1", text: @contest_group.name
+    assert_selector "h1", text: contest_groups(:contest_hq_cantina).name
   end
 
   test "should only see own contest groups" do
@@ -75,6 +80,7 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
   def invite_new_director(email)
     log_in_as(users(:ossaa_tenant_admin_bob))
     visit new_invitation_url
+
     fill_in "First name", with: "New"
     fill_in "Last name", with: "Director"
     fill_in "Email", with: email
@@ -83,18 +89,16 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
     select "Santa Fe High School", from: "Organization"
     assert_no_text "TenantAdmin"
     click_on "Send Invitation"
-
     assert_text "An invitation email has been sent to #{email}"
+
     @new_director = User.find_by(email: email)
     signed_id = @new_director.generate_token_for(:password_reset)
     visit edit_identity_password_reset_url(sid: signed_id)
-
     assert_text "Reset your password"
     fill_in "New password", with: "Secret1*3*5*"
     fill_in "Confirm new password", with: "Secret1*3*5*"
     click_on "Save changes"
     assert_text "Your password was reset successfully"
-
     log_in_as(@new_director)
   end
 end

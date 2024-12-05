@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  belongs_to :account
+  include AccountScoped
 
   has_secure_password
 
@@ -35,7 +35,7 @@ class User < ApplicationRecord
   end
 
   before_validation on: :create do
-    self.account ||= Account.find_or_create_by!(name: "Contest HQ")
+    self.account = Current.account
   end
 
   after_update if: :password_digest_previously_changed? do
