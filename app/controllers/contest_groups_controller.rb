@@ -2,11 +2,6 @@ class ContestGroupsController < ApplicationController
   before_action :set_contest_group, only: %i[show edit update destroy]
 
   def index
-    @empty_text = "No contest groups found"
-    @empty_hint = "Create a contest group to register for contests"
-    @create_text = "Create Contest Group"
-    @create_path = new_contest_group_path
-
     if index_params[:filter_current_user] == "false"
       @contest_groups = ContestGroup.includes(:contest_group_class).all
     else
