@@ -18,7 +18,7 @@ class OrganizationsController < ApplicationController
     if @organization.save
       redirect_to organizations_path, notice: "Organization was successfully created."
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
