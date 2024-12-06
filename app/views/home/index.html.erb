@@ -1,8 +1,27 @@
 <div class="space-y-8">
-  <%= render "home/dashboards/director" if current_user.director? %>
-  <%= render "home/dashboards/scheduler" if current_user.scheduler? %>
+  <% if current_user.director? || current_user.scheduler? %>
+    <div
+      class="
+        relative border border-neutral-300 px-4 pb-4 space-y-4 shadow-sm bg-neutral-50
+      "
+    >
+      <div class="flex justify-center">
+        <div
+          class="
+            absolute -top-2 px-2 border border-neutral-400 rounded-sm bg-white
+            text-neutral-600 font-semibold text-xs uppercase
+          "
+        >
+          Contest Dashboard
+        </div>
+      </div>
 
-  <% if current_user.sysadmin? || current_user.tenant_admin? %>
+      <%= render "home/dashboards/director" if current_user.director? %>
+      <%= render "home/dashboards/scheduler" if current_user.scheduler? %>
+    </div>
+  <% end %>
+
+  <% if current_user.admin? %>
     <div
       class="
         relative border border-neutral-300 px-4 pb-4 space-y-4 shadow-sm bg-neutral-50
