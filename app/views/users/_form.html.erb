@@ -1,17 +1,62 @@
-<%= form_with(model: user, class: "wide-form") do |form| %>
+<%= form_with(url: url, model: user, class: "wide-form") do |form| %>
   <div class="sm:col-span-2">
-    <strong>Email address</strong>
-    <p><%= user.email %></p>
+    <% if user.id? %>
+      <strong>Email address</strong>
+      <p><%= user.email %></p>
+    <% else %>
+      <%= form.label :email, style: "display: block" %>
+      <%= form.email_field :email,
+                       autofocus: true,
+                       required: true,
+                       autocomplete: "email",
+                       class: "text-field" %>
+    <% end %>
   </div>
 
   <div>
     <%= form.label :first_name, "First name" %>
-    <%= form.text_field :first_name, class: "text-field" %>
+    <%= form.text_field :first_name,
+                    autofocus: true,
+                    required: true,
+                    class: "text-field" %>
   </div>
 
   <div>
     <%= form.label :last_name, "Last name" %>
-    <%= form.text_field :last_name, class: "text-field" %>
+    <%= form.text_field :last_name, required: true, class: "text-field" %>
+  </div>
+
+  <div>
+    <%= form.label :role_ids, "Roles", style: "display: block" %>
+    <div
+      class="
+        flex flex-col space-y-2 border border-gray-400 bg-white shadow p-4 rounded-md
+      "
+    >
+      <div class="-mt-2"></div>
+      <%= form.collection_checkboxes :role_ids,
+                                 roles,
+                                 :id,
+                                 :name do |helper| %>
+        <%= helper.label do %>
+          <%= helper.check_box %><span class="ml-2"><%= helper.label %></span>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <div>
+    <div class="flex justify-between">
+      <%= form.label :organization_ids, "Organizations", style: "display: block" %>
+      <span class="text-sm text-gray-500">(Optional)</span>
+    </div>
+
+    <%= form.collection_select :organization_ids,
+                           organizations,
+                           :id,
+                           :name,
+                           { multiple: true },
+                           { class: "text-field" } %>
   </div>
 
   <div class="sm:col-span-2">
@@ -26,18 +71,8 @@
 
   </div>
 
-  <div>
-    <%= form.label :role_ids, "Roles" %>
-    <%= form.collection_select :role_ids,
-                           Role.all.order(:name),
-                           :id,
-                           :name,
-                           { required: true },
-                           { multiple: true, class: "multi-select" } %>
-  </div>
-
   <div class="form-button-container">
-    <%= form.submit class: "btn-primary" %>
+    <%= form.submit submit_text, class: "btn-primary" %>
     <%= link_to "Cancel", users_path, class: "btn-secondary", role: "button" %>
   </div>
 
@@ -45,3 +80,15 @@
     <%= render "layouts/error_messages", errors: user.errors %>
   <% end %>
 <% end %>
+
+<script>
+  function setDefaultTimeZone() {
+    const defaultTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const time_zone_field = document.querySelector("#user_time_zone")
+    if (time_zone_field && !time_zone_field.value) {
+      time_zone_field.value = defaultTimeZone;
+    }
+  }
+
+  document.addEventListener("turbo:render", setDefaultTimeZone);
+</script>

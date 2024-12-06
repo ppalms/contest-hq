@@ -1,19 +1,17 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-coda:
+demo_contest_a:
   name: CODA
   contest_start: 2024-10-23 13:00:00
   contest_end: 2024-10-23 22:00:00
-  account: contest_hq
+  account: demo
 
-sand_springs:
+demo_contest_b:
   name: Sand Springs
   contest_start: 2024-10-23 14:00:00
   contest_end: 2024-10-23 17:00:00
-  account: contest_hq
+  account: demo
 
-all_state:
+customer_contest_a:
   name: All State
   contest_start: 2024-11-01 12:00:00
   contest_end: 2024-11-02 20:00:00
-  account: ossaa
+  account: customer

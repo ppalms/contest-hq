@@ -1,7 +1,7 @@
-school_contest_hq:
+demo_orgtype_school:
   name: School
-  account: contest_hq
+  account: demo
 
-school_ossaa:
+customer_orgtype_school:
   name: School
-  account: ossaa
+  account: customer

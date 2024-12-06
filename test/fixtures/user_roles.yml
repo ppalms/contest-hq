@@ -1,9 +1,23 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-sys_admin:
-  user: sys_admin
+sys_admin_a:
+  user: sys_admin_a
   role: sys_admin
 
-tenant_admin:
-  user: tenant_admin
-  role: tenant_admin
+demo_admin_a:
+  user: demo_admin_a
+  role: account_admin
+
+demo_director_a:
+  user: demo_director_a
+  role: director
+
+customer_admin_a:
+  user: customer_admin_a
+  role: account_admin
+
+customer_director_a:
+  user: customer_director_a
+  role: director
+
+customer_director_b:
+  user: customer_director_b
+  role: director

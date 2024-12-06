@@ -11,30 +11,33 @@ class ApplicationController < ActionController::Base
   helper_method :require_role
 
   private
-    def authenticate
+
+  def authenticate
+    User.unscoped_by_account do
       if session_record = Session.find_by_id(cookies.signed[:session_token])
         Current.session = session_record
       else
         redirect_to sign_in_path
       end
     end
+  end
 
-    def set_current_request_details
-      Current.user_agent = request.user_agent
-      Current.ip_address = request.ip
-    end
+  def set_current_request_details
+    Current.user_agent = request.user_agent
+    Current.ip_address = request.ip
+  end
 
-    def current_user
-      Current.user
-    end
+  def current_user
+    Current.user
+  end
 
-    def require_role(role_name)
-      unless Current.user&.roles&.exists?(name: role_name)
-        redirect_to root_path
-      end
+  def require_role(*role_names)
+    unless role_names.any? { |role_name| current_user&.roles&.exists?(name: role_name) }
+      redirect_to root_path
     end
+  end
 
-    def set_time_zone(&block)
-      Time.use_zone(current_user&.time_zone, &block)
-    end
+  def set_time_zone(&block)
+    Time.use_zone(current_user&.time_zone, &block)
+  end
 end

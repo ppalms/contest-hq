@@ -2,7 +2,7 @@ require "test_helper"
 
 class UserMailerTest < ActionMailer::TestCase
   setup do
-    @user = users(:sys_admin)
+    @user = users(:sys_admin_a)
   end
 
   test "password_reset" do

@@ -1,10 +1,8 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 sys_admin:
   name: SysAdmin
 
-tenant_admin:
-  name: TenantAdmin
+account_admin:
+  name: AccountAdmin
 
 director:
   name: Director

@@ -2,9 +2,12 @@
 <div id="contests">
   <div class="flex justify-between items-center">
     <h1>Contests</h1>
-    <div class="flex gap-2">
-      <%= link_to "New contest", new_contest_path, class: "btn-primary" %>
-    </div>
+
+    <% if current_user.admin? %>
+      <div class="flex gap-2">
+        <%= link_to "New Contest", new_contest_path, class: "btn-primary" %>
+      </div>
+    <% end %>
   </div>
 
   <div class="pt-4">

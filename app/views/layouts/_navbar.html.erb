@@ -13,7 +13,11 @@
     </div>
     <div class="absolute left-1/2 -translate-x-1/2 font-bold">
       <span>
-        <%= link_to "Contest HQ", root_path %>
+        <% if current_user %>
+          <%= link_to "#{current_user.account.name} Contest HQ", root_path %>
+        <% else %>
+          <%= link_to "Contest HQ", root_path %>
+        <% end %>
       </span>
     </div>
   </div>
@@ -29,17 +33,21 @@
           <%= link_to "Home", root_path %>
         </div>
 
-        <% if current_user.tenant_admin? %>
-          <div>
-            <%= link_to "Contests", contests_path %>
-          </div>
+        <div>
+          <%= link_to "Contests", contests_path %>
+        </div>
 
+        <% if current_user.director? %>
           <div>
-            <%= link_to "Organizations", organizations_path %>
+            <%= link_to "Contest Groups", contest_groups_path %>
           </div>
         <% end %>
 
-        <% if current_user.sysadmin? %>
+        <% if current_user.admin? %>
+          <div>
+            <%= link_to "Organizations", organizations_path %>
+          </div>
+
           <div>
             <%= link_to "Users", users_path %>
           </div>

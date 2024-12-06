@@ -6,6 +6,10 @@ class OrganizationsController < ApplicationController
   end
 
   def new
+    if !current_user.admin?
+      redirect_to organizations_path, alert: "You do not have permission to create organizations."
+    end
+
     @organization = Organization.new
   end
 
@@ -14,7 +18,7 @@ class OrganizationsController < ApplicationController
     if @organization.save
       redirect_to organizations_path, notice: "Organization was successfully created."
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 

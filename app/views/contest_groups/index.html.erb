@@ -1,0 +1,30 @@
+<% content_for :title, "Contest Groups" %>
+<div id="contest_groups">
+  <div class="flex justify-between items-center">
+    <h1>Contest Groups</h1>
+
+    <% if (current_user.admin? || current_user.director?) && !@contest_groups.empty? %>
+      <div class="flex gap-2">
+        <%= link_to "New Contest Group", new_contest_group_path, class: "btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="p-4">
+    <%# render partial: "search" %>
+  </div>
+
+  <div
+    id="contest_group_list"
+    class="px-4 rounded-md bg-white border border-neutral-200 shadow-sm"
+  >
+
+    <%= render partial: "table",
+    locals: {
+      empty_text: "No contest groups found",
+      empty_hint: "Create a contest group to register for contests",
+      create_text: "New Contest Group",
+      create_path: new_contest_group_path,
+    } %>
+  </div>
+</div>

@@ -1,66 +1,78 @@
 <div
-  class="
-    relative border border-neutral-300 rounded-sm p-4 shadow-sm bg-neutral-50
-  "
+  class="grid grid-cols-1 space-y-4 sm:grid-cols-2 sm:space-y-0 sm:space-x-4"
 >
-  <div class="flex justify-center">
-    <div
-      class="
-        absolute -top-2 px-2 border border-neutral-400 rounded-sm bg-white
-        text-neutral-600 font-semibold text-xs uppercase
-      "
-    >
-      Director
+  <div
+    class="
+      divide-y divide-gray-200 overflow-hidden rounded-lg bg-white border
+      border-neutral-200
+    "
+  >
+    <div class="p-4 sm:px-6 bg-blue-100">
+      <strong>My Entries</strong>
+    </div>
+
+    <div class="p-4 py-5 sm:p-6">
+      <% @upcoming_contests&.each do |contest| %>
+        <div>
+          <%= link_to contest do %>
+            <%= contest.name %>
+            -
+            <%= contest.contest_start&.strftime("%m-%d-%Y") || "TBD" %>
+          <% end %>
+        </div>
+      <% end %>
     </div>
   </div>
 
   <div
-    class="grid grid-cols-1 space-y-4 sm:grid-cols-2 sm:space-y-0 sm:space-x-4"
+    class="
+      divide-y divide-gray-200 overflow-hidden rounded-lg bg-white border
+      border-neutral-200
+    "
   >
-    <div
-      class="
-        divide-y divide-gray-200 overflow-hidden rounded-lg bg-white border
-        border-neutral-200
-      "
-    >
-      <div class="p-4 sm:px-6 bg-blue-100">
-        <strong>My Contests</strong>
-      </div>
+    <div class="p-4 sm:px-6 bg-blue-100">
+      <strong><%= link_to "My Groups", contest_groups_path %></strong>
+    </div>
 
-      <div class="p-4 py-5 sm:p-6">
-        <% @upcoming_contests&.each do |contest| %>
+    <div class="p-4 sm:p-6">
+      <% if current_user.conducted_groups.any? %>
+        <% current_user.conducted_groups.each do |contest_group| %>
           <div>
-            <%= link_to contest do %>
-              <%= contest.name %>
+            <%= link_to contest_group do %>
+              <%= contest_group.name %>
               -
-              <%= contest.contest_start&.strftime("%m-%d-%Y") || "TBD" %>
+              <%= contest_group.contest_group_class.name %>
             <% end %>
           </div>
         <% end %>
-      </div>
+      <% else %>
+        <div>
+          <%= link_to "Create a contest group to get started", new_contest_group_path %>
+        </div>
+      <% end %>
     </div>
+  </div>
+</div>
 
-    <div
-      class="
-        divide-y divide-gray-200 overflow-hidden rounded-lg bg-white border
-        border-neutral-200
-      "
-    >
-      <div class="p-4 sm:px-6 bg-blue-100">
-        <strong>Eligible Contests</strong>
-      </div>
+<div
+  class="
+    divide-y divide-gray-200 overflow-hidden rounded-lg bg-white border
+    border-neutral-200 mt-4
+  "
+>
+  <div class="p-4 sm:px-6 bg-blue-100">
+    <strong>Contests</strong>
+  </div>
 
-      <div class="p-4 sm:p-6">
-        <% @upcoming_contests&.each do |contest| %>
-          <div>
-            <%= link_to contest do %>
-              <%= contest.name %>
-              -
-              <%= contest.contest_start&.strftime("%m-%d-%Y") || "TBD" %>
-            <% end %>
-          </div>
+  <div class="p-4 sm:p-6">
+    <% @upcoming_contests&.each do |contest| %>
+      <div>
+        <%= link_to contest do %>
+          <%= contest.name %>
+          -
+          <%= contest.contest_start&.strftime("%m-%d-%Y") || "TBD" %>
         <% end %>
       </div>
-    </div>
+    <% end %>
   </div>
 </div>

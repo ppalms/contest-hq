@@ -24,13 +24,13 @@
     "
   >
     <div class="p-4 sm:px-6 bg-orange-100">
-      <strong>Recent Sessions</strong>
+      <strong>Active Sessions</strong>
     </div>
     <div class="px-4 py-5 sm:p-6">
-      <% @recent_users&.each do |user| %>
+      <% @active_sessions&.each do |user| %>
         <%= user.email %>
         -
-        <%= user.sessions.last.created_at %>
+        <%= user.sessions.last.created_at %><br/>
       <% end %>
     </div>
   </div>

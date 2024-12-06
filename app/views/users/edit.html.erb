@@ -1,5 +1,10 @@
 <div class="wide-form-container" id="edit_<%= dom_id @user %>">
   <h1>Editing user</h1>
 
-  <%= render "form", user: @user %>
+  <%= render "form",
+  url: user_path,
+  user: @user,
+  roles: @roles,
+  organizations: @organizations,
+  submit_text: "Update User" %>
 </div>

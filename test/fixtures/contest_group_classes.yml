@@ -1,0 +1,27 @@
+demo_group_class_a:
+  name: 1-A
+  account: demo
+
+customer_group_class_a:
+  name: 1-A
+  account: customer
+
+customer_group_class_b:
+  name: 2-A
+  account: customer
+
+customer_group_class_c:
+  name: 3-A
+  account: customer
+
+customer_group_class_d:
+  name: 4-A
+  account: customer
+
+customer_group_class_e:
+  name: 5-A
+  account: customer
+
+customer_group_class_f:
+  name: 6-A
+  account: customer

@@ -2,8 +2,8 @@ require "application_system_test_case"
 
 class OrganizationsTest < ApplicationSystemTestCase
   setup do
-    log_in_as(users(:tenant_admin))
-    @organization = organizations(:five)
+    log_in_as(users(:demo_admin_a))
+    @organization = organizations(:demo_school_d)
   end
 
   test "visiting the index" do
@@ -19,7 +19,7 @@ class OrganizationsTest < ApplicationSystemTestCase
     visit organizations_url
     click_on "New Organization"
 
-    fill_in "Name", with: @organization.name
+    fill_in "Name", with: "Unseen University"
 
     select "School", from: :organization_type_id
     click_on "Create Organization"
@@ -64,5 +64,14 @@ class OrganizationsTest < ApplicationSystemTestCase
 
     # Can't see organization belonging to OSSAA account
     assert_no_text "Lincoln High School"
+  end
+
+  test "should not allow director to create" do
+    log_in_as(users(:demo_director_a))
+    visit organizations_url
+    assert_no_text "New Organization"
+
+    visit new_organization_url
+    assert_text "You do not have permission to create organizations."
   end
 end

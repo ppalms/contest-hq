@@ -1,28 +1,64 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-sys_admin:
-  first_name: Jake
-  last_name: Human
-  email: sa@ppalmer.dev
+sys_admin_a:
+  first_name: Havelock
+  last_name: Vetinari
+  email: sa@contesthq.app
   password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
   verified: true
-  account: contest_hq
+  account: demo
   time_zone: America/Chicago
 
-tenant_admin:
-  first_name: Bobby
-  last_name: Hill
-  email: bobby@ossaa.org
+demo_admin_a:
+  first_name: Sam
+  last_name: Vimes
+  email: sam@demo.org
   password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
   verified: true
-  account: contest_hq
   time_zone: America/Chicago
+  account: demo
 
-director:
+demo_director_a:
+  first_name: Carrot
+  last_name: Ironfoundersson
+  email: carrot@demo.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: demo
+
+demo_director_b:
+  first_name: Angua
+  last_name: von Uberwald
+  email: angua@demo.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: demo
+
+customer_admin_a:
   first_name: Hank
   last_name: Hill
-  email: hank@ossaa.org
+  email: hank@school.org
   password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
   verified: true
-  account: contest_hq
   time_zone: America/Chicago
+  account: customer
+
+customer_director_a:
+  first_name: Dale
+  last_name: Gribble
+  email: dale@school.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: customer
+
+customer_director_b:
+  first_name: Bill
+  last_name: Dauterive
+  email: bill@school.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: customer

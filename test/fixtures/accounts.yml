@@ -1,5 +1,5 @@
-contest_hq:
-  name: Contest HQ
+demo:
+  name: Public Demo
 
-ossaa:
-  name: OSSAA
+customer:
+  name: Customer

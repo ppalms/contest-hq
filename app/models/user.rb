@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  belongs_to :account
+  include AccountScoped
 
   has_secure_password
 
@@ -11,11 +11,14 @@ class User < ApplicationRecord
     password_salt.last(10)
   end
 
-  has_many :user_roles
+  has_many :user_roles, dependent: :delete_all
   has_many :roles, through: :user_roles
 
-  has_many :org_memberships
+  has_many :org_memberships, dependent: :delete_all
   has_many :organizations, through: :org_memberships
+
+  has_many :contest_group_conductors, dependent: :delete_all
+  has_many :conducted_groups, through: :contest_group_conductors, source: :contest_group
 
   has_many :sessions, dependent: :destroy
 
@@ -32,7 +35,7 @@ class User < ApplicationRecord
   end
 
   before_validation on: :create do
-    self.account ||= Account.find_or_create_by!(name: "Contest HQ")
+    self.account = Current.account
   end
 
   after_update if: :password_digest_previously_changed? do
@@ -44,7 +47,11 @@ class User < ApplicationRecord
   end
 
   def tenant_admin?
-    roles.exists?(name: "TenantAdmin")
+    roles.exists?(name: "AccountAdmin")
+  end
+
+  def admin?
+    sysadmin? || tenant_admin?
   end
 
   def director?
