@@ -2,7 +2,7 @@ require "test_helper"
 
 class SessionsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @user = users(:sys_admin)
+    @user = users(:sys_admin_a)
   end
 
   test "should get index" do

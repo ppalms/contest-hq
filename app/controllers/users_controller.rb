@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action -> { require_role "SysAdmin", "TenantAdmin" }
+  before_action -> { require_role "SysAdmin", "AccountAdmin" }
   before_action :set_user, only: %i[edit update]
 
   def index
@@ -17,7 +17,7 @@ class UsersController < ApplicationController
       redirect_to root_path, status: :forbidden
     end
 
-    @roles = Role.where(name: %w[Director Judge TenantAdmin]).order(:name)
+    @roles = Role.where(name: %w[Director Judge AccountAdmin]).order(:name)
     @organizations = Organization.all.order(:name)
 
     render :edit, locals: { roles: @roles, organizations: @organizations }

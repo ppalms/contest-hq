@@ -47,7 +47,7 @@ class User < ApplicationRecord
   end
 
   def tenant_admin?
-    roles.exists?(name: "TenantAdmin")
+    roles.exists?(name: "AccountAdmin")
   end
 
   def admin?

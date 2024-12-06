@@ -12,7 +12,7 @@ Account.find_or_create_by!(name: "Contest HQ")
 
 roles = [
   { name: 'SysAdmin' },
-  { name: 'TenantAdmin' },
+  { name: 'AccountAdmin' },
   { name: 'Director' },
   { name: 'Scheduler' },
   { name: 'Judge' }

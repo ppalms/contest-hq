@@ -2,7 +2,7 @@ class InvitationsController < ApplicationController
   def new
     @user = User.new
     if current_user.sysadmin?
-      @roles = Role.where(name: %w[Director Judge TenantAdmin]).order(:name)
+      @roles = Role.where(name: %w[Director Judge AccountAdmin]).order(:name)
     else
       @roles = Role.where(name: %w[Director Judge]).order(:name)
     end

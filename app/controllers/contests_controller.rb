@@ -1,6 +1,6 @@
 class ContestsController < ApplicationController
   before_action :set_contest, only: %i[ show edit update destroy ]
-  before_action -> { require_role "TenantAdmin" }, except: %i[ index show ]
+  before_action -> { require_role "AccountAdmin" }, except: %i[ index show ]
 
   # GET /contests or /contests.json
   def index

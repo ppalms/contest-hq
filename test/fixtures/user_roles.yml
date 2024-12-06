@@ -1,23 +1,23 @@
-sys_admin:
-  user: sys_admin
+sys_admin_a:
+  user: sys_admin_a
   role: sys_admin
 
-tenant_admin:
-  user: tenant_admin
-  role: tenant_admin
+demo_admin_a:
+  user: demo_admin_a
+  role: account_admin
 
-director:
-  user: director
+demo_director_a:
+  user: demo_director_a
   role: director
 
-ossaa_director_john:
-  user: ossaa_director_john
+customer_admin_a:
+  user: customer_admin_a
+  role: account_admin
+
+customer_director_a:
+  user: customer_director_a
   role: director
 
-ossaa_director_jane:
-  user: ossaa_director_jane
+customer_director_b:
+  user: customer_director_b
   role: director
-
-ossaa_tenant_admin_bob:
-  user: ossaa_tenant_admin_bob
-  role: tenant_admin

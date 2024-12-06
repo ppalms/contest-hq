@@ -1,27 +1,27 @@
-1a:
+demo_group_class_a:
   name: 1-A
-  account: ossaa
+  account: demo
 
-2a:
+customer_group_class_a:
+  name: 1-A
+  account: customer
+
+customer_group_class_b:
   name: 2-A
-  account: ossaa
+  account: customer
 
-3a:
+customer_group_class_c:
   name: 3-A
-  account: ossaa
+  account: customer
 
-4a:
+customer_group_class_d:
   name: 4-A
-  account: ossaa
+  account: customer
 
-5a:
+customer_group_class_e:
   name: 5-A
-  account: ossaa
+  account: customer
 
-6a:
+customer_group_class_f:
   name: 6-A
-  account: ossaa
-
-contest_hq_1a:
-  name: 1-A
-  account: contest_hq
+  account: customer

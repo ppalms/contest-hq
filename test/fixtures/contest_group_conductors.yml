@@ -1,14 +1,19 @@
-contest_hq_cantina_conductor:
-  contest_group: contest_hq_cantina
-  user: director
-  account_id: <%= ActiveRecord::FixtureSet.identify(:contest_hq) %>
+demo_school_a_group_a_conductor:
+  contest_group: demo_school_a_group_a
+  user: demo_director_a
+  account_id: <%= ActiveRecord::FixtureSet.identify(:demo) %>
 
-ossaa_symphonic_conductor:
-  contest_group: ossaa_symphonic
-  user: ossaa_director_john
-  account_id: <%= ActiveRecord::FixtureSet.identify(:ossaa) %>
+demo_school_a_group_b_conductor:
+  contest_group: demo_school_a_group_b
+  user: demo_director_b
+  account_id: <%= ActiveRecord::FixtureSet.identify(:demo) %>
 
-ossaa_concert_conductor:
-  contest_group: ossaa_concert
-  user: ossaa_director_jane
-  account_id: <%= ActiveRecord::FixtureSet.identify(:ossaa) %>
+customer_school_a_group_a_conductor:
+  contest_group: customer_school_a_group_a
+  user: customer_director_a
+  account_id: <%= ActiveRecord::FixtureSet.identify(:customer) %>
+
+customer_school_b_group_a_conductor:
+  contest_group: customer_school_b_group_a
+  user: customer_director_b
+  account_id: <%= ActiveRecord::FixtureSet.identify(:customer) %>

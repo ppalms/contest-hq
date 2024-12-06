@@ -2,7 +2,7 @@ require "test_helper"
 
 class Identity::PasswordResetsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @user = users(:sys_admin)
+    @user = users(:sys_admin_a)
   end
 
   test "should get new" do
