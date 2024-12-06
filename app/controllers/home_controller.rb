@@ -13,10 +13,12 @@ class HomeController < ApplicationController
 
     if current_user.tenant_admin?
       @new_users = User
-        .includes(:roles)
         .select("users.id, users.email, users.created_at")
         .where(account: current_user.account)
-        .where.not(roles: { name: "SysAdmin" })
+        .where.not(
+          id: User.joins(:roles).where(roles: { name: "SysAdmin" }).select(:id)
+        )
+        .includes(:roles)
         .order("users.created_at DESC")
         .limit(5)
 

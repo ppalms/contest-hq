@@ -1,7 +1,7 @@
 if Rails.env.development?
   module ConsoleMethods
     def setup_session
-      test_user = User.find_by!(email: "johndoe@school.org")
+      test_user = User.find_by!(email: "sa@contesthq.app")
       test_session = Session.create(user: test_user)
       Current.session = test_session
     end
