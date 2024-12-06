@@ -4,9 +4,10 @@ class UsersController < ApplicationController
 
   def index
       @users = User
+        .where.not(
+          id: User.joins(:roles).where(roles: { name: "SysAdmin" }).select(:id)
+        )
         .includes(:roles)
-        .where.not(roles: { name: "SysAdmin" })
-        .where(account: current_user.account)
         .order(:last_name)
 
       @users = @users.where("email ILIKE ?", "%#{params[:email]}%") if params[:email].present?
