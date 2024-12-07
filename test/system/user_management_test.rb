@@ -88,6 +88,12 @@ class UserManagementTest < ApplicationSystemTestCase
     assert_text "Create a contest group to get started"
   end
 
+  test "should not allow account admin to invite account admin" do
+    log_in_as(users(:demo_admin_a))
+    visit new_invitation_url
+    assert_no_text "AccountAdmin"
+  end
+
   test "should only see users from own account" do
     log_in_as(users(:demo_admin_a))
     assert_no_text users(:customer_director_a).email

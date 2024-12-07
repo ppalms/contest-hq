@@ -32,7 +32,7 @@
   }
 
   .wide-form {
-    @apply grid grid-cols-1 md:grid-cols-2 gap-4 pt-4;
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4;
   }
 
   .text-field {
@@ -104,7 +104,7 @@
   }
 
   .wide-form-container {
-    @apply max-w-2xl mx-auto space-y-4 pt-2 pb-4;
+    @apply max-w-4xl mx-auto space-y-4 py-8;
   }
 
   .form-button-container {

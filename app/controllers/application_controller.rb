@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user
   helper_method :require_role
+  helper_method :breadcrumbs
 
   private
 
@@ -39,5 +40,13 @@ class ApplicationController < ActionController::Base
 
   def set_time_zone(&block)
     Time.use_zone(current_user&.time_zone, &block)
+  end
+
+  def breadcrumbs
+    @breadcrumbs ||= []
+  end
+
+  def add_breadcrumb(name, path = nil)
+    breadcrumbs << Breadcrumb.new(name, path)
   end
 end

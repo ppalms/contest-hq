@@ -21,7 +21,7 @@ class ContestsTest < ApplicationSystemTestCase
     click_on "Create Contest"
 
     assert_text "Contest was successfully created"
-    click_on "Browse Contests"
+    click_on "Contests"
     assert_text "New Demo Contest"
   end
 
@@ -33,7 +33,7 @@ class ContestsTest < ApplicationSystemTestCase
     click_on "Update Contest"
 
     assert_text "Contest was successfully updated"
-    click_on "Browse Contests"
+    click_on "Contests"
     assert_text "New Demo Contest Name"
   end
 
@@ -49,7 +49,7 @@ class ContestsTest < ApplicationSystemTestCase
 
   test "showing a contest" do
     visit contests_url
-    click_link @contest.name
+    click_link(href: contest_path(@contest.id))
 
     assert_selector "h1", text: @contest.name
   end

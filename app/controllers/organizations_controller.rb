@@ -1,5 +1,6 @@
 class OrganizationsController < ApplicationController
   before_action :set_organization, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_breadcrumbs
 
   def index
     @organizations = Organization.includes(:organization_type).all.order(:name)
@@ -20,9 +21,6 @@ class OrganizationsController < ApplicationController
     else
       render :new, status: :unprocessable_entity
     end
-  end
-
-  def edit
   end
 
   def update
@@ -54,5 +52,9 @@ class OrganizationsController < ApplicationController
 
   def organization_params
     params.expect(organization: [ :name, :organization_type_id ])
+  end
+
+  def set_breadcrumbs
+    add_breadcrumb("Organizations", organizations_path)
   end
 end
