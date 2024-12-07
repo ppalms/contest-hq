@@ -49,7 +49,7 @@ class ContestsTest < ApplicationSystemTestCase
 
   test "showing a contest" do
     visit contests_url
-    click_link @contest.name
+    click_link(href: contest_path(@contest.id))
 
     assert_selector "h1", text: @contest.name
   end
