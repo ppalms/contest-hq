@@ -1,5 +1,6 @@
 class ContestGroupsController < ApplicationController
   before_action :set_contest_group, only: %i[show edit update destroy]
+  before_action :set_breadcrumbs
 
   def index
     if index_params[:filter_current_user] == "false"
@@ -65,5 +66,9 @@ class ContestGroupsController < ApplicationController
 
   def index_params
     params.permit(:filter_current_user)
+  end
+
+  def set_breadcrumbs
+    add_breadcrumb("Contest Groups", contest_groups_path)
   end
 end
