@@ -15,7 +15,7 @@ class ContestGroupsTest < ApplicationSystemTestCase
     click_on "Create Contest Group"
 
     assert_text "Contest group was successfully created"
-    click_on "Browse Contest Groups"
+    click_on "Contest Groups"
     assert_text "Ultra Symphonic Band"
   end
 
@@ -27,7 +27,7 @@ class ContestGroupsTest < ApplicationSystemTestCase
     click_on "Update Contest Group"
 
     assert_text "Contest group was successfully updated"
-    click_on "Browse Contest Groups"
+    click_on "Contest Groups"
     assert_text "New Contest Group Name"
   end
 
