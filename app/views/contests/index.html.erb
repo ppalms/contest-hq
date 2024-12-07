@@ -18,31 +18,12 @@
     <% if @contests.empty? %>
       <p class="text-center">No contests found.</p>
     <% else %>
-      <% @contests.each do |contest| %>
-        <%= link_to contest do %>
-          <div
-            class="
-              flex gap-2 p-2 min-h-24 rounded hover:cursor-pointer hover:bg-cyan-50
-              hover:outline hover:outline-1 hover:outline-cyan-100 hover:transition
-              duration-300
-            "
-          >
-            <div class="grow">
-              <p class="text-xl font-bold"><%= contest.name %></p>
-            </div>
-            <div class="hidden sm:block pr-2 text-right">
-              <strong>Dates</strong>
-              <p>
-                <%= contest.contest_start&.strftime("%A %-m/%d/%Y") %>
-                <% if contest.contest_start&.to_date != contest.contest_end&.to_date %>
-                  -
-                  <%= contest.contest_end&.strftime("%A %-m/%d/%Y") %>
-                <% end %>
-              </p>
-            </div>
-          </div>
-        <% end %>
-      <% end %>
+      <div
+        id="contest_list"
+        class="px-4 rounded-md bg-white border border-neutral-200 shadow-sm"
+      >
+        <%= render partial: "layouts/entity_list", locals: { entities: @contests } %>
+      </div>
     <% end %>
   </div>
 </div>
