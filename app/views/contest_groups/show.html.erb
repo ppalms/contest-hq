@@ -1,8 +1,4 @@
-<div id="show_<%= dom_id @contest_group %>">
-  <div class="py-4">
-    <%= link_to sanitize("&larr; Browse Contest Groups"), contest_groups_path %>
-  </div>
-
+<div class="py-8" id="show_<%= dom_id @contest_group %>">
   <%= render @contest_group %>
 
   <% if current_user.director? || current_user.admin? %>
