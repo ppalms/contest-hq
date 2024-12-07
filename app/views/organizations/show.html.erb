@@ -1,8 +1,4 @@
-<div id="show_<%= dom_id @organization %>">
-  <div class="py-4">
-    <%= link_to sanitize("&larr; Browse Organizations"), organizations_path %>
-  </div>
-
+<div class="py-8" id="show_<%= dom_id @organization %>">
   <%= render @organization %>
 
   <% if current_user.tenant_admin? %>
