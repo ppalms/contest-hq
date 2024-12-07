@@ -1,6 +1,7 @@
 class ContestsController < ApplicationController
   before_action :set_contest, only: %i[ show edit update destroy ]
   before_action -> { require_role "AccountAdmin" }, except: %i[ index show ]
+  before_action :set_breadcrumbs
 
   # GET /contests or /contests.json
   def index
@@ -69,5 +70,9 @@ class ContestsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def contest_params
     params.expect(contest: [ :name, :contest_start, :contest_end ])
+  end
+
+  def set_breadcrumbs
+    add_breadcrumb("Contests", contests_path)
   end
 end
