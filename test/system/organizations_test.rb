@@ -36,7 +36,7 @@ class OrganizationsTest < ApplicationSystemTestCase
     click_on "Update Organization"
 
     assert_text "Organization was successfully updated"
-    click_on "Browse Organizations"
+    click_on "Organizations"
     assert_text "New School Name"
   end
 
@@ -56,7 +56,7 @@ class OrganizationsTest < ApplicationSystemTestCase
 
     assert_selector "h1", text: @organization.name
 
-    click_on "Browse Organizations"
+    click_on "Organizations"
   end
 
   test "should not see other account's organizations" do
