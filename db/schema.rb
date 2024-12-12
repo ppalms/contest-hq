@@ -23,44 +23,12 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_11_035949) do
   create_table "contest_entries", force: :cascade do |t|
     t.bigint "contest_id", null: false
     t.bigint "user_id", null: false
-    t.bigint "contest_group_id", null: false
+    t.bigint "large_group_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["contest_group_id"], name: "index_contest_entries_on_contest_group_id"
     t.index ["contest_id"], name: "index_contest_entries_on_contest_id"
+    t.index ["large_group_id"], name: "index_contest_entries_on_large_group_id"
     t.index ["user_id"], name: "index_contest_entries_on_user_id"
-  end
-
-  create_table "contest_group_classes", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "account_id", null: false
-    t.index ["account_id"], name: "index_contest_group_classes_on_account_id"
-  end
-
-  create_table "contest_group_conductors", id: false, force: :cascade do |t|
-    t.bigint "contest_group_id", null: false
-    t.bigint "user_id", null: false
-    t.bigint "account_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_contest_group_conductors_on_account_id"
-    t.index ["contest_group_id", "account_id"], name: "idx_on_contest_group_id_account_id_a81d344964"
-    t.index ["contest_group_id", "user_id", "account_id"], name: "idx_on_contest_group_id_user_id_account_id_d73e3c1e6a", unique: true
-    t.index ["user_id", "account_id"], name: "index_contest_group_conductors_on_user_id_and_account_id"
-  end
-
-  create_table "contest_groups", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "organization_id", null: false
-    t.bigint "contest_group_class_id", null: false
-    t.bigint "account_id", null: false
-    t.index ["account_id"], name: "index_contest_groups_on_account_id"
-    t.index ["contest_group_class_id"], name: "index_contest_groups_on_contest_group_class_id"
-    t.index ["organization_id"], name: "index_contest_groups_on_organization_id"
   end
 
   create_table "contests", force: :cascade do |t|
@@ -71,6 +39,38 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_11_035949) do
     t.datetime "updated_at", null: false
     t.bigint "account_id", null: false
     t.index ["account_id"], name: "index_contests_on_account_id"
+  end
+
+  create_table "large_group_classes", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "account_id", null: false
+    t.index ["account_id"], name: "index_large_group_classes_on_account_id"
+  end
+
+  create_table "large_group_conductors", id: false, force: :cascade do |t|
+    t.bigint "large_group_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "account_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_large_group_conductors_on_account_id"
+    t.index ["large_group_id", "account_id"], name: "idx_on_large_group_id_account_id_a81d344964"
+    t.index ["large_group_id", "user_id", "account_id"], name: "idx_on_large_group_id_user_id_account_id_d73e3c1e6a", unique: true
+    t.index ["user_id", "account_id"], name: "index_large_group_conductors_on_user_id_and_account_id"
+  end
+
+  create_table "large_groups", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "organization_id", null: false
+    t.bigint "large_group_class_id", null: false
+    t.bigint "account_id", null: false
+    t.index ["account_id"], name: "index_large_groups_on_account_id"
+    t.index ["large_group_class_id"], name: "index_large_groups_on_large_group_class_id"
+    t.index ["organization_id"], name: "index_large_groups_on_organization_id"
   end
 
   create_table "org_memberships", id: false, force: :cascade do |t|
@@ -142,17 +142,17 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_11_035949) do
     t.index ["last_name"], name: "index_users_on_last_name"
   end
 
-  add_foreign_key "contest_entries", "contest_groups"
   add_foreign_key "contest_entries", "contests"
+  add_foreign_key "contest_entries", "large_groups"
   add_foreign_key "contest_entries", "users"
-  add_foreign_key "contest_group_classes", "accounts"
-  add_foreign_key "contest_group_conductors", "accounts"
-  add_foreign_key "contest_group_conductors", "contest_groups"
-  add_foreign_key "contest_group_conductors", "users"
-  add_foreign_key "contest_groups", "accounts"
-  add_foreign_key "contest_groups", "contest_group_classes"
-  add_foreign_key "contest_groups", "organizations"
   add_foreign_key "contests", "accounts"
+  add_foreign_key "large_group_classes", "accounts"
+  add_foreign_key "large_group_conductors", "accounts"
+  add_foreign_key "large_group_conductors", "large_groups"
+  add_foreign_key "large_group_conductors", "users"
+  add_foreign_key "large_groups", "accounts"
+  add_foreign_key "large_groups", "large_group_classes"
+  add_foreign_key "large_groups", "organizations"
   add_foreign_key "org_memberships", "accounts"
   add_foreign_key "org_memberships", "organizations"
   add_foreign_key "org_memberships", "users"

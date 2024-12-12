@@ -1,15 +1,7 @@
-<%= form_with(model: contest_group, class: "wide-form") do |form| %>
+<%= form_with(model: large_group, class: "wide-form") do |form| %>
   <div class="sm:col-span-2">
     <%= form.label :name %>
     <%= form.text_field :name, class: "text-field", autofocus: true %>
-  </div>
-
-  <div>
-    <%= form.label :contest_group_class %>
-    <%= form.select :contest_group_class_id,
-                contest_group_classes.map { |t| [t.name, t.id] },
-                { include_blank: "Select a group class" },
-                { required: true, class: "text-field", id: :contest_group_class_id } %>
   </div>
 
   <div>
@@ -20,14 +12,22 @@
                 { required: true, class: "text-field", id: :organization_id } %>
   </div>
 
-  <div class="form-button-container">
-    <%= form.submit submit_text, class: "btn-primary" %>
-    <%= link_to "Cancel", contest_groups_path, class: "btn-secondary", role: "button" %>
+  <div>
+    <%= form.label :large_group_class %>
+    <%= form.select :large_group_class_id,
+                large_group_classes.map { |t| [t.name, t.id] },
+                { include_blank: "Select a classification" },
+                { required: true, class: "text-field", id: :large_group_class_id } %>
   </div>
 
-  <% if contest_group.errors.any? %>
+  <div class="form-button-container">
+    <%= form.submit submit_text, class: "btn-primary" %>
+    <%= link_to "Cancel", large_groups_path, class: "btn-secondary", role: "button" %>
+  </div>
+
+  <% if large_group.errors.any? %>
     <div class="pt-2 sm:col-span-2">
-      <%= render "layouts/error_messages", errors: contest_group.errors %>
+      <%= render "layouts/error_messages", errors: large_group.errors %>
     </div>
   <% end %>
 <% end %>

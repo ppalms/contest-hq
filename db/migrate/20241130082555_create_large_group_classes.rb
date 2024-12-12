@@ -1,6 +1,6 @@
-class CreateContestGroupClasses < ActiveRecord::Migration[8.0]
+class CreateLargeGroupClasses < ActiveRecord::Migration[8.0]
   def change
-    create_table :contest_group_classes do |t|
+    create_table :large_group_classes do |t|
       t.string :name
       t.timestamps
 

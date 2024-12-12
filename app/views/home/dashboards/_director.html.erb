@@ -1,3 +1,17 @@
+<div class="bg-white shadow-sm sm:rounded-lg">
+  <div class="px-4 py-5 sm:p-6">
+    <h3 class="text-base font-semibold text-gray-900">Welcome</h3>
+    <div class="mt-2 sm:flex sm:items-start sm:justify-between">
+      <div class="max-w-xl text-sm text-gray-500">
+        <p>Set up your roster to register for contests</p>
+      </div>
+      <div class="mt-5 sm:mt-0 sm:ml-6 sm:flex sm:shrink-0 sm:items-center">
+        <%= link_to "Add Large Group", new_large_group_path, class: "btn-primary-sm" %>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div
   class="grid grid-cols-1 space-y-4 sm:grid-cols-2 sm:space-y-0 sm:space-x-4"
 >
@@ -31,23 +45,17 @@
     "
   >
     <div class="p-4 sm:px-6 bg-blue-100">
-      <strong><%= link_to "My Groups", contest_groups_path %></strong>
+      <strong>My Scores</strong>
     </div>
 
-    <div class="p-4 sm:p-6">
-      <% if current_user.conducted_groups.any? %>
-        <% current_user.conducted_groups.each do |contest_group| %>
-          <div>
-            <%= link_to contest_group do %>
-              <%= contest_group.name %>
-              -
-              <%= contest_group.contest_group_class.name %>
-            <% end %>
-          </div>
-        <% end %>
-      <% else %>
+    <div class="p-4 py-5 sm:p-6">
+      <% @upcoming_contests&.each do |contest| %>
         <div>
-          <%= link_to "Create a contest group to get started", new_contest_group_path %>
+          <%= link_to contest do %>
+            <%= contest.name %>
+            -
+            <%= contest.contest_start&.strftime("%m-%d-%Y") || "TBD" %>
+          <% end %>
         </div>
       <% end %>
     </div>

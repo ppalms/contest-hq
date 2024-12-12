@@ -11,14 +11,14 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
     end
   end
 
-  test "should prompt director to create contest group" do
+  test "should prompt director to create large group" do
     visit root_url
 
-    assert_text "Create a contest group to get started"
+    assert_text "Create a large group to get started"
 
-    click_on "Create a contest group"
+    click_on "Create a large group"
 
-    assert_text "New Contest Group"
+    assert_text "New Large Group"
   end
 
   # test "should prompt director to register for contest" do

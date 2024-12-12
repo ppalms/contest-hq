@@ -1,6 +1,6 @@
 require "test_helper"
 
-class ContestGroupControllerTest < ActionDispatch::IntegrationTest
+class LargeGroupControllerTest < ActionDispatch::IntegrationTest
   # test "the truth" do
   #   assert true
   # end

@@ -1,0 +1,29 @@
+<% content_for :title, "Large Groups" %>
+<div class="py-8" id="large_groups">
+  <div class="flex justify-between">
+    <h1>Large Groups</h1>
+
+    <% if (current_user.admin? || current_user.director?) && !@large_groups.empty? %>
+      <div class="flex gap-2">
+        <%= link_to "New Large Group", new_large_group_path, class: "btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="p-4">
+    <%# render partial: "search" %>
+  </div>
+
+  <div
+    id="large_group_list"
+    class="px-4 rounded-md bg-white border border-neutral-200 shadow-sm"
+  >
+    <%= render partial: "table",
+    locals: {
+      empty_text: "No large groups found",
+      empty_hint: "Create a large group to register for contests",
+      create_text: "New Large Group",
+      create_path: new_large_group_path,
+    } %>
+  </div>
+</div>

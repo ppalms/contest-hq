@@ -85,7 +85,7 @@ class UserManagementTest < ApplicationSystemTestCase
     assert_text "Your password was reset successfully"
 
     log_in_as(new_user)
-    assert_text "Create a contest group to get started"
+    assert_text "Create a large group to get started"
   end
 
   test "should not allow account admin to invite account admin" do

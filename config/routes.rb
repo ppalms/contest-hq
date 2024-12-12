@@ -3,10 +3,10 @@ Rails.application.routes.draw do
   resources :users, only: [ :index, :edit, :update ]
   resources :contests
   resources :organizations
-  resources :contest_groups
+  resources :large_groups
 
   resources :organization_types, only: [ :index, :show ]
-  resources :contest_group_classes, only: [ :index, :show ]
+  resources :large_group_classes, only: [ :index, :show ]
 
   resource :invitation, only: [ :new, :create ]
   get  "sign_in", to: "sessions#new"

@@ -1,4 +1,4 @@
-<% if @contest_groups.empty? %>
+<% if @large_groups.empty? %>
   <div class="text-center p-8">
     <svg
       class="mx-auto size-12 text-gray-400"
@@ -23,23 +23,23 @@
   </div>
 <% else %>
   <ul role="list" class="divide-y divide-gray-100">
-    <% @contest_groups.each do |contest_group| %>
+    <% @large_groups.each do |large_group| %>
       <li class="flex items-center justify-between gap-x-6 py-5">
         <div class="min-w-0">
           <div class="flex items-start gap-x-3">
-            <p class="font-semibold text-gray-900"><%= contest_group.name %></p>
+            <p class="font-semibold text-gray-900"><%= large_group.name %></p>
           </div>
           <div class="mt-1 flex items-center gap-x-2 text-xs/5 text-gray-500">
-            <p class="truncate"><%= contest_group.organization.name %></p>
+            <p class="truncate"><%= large_group.organization.name %></p>
             <svg viewBox="0 0 2 2" class="size-0.5 fill-current">
               <circle cx="1" cy="1" r="1"/>
             </svg>
-            <%= contest_group.contest_group_class&.name %>
+            <%= large_group.large_group_class&.name %>
           </div>
         </div>
 
         <div class="flex flex-none items-center gap-x-4">
-          <%= link_to "View", contest_group, class: "btn-primary-sm" %>
+          <%= link_to "View", large_group, class: "btn-primary-sm" %>
         </div>
       </li>
     <% end %>

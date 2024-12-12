@@ -17,8 +17,8 @@ class User < ApplicationRecord
   has_many :org_memberships, dependent: :delete_all
   has_many :organizations, through: :org_memberships
 
-  has_many :contest_group_conductors, dependent: :delete_all
-  has_many :conducted_groups, through: :contest_group_conductors, source: :contest_group
+  has_many :large_group_conductors, dependent: :delete_all
+  has_many :conducted_groups, through: :large_group_conductors, source: :large_group
 
   has_many :sessions, dependent: :destroy
 

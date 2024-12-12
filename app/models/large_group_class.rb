@@ -1,4 +1,4 @@
-class ContestGroupClass < ApplicationRecord
+class LargeGroupClass < ApplicationRecord
   include AccountScoped
 
   validates :name, presence: true
