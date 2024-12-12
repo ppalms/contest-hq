@@ -22,7 +22,10 @@
 
   <div class="form-button-container">
     <%= form.submit submit_text, class: "btn-primary" %>
-    <%= link_to "Cancel", large_groups_path, class: "btn-secondary", role: "button" %>
+    <%= link_to "Cancel",
+    large_group.id == nil ? large_groups_path : large_group_path(large_group.id),
+    class: "btn-secondary",
+    role: "button" %>
   </div>
 
   <% if large_group.errors.any? %>
