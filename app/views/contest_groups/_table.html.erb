@@ -30,11 +30,11 @@
             <p class="font-semibold text-gray-900"><%= contest_group.name %></p>
           </div>
           <div class="mt-1 flex items-center gap-x-2 text-xs/5 text-gray-500">
-            <%= contest_group.contest_group_class&.name %>
+            <p class="truncate"><%= contest_group.organization.name %></p>
             <svg viewBox="0 0 2 2" class="size-0.5 fill-current">
               <circle cx="1" cy="1" r="1"/>
             </svg>
-            <p class="truncate"><%= contest_group.organization.name %></p>
+            <%= contest_group.contest_group_class&.name %>
           </div>
         </div>
 
