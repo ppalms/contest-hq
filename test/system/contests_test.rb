@@ -3,7 +3,7 @@ require "application_system_test_case"
 class ContestsTest < ApplicationSystemTestCase
   setup do
     log_in_as(users(:demo_admin_a))
-    @contest = contests(:demo_contest_a)
+    @contest = contests(:demo_contest_c)
   end
 
   test "visiting the index" do

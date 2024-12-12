@@ -3,7 +3,7 @@ require "application_system_test_case"
 class ContestGroupsTest < ApplicationSystemTestCase
   setup do
     log_in_as(users(:demo_director_a))
-    @contest_group = contest_groups(:demo_school_a_group_a)
+    @contest_group = contest_groups(:demo_school_a_group_c)
   end
 
   test "should create contest group" do
@@ -45,7 +45,7 @@ class ContestGroupsTest < ApplicationSystemTestCase
     visit contest_groups_url
     click_on "View", match: :first
 
-    assert_selector "h1", text: @contest_group.name
+    assert_selector "h1", text: "Wind Ensemble"
   end
 
   test "should only see own contest groups" do
