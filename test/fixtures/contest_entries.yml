@@ -1,0 +1,9 @@
+contest_a_school_a_director_a_group_a:
+  contest: demo_contest_a
+  user: demo_director_a
+  contest_group: demo_school_a_group_a
+
+contest_a_school_a_director_b_group_b:
+  contest: demo_contest_a
+  user: demo_director_b
+  contest_group: demo_school_a_group_b

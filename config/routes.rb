@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :contest_entries
   resources :users, only: [ :index, :edit, :update ]
   resources :contests
   resources :organizations
