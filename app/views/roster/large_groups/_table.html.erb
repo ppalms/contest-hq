@@ -1,20 +1,19 @@
 <% if @large_groups.empty? %>
   <div class="text-center p-8">
     <svg
-      class="mx-auto size-12 text-gray-400"
+      xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
-      aria-hidden="true"
+      class="mx-auto size-12 text-gray-400"
     >
       <path
-        vector-effect="non-scaling-stroke"
         stroke-linecap="round"
         stroke-linejoin="round"
-        stroke-width="2"
-        d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
+        d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"
       />
     </svg>
+
     <h3 class="mt-2 text-sm font-semibold text-gray-900"><%= empty_text %></h3>
     <p class="mt-1 text-sm text-gray-500"><%= empty_hint %></p>
     <div class="mt-6">

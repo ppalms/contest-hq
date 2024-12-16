@@ -20,6 +20,10 @@ class Roster::LargeGroupsController < ApplicationController
   def new
     @large_group = LargeGroup.new
     @large_group_classes = LargeGroupClass.all
+
+    if current_user.organizations.length == 1
+      @large_group.organization = current_user.organizations.first
+    end
   end
 
   def create

@@ -15,12 +15,19 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
     visit root_url
 
     assert_text "Set up your roster to register for contests"
-
     click_on "Get Started"
 
     assert_text "Roster"
-
     click_on "Large Ensembles"
+
+    assert_text "No large ensembles found"
+    click_on "New Large Ensemble"
+
+    fill_in "Name", with: "Symphonic Band"
+    assert_text organizations(:customer_school_c).name
+    select large_group_classes(:demo_group_class_a).name, from: :large_group_class_id
+    click_on "Create Large Ensemble"
+    assert_text "Large ensemble was successfully created"
   end
 
   # test "should prompt director to register for contest" do
