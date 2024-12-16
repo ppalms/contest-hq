@@ -23,7 +23,7 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
     assert_text "No large ensembles found"
     click_on "New Large Ensemble"
 
-    fill_in "Name", with: "Symphonic Band"
+    fill_in "Name", with: "Symphonic Orchestra"
     assert_text organizations(:customer_school_c).name
     select large_group_classes(:demo_group_class_a).name, from: :large_group_class_id
     click_on "Create Large Ensemble"
