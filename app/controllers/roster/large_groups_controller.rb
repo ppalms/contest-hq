@@ -1,4 +1,4 @@
-class LargeGroupsController < ApplicationController
+class Roster::LargeGroupsController < ApplicationController
   before_action :set_large_group, only: %i[show edit update destroy]
   before_action :set_breadcrumbs
 
@@ -27,7 +27,7 @@ class LargeGroupsController < ApplicationController
     @large_group_classes = LargeGroupClass.all
 
     if @large_group.save
-      redirect_to @large_group, notice: "Group was successfully created."
+      redirect_to roster_large_group_path(@large_group), notice: "Large ensemble was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -36,7 +36,7 @@ class LargeGroupsController < ApplicationController
   def update
     respond_to do |format|
       if @large_group.update(large_group_params)
-        format.html { redirect_to @large_group, notice: "Group was successfully updated." }
+        format.html { redirect_to roster_large_group_path(@large_group), notice: "Large ensemble was successfully updated." }
         format.json { render :show, status: :ok, large_group: @large_group }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -49,26 +49,27 @@ class LargeGroupsController < ApplicationController
     @large_group.destroy!
 
     respond_to do |format|
-      format.html { redirect_to large_groups_url, notice: "Group was successfully deleted." }
+      format.html { redirect_to roster_large_groups_url, notice: "Large ensemble was successfully deleted." }
       format.json { head :no_content }
     end
   end
 
-  private
+    private
 
-  def set_large_group
-    @large_group = LargeGroup.find(params[:id])
-  end
+    def set_large_group
+      @large_group = LargeGroup.find(params[:id])
+    end
 
-  def large_group_params
-    params.expect(large_group: [ :name, :large_group_class_id, :organization_id ])
-  end
+    def large_group_params
+      params.expect(large_group: [ :name, :large_group_class_id, :organization_id ])
+    end
 
-  def index_params
-    params.permit(:filter_current_user)
-  end
+    def index_params
+      params.permit(:filter_current_user)
+    end
 
-  def set_breadcrumbs
-    add_breadcrumb("Large Groups", large_groups_path)
-  end
+    def set_breadcrumbs
+      add_breadcrumb("Roster", roster_path)
+      add_breadcrumb("Large Ensembles", roster_large_groups_path)
+    end
 end

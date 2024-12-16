@@ -3,9 +3,12 @@
 
   <% if current_user.director? || current_user.admin? %>
     <div class="form-button-container">
-      <%= link_to "Edit", edit_large_group_path(@large_group), class: "btn-secondary" %>
+      <%= link_to "Edit",
+      edit_roster_large_group_path(@large_group),
+      class: "btn-secondary" %>
+
       <%= button_to "Delete",
-      @large_group,
+      roster_large_group_path(@large_group),
       method: :delete,
       class: "btn-danger",
       form: {

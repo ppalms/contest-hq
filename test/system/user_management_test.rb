@@ -24,7 +24,7 @@ class UserManagementTest < ApplicationSystemTestCase
     visit root_url
 
     assert_text "My Entries"
-    assert_text "My Groups"
+    assert_text "My Scores"
     assert_text "Contests"
   end
 
@@ -85,7 +85,7 @@ class UserManagementTest < ApplicationSystemTestCase
     assert_text "Your password was reset successfully"
 
     log_in_as(new_user)
-    assert_text "Create a large group to get started"
+    assert_text "Set up your roster to register for contests"
   end
 
   test "should not allow account admin to invite account admin" do

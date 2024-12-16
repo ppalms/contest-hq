@@ -39,7 +39,7 @@
 
         <% if current_user.director? %>
           <div>
-            <%= link_to "Large Groups", large_groups_path %>
+            <%= link_to "Roster", roster_path %>
           </div>
         <% end %>
 
@@ -71,19 +71,16 @@
     </div>
   </div>
 </nav>
+
 <script>
   function toggleNavMenu() {
-    const hamburger = document.querySelector('.hamburger');
-    const nav_menu = document.querySelector('#nav_menu');
-    hamburger.classList.toggle('is-active');
-    nav_menu.classList.toggle('hidden');
+    document.querySelector('.hamburger').classList.toggle('is-active');
+    document.querySelector('#nav_menu').classList.toggle('hidden');
   }
 
   // Close nav menu on navigation to new page
   document.addEventListener('turbo:visit', function() {
-    const hamburger = document.querySelector('.hamburger');
-    const nav_menu = document.querySelector('#nav_menu');
-    nav_menu.classList.add('hidden');
-    hamburger.classList.remove('is-active');
+    document.querySelector('#nav_menu').classList.add('hidden');
+    document.querySelector('.hamburger').classList.remove('is-active');
   });
 </script>

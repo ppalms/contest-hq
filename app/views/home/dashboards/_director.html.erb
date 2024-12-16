@@ -1,12 +1,14 @@
-<div class="bg-white shadow-sm sm:rounded-lg">
+<div class="bg-white shadow-sm sm:rounded-lg border border-neutral-200">
   <div class="px-4 py-5 sm:p-6">
-    <h3 class="text-base font-semibold text-gray-900">Welcome</h3>
+    <h2>Welcome</h2>
     <div class="mt-2 sm:flex sm:items-start sm:justify-between">
       <div class="max-w-xl text-sm text-gray-500">
         <p>Set up your roster to register for contests</p>
       </div>
       <div class="mt-5 sm:mt-0 sm:ml-6 sm:flex sm:shrink-0 sm:items-center">
-        <%= link_to "Add Large Group", new_large_group_path, class: "btn-primary-sm" %>
+        <%= link_to sanitize("Get Started &rarr;"),
+        roster_path,
+        class: "btn-primary-sm text-center" %>
       </div>
     </div>
   </div>

@@ -1,9 +1,13 @@
 Rails.application.routes.draw do
-  resources :contest_entries
   resources :users, only: [ :index, :edit, :update ]
-  resources :contests
   resources :organizations
-  resources :large_groups
+  resources :contests
+  resources :contest_entries
+
+  namespace :roster do
+    get "/", to: "index"
+    resources :large_groups
+  end
 
   resources :organization_types, only: [ :index, :show ]
   resources :large_group_classes, only: [ :index, :show ]
