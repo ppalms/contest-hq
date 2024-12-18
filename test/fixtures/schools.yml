@@ -1,0 +1,39 @@
+demo_school_a:
+  name: Kennedy High School
+  school_class: demo_school_class_a
+  account: demo
+
+demo_school_b:
+  name: Washington High School
+  school_class: demo_school_class_b
+  account: demo
+
+demo_school_c:
+  name: Memorial High School
+  school_class: demo_school_class_b
+  account: demo
+
+demo_school_d:
+  name: Central High School
+  school_class: demo_school_class_b
+  account: demo
+
+customer_school_a:
+  name: Santa Fe High School
+  school_class: customer_school_class_f
+  account: customer
+
+customer_school_b:
+  name: Roosevelt High School
+  school_class: customer_school_class_a
+  account: customer
+
+customer_school_c:
+  name: Jefferson High School
+  school_class: customer_school_class_a
+  account: customer
+
+customer_school_d:
+  name: North High School
+  school_class: customer_school_class_b
+  account: customer
