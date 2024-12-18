@@ -1,11 +1,11 @@
-<div class="py-8" id="show_<%= dom_id @organization %>">
-  <%= render @organization %>
+<div class="py-8" id="show_<%= dom_id @school %>">
+  <%= render @school %>
 
   <% if current_user.tenant_admin? %>
     <div class="form-button-container">
-      <%= link_to "Edit", edit_organization_path(@organization), class: "btn-secondary" %>
+      <%= link_to "Edit", edit_organizations_school_path(@school), class: "btn-secondary" %>
       <%= button_to "Delete",
-      @organization,
+      organizations_school_path(@school),
       method: :delete,
       class: "btn-danger",
       form: {

@@ -1,23 +1,10 @@
 <% content_for :title, "Organizations" %>
-<div class="py-8 space-y-4" id="organizations">
+<div class="py-8 space-y-4">
   <div class="flex justify-between">
     <h1>Organizations</h1>
-
-    <% if current_user.admin? %>
-      <div class="flex gap-2">
-        <%= link_to "New Organization", new_organization_path, class: "btn-primary" %>
-      </div>
-    <% end %>
   </div>
 
-  <div class="hidden p-4">
-    <%= render partial: "search" %>
-  </div>
-
-  <div
-    id="organization_list"
-    class="px-4 rounded-md bg-white border border-neutral-200 shadow-sm"
-  >
-    <%= render partial: "list" %>
+  <div>
+    <%= link_to sanitize("Schools &rarr;"), organizations_schools_path %>
   </div>
 </div>

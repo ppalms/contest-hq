@@ -1,8 +1,12 @@
 Rails.application.routes.draw do
-  resources :schools
-  resources :school_classes
   resources :users, only: [ :index, :edit, :update ]
-  resources :organizations
+
+  namespace :organizations do
+    get "/", to: "index"
+    resources :schools
+    resources :school_classes
+  end
+
   resources :contests
   resources :contest_entries
 
@@ -11,7 +15,6 @@ Rails.application.routes.draw do
     resources :large_groups
   end
 
-  resources :organization_types, only: [ :index, :show ]
   resources :large_group_classes, only: [ :index, :show ]
 
   resource :invitation, only: [ :new, :create ]

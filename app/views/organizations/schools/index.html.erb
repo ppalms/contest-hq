@@ -1,0 +1,23 @@
+<% content_for :title, "Schools" %>
+<div class="py-8 space-y-4">
+  <div class="flex justify-between">
+    <h1>Schools</h1>
+
+    <% if current_user.admin? %>
+      <div class="flex gap-2">
+        <%= link_to "New School", new_organizations_school_path, class: "btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="hidden p-4">
+    <%= render partial: "search" %>
+  </div>
+
+  <div
+    id="school_list"
+    class="px-4 rounded-md bg-white border border-neutral-200 shadow-sm"
+  >
+    <%= render partial: "list" %>
+  </div>
+</div>

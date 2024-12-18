@@ -22,7 +22,7 @@ class HomeController < ApplicationController
         .order("users.created_at DESC")
         .limit(5)
 
-      @organizations = Organization.select("organizations.id, organizations.name").order("organizations.name").limit(5)
+      @schools = School.select("schools.id, schools.name").order("schools.name").limit(5)
     end
 
     # TODO: show contests director has registered for
