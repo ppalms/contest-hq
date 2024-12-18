@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :school_classes
   resources :users, only: [ :index, :edit, :update ]
   resources :organizations
   resources :contests

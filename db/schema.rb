@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_11_035949) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_18_035006) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -108,6 +108,16 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_11_035949) do
     t.index ["name"], name: "index_roles_on_name", unique: true
   end
 
+  create_table "school_classes", force: :cascade do |t|
+    t.string "name"
+    t.integer "ordinal"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "account_id", null: false
+    t.index ["account_id", "ordinal"], name: "index_school_classes_on_account_id_and_ordinal", unique: true
+    t.index ["account_id"], name: "index_school_classes_on_account_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "user_agent"
@@ -159,6 +169,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_11_035949) do
   add_foreign_key "organization_types", "accounts"
   add_foreign_key "organizations", "accounts"
   add_foreign_key "organizations", "organization_types"
+  add_foreign_key "school_classes", "accounts"
   add_foreign_key "sessions", "users"
   add_foreign_key "user_roles", "roles"
   add_foreign_key "user_roles", "users"
