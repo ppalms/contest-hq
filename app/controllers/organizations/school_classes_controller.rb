@@ -1,2 +1,2 @@
-class Organizations::SchoolClassesController < ApplicationController
+class Schools::SchoolClassesController < ApplicationController
 end

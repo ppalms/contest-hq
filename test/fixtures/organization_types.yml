@@ -1,7 +1,0 @@
-demo_orgtype_school:
-  name: School
-  account: demo
-
-customer_orgtype_school:
-  name: School
-  account: customer

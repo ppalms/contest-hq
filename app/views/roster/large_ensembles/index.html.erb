@@ -1,0 +1,29 @@
+<% content_for :title, "Large Ensembles" %>
+<div class="py-8" id="large_ensembles">
+  <div class="flex justify-between">
+    <h1>Large Ensembles</h1>
+
+    <% if (current_user.admin? || current_user.director?) && !@large_ensembles.empty? %>
+      <div class="flex gap-2">
+        <%= link_to "New Large Ensemble", new_roster_large_ensemble_path, class: "btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="p-4">
+    <%# render partial: "search" %>
+  </div>
+
+  <div
+    id="large_ensemble_list"
+    class="px-4 rounded-md bg-white border border-neutral-200 shadow-sm"
+  >
+    <%= render partial: "table",
+    locals: {
+      empty_text: "No large ensembles found",
+      empty_hint: "Create a large ensemble to register for contests",
+      create_text: "New Large Ensemble",
+      create_path: new_roster_large_ensemble_path,
+    } %>
+  </div>
+</div>

@@ -12,10 +12,10 @@ Rails.application.routes.draw do
 
   namespace :roster do
     get "/", to: "index"
-    resources :large_groups
+    resources :large_ensembles
   end
 
-  resources :large_group_classes, only: [ :index, :show ]
+  resources :performance_classes, only: [ :index, :show ]
 
   resource :invitation, only: [ :new, :create ]
   get  "sign_in", to: "sessions#new"

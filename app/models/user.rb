@@ -14,11 +14,11 @@ class User < ApplicationRecord
   has_many :user_roles, dependent: :delete_all
   has_many :roles, through: :user_roles
 
-  has_many :org_memberships, dependent: :delete_all
-  has_many :organizations, through: :org_memberships
+  has_many :school_directors, dependent: :delete_all
+  has_many :schools, through: :school_directors
 
-  has_many :large_group_conductors, dependent: :delete_all
-  has_many :conducted_groups, through: :large_group_conductors, source: :large_group
+  has_many :large_ensemble_conductors, dependent: :delete_all
+  has_many :conducted_ensembles, through: :large_ensemble_conductors, source: :large_ensemble
 
   has_many :sessions, dependent: :destroy
 

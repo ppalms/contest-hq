@@ -1,8 +1,8 @@
-class LargeGroupClassesController < ApplicationController
-  before_action :set_large_group_class, only: %i[show]
+class PerformanceClassesController < ApplicationController
+  before_action :set_performance_class, only: %i[show]
 
   def index
-    @large_group_classes = LargeGroupClass.all
+    @performance_classes = PerformanceClass.all
   end
 
   def show
@@ -10,11 +10,11 @@ class LargeGroupClassesController < ApplicationController
 
   private
 
-  def set_large_group_class
-    @large_group_class = LargeGroupClass.find(params[:id])
+  def set_performance_class
+    @performance_class = PerformanceClass.find(params[:id])
   end
 
-  def large_group_class_params
-    params.require(:large_group_class).permit(:name)
+  def performance_class_params
+    params.require(:performance_class).permit(:name)
   end
 end

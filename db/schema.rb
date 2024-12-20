@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_18_051215) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_20_042106) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -23,11 +23,11 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_18_051215) do
   create_table "contest_entries", force: :cascade do |t|
     t.bigint "contest_id", null: false
     t.bigint "user_id", null: false
-    t.bigint "large_group_id", null: false
+    t.bigint "large_ensemble_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["contest_id"], name: "index_contest_entries_on_contest_id"
-    t.index ["large_group_id"], name: "index_contest_entries_on_large_group_id"
+    t.index ["large_ensemble_id"], name: "index_contest_entries_on_large_ensemble_id"
     t.index ["user_id"], name: "index_contest_entries_on_user_id"
   end
 
@@ -41,64 +41,34 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_18_051215) do
     t.index ["account_id"], name: "index_contests_on_account_id"
   end
 
-  create_table "large_group_classes", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "account_id", null: false
-    t.index ["account_id"], name: "index_large_group_classes_on_account_id"
-  end
-
-  create_table "large_group_conductors", id: false, force: :cascade do |t|
-    t.bigint "large_group_id", null: false
+  create_table "large_ensemble_conductors", id: false, force: :cascade do |t|
+    t.bigint "large_ensemble_id", null: false
     t.bigint "user_id", null: false
     t.bigint "account_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_large_group_conductors_on_account_id"
-    t.index ["large_group_id", "account_id"], name: "idx_on_large_group_id_account_id_a81d344964"
-    t.index ["large_group_id", "user_id", "account_id"], name: "idx_on_large_group_id_user_id_account_id_d73e3c1e6a", unique: true
-    t.index ["user_id", "account_id"], name: "index_large_group_conductors_on_user_id_and_account_id"
+    t.index ["account_id"], name: "index_large_ensemble_conductors_on_account_id"
+    t.index ["large_ensemble_id", "account_id"], name: "idx_on_large_ensemble_id_account_id_a81d344964"
+    t.index ["large_ensemble_id", "user_id", "account_id"], name: "idx_on_large_ensemble_id_user_id_account_id_d73e3c1e6a", unique: true
+    t.index ["user_id", "account_id"], name: "index_large_ensemble_conductors_on_user_id_and_account_id"
   end
 
-  create_table "large_groups", force: :cascade do |t|
+  create_table "large_ensembles", force: :cascade do |t|
+    t.string "name"
+    t.bigint "school_id", null: false
+    t.bigint "performance_class_id", null: false
+    t.bigint "account_id", null: false
+    t.index ["account_id"], name: "index_large_ensembles_on_account_id"
+    t.index ["performance_class_id"], name: "index_large_ensembles_on_performance_class_id"
+    t.index ["school_id"], name: "index_large_ensembles_on_school_id"
+  end
+
+  create_table "performance_classes", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "organization_id", null: false
-    t.bigint "large_group_class_id", null: false
     t.bigint "account_id", null: false
-    t.index ["account_id"], name: "index_large_groups_on_account_id"
-    t.index ["large_group_class_id"], name: "index_large_groups_on_large_group_class_id"
-    t.index ["organization_id"], name: "index_large_groups_on_organization_id"
-  end
-
-  create_table "org_memberships", id: false, force: :cascade do |t|
-    t.bigint "organization_id", null: false
-    t.bigint "user_id", null: false
-    t.bigint "account_id", null: false
-    t.index ["account_id"], name: "index_org_memberships_on_account_id"
-    t.index ["organization_id", "user_id", "account_id"], name: "idx_on_organization_id_user_id_account_id_c9f9014116", unique: true
-    t.index ["organization_id"], name: "index_org_memberships_on_organization_id"
-    t.index ["user_id"], name: "index_org_memberships_on_user_id"
-  end
-
-  create_table "organization_types", force: :cascade do |t|
-    t.string "name"
-    t.bigint "account_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_organization_types_on_account_id"
-  end
-
-  create_table "organizations", force: :cascade do |t|
-    t.string "name"
-    t.bigint "organization_type_id", null: false
-    t.bigint "account_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_organizations_on_account_id"
-    t.index ["organization_type_id"], name: "index_organizations_on_organization_type_id"
+    t.index ["account_id"], name: "index_performance_classes_on_account_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -116,6 +86,16 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_18_051215) do
     t.bigint "account_id", null: false
     t.index ["account_id", "ordinal"], name: "index_school_classes_on_account_id_and_ordinal", unique: true
     t.index ["account_id"], name: "index_school_classes_on_account_id"
+  end
+
+  create_table "school_directors", id: false, force: :cascade do |t|
+    t.bigint "school_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "account_id", null: false
+    t.index ["account_id"], name: "index_school_directors_on_account_id"
+    t.index ["school_id", "user_id", "account_id"], name: "idx_on_school_id_user_id_account_id_c9f9014116", unique: true
+    t.index ["school_id"], name: "index_school_directors_on_school_id"
+    t.index ["user_id"], name: "index_school_directors_on_user_id"
   end
 
   create_table "schools", force: :cascade do |t|
@@ -163,23 +143,20 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_18_051215) do
   end
 
   add_foreign_key "contest_entries", "contests"
-  add_foreign_key "contest_entries", "large_groups"
+  add_foreign_key "contest_entries", "large_ensembles"
   add_foreign_key "contest_entries", "users"
   add_foreign_key "contests", "accounts"
-  add_foreign_key "large_group_classes", "accounts"
-  add_foreign_key "large_group_conductors", "accounts"
-  add_foreign_key "large_group_conductors", "large_groups"
-  add_foreign_key "large_group_conductors", "users"
-  add_foreign_key "large_groups", "accounts"
-  add_foreign_key "large_groups", "large_group_classes"
-  add_foreign_key "large_groups", "organizations"
-  add_foreign_key "org_memberships", "accounts"
-  add_foreign_key "org_memberships", "organizations"
-  add_foreign_key "org_memberships", "users"
-  add_foreign_key "organization_types", "accounts"
-  add_foreign_key "organizations", "accounts"
-  add_foreign_key "organizations", "organization_types"
+  add_foreign_key "large_ensemble_conductors", "accounts"
+  add_foreign_key "large_ensemble_conductors", "large_ensembles"
+  add_foreign_key "large_ensemble_conductors", "users"
+  add_foreign_key "large_ensembles", "accounts"
+  add_foreign_key "large_ensembles", "performance_classes"
+  add_foreign_key "large_ensembles", "schools"
+  add_foreign_key "performance_classes", "accounts"
   add_foreign_key "school_classes", "accounts"
+  add_foreign_key "school_directors", "accounts"
+  add_foreign_key "school_directors", "schools"
+  add_foreign_key "school_directors", "users"
   add_foreign_key "schools", "accounts"
   add_foreign_key "schools", "school_classes"
   add_foreign_key "sessions", "users"

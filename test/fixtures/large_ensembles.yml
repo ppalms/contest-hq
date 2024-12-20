@@ -1,0 +1,29 @@
+demo_school_a_ensemble_a:
+  name: Wind Ensemble
+  performance_class: demo_performance_class_a
+  school: demo_school_a
+  account: demo
+
+demo_school_a_ensemble_b:
+  name: Symphonic Orchestra
+  performance_class: demo_performance_class_a
+  school: demo_school_a
+  account: demo
+
+demo_school_a_ensemble_c:
+  name: Concert Band
+  performance_class: demo_performance_class_a
+  school: demo_school_a
+  account: demo
+
+customer_school_a_ensemble_a:
+  name: Symphonic Band
+  performance_class: customer_performance_class_e
+  school: customer_school_a
+  account: customer
+
+customer_school_b_ensemble_a:
+  name: Concert Band
+  performance_class: customer_performance_class_c
+  school: customer_school_b
+  account: customer
