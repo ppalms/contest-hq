@@ -1,8 +1,10 @@
 class Contest < ApplicationRecord
   include AccountScoped
 
-  validates :name, presence: true
+  has_many :contests_school_classes
+  has_many :school_classes, through: :contests_school_classes
 
+  validates :name, presence: true
   validate :start_date_before_end_date
 
   private
