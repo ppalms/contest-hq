@@ -27,6 +27,10 @@
     @apply rounded-lg py-3 px-5 bg-gray-100 hover:bg-gray-200 border border-b-4 border-gray-400 block text-center sm:inline-block hover:border-gray-500 transition font-medium;
   }
 
+  .btn-secondary-sm {
+    @apply btn-secondary py-2 text-sm font-semibold;
+  }
+
   .btn-danger {
     @apply rounded-lg py-3 px-5 text-red-800 hover:bg-red-100 border border-b-4 border-red-200 block w-full sm:w-auto sm:inline-block hover:border-red-300 transition font-semibold;
   }

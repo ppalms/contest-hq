@@ -1,0 +1,31 @@
+<%= form_with(model: contest_entry, url: @contest_entry.new_record? ? contest_entries_path : contest_entry_path(@contest_entry), class: "wide-form") do |form| %>
+  <%= form.hidden_field :contest_id, value: @contest.id %>
+
+  <div>
+    <%= form.label :large_ensemble %>
+    <%= form.select :large_ensemble_id,
+                current_user.conducted_ensembles.all.map { |t| [t.name, t.id] },
+                { include_blank: "Select a large ensemble" },
+                { required: true, class: "text-field", id: :large_ensemble_id } %>
+  </div>
+
+  <div class="form-button-container">
+    <%= form.submit "Continue", class: "btn-primary" %>
+    <%= link_to "Cancel",
+    (
+      if @contest_entry.id == nil
+        contest_entries_path
+      else
+        contest_entry_path(@contest_entry)
+      end
+    ),
+    class: "btn-secondary",
+    role: "button" %>
+  </div>
+
+  <% if contest_entry.errors.any? %>
+    <div class="pt-2 sm:col-span-2">
+      <%= render "layouts/error_messages", errors: contest_entry.errors %>
+    </div>
+  <% end %>
+<% end %>

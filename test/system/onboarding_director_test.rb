@@ -5,13 +5,7 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
     invite_new_director("peggy@school.org")
   end
 
-  def teardown
-    if @new_director
-      @new_director.destroy
-    end
-  end
-
-  test "should prompt director to create large ensemble" do
+  test "should walk director through large ensemble registration" do
     visit root_url
 
     assert_text "Set up your roster to register for contests"
@@ -24,27 +18,40 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
     click_on "New Large Ensemble"
 
     fill_in "Name", with: "Symphonic Orchestra"
-    assert_text organizations(:customer_school_c).name
-    select large_group_classes(:demo_group_class_a).name, from: :large_group_class_id
+    assert_text schools(:demo_school_a).name
+    select performance_classes(:demo_performance_class_a).name, from: :performance_class_id
     click_on "Create Large Ensemble"
     assert_text "Large ensemble was successfully created"
-  end
 
-  # test "should prompt director to register for contest" do
-  # end
+    assert_text "Contests"
+    assert_no_text contests(:demo_contest_c).name
+    click_on "Register", match: :first
+
+    assert_text "New Contest Entry"
+    assert_text "Symphonic Orchestra"
+    click_on "Continue"
+    assert_text "Contest entry was successfully created"
+
+    # click_on "Add Music Selection"
+    # assert_text "New Music Selection"
+    # fill_in "Title", with: "Symphony No. 5"
+    # fill_in "Composer", with: "Beethoven"
+    # click_on "Create Music Selection"
+    # assert_text "Music selection added to contest entry"
+  end
 
   private
 
   def invite_new_director(email)
-    log_in_as(users(:customer_admin_a))
+    log_in_as(users(:demo_admin_a))
     visit new_invitation_url
 
-    fill_in "First name", with: "Peggy"
-    fill_in "Last name", with: "Hill"
+    fill_in "First name", with: "Nobby"
+    fill_in "Last name", with: "Nobbs"
     fill_in "Email", with: email
     select "Central Time (US & Canada)", from: "Time zone"
     check "Director"
-    select organizations(:customer_school_c).name, from: "Organization"
+    select schools(:demo_school_a).name, from: "School"
     assert_no_text "AccountAdmin"
     click_on "Send Invitation"
     assert_text "An invitation email has been sent to #{email}"

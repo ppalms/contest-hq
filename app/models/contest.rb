@@ -1,7 +1,7 @@
 class Contest < ApplicationRecord
   include AccountScoped
 
-  has_many :contests_school_classes
+  has_many :contests_school_classes, dependent: :delete_all
   has_many :school_classes, through: :contests_school_classes
 
   validates :name, presence: true

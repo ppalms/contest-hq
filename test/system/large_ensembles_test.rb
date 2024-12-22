@@ -45,13 +45,13 @@ class LargeEnsemblesTest < ApplicationSystemTestCase
     visit roster_large_ensembles_url
     click_on "View", match: :first
 
-    assert_selector "h1", text: "Wind Ensemble"
+    assert_selector "h1", text: "Concert Band"
   end
 
   test "should only see own large ensemble" do
     visit roster_large_ensembles_url
 
     # Other director's large ensemble
-    assert_no_text "Concert Band"
+    assert_no_text "Wind Ensemble"
   end
 end

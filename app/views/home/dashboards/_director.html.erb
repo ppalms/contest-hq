@@ -28,14 +28,36 @@
     </div>
 
     <div class="p-4 py-5 sm:p-6">
-      <% @upcoming_contests&.each do |contest| %>
-        <div>
-          <%= link_to contest do %>
-            <%= contest.name %>
-            -
-            <%= contest.contest_start&.strftime("%m-%d-%Y") || "TBD" %>
-          <% end %>
+      <% if @my_entries.empty? %>
+        <div class="text-center pb-4">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            class="mx-auto size-12 text-gray-400"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776"
+            />
+          </svg>
+          <h3 class="mt-2 text-sm font-semibold text-gray-900">No entries</h3>
+          <p class="mt-1 text-sm text-gray-500">You have not registered for any contests</p>
         </div>
+      <% else %>
+        <% @my_entries.each do |entry| %>
+          <div class="flex justify-between">
+            <%= link_to contest_entry_path(entry.contest, entry) do %>
+              <div>
+                <%= entry.contest.name %>
+                -
+                <%= entry.large_ensemble.name %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
       <% end %>
     </div>
   </div>
@@ -51,13 +73,24 @@
     </div>
 
     <div class="p-4 py-5 sm:p-6">
-      <% @upcoming_contests&.each do |contest| %>
-        <div>
-          <%= link_to contest do %>
-            <%= contest.name %>
-            -
-            <%= contest.contest_start&.strftime("%m-%d-%Y") || "TBD" %>
-          <% end %>
+      <% if @my_scores.empty? %>
+        <div class="text-center pb-4">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            class="mx-auto size-12 text-gray-400"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0 0 12 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52 2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 0 1-2.031.352 5.988 5.988 0 0 1-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971Zm-16.5.52c.99-.203 1.99-.377 3-.52m0 0 2.62 10.726c.122.499-.106 1.028-.589 1.202a5.989 5.989 0 0 1-2.031.352 5.989 5.989 0 0 1-2.031-.352c-.483-.174-.711-.703-.59-1.202L5.25 4.971Z"
+            />
+          </svg>
+
+          <h3 class="mt-2 text-sm font-semibold text-gray-900">No scores</h3>
+          <p class="mt-1 text-sm text-gray-500">You have not received any scores</p>
         </div>
       <% end %>
     </div>

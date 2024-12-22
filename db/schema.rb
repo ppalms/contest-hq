@@ -24,8 +24,11 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_21_160354) do
     t.bigint "contest_id", null: false
     t.bigint "user_id", null: false
     t.bigint "large_ensemble_id", null: false
+    t.bigint "account_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_contest_entries_on_account_id"
+    t.index ["contest_id", "large_ensemble_id", "account_id"], name: "index_contest_entries_unique", unique: true
     t.index ["contest_id"], name: "index_contest_entries_on_contest_id"
     t.index ["large_ensemble_id"], name: "index_contest_entries_on_large_ensemble_id"
     t.index ["user_id"], name: "index_contest_entries_on_user_id"
@@ -45,10 +48,10 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_21_160354) do
     t.bigint "contest_id", null: false
     t.bigint "school_class_id", null: false
     t.bigint "account_id", null: false
-    t.index ["account_id", "contest_id", "school_class_id"], name: "idx_on_account_id_contest_id_school_class_id_4fb316e464", unique: true
+    t.index ["account_id", "contest_id", "school_class_id"], name: "index_contests_school_classes_unique", unique: true
     t.index ["account_id"], name: "index_contests_school_classes_on_account_id"
-    t.index ["contest_id", "school_class_id"], name: "idx_on_contest_id_school_class_id_93949bc8a6"
-    t.index ["school_class_id", "contest_id"], name: "idx_on_school_class_id_contest_id_eb4dccf6b5"
+    t.index ["contest_id"], name: "index_contests_school_classes_on_contest_id"
+    t.index ["school_class_id"], name: "index_contests_school_classes_on_school_class_id"
   end
 
   create_table "large_ensemble_conductors", id: false, force: :cascade do |t|
@@ -58,9 +61,9 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_21_160354) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_large_ensemble_conductors_on_account_id"
-    t.index ["large_ensemble_id", "account_id"], name: "idx_on_large_ensemble_id_account_id_a81d344964"
-    t.index ["large_ensemble_id", "user_id", "account_id"], name: "idx_on_large_ensemble_id_user_id_account_id_d73e3c1e6a", unique: true
-    t.index ["user_id", "account_id"], name: "index_large_ensemble_conductors_on_user_id_and_account_id"
+    t.index ["large_ensemble_id", "user_id", "account_id"], name: "index_large_ensemble_conductors_unique", unique: true
+    t.index ["large_ensemble_id"], name: "index_large_ensemble_conductors_on_large_ensemble_id"
+    t.index ["user_id"], name: "index_large_ensemble_conductors_on_user_id"
   end
 
   create_table "large_ensembles", force: :cascade do |t|
@@ -103,7 +106,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_21_160354) do
     t.bigint "user_id", null: false
     t.bigint "account_id", null: false
     t.index ["account_id"], name: "index_school_directors_on_account_id"
-    t.index ["school_id", "user_id", "account_id"], name: "idx_on_school_id_user_id_account_id_c9f9014116", unique: true
+    t.index ["school_id", "user_id", "account_id"], name: "index_school_directors_unique", unique: true
     t.index ["school_id"], name: "index_school_directors_on_school_id"
     t.index ["user_id"], name: "index_school_directors_on_user_id"
   end
@@ -152,6 +155,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_21_160354) do
     t.index ["last_name"], name: "index_users_on_last_name"
   end
 
+  add_foreign_key "contest_entries", "accounts"
   add_foreign_key "contest_entries", "contests"
   add_foreign_key "contest_entries", "large_ensembles"
   add_foreign_key "contest_entries", "users"

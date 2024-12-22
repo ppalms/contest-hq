@@ -8,6 +8,11 @@ demo_school_class_b:
   ordinal: 2
   account: demo
 
+demo_school_class_c:
+  name: 3-A
+  ordinal: 3
+  account: demo
+
 customer_school_class_a:
   name: 1-A
   ordinal: 1

@@ -3,10 +3,25 @@ demo_contest_a_class_1a:
   school_class: demo_school_class_a
   account: demo
 
-demo_contest_a_class_2a:
-  contest: demo_contest_a
+demo_contest_b_class_1a:
+  contest: demo_contest_b
+  school_class: demo_school_class_a
+  account: demo
+
+demo_contest_b_class_2a:
+  contest: demo_contest_b
   school_class: demo_school_class_b
-  account: customer
+  account: demo
+
+demo_contest_c_class_2a:
+  contest: demo_contest_c
+  school_class: demo_school_class_b
+  account: demo
+
+demo_contest_c_class_3a:
+  contest: demo_contest_c
+  school_class: demo_school_class_c
+  account: demo
 
 customer_contest_a_class_4a:
   contest: customer_contest_a

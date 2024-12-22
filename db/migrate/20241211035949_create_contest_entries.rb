@@ -7,6 +7,8 @@ class CreateContestEntries < ActiveRecord::Migration[8.0]
       t.references :account, null: false, foreign_key: true
 
       t.timestamps
+
+      t.index [ :contest_id, :large_ensemble_id, :account_id ], unique: true, name: "index_contest_entries_unique"
     end
   end
 end

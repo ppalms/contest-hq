@@ -1,17 +1,7 @@
 <% content_for :title, "Contests" %>
 <div class="py-8 space-y-4" id="contests">
   <div class="flex justify-between">
-    <h1>Contests</h1>
-
-    <% if current_user.admin? %>
-      <div class="flex gap-2">
-        <%= link_to "New Contest", new_contest_path, class: "btn-primary" %>
-      </div>
-    <% end %>
-  </div>
-
-  <div class="hidden pt-4">
-    <%= render partial: "contests/search" %>
+    <h2>Contests</h2>
   </div>
 
   <div
@@ -21,7 +11,7 @@
     <% if @contests.empty? %>
       <p class="text-center">No contests found.</p>
     <% else %>
-      <%= render "contests/list", locals: { contests: @contests } %>
+      <%= render "contest_list", locals: { contests: @contests } %>
     <% end %>
   </div>
 </div>

@@ -7,8 +7,9 @@ Rails.application.routes.draw do
     resources :school_classes
   end
 
-  resources :contests
-  resources :contest_entries
+  resources :contests do
+    resources :contest_entries, as: "entries", path: "entries"
+  end
 
   namespace :roster do
     get "/", to: "index"

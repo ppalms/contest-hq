@@ -16,6 +16,8 @@ class ContestsTest < ApplicationSystemTestCase
     click_on "New Contest"
 
     fill_in "Name", with: "New Demo Contest"
+    check "1-A"
+    check "2-A"
     fill_in "Contest start", with: @contest.contest_start
     fill_in "Contest end", with: @contest.contest_end
     click_on "Create Contest"

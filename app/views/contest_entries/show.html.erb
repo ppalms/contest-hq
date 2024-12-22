@@ -1,0 +1,17 @@
+<div class="py-8" id="show_<%= dom_id @contest_entry %>">
+  <%= render @contest_entry %>
+
+  <% if @contest_entry.user == current_user %>
+    <div class="form-button-container">
+      <%= button_to "Delete",
+      contest_entry_path(@contest_entry.contest, @contest_entry),
+      method: :delete,
+      class: "btn-danger",
+      form: {
+        data: {
+          turbo_confirm: "Are you sure?",
+        },
+      } %>
+    </div>
+  <% end %>
+</div>

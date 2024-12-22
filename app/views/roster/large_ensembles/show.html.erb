@@ -1,21 +1,27 @@
 <div class="py-8" id="show_<%= dom_id @large_ensemble %>">
+  <div class="flex">
+    <h1><%= @large_ensemble.name %></h1>
+
+    <% if current_user.conducted_ensembles.exists?(id: @large_ensemble.id) %>
+      <div class="flex flex-grow justify-end gap-2">
+        <%= link_to "Edit",
+        edit_roster_large_ensemble_path(@large_ensemble),
+        class: "btn-secondary" %>
+
+        <%= button_to "Delete",
+        roster_large_ensemble_path(@large_ensemble),
+        method: :delete,
+        class: "btn-danger",
+        form: {
+          data: {
+            turbo_confirm: "Are you sure?",
+          },
+        } %>
+      </div>
+    <% end %>
+  </div>
+
   <%= render @large_ensemble %>
 
-  <% if current_user.director? || current_user.admin? %>
-    <div class="form-button-container">
-      <%= link_to "Edit",
-      edit_roster_large_ensemble_path(@large_ensemble),
-      class: "btn-secondary" %>
-
-      <%= button_to "Delete",
-      roster_large_ensemble_path(@large_ensemble),
-      method: :delete,
-      class: "btn-danger",
-      form: {
-        data: {
-          turbo_confirm: "Are you sure?",
-        },
-      } %>
-    </div>
-  <% end %>
+  <%= render "contests" %>
 </div>

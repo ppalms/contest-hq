@@ -1,5 +1,5 @@
 demo_school_a_ensemble_a_conductor:
-  large_ensemble: demo_school_a_ensemble_a
+  large_ensemble: demo_school_a_ensemble_c
   user: demo_director_a
   account_id: <%= ActiveRecord::FixtureSet.identify(:demo) %>
 

@@ -1,17 +1,17 @@
 demo_contest_a:
-  name: CODA
+  name: District Orchestra
   contest_start: 2024-10-23 13:00:00
   contest_end: 2024-10-23 22:00:00
   account: demo
 
 demo_contest_b:
-  name: Sand Springs
+  name: Regional Orchestra
   contest_start: 2024-10-23 14:00:00
   contest_end: 2024-10-23 17:00:00
   account: demo
 
 demo_contest_c:
-  name: State Orchestra
+  name: 2A, 3A State Orchestra
   contest_start: 2025-02-18 14:00:00
   contest_end: 2025-02-19 23:00:00
   account: demo
