@@ -23,7 +23,7 @@
 
       <div class="flex flex-none items-center gap-x-4">
         <% if current_user.contest_entries.exists?(contest_id: contest.id) %>
-          <%= link_to "View",
+          <%= link_to "View Entry",
           contest_entry_path(
             contest_id: contest.id,
             id: current_user.contest_entries.find_by(contest_id: contest.id).id,

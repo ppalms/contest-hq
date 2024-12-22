@@ -35,6 +35,10 @@
     @apply rounded-lg py-3 px-5 text-red-800 hover:bg-red-100 border border-b-4 border-red-200 block w-full sm:w-auto sm:inline-block hover:border-red-300 transition font-semibold;
   }
 
+  .btn-danger-sm {
+    @apply btn-danger py-2 text-sm font-semibold;
+  }
+
   .simple-form {
     @apply flex flex-col gap-y-4 pt-4;
   }
