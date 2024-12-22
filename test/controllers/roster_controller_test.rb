@@ -1,8 +1,13 @@
 require "test_helper"
 
 class RosterControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    @user = users(:sys_admin_a)
+  end
+
   test "should get index" do
-    get roster_index_url
+    sign_in_as @user
+    get roster_url
     assert_response :success
   end
 end
