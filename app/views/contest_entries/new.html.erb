@@ -1,7 +1,10 @@
 <div class="wide-form-container" id="new_contest_entry">
   <h1>New Contest Entry</h1>
 
-  <p class="text-xl font-bold"><%= @contest.name %></p>
+  <p>
+    <span class="block text-xl font-bold"><%= @contest.name %></span>
+    <span class="block"><%= @contest.contest_start.strftime("%A %-m/%d/%Y") %></span>
+  </p>
 
   <%= render "form", contest_entry: @contest_entry %>
 </div>
