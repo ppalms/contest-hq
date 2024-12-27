@@ -1,0 +1,33 @@
+<ul role="list" class="divide-y divide-gray-100">
+  <% @contest_entry.music_selections.each do |music_selection| %>
+    <li class="flex items-center justify-between gap-x-6 py-5">
+      <div class="min-w-0">
+        <div class="flex items-start gap-x-3">
+          <p class="font-semibold text-gray-900"><%= music_selection.title %></p>
+          <p
+            class="
+              hidden mt-0.5 whitespace-nowrap rounded-md bg-green-50 px-1.5 py-0.5 text-xs
+              font-medium text-green-700 ring-1 ring-inset ring-green-600/20
+            "
+          >Prescribed Music</p>
+        </div>
+
+        <div class="mt-1 gap-x-2 text-xs/5 text-gray-500">
+          <p><%= music_selection.composer %></p>
+        </div>
+      </div>
+
+      <div class="flex flex-none items-center gap-x-4">
+        <%= button_to "Delete",
+        contest_entry_selection_path(entry_id: @contest_entry.id, id: music_selection),
+        method: :delete,
+        class: "btn-danger-sm sm:btn-danger",
+        form: {
+          data: {
+            turbo_confirm: "Are you sure?",
+          },
+        } %>
+      </div>
+    </li>
+  <% end %>
+</ul>

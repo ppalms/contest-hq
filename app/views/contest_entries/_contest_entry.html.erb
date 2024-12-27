@@ -1,8 +1,8 @@
 <div id="<%= dom_id contest_entry %>">
-  <h1><%= @contest_entry.large_ensemble.name %></h1>
-
   <%= render partial: "roster/large_ensembles/large_ensemble",
   locals: {
     large_ensemble: contest_entry.large_ensemble,
   } %>
+
+  <%= render "music_selections" %>
 </div>

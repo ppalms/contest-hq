@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_21_160354) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_22_190439) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -74,6 +74,18 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_21_160354) do
     t.index ["account_id"], name: "index_large_ensembles_on_account_id"
     t.index ["performance_class_id"], name: "index_large_ensembles_on_performance_class_id"
     t.index ["school_id"], name: "index_large_ensembles_on_school_id"
+  end
+
+  create_table "music_selections", force: :cascade do |t|
+    t.string "title"
+    t.string "composer"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "contest_entry_id", null: false
+    t.bigint "account_id", null: false
+    t.index ["account_id", "contest_entry_id"], name: "index_music_selections_on_account_id_and_contest_entry_id"
+    t.index ["account_id"], name: "index_music_selections_on_account_id"
+    t.index ["contest_entry_id"], name: "index_music_selections_on_contest_entry_id"
   end
 
   create_table "performance_classes", force: :cascade do |t|
@@ -169,6 +181,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_21_160354) do
   add_foreign_key "large_ensembles", "accounts"
   add_foreign_key "large_ensembles", "performance_classes"
   add_foreign_key "large_ensembles", "schools"
+  add_foreign_key "music_selections", "accounts"
+  add_foreign_key "music_selections", "contest_entries"
   add_foreign_key "performance_classes", "accounts"
   add_foreign_key "school_classes", "accounts"
   add_foreign_key "school_directors", "accounts"

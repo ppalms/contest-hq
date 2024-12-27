@@ -1,0 +1,11 @@
+contest_a_school_a_ensemble_a_music_a:
+  title: Symphony No. 5
+  composer: Beethoven
+  contest_entry: contest_a_school_a_ensemble_a
+  account: demo
+
+contest_a_school_a_ensemble_b_music_a:
+  title: Symphony No. 25
+  composer: Mozart
+  contest_entry: contest_a_school_a_ensemble_b
+  account: demo

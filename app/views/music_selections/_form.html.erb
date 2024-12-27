@@ -1,0 +1,30 @@
+<%= form_with(model: music_selection, url: music_selection.new_record? ? contest_entry_selections_path : contest_entry_selection_path(music_selection), class: "wide-form") do |form| %>
+  <%= form.hidden_field :contest_entry_id, value: @contest_entry.id %>
+
+  <div class="sm:col-span-2">
+    <%= form.label :title %>
+    <%= form.text_field :title, class: "text-field", autofocus: true %>
+  </div>
+
+  <div class="sm:col-span-2">
+    <%= form.label :composer %>
+    <%= form.text_field :composer, class: "text-field", autofocus: true %>
+  </div>
+
+  <div class="form-button-container">
+    <%= form.submit "Save", class: "btn-primary" %>
+    <%= link_to "Cancel",
+    contest_entry_path(
+      contest_id: @contest_entry.contest.id,
+      id: @contest_entry.id,
+    ),
+    class: "btn-secondary",
+    role: "button" %>
+  </div>
+
+  <% if music_selection.errors.any? %>
+    <div class="pt-2 sm:col-span-2">
+      <%= render "layouts/error_messages", errors: music_selection.errors %>
+    </div>
+  <% end %>
+<% end %>

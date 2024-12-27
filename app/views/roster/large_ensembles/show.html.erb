@@ -3,11 +3,7 @@
     <h1><%= @large_ensemble.name %></h1>
 
     <% if current_user.conducted_ensembles.exists?(id: @large_ensemble.id) %>
-      <div
-        class="
-          space-y-2 pt-2 sm:flex sm:flex-grow sm:justify-end sm:gap-2 sm:space-y-0 sm:pt-0
-        "
-      >
+      <div class="action-button-container">
         <%= link_to "Edit",
         edit_roster_large_ensemble_path(@large_ensemble),
         class: "btn-secondary-sm sm:btn-secondary" %>

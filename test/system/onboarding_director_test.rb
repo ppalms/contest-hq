@@ -32,12 +32,12 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
     click_on "Continue"
     assert_text "Contest entry was successfully created"
 
-    # click_on "Add Music Selection"
-    # assert_text "New Music Selection"
-    # fill_in "Title", with: "Symphony No. 5"
-    # fill_in "Composer", with: "Beethoven"
-    # click_on "Create Music Selection"
-    # assert_text "Music selection added to contest entry"
+    click_on "Add Music Selection"
+    assert_text "Add Music Selection"
+    fill_in "Title", with: "Symphony No. 5"
+    fill_in "Composer", with: "Beethoven"
+    click_on "Save"
+    assert_text "Music selection added to contest entry"
   end
 
   private

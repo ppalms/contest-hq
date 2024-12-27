@@ -123,6 +123,10 @@
     @apply pt-6 sm:col-span-2 space-y-4 sm:space-y-0 sm:space-x-2 sm:flex sm:justify-end;
   }
 
+  .action-button-container {
+    @apply space-y-2 pt-2 sm:flex sm:flex-grow sm:justify-end sm:gap-2 sm:space-y-0 sm:pt-0;
+  }
+
   .modal-backdrop {
     @apply fixed inset-0 z-10 w-full h-full bg-black bg-opacity-50 transition-opacity;
   }

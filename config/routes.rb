@@ -8,7 +8,9 @@ Rails.application.routes.draw do
   end
 
   resources :contests do
-    resources :contest_entries, as: "entries", path: "entries"
+    resources :contest_entries, as: "entries", path: "entries" do
+      resources :music_selections, as: "selections", path: "selections"
+    end
   end
 
   namespace :roster do
