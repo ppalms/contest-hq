@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_01_232724) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_22_190439) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -20,36 +20,18 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_01_232724) do
     t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
   end
 
-  create_table "contest_group_classes", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "account_id", null: false
-    t.index ["account_id"], name: "index_contest_group_classes_on_account_id"
-  end
-
-  create_table "contest_group_conductors", id: false, force: :cascade do |t|
-    t.bigint "contest_group_id", null: false
+  create_table "contest_entries", force: :cascade do |t|
+    t.bigint "contest_id", null: false
     t.bigint "user_id", null: false
+    t.bigint "large_ensemble_id", null: false
     t.bigint "account_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_contest_group_conductors_on_account_id"
-    t.index ["contest_group_id", "account_id"], name: "idx_on_contest_group_id_account_id_a81d344964"
-    t.index ["contest_group_id", "user_id", "account_id"], name: "idx_on_contest_group_id_user_id_account_id_d73e3c1e6a", unique: true
-    t.index ["user_id", "account_id"], name: "index_contest_group_conductors_on_user_id_and_account_id"
-  end
-
-  create_table "contest_groups", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "organization_id", null: false
-    t.bigint "contest_group_class_id", null: false
-    t.bigint "account_id", null: false
-    t.index ["account_id"], name: "index_contest_groups_on_account_id"
-    t.index ["contest_group_class_id"], name: "index_contest_groups_on_contest_group_class_id"
-    t.index ["organization_id"], name: "index_contest_groups_on_organization_id"
+    t.index ["account_id"], name: "index_contest_entries_on_account_id"
+    t.index ["contest_id", "large_ensemble_id", "account_id"], name: "index_contest_entries_unique", unique: true
+    t.index ["contest_id"], name: "index_contest_entries_on_contest_id"
+    t.index ["large_ensemble_id"], name: "index_contest_entries_on_large_ensemble_id"
+    t.index ["user_id"], name: "index_contest_entries_on_user_id"
   end
 
   create_table "contests", force: :cascade do |t|
@@ -62,32 +44,56 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_01_232724) do
     t.index ["account_id"], name: "index_contests_on_account_id"
   end
 
-  create_table "org_memberships", id: false, force: :cascade do |t|
-    t.bigint "organization_id", null: false
+  create_table "contests_school_classes", id: false, force: :cascade do |t|
+    t.bigint "contest_id", null: false
+    t.bigint "school_class_id", null: false
+    t.bigint "account_id", null: false
+    t.index ["account_id", "contest_id", "school_class_id"], name: "index_contests_school_classes_unique", unique: true
+    t.index ["account_id"], name: "index_contests_school_classes_on_account_id"
+    t.index ["contest_id"], name: "index_contests_school_classes_on_contest_id"
+    t.index ["school_class_id"], name: "index_contests_school_classes_on_school_class_id"
+  end
+
+  create_table "large_ensemble_conductors", id: false, force: :cascade do |t|
+    t.bigint "large_ensemble_id", null: false
     t.bigint "user_id", null: false
     t.bigint "account_id", null: false
-    t.index ["account_id"], name: "index_org_memberships_on_account_id"
-    t.index ["organization_id", "user_id", "account_id"], name: "idx_on_organization_id_user_id_account_id_c9f9014116", unique: true
-    t.index ["organization_id"], name: "index_org_memberships_on_organization_id"
-    t.index ["user_id"], name: "index_org_memberships_on_user_id"
-  end
-
-  create_table "organization_types", force: :cascade do |t|
-    t.string "name"
-    t.bigint "account_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_organization_types_on_account_id"
+    t.index ["account_id"], name: "index_large_ensemble_conductors_on_account_id"
+    t.index ["large_ensemble_id", "user_id", "account_id"], name: "index_large_ensemble_conductors_unique", unique: true
+    t.index ["large_ensemble_id"], name: "index_large_ensemble_conductors_on_large_ensemble_id"
+    t.index ["user_id"], name: "index_large_ensemble_conductors_on_user_id"
   end
 
-  create_table "organizations", force: :cascade do |t|
+  create_table "large_ensembles", force: :cascade do |t|
     t.string "name"
-    t.bigint "organization_type_id", null: false
+    t.bigint "school_id", null: false
+    t.bigint "performance_class_id", null: false
     t.bigint "account_id", null: false
+    t.index ["account_id"], name: "index_large_ensembles_on_account_id"
+    t.index ["performance_class_id"], name: "index_large_ensembles_on_performance_class_id"
+    t.index ["school_id"], name: "index_large_ensembles_on_school_id"
+  end
+
+  create_table "music_selections", force: :cascade do |t|
+    t.string "title"
+    t.string "composer"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_organizations_on_account_id"
-    t.index ["organization_type_id"], name: "index_organizations_on_organization_type_id"
+    t.bigint "contest_entry_id", null: false
+    t.bigint "account_id", null: false
+    t.index ["account_id", "contest_entry_id"], name: "index_music_selections_on_account_id_and_contest_entry_id"
+    t.index ["account_id"], name: "index_music_selections_on_account_id"
+    t.index ["contest_entry_id"], name: "index_music_selections_on_contest_entry_id"
+  end
+
+  create_table "performance_classes", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "account_id", null: false
+    t.index ["account_id"], name: "index_performance_classes_on_account_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -95,6 +101,36 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_01_232724) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_roles_on_name", unique: true
+  end
+
+  create_table "school_classes", force: :cascade do |t|
+    t.string "name"
+    t.integer "ordinal"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "account_id", null: false
+    t.index ["account_id", "ordinal"], name: "index_school_classes_on_account_id_and_ordinal", unique: true
+    t.index ["account_id"], name: "index_school_classes_on_account_id"
+  end
+
+  create_table "school_directors", id: false, force: :cascade do |t|
+    t.bigint "school_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "account_id", null: false
+    t.index ["account_id"], name: "index_school_directors_on_account_id"
+    t.index ["school_id", "user_id", "account_id"], name: "index_school_directors_unique", unique: true
+    t.index ["school_id"], name: "index_school_directors_on_school_id"
+    t.index ["user_id"], name: "index_school_directors_on_user_id"
+  end
+
+  create_table "schools", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "school_class_id", null: false
+    t.bigint "account_id", null: false
+    t.index ["account_id"], name: "index_schools_on_account_id"
+    t.index ["school_class_id"], name: "index_schools_on_school_class_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -131,20 +167,29 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_01_232724) do
     t.index ["last_name"], name: "index_users_on_last_name"
   end
 
-  add_foreign_key "contest_group_classes", "accounts"
-  add_foreign_key "contest_group_conductors", "accounts"
-  add_foreign_key "contest_group_conductors", "contest_groups"
-  add_foreign_key "contest_group_conductors", "users"
-  add_foreign_key "contest_groups", "accounts"
-  add_foreign_key "contest_groups", "contest_group_classes"
-  add_foreign_key "contest_groups", "organizations"
+  add_foreign_key "contest_entries", "accounts"
+  add_foreign_key "contest_entries", "contests"
+  add_foreign_key "contest_entries", "large_ensembles"
+  add_foreign_key "contest_entries", "users"
   add_foreign_key "contests", "accounts"
-  add_foreign_key "org_memberships", "accounts"
-  add_foreign_key "org_memberships", "organizations"
-  add_foreign_key "org_memberships", "users"
-  add_foreign_key "organization_types", "accounts"
-  add_foreign_key "organizations", "accounts"
-  add_foreign_key "organizations", "organization_types"
+  add_foreign_key "contests_school_classes", "accounts"
+  add_foreign_key "contests_school_classes", "contests"
+  add_foreign_key "contests_school_classes", "school_classes"
+  add_foreign_key "large_ensemble_conductors", "accounts"
+  add_foreign_key "large_ensemble_conductors", "large_ensembles"
+  add_foreign_key "large_ensemble_conductors", "users"
+  add_foreign_key "large_ensembles", "accounts"
+  add_foreign_key "large_ensembles", "performance_classes"
+  add_foreign_key "large_ensembles", "schools"
+  add_foreign_key "music_selections", "accounts"
+  add_foreign_key "music_selections", "contest_entries"
+  add_foreign_key "performance_classes", "accounts"
+  add_foreign_key "school_classes", "accounts"
+  add_foreign_key "school_directors", "accounts"
+  add_foreign_key "school_directors", "schools"
+  add_foreign_key "school_directors", "users"
+  add_foreign_key "schools", "accounts"
+  add_foreign_key "schools", "school_classes"
   add_foreign_key "sessions", "users"
   add_foreign_key "user_roles", "roles"
   add_foreign_key "user_roles", "users"

@@ -1,0 +1,11 @@
+contest_a_school_a_ensemble_a:
+  contest: demo_contest_a
+  large_ensemble: demo_school_a_ensemble_a
+  user: demo_director_a
+  account: demo
+
+contest_a_school_a_ensemble_b:
+  contest: demo_contest_a
+  large_ensemble: demo_school_a_ensemble_b
+  user: demo_director_b
+  account: demo

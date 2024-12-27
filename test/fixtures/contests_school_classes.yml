@@ -1,0 +1,39 @@
+demo_contest_a_class_1a:
+  contest: demo_contest_a
+  school_class: demo_school_class_a
+  account: demo
+
+demo_contest_b_class_1a:
+  contest: demo_contest_b
+  school_class: demo_school_class_a
+  account: demo
+
+demo_contest_b_class_2a:
+  contest: demo_contest_b
+  school_class: demo_school_class_b
+  account: demo
+
+demo_contest_c_class_2a:
+  contest: demo_contest_c
+  school_class: demo_school_class_b
+  account: demo
+
+demo_contest_c_class_3a:
+  contest: demo_contest_c
+  school_class: demo_school_class_c
+  account: demo
+
+customer_contest_a_class_4a:
+  contest: customer_contest_a
+  school_class: customer_school_class_d
+  account: customer
+
+customer_contest_a_class_5a:
+  contest: customer_contest_a
+  school_class: customer_school_class_e
+  account: customer
+
+customer_contest_a_class_6a:
+  contest: customer_contest_a
+  school_class: customer_school_class_f
+  account: customer

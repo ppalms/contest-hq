@@ -1,0 +1,35 @@
+<ul role="list" class="divide-y divide-gray-100">
+  <% @contest_entries.each do |contest_entry| %>
+    <li class="flex items-center justify-between gap-x-6 py-5">
+      <div class="min-w-0">
+        <div class="flex items-start gap-x-3">
+          <p class="font-semibold text-gray-900"><%= contest_entry.large_ensemble.name %></p>
+        </div>
+        <div class="mt-1 gap-x-2 text-xs/5 text-gray-500">
+        </div>
+        <div class="mt-1 flex items-center gap-x-2 text-xs/5 text-gray-500">
+          <p class="whitespace-nowrap">
+            <%= contest_entry.large_ensemble.school.name %>
+          </p>
+          <svg viewBox="0 0 2 2" class="size-0.5 fill-current">
+            <circle cx="1" cy="1" r="1"/>
+          </svg>
+          <p class="whitespace-nowrap">
+            <%= contest_entry.large_ensemble.school.school_class.name %>
+          </p>
+          <svg viewBox="0 0 2 2" class="size-0.5 fill-current">
+            <circle cx="1" cy="1" r="1"/>
+          </svg>
+          <p class="truncate">
+            <%= contest_entry.large_ensemble.performance_class.name %>
+          </p>
+        </div>
+      </div>
+      <div class="flex flex-none items-center gap-x-4">
+        <%= link_to "View",
+        contest_entry_path(id: contest_entry.id),
+        class: "btn-primary-sm" %>
+      </div>
+    </li>
+  <% end %>
+</ul>

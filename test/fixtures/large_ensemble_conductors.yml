@@ -1,0 +1,19 @@
+demo_school_a_ensemble_a_conductor:
+  large_ensemble: demo_school_a_ensemble_c
+  user: demo_director_a
+  account_id: <%= ActiveRecord::FixtureSet.identify(:demo) %>
+
+demo_school_a_ensemble_b_conductor:
+  large_ensemble: demo_school_a_ensemble_b
+  user: demo_director_b
+  account_id: <%= ActiveRecord::FixtureSet.identify(:demo) %>
+
+customer_school_a_ensemble_a_conductor:
+  large_ensemble: customer_school_a_ensemble_a
+  user: customer_director_a
+  account_id: <%= ActiveRecord::FixtureSet.identify(:customer) %>
+
+customer_school_b_ensemble_a_conductor:
+  large_ensemble: customer_school_b_ensemble_a
+  user: customer_director_b
+  account_id: <%= ActiveRecord::FixtureSet.identify(:customer) %>

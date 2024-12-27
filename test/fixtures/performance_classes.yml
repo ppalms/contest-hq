@@ -1,0 +1,27 @@
+demo_performance_class_a:
+  name: A
+  account: demo
+
+customer_performance_class_a:
+  name: A
+  account: customer
+
+customer_performance_class_b:
+  name: B
+  account: customer
+
+customer_performance_class_c:
+  name: C
+  account: customer
+
+customer_performance_class_d:
+  name: D
+  account: customer
+
+customer_performance_class_e:
+  name: E
+  account: customer
+
+customer_performance_class_f:
+  name: F
+  account: customer

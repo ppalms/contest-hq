@@ -3,7 +3,7 @@ require "application_system_test_case"
 class ContestsTest < ApplicationSystemTestCase
   setup do
     log_in_as(users(:demo_admin_a))
-    @contest = contests(:demo_contest_a)
+    @contest = contests(:demo_contest_c)
   end
 
   test "visiting the index" do
@@ -16,6 +16,8 @@ class ContestsTest < ApplicationSystemTestCase
     click_on "New Contest"
 
     fill_in "Name", with: "New Demo Contest"
+    check "1-A"
+    check "2-A"
     fill_in "Contest start", with: @contest.contest_start
     fill_in "Contest end", with: @contest.contest_end
     click_on "Create Contest"

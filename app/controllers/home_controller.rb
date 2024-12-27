@@ -22,12 +22,12 @@ class HomeController < ApplicationController
         .order("users.created_at DESC")
         .limit(5)
 
-      @organizations = Organization.select("organizations.id, organizations.name").order("organizations.name").limit(5)
+      @schools = School.select("schools.id, schools.name").order("schools.name").limit(5)
     end
 
-    # TODO: show contests director has registered for
     if current_user.director?
-      @my_groups = ContestGroup.includes(:contest_group_class)
+      @my_entries = ContestEntry.where(user: current_user)
+      @my_scores = []
 
       @upcoming_contests = Contest
         .order("contest_start")

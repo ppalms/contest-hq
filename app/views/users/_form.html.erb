@@ -47,11 +47,11 @@
 
   <div>
     <div class="flex justify-between">
-      <%= form.label :organization_ids, "Organizations", style: "display: block" %>
+      <%= form.label :school_ids, "Schools", style: "display: block" %>
       <span class="text-sm text-gray-500">(Optional)</span>
     </div>
 
-    <%= form.collection_select :organization_ids,
+    <%= form.collection_select :school_ids,
                            organizations,
                            :id,
                            :name,

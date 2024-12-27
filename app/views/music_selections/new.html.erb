@@ -1,0 +1,10 @@
+<div class="wide-form-container" id="new_music_selection">
+  <h1>Add Music Selection</h1>
+
+  <p>
+    <span class="block text-xl font-bold"><%= @contest_entry.large_ensemble.name %></span>
+    <span class="block"><%= @contest_entry.contest.name %></span>
+  </p>
+
+  <%= render "form", music_selection: @music_selection %>
+</div>

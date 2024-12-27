@@ -17,14 +17,14 @@
 
   <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white border border-neutral-200">
     <div class="p-4 sm:px-6 bg-green-100">
-      <strong><%= link_to "Organizations", organizations_path %></strong>
+      <strong><%= link_to "Schools", organizations_schools_path %></strong>
     </div>
 
     <div class="px-4 py-5 sm:p-6">
-      <% @organizations&.each do |org| %>
+      <% @schools&.each do |school| %>
         <div>
-          <%= link_to org do %>
-            <%= org.name %>
+          <%= link_to organizations_school_path(school) do %>
+            <%= school.name %>
           <% end %>
         </div>
       <% end %>

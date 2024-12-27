@@ -11,6 +11,10 @@
     @apply text-3xl font-bold text-stone-800;
   }
 
+  h3 {
+    @apply text-base font-semibold text-stone-800;
+  }
+
   .btn-primary {
     @apply rounded-lg py-3 px-5 bg-blue-600 hover:bg-blue-500 border border-b-4 border-blue-900 block w-full sm:w-auto sm:inline-block hover:border-blue-600 transition text-white font-medium cursor-pointer;
   }
@@ -23,8 +27,16 @@
     @apply rounded-lg py-3 px-5 bg-gray-100 hover:bg-gray-200 border border-b-4 border-gray-400 block text-center sm:inline-block hover:border-gray-500 transition font-medium;
   }
 
+  .btn-secondary-sm {
+    @apply btn-secondary py-2 text-sm font-semibold;
+  }
+
   .btn-danger {
     @apply rounded-lg py-3 px-5 text-red-800 hover:bg-red-100 border border-b-4 border-red-200 block w-full sm:w-auto sm:inline-block hover:border-red-300 transition font-semibold;
+  }
+
+  .btn-danger-sm {
+    @apply btn-danger py-2 text-sm font-semibold;
   }
 
   .simple-form {
@@ -109,6 +121,10 @@
 
   .form-button-container {
     @apply pt-6 sm:col-span-2 space-y-4 sm:space-y-0 sm:space-x-2 sm:flex sm:justify-end;
+  }
+
+  .action-button-container {
+    @apply space-y-2 pt-2 sm:flex sm:flex-grow sm:justify-end sm:gap-2 sm:space-y-0 sm:pt-0;
   }
 
   .modal-backdrop {

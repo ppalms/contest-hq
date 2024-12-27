@@ -1,7 +1,7 @@
 <div id="<%= dom_id contest %>">
   <h1><%= contest.name %></h1>
 
-  <div class="grid grid-cols-1 sm:grid-cols-4 space-y-4 sm:space-y-0 pt-6">
+  <div class="grid grid-cols-1 sm:grid-cols-4 gap-6 pt-6">
     <div class="sm:col-span-2">
       <strong class="block font-medium mb-1">Contest Start</strong>
       <%= contest.contest_start&.strftime("%-m/%d/%Y %l:%M %p") || "TBD" %>
@@ -10,6 +10,11 @@
     <div class="sm:col-span-2">
       <strong class="block font-medium mb-1">Contest End</strong>
       <%= contest.contest_end&.strftime("%-m/%d/%Y %l:%M %p") || "TBD" %>
+    </div>
+
+    <div class="sm:col-span-1">
+      <strong class="block font-medium mb-1">Eligible School Classes</strong>
+      <%= contest.school_classes&.pluck(:name).join(", ") || "All" %>
     </div>
   </div>
 </div>

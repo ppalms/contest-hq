@@ -1,0 +1,19 @@
+<% content_for :title, "Contest Entries" %>
+<div class="py-8 space-y-4">
+  <div class="flex justify-between">
+    <h1>Contest Entries</h1>
+
+    <% if current_user.director? %>
+      <div class="flex gap-2">
+        <%= link_to "New Contest Entry", new_contest_entry_path, class: "btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div
+    id="contest_entry_list"
+    class="px-4 rounded-md bg-white border border-neutral-200 shadow-sm"
+  >
+    <%= render partial: "list" %>
+  </div>
+</div>

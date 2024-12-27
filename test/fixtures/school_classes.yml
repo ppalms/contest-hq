@@ -1,0 +1,44 @@
+demo_school_class_a:
+  name: 1-A
+  ordinal: 1
+  account: demo
+
+demo_school_class_b:
+  name: 2-A
+  ordinal: 2
+  account: demo
+
+demo_school_class_c:
+  name: 3-A
+  ordinal: 3
+  account: demo
+
+customer_school_class_a:
+  name: 1-A
+  ordinal: 1
+  account: customer
+
+customer_school_class_b:
+  name: 2-A
+  ordinal: 2
+  account: customer
+
+customer_school_class_c:
+  name: 3-A
+  ordinal: 3
+  account: customer
+
+customer_school_class_d:
+  name: 4-A
+  ordinal: 4
+  account: customer
+
+customer_school_class_e:
+  name: 5-A
+  ordinal: 5
+  account: customer
+
+customer_school_class_f:
+  name: 6-A
+  ordinal: 6
+  account: customer

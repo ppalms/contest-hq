@@ -19,7 +19,7 @@ class UsersController < ApplicationController
     end
 
     @roles = Role.where(name: %w[Director Judge AccountAdmin]).order(:name)
-    @organizations = Organization.all.order(:name)
+    @organizations = School.all.order(:name)
 
     render :edit, locals: { roles: @roles, organizations: @organizations }
   end
@@ -39,7 +39,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.expect(user: [ :email, :first_name, :last_name, :time_zone, role_ids: [], organization_ids: [] ])
+    params.expect(user: [ :email, :first_name, :last_name, :time_zone, role_ids: [], school_ids: [] ])
   end
 
   def set_user

@@ -6,7 +6,7 @@ class InvitationsController < ApplicationController
     else
       @roles = Role.where(name: %w[Director Judge]).order(:name)
     end
-    @organizations = Organization.all.order(:name)
+    @organizations = School.all.order(:name)
 
     render :new, locals: { roles: @roles, organizations: @organizations }
   end
@@ -24,7 +24,7 @@ class InvitationsController < ApplicationController
   private
 
   def user_params
-    params.expect(user: [ :email, :first_name, :last_name, :time_zone, role_ids: [], organization_ids: [] ]).merge(password: SecureRandom.base58, verified: true)
+    params.expect(user: [ :email, :first_name, :last_name, :time_zone, role_ids: [], school_ids: [] ]).merge(password: SecureRandom.base58, verified: true)
   end
 
   def send_invitation_instructions

@@ -1,0 +1,42 @@
+<%= form_with(model: @large_ensemble, url: @large_ensemble.new_record? ? roster_large_ensembles_path : roster_large_ensemble_path(@large_ensemble), class: "wide-form") do |form| %>
+  <div class="sm:col-span-2">
+    <%= form.label :name %>
+    <%= form.text_field :name, class: "text-field", autofocus: true %>
+  </div>
+
+  <div>
+    <%= form.label :school %>
+    <%= form.select :school_id,
+                current_user.schools.map { |t| [t.name, t.id] },
+                { include_blank: "Select a school" },
+                { required: true, class: "text-field", id: :school_id } %>
+  </div>
+
+  <div>
+    <%= form.label :performance_class, "Classification" %>
+    <%= form.select :performance_class_id,
+                performance_classes.map { |t| [t.name, t.id] },
+                { include_blank: "Select a classification" },
+                { required: true, class: "text-field", id: :performance_class_id } %>
+  </div>
+
+  <div class="form-button-container">
+    <%= form.submit submit_text, class: "btn-primary" %>
+    <%= link_to "Cancel",
+    (
+      if @large_ensemble.id == nil
+        roster_large_ensembles_path
+      else
+        roster_large_ensemble_path(@large_ensemble)
+      end
+    ),
+    class: "btn-secondary",
+    role: "button" %>
+  </div>
+
+  <% if @large_ensemble.errors.any? %>
+    <div class="pt-2 sm:col-span-2">
+      <%= render "layouts/error_messages", errors: @large_ensemble.errors %>
+    </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,17 @@
+<% content_for :title, "Contests" %>
+<div class="py-8 space-y-4" id="contests">
+  <div class="flex justify-between">
+    <h2>Contests</h2>
+  </div>
+
+  <div
+    id="contest_list"
+    class="px-4 rounded-md bg-white border border-neutral-200 shadow-sm"
+  >
+    <% if @contests.empty? %>
+      <p class="text-center">No contests found.</p>
+    <% else %>
+      <%= render "contest_list", locals: { contests: @contests } %>
+    <% end %>
+  </div>
+</div>

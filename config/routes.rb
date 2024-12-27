@@ -1,11 +1,24 @@
 Rails.application.routes.draw do
   resources :users, only: [ :index, :edit, :update ]
-  resources :contests
-  resources :organizations
-  resources :contest_groups
 
-  resources :organization_types, only: [ :index, :show ]
-  resources :contest_group_classes, only: [ :index, :show ]
+  namespace :organizations do
+    get "/", to: "index"
+    resources :schools
+    resources :school_classes
+  end
+
+  resources :contests do
+    resources :contest_entries, as: "entries", path: "entries" do
+      resources :music_selections, as: "selections", path: "selections"
+    end
+  end
+
+  namespace :roster do
+    get "/", to: "index"
+    resources :large_ensembles
+  end
+
+  resources :performance_classes, only: [ :index, :show ]
 
   resource :invitation, only: [ :new, :create ]
   get  "sign_in", to: "sessions#new"
