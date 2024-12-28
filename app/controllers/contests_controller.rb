@@ -69,7 +69,7 @@ class ContestsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def contest_params
-    params.expect(contest: [ :name, :contest_start, :contest_end ])
+    params.expect(contest: [ :name, :contest_start, :contest_end, school_class_ids: [] ])
   end
 
   def set_breadcrumbs
