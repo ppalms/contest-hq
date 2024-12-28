@@ -7,7 +7,7 @@
   <div>
     <%= form.label :school_class %>
     <%= form.select :school_class_id,
-                SchoolClass.all.map { |t| [t.name, t.id] },
+                SchoolClass.all.order(:ordinal).map { |t| [t.name, t.id] },
                 { include_blank: "Select a class" },
                 { required: true, class: "text-field", id: :school_class_id } %>
   </div>

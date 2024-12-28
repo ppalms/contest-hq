@@ -27,7 +27,7 @@
         </small>
       </div>
 
-      <%= form.collection_checkboxes :school_class_ids, SchoolClass.all, :id, :name do |helper| %>
+      <%= form.collection_checkboxes :school_class_ids, SchoolClass.all.order(:ordinal), :id, :name do |helper| %>
         <%= helper.label do %>
           <%= helper.check_box %><span class="ml-2"><%= helper.label %></span>
         <% end %>

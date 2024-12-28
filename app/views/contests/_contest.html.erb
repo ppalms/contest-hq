@@ -14,7 +14,7 @@
 
     <div class="sm:col-span-1">
       <strong class="block font-medium mb-1">Eligible School Classes</strong>
-      <%= contest.school_classes&.pluck(:name).join(", ") || "All" %>
+      <%= contest.school_classes&.order(:ordinal).pluck(:name).join(", ") || "All" %>
     </div>
   </div>
 </div>
