@@ -19,14 +19,9 @@
 <div
   class="grid grid-cols-1 space-y-4 sm:grid-cols-2 sm:space-y-0 sm:space-x-4"
 >
-  <div
-    class="
-      divide-y divide-gray-200 overflow-hidden rounded-lg bg-white border
-      border-neutral-200
-    "
-  >
-    <div class="p-4 sm:px-6 bg-blue-100">
-      <strong>My Entries</strong>
+  <div class="card">
+    <div class="card-header">
+      My Entries
     </div>
 
     <div class="p-4 py-5 sm:p-6">
@@ -64,14 +59,9 @@
     </div>
   </div>
 
-  <div
-    class="
-      divide-y divide-gray-200 overflow-hidden rounded-lg bg-white border
-      border-neutral-200
-    "
-  >
-    <div class="p-4 sm:px-6 bg-blue-100">
-      <strong>My Scores</strong>
+  <div class="card">
+    <div class="card-header">
+      My Scores
     </div>
 
     <div class="p-4 py-5 sm:p-6">
@@ -99,14 +89,9 @@
   </div>
 </div>
 
-<div
-  class="
-    divide-y divide-gray-200 overflow-hidden rounded-lg bg-white border
-    border-neutral-200 mt-4
-  "
->
-  <div class="p-4 sm:px-6 bg-blue-100">
-    <strong><%= link_to "Contests", contests_path %></strong>
+<div class="card">
+  <div class="card-header">
+    <%= link_to "Upcoming Contests", contests_path %>
   </div>
 
   <div class="p-4 sm:p-6">
