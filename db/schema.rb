@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_22_190439) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_09_061835) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -32,6 +32,18 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_22_190439) do
     t.index ["contest_id"], name: "index_contest_entries_on_contest_id"
     t.index ["large_ensemble_id"], name: "index_contest_entries_on_large_ensemble_id"
     t.index ["user_id"], name: "index_contest_entries_on_user_id"
+  end
+
+  create_table "contest_managers", id: false, force: :cascade do |t|
+    t.bigint "contest_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "account_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "contest_id", "user_id"], name: "index_contest_managers_unique", unique: true
+    t.index ["account_id"], name: "index_contest_managers_on_account_id"
+    t.index ["contest_id"], name: "index_contest_managers_on_contest_id"
+    t.index ["user_id"], name: "index_contest_managers_on_user_id"
   end
 
   create_table "contests", force: :cascade do |t|
@@ -171,6 +183,9 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_22_190439) do
   add_foreign_key "contest_entries", "contests"
   add_foreign_key "contest_entries", "large_ensembles"
   add_foreign_key "contest_entries", "users"
+  add_foreign_key "contest_managers", "accounts"
+  add_foreign_key "contest_managers", "contests"
+  add_foreign_key "contest_managers", "users"
   add_foreign_key "contests", "accounts"
   add_foreign_key "contests_school_classes", "accounts"
   add_foreign_key "contests_school_classes", "contests"

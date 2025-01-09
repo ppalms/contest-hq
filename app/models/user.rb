@@ -17,6 +17,9 @@ class User < ApplicationRecord
   has_many :large_ensemble_conductors, dependent: :delete_all
   has_many :conducted_ensembles, through: :large_ensemble_conductors, source: :large_ensemble
 
+  has_many :contest_managers, dependent: :delete_all
+  has_many :managed_contests, through: :contest_managers, source: :contest
+
   has_many :contest_entries
 
   has_many :user_roles, dependent: :delete_all
@@ -59,8 +62,8 @@ class User < ApplicationRecord
     roles.exists?(name: "Director")
   end
 
-  def scheduler?
-    roles.exists?(name: "Scheduler")
+  def manager?
+    roles.exists?(name: "Manager")
   end
 
   def judge?

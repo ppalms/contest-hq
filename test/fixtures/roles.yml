@@ -7,8 +7,8 @@ account_admin:
 director:
   name: Director
 
-scheduler:
-  name: Scheduler
+manager:
+  name: Manager
 
 judge:
   name: Judge

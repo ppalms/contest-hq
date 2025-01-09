@@ -138,4 +138,12 @@
   .modal-small {
     @apply fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 w-full md:w-2/3 xl:w-1/2 bg-white shadow-lg h-auto;
   }
+
+  .card {
+    @apply divide-y divide-gray-200 overflow-hidden rounded-lg bg-white border border-neutral-300;
+  }
+
+  .card-header {
+    @apply pt-4 pb-3 px-4 sm:px-6 border-b-4 border-blue-900 bg-gradient-to-r from-blue-700 to-blue-600 text-white text-lg font-semibold;
+  }
 }

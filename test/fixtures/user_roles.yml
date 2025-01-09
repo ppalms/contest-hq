@@ -14,6 +14,10 @@ demo_director_a:
   user: demo_director_a
   role: director
 
+demo_manager_a:
+  user: demo_manager_a
+  role: manager
+
 demo_director_b:
   user: demo_director_b
   role: director
