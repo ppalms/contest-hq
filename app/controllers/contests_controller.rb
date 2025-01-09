@@ -5,7 +5,7 @@ class ContestsController < ApplicationController
 
   # GET /contests or /contests.json
   def index
-    @contests = Contest.all.order(:name)
+    @contests = Contest.all.order(:contest_start)
     @contests = @contests.where("name ILIKE ?", "%#{params[:name]}%") if params[:name].present?
   end
 
