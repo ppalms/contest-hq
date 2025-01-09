@@ -5,5 +5,5 @@ class ContestEntry < ApplicationRecord
   belongs_to :user
   belongs_to :large_ensemble
 
-  has_many :music_selections
+  has_many :music_selections, dependent: :destroy
 end
