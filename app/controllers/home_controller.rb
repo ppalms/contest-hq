@@ -34,8 +34,8 @@ class HomeController < ApplicationController
         .limit(5)
     end
 
-    if current_user.scheduler?
-      @managed_contests = Contest
+    if current_user.manager?
+      @managed_contests = current_user.managed_contests
         .order("contest_start")
         .limit(5)
     end

@@ -14,7 +14,7 @@ roles = [
   { name: 'SysAdmin' },
   { name: 'AccountAdmin' },
   { name: 'Director' },
-  { name: 'Scheduler' },
+  { name: 'Manager' },
   { name: 'Judge' }
 ]
 

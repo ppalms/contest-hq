@@ -4,7 +4,7 @@
   </div>
 
   <div class="p-4 sm:p-6">
-    <% @upcoming_contests&.each do |contest| %>
+    <% @managed_contests&.each do |contest| %>
       <div>
         <%= link_to contest do %>
           <%= contest.name %>

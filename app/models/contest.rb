@@ -4,6 +4,9 @@ class Contest < ApplicationRecord
   has_many :contests_school_classes, dependent: :delete_all
   has_many :school_classes, through: :contests_school_classes
 
+  has_many :contest_managers, dependent: :delete_all
+  has_many :managers, through: :contest_managers, source: :user
+
   validates :name, presence: true
   validate :start_date_before_end_date
 

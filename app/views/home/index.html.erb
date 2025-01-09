@@ -1,5 +1,5 @@
 <div class="space-y-4">
-  <%= render "home/dashboards/scheduler" if current_user.scheduler? %>
+  <%= render "home/dashboards/manager" if current_user.manager? %>
   <%= render "home/dashboards/director" if current_user.director? %>
 
   <% if current_user.admin? %>

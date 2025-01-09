@@ -18,7 +18,7 @@ class UsersController < ApplicationController
       redirect_to root_path, status: :forbidden
     end
 
-    @roles = Role.where(name: %w[Director Scheduler Judge AccountAdmin]).order(:name)
+    @roles = Role.where(name: %w[Director Manager Judge AccountAdmin]).order(:name)
     @organizations = School.all.order(:name)
 
     render :edit, locals: { roles: @roles, organizations: @organizations }
