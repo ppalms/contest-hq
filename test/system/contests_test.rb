@@ -18,8 +18,8 @@ class ContestsTest < ApplicationSystemTestCase
     fill_in "Name", with: "New Demo Contest"
     check "1-A"
     check "2-A"
-    fill_in "Contest start", with: @contest.contest_start
-    fill_in "Contest end", with: @contest.contest_end
+    fill_in "Start date", with: @contest.contest_start
+    fill_in "End date", with: @contest.contest_end
     click_on "Create Contest"
 
     assert_text "Contest was successfully created"
@@ -65,8 +65,8 @@ class ContestsTest < ApplicationSystemTestCase
 
     assert_text "Contest was successfully created"
 
-    assert_text "Contest Start\nTBD"
-    assert_text "Contest End\nTBD"
+    assert_text "Start Date\nTBD"
+    assert_text "End Date\nTBD"
   end
 
   test "should prevent saving end date before start date" do
@@ -74,8 +74,8 @@ class ContestsTest < ApplicationSystemTestCase
     click_on "New Contest"
 
     fill_in "Name", with: "Contest With Backward Dates"
-    fill_in "Contest start", with: Date.new(2024, 10, 8)
-    fill_in "Contest end", with: Date.new(2024, 10, 6)
+    fill_in "Start date", with: Date.new(2024, 10, 8)
+    fill_in "End date", with: Date.new(2024, 10, 6)
     click_on "Create Contest"
 
     assert_text "date must be after start date"
@@ -91,5 +91,14 @@ class ContestsTest < ApplicationSystemTestCase
     log_in_as(users(:demo_director_a))
     visit contests_url
     assert_no_text "New Contest"
+  end
+
+  # Scheduling tests
+  test "managers can see contest schedule" do
+    log_in_as(users(:demo_manager_a))
+    visit contests_url
+    click_link(href: contest_path(@contest.id))
+
+    assert_text "Schedule"
   end
 end

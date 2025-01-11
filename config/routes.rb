@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     resources :contest_entries, as: "entries", path: "entries" do
       resources :music_selections, as: "selections", path: "selections"
     end
+    patch "times", to: "contests#set_times"
   end
 
   namespace :roster do
