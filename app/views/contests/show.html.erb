@@ -20,5 +20,7 @@
 
   <%= render @contest %>
 
-  <%= render "schedule" %>
+  <div class="pt-6">
+    <%= link_to sanitize("Schedule &rarr;"), contest_schedules_path(@contest) %>
+  </div>
 </div>

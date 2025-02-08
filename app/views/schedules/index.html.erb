@@ -1,0 +1,11 @@
+<% content_for :title, "Schedule" %>
+<div class="py-8 space-y-4">
+  <div class="flex justify-between">
+    <h1><%= @contest.name %>
+      Schedule</h1>
+  </div>
+
+  <div class="px-4 rounded-md bg-white border border-neutral-200 shadow-sm">
+    <%= link_to "Set up schedule", contest_schedule_setup_path %>
+  </div>
+</div>

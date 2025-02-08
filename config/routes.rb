@@ -11,7 +11,15 @@ Rails.application.routes.draw do
     resources :contest_entries, as: "entries", path: "entries" do
       resources :music_selections, as: "selections", path: "selections"
     end
+
     patch "times", to: "contests#set_times"
+    get "schedule/setup", to: "schedules#setup"
+
+    resources :schedules, path: "schedule" do
+      resources :rooms, controller: "schedules/rooms"
+      resources :sequences, controller: "schedules/performance_sequences"
+      resources :schedule_days, as: "days", path: "days"
+    end
   end
 
   namespace :roster do

@@ -9,7 +9,7 @@
     class="px-4 rounded-md bg-white border border-neutral-200 shadow-sm"
   >
     <% if @contest.start_time == nil || @contest.end_time == nil %>
-      <p class="text-center pt-4">Set performance start and end times to begin.</p>
+      <p class="text-center pt-4">Set performance start and end times to begin</p>
       <div class="simple-form-container">
         <%= form_with model: @contest, url: contest_times_path(@contest), method: :patch, class: "simple-form" do |f| %>
           <div class="grid grid-cols-2 gap-2">
@@ -19,7 +19,9 @@
             <%= f.label :end_time %>
             <%= f.time_field :end_time, value: @contest.end_time, class: "text-field" %>
           </div>
-          <%= f.submit %>
+          <div class="col-span-2 mx-auto">
+            <%= f.submit "Save", class: "btn-primary-sm" %>
+          </div>
         <% end %>
         <% if @contest.errors.any? %>
           <div class="pt-2 sm:col-span-2">
@@ -28,7 +30,7 @@
         <% end %>
       </div>
     <% else %>
-      <%= render partial: "schedule_days", locals: { contest: @contest } %>
+      <%= link_to sanitize("Schedule &rarr;"), contest_schedules_path(@contest) %>
     <% end %>
   </div>
 </div>

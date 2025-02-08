@@ -1,0 +1,16 @@
+<div data-controller="schedule-setup">
+  <h1>Schedule Setup</h1>
+
+  <%= turbo_frame_tag "schedule_room_content" do %>
+    <div class="pt-8">
+      <%= render partial: "schedules/rooms/room_list", locals: { rooms: @schedule.rooms } %>
+    </div>
+
+    <div class="py-8">
+      <%= render partial: "schedules/performance_sequences/summary",
+      locals: {
+        performance_sequence: @schedule.performance_sequence,
+      } %>
+    </div>
+  <% end %>
+</div>

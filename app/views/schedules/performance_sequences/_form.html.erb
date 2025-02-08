@@ -1,0 +1,50 @@
+<div class="wide-form-container -mt-2">
+  <%= form_with(model: [@schedule.contest, @schedule, @sequence], 
+                url: contest_schedule_sequence_path(@schedule.contest, @schedule, @sequence), 
+                method: :put, 
+                class: "wide-form",
+                data: { controller: "sequence" }) do |f| %>
+    <div class="mb-4 col-span-2 flex justify-center">
+      <%= button_tag type: "button",
+          class: "btn-secondary-sm",
+          data: { action: "sequence#addStep" } do %>
+        Add Step
+      <% end %>
+    </div>
+
+    <table class="col-span-2">
+      <thead class="text-sm">
+        <tr>
+          <th scope="col">Order</th>
+          <th scope="col">Name</th>
+          <th scope="col">Room</th>
+          <th scope="col">Duration</th>
+        </tr>
+      </thead>
+      <tbody data-sequence-target="steps">
+        <%= f.fields_for :performance_steps do |step_f| %>
+          <%= render "step_fields", f: step_f, rooms: @schedule.rooms %>
+        <% end %>
+      </tbody>
+    </table>
+
+    <template data-sequence-target="template">
+      <%= f.fields_for :performance_steps, PerformanceStep.new(room_block: RoomBlock.new), child_index: 'NEW_RECORD' do |step_f| %>
+        <%= render "step_fields", f: step_f, rooms: @schedule.rooms %>
+      <% end %>
+    </template>
+
+    <div class="col-span-2 mx-auto mt-4">
+      <%= f.submit "Save", class: "btn-primary-sm" %>
+      <%= link_to "Cancel",
+      contest_schedule_setup_path(@schedule.contest, @schedule),
+      class: "btn-secondary-sm" %>
+    </div>
+
+    <% if @sequence.errors.any? %>
+      <div class="pt-2 sm:col-span-2">
+        <%= render "layouts/error_messages", errors: @sequence.errors %>
+      </div>
+    <% end %>
+  <% end %>
+</div>

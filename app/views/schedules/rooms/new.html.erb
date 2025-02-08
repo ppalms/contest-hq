@@ -1,0 +1,7 @@
+<%= turbo_frame_tag "schedule_room_content" do %>
+  <div class="wide-form-container">
+    <h2>New Room</h2>
+
+    <%= render "form", room: @room, submit_text: "Create Room" %>
+  </div>
+<% end %>

@@ -1,0 +1,21 @@
+<ul role="list" class="divide-y divide-gray-100">
+  <% for day in @schedule.days %>
+    <li class="flex items-center justify-between gap-x-6 py-5">
+      <div class="min-w-0">
+        <div class="flex items-start gap-x-3">
+          <p class="font-semibold text-gray-900"><%= day.date&.strftime("%A %-m/%d/%Y") %></p>
+        </div>
+
+        <div class="mt-1 gap-x-2 text-xs/5 text-gray-500">
+          <%= day.start_time&.strftime("%l:%M %p") %>
+          -
+          <%= day.end_time&.strftime("%l:%M %p") %>
+        </div>
+      </div>
+
+      <div class="flex flex-none items-center gap-x-4">
+        <%= link_to "View Day", schedule_day_path(day), class: "btn-primary-sm" %>
+      </div>
+    </li>
+  <% end %>
+</ul>
