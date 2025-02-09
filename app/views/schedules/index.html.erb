@@ -5,7 +5,30 @@
       Schedule</h1>
   </div>
 
-  <div class="px-4 rounded-md bg-white border border-neutral-200 shadow-sm">
-    <%= link_to "Set up schedule", contest_schedule_setup_path %>
+  <div>
+    <div class="flex justify-between border-b">
+      <h3 class="text-xl font-bold">Phases</h3>
+      <%= link_to "Edit Setup",
+      contest_schedule_setup_path,
+      class: "text-gray-800 text-sm font-semibold hover:underline" %>
+    </div>
+
+    <ol class="list-decimal text-sm">
+      <% @schedule.performance_sequence.performance_steps&.each do |step| %>
+        <li>
+          <div class="flex justify-between border-b">
+            <div>
+              <%= step.name %>
+              -
+              <%= step.room_block.duration %>
+              min.
+            </div>
+            <div>
+              <%= step.room.name %>
+            </div>
+          </div>
+        </li>
+      <% end %>
+    </ol>
   </div>
 </div>

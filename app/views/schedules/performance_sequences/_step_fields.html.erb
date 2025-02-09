@@ -20,7 +20,7 @@
                                 } %>
 
       <%= room_block_f.select :room_id,
-                          rooms.map { |t| [t.name, t.id] },
+                          rooms.order(:name).map { |t| [t.name, t.id] },
                           { include_blank: "Room" },
                           { required: true, class: "text-field" } %>
     </td>
