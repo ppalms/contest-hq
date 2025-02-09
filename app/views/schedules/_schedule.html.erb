@@ -1,0 +1,36 @@
+<% content_for :title, "Schedule" %>
+<div class="py-8 space-y-4" id="contests">
+  <div class="flex justify-between">
+    <h2>Schedule</h2>
+  </div>
+
+  <div
+    id="schedule"
+    class="px-4 rounded-md bg-white border border-neutral-200 shadow-sm"
+  >
+    <% if @contest.start_time == nil || @contest.end_time == nil %>
+      <p class="text-center pt-4">Set performance start and end times to begin</p>
+      <div class="simple-form-container">
+        <%= form_with model: @contest, url: contest_times_path(@contest), method: :patch, class: "simple-form" do |f| %>
+          <div class="grid grid-cols-2 gap-2">
+            <%= f.label :start_time %>
+            <%= f.time_field :start_time, value: @contest.start_time, class: "text-field" %>
+
+            <%= f.label :end_time %>
+            <%= f.time_field :end_time, value: @contest.end_time, class: "text-field" %>
+          </div>
+          <div class="col-span-2 mx-auto">
+            <%= f.submit "Save", class: "btn-primary-sm" %>
+          </div>
+        <% end %>
+        <% if @contest.errors.any? %>
+          <div class="pt-2 sm:col-span-2">
+            <%= render "layouts/error_messages", errors: @contest.errors %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <%= link_to sanitize("Schedule &rarr;"), contest_schedules_path(@contest) %>
+    <% end %>
+  </div>
+</div>

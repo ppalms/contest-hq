@@ -1,0 +1,17 @@
+<div class="card">
+  <div class="card-header">
+    <%= link_to "Upcoming Contests", contests_path %>
+  </div>
+
+  <div class="p-4 sm:p-6">
+    <% @upcoming_contests&.each do |contest| %>
+      <div>
+        <%= link_to contest do %>
+          <%= contest.name %>
+          -
+          <%= contest.contest_start&.strftime("%m-%d-%Y") || "TBD" %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -50,6 +50,20 @@ class ContestsController < ApplicationController
     end
   end
 
+  # PATCH/PUT /contests/1/times or /contests/1/times.json
+  def set_times
+    @contest = Contest.find(params[:contest_id])
+    respond_to do |format|
+      if @contest.update(schedule_params)
+        format.html { redirect_to contest_url(@contest), notice: "Contest times were successfully updated." }
+        format.json { render :show, status: :ok, contest: @contest }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @contest.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   # DELETE /contests/1 or /contests/1.json
   def destroy
     @contest.destroy!
@@ -62,14 +76,16 @@ class ContestsController < ApplicationController
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
   def set_contest
     @contest = Contest.find(params[:id])
   end
 
-  # Only allow a list of trusted parameters through.
   def contest_params
     params.expect(contest: [ :name, :contest_start, :contest_end, school_class_ids: [] ])
+  end
+
+  def schedule_params
+    params.expect(contest: [ :start_time, :end_time ])
   end
 
   def set_breadcrumbs

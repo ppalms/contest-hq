@@ -1,6 +1,7 @@
 <div class="space-y-4">
-  <%= render "home/dashboards/manager" if current_user.manager? %>
   <%= render "home/dashboards/director" if current_user.director? %>
+  <%= render "home/dashboards/manager" if current_user.manager? %>
+  <%= render "home/dashboards/shared" %>
 
   <% if current_user.admin? %>
     <div
