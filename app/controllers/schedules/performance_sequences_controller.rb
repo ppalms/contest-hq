@@ -74,8 +74,9 @@ module Schedules
           :id,
           :ordinal,
           :name,
-          :_destroy,
-          room_block_attributes: [ :id, :room_id, :duration, :_destroy ]
+          :room_id,
+          :duration,
+          :_destroy
         ]
       )
     end

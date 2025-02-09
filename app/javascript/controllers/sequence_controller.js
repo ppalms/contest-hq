@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
-  static targets = ["steps", "template", "step", "destroy"]
+  static targets = ["steps", "template", "step", "stepName", "destroy"]
 
   addStep(event) {
     event.preventDefault()
@@ -10,6 +10,10 @@ export default class extends Controller {
  
     this.stepsTarget.insertAdjacentHTML('beforeend', newStepHTML)
     this.updateOrdinals()
+
+    const newStep = this.stepsTarget.lastElementChild
+    const nameField = newStep.querySelector('[data-sequence-target="stepName"]')
+    nameField.focus()
   }
 
   removeStep(event) {

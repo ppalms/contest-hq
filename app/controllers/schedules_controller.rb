@@ -15,8 +15,6 @@ class SchedulesController < ApplicationController
   end
 
   def show
-    @rooms = @schedule.rooms.includes(:room_blocks)
-    @sequence = @schedule.performance_sequence
   end
 
   def edit

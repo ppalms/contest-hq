@@ -1,5 +1,7 @@
 <div class="py-8" data-controller="schedule-setup">
-  <h1>Schedule Setup</h1>
+  <%= link_to sanitize("&larr; Back to Schedule"), contest_schedules_path %>
+
+  <h1 class="mt-4">Schedule Setup</h1>
 
   <%= turbo_frame_tag "schedule_room_content" do %>
     <div class="pt-8">

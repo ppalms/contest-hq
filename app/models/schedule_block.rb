@@ -2,7 +2,7 @@ class ScheduleBlock < ApplicationRecord
   include AccountScoped
 
   belongs_to :day
-  belongs_to :room_block, optional: true
+  belongs_to :room, optional: true
 
   validates :start_time, :end_time, presence: true
   validate :end_time_after_start_time
@@ -23,7 +23,7 @@ class ScheduleBlock < ApplicationRecord
 
     if day.schedule_blocks.any? do |block|
       block != self &&
-        block.room_block.room == room_block.room &&
+        block.room == room &&
         block.start_time < end_time &&
         block.end_time > start_time
       end

@@ -26,13 +26,6 @@ class CreateSchedules < ActiveRecord::Migration[8.0]
       t.index [ :room_number, :schedule_id ], unique: true
     end
 
-    create_table :room_blocks do |t|
-      t.integer :duration, null: false
-
-      t.references :room, null: false, foreign_key: true
-      t.references :account, null: false, foreign_key: true
-    end
-
     create_table :performance_sequences do |t|
       t.references :schedule, null: false, foreign_key: true
       t.references :account, null: false, foreign_key: true
@@ -40,11 +33,11 @@ class CreateSchedules < ActiveRecord::Migration[8.0]
 
     create_table :performance_steps do |t|
       t.text :name, null: false
-      t.text :description
+      t.integer :duration, null: false
       t.integer :ordinal, null: false
 
       t.references :performance_sequence, null: false, foreign_key: true
-      t.references :room_block, null: false, foreign_key: true
+      t.references :room, null: false, foreign_key: true
       t.references :account, null: false, foreign_key: true
 
       t.index [ :ordinal, :performance_sequence_id ], unique: true
@@ -54,7 +47,7 @@ class CreateSchedules < ActiveRecord::Migration[8.0]
       t.time :start_time, null: false
       t.time :end_time, null: false
 
-      t.references :room_block, null: true, foreign_key: true
+      t.references :room, null: false, foreign_key: true
       t.references :schedule_day, null: false, foreign_key: true
       t.references :account, null: false, foreign_key: true
     end

@@ -10,26 +10,17 @@
     <%= f.text_field :ordinal, class: "text-field" %>
   </td>
   <td>
-    <%= f.text_field :name, class: "text-field" %>
+    <%= f.text_field :name, class: "text-field", data: { sequence_target: "stepName" } %>
   </td>
-  <%= f.fields_for :room_block do |room_block_f| %>
-    <td class="w-72">
-      <%= room_block_f.hidden_field :_destroy,
-                                data: {
-                                  sequence_target: "roomBlockDestroy",
-                                } %>
-
-      <%= room_block_f.select :room_id,
-                          rooms.order(:name).map { |t| [t.name, t.id] },
-                          { include_blank: "Room" },
-                          { required: true, class: "text-field" } %>
-    </td>
-    <td class="w-20">
-      <%= room_block_f.text_field :duration,
-                              class: "text-field text-right",
-                              required: true %>
-    </td>
-  <% end %>
+  <td class="w-72">
+    <%= f.select :room_id,
+             rooms.order(:name).map { |t| [t.name, t.id] },
+             { include_blank: "Select a room" },
+             { required: true, class: "text-field" } %>
+  </td>
+  <td class="w-20">
+    <%= f.text_field :duration, class: "text-field text-right", required: true %>
+  </td>
   <td>
     <%= button_tag type: "button",
         class: "btn-danger-sm",

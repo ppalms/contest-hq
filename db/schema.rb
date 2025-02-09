@@ -119,15 +119,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_12_143628) do
 
   create_table "performance_steps", force: :cascade do |t|
     t.text "name", null: false
-    t.text "description"
+    t.integer "duration", null: false
     t.integer "ordinal", null: false
     t.bigint "performance_sequence_id", null: false
-    t.bigint "room_block_id", null: false
+    t.bigint "room_id", null: false
     t.bigint "account_id", null: false
     t.index ["account_id"], name: "index_performance_steps_on_account_id"
     t.index ["ordinal", "performance_sequence_id"], name: "index_performance_steps_on_ordinal_and_performance_sequence_id", unique: true
     t.index ["performance_sequence_id"], name: "index_performance_steps_on_performance_sequence_id"
-    t.index ["room_block_id"], name: "index_performance_steps_on_room_block_id"
+    t.index ["room_id"], name: "index_performance_steps_on_room_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -135,14 +135,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_12_143628) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_roles_on_name", unique: true
-  end
-
-  create_table "room_blocks", force: :cascade do |t|
-    t.integer "duration", null: false
-    t.bigint "room_id", null: false
-    t.bigint "account_id", null: false
-    t.index ["account_id"], name: "index_room_blocks_on_account_id"
-    t.index ["room_id"], name: "index_room_blocks_on_room_id"
   end
 
   create_table "rooms", force: :cascade do |t|
@@ -158,11 +150,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_12_143628) do
   create_table "schedule_blocks", force: :cascade do |t|
     t.time "start_time", null: false
     t.time "end_time", null: false
-    t.bigint "room_block_id"
+    t.bigint "room_id", null: false
     t.bigint "schedule_day_id", null: false
     t.bigint "account_id", null: false
     t.index ["account_id"], name: "index_schedule_blocks_on_account_id"
-    t.index ["room_block_id"], name: "index_schedule_blocks_on_room_block_id"
+    t.index ["room_id"], name: "index_schedule_blocks_on_room_id"
     t.index ["schedule_day_id"], name: "index_schedule_blocks_on_schedule_day_id"
   end
 
@@ -273,13 +265,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_12_143628) do
   add_foreign_key "performance_sequences", "schedules"
   add_foreign_key "performance_steps", "accounts"
   add_foreign_key "performance_steps", "performance_sequences"
-  add_foreign_key "performance_steps", "room_blocks"
-  add_foreign_key "room_blocks", "accounts"
-  add_foreign_key "room_blocks", "rooms"
+  add_foreign_key "performance_steps", "rooms"
   add_foreign_key "rooms", "accounts"
   add_foreign_key "rooms", "schedules"
   add_foreign_key "schedule_blocks", "accounts"
-  add_foreign_key "schedule_blocks", "room_blocks"
+  add_foreign_key "schedule_blocks", "rooms"
   add_foreign_key "schedule_blocks", "schedule_days"
   add_foreign_key "schedule_days", "accounts"
   add_foreign_key "schedule_days", "schedules"

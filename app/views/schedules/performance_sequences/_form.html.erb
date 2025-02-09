@@ -29,7 +29,7 @@
     </table>
 
     <template data-sequence-target="template">
-      <%= f.fields_for :performance_steps, PerformanceStep.new(room_block: RoomBlock.new), child_index: 'NEW_RECORD' do |step_f| %>
+      <%= f.fields_for :performance_steps, PerformanceStep.new, child_index: 'NEW_RECORD' do |step_f| %>
         <%= render "step_fields", f: step_f, rooms: @schedule.rooms %>
       <% end %>
     </template>
