@@ -5,7 +5,7 @@
 @plugin '@tailwindcss/typography';
 
 @theme {
-  --font-inter: "Inter", sans-serif; 
+  --font-inter: "Inter", sans-serif;
 }
 
 /*
