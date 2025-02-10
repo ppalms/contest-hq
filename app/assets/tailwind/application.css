@@ -1,0 +1,213 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import 'tailwindcss';
+
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+
+@theme {
+  --font-inter: "Inter", sans-serif;
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+
+  html {
+    font-family: var(--font-inter);
+  }
+}
+
+@utility btn-primary {
+  @apply rounded-lg py-3 px-5 bg-blue-600 hover:bg-blue-500 border border-b-4 border-blue-900 block w-full sm:w-auto sm:inline-block hover:border-blue-600 transition text-white font-medium cursor-pointer;
+}
+
+@utility btn-primary-sm {
+  @apply btn-primary py-2 text-sm font-semibold;
+}
+
+@utility btn-secondary {
+  @apply rounded-lg py-3 px-5 bg-gray-100 hover:bg-gray-200 border border-b-4 border-gray-400 block text-center sm:inline-block hover:border-gray-500 transition font-medium;
+}
+
+@utility btn-secondary-sm {
+  @apply btn-secondary py-2 text-sm font-semibold;
+}
+
+@utility btn-danger {
+  @apply rounded-lg py-3 px-5 text-red-800 hover:bg-red-100 border border-b-4 border-red-200 block w-full sm:w-auto sm:inline-block hover:border-red-300 transition font-semibold;
+}
+
+@utility btn-danger-sm {
+  @apply btn-danger py-2 text-sm font-semibold;
+}
+
+@utility simple-form {
+  @apply flex flex-col gap-y-4 pt-4;
+}
+
+@utility wide-form {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+}
+
+@utility text-field {
+  @apply block shadow-sm rounded-md border border-gray-400 outline-hidden px-3 py-2 w-full;
+}
+
+@utility multi-select {
+  @apply block shadow-sm border rounded-l-md border-gray-400 outline-hidden px-3 py-2 w-full;
+}
+
+@utility notice {
+  @apply py-2 px-3 bg-green-50 text-green-500 font-medium rounded-lg inline-block;
+}
+
+@utility alert {
+  @apply py-2 px-3 bg-red-50 text-red-500 font-medium rounded-lg inline-block;
+}
+
+@utility timeline-container {
+  @apply overflow-x-auto rounded-sm shadow-sm;
+}
+
+@utility timeline {
+  @apply grid grid-cols-12 min-w-[700px] border border-stone-800 rounded-sm;
+
+  & > .month-header {
+    @apply py-1 sm:font-semibold text-center text-white text-xs sm:text-base uppercase bg-stone-700 border-b-2 border-stone-400;
+  }
+
+  & > .current-month-header {
+    @apply py-1 sm:font-semibold text-center text-white text-xs sm:text-base uppercase bg-green-700;
+  }
+
+  & > .interval {
+    @apply bg-stone-300 rounded-xl h-8 border-b-2 sm:border-b-4 my-0.5 sm:my-1 border-stone-400 flex items-center justify-center text-stone-800 text-sm sm:text-base sm:font-medium font-medium whitespace-nowrap;
+  }
+
+  & > .current-month {
+    @apply bg-green-600;
+  }
+}
+
+@utility month-header {
+  .timeline > & {
+    @apply py-1 sm:font-semibold text-center text-white text-xs sm:text-base uppercase bg-stone-700 border-b-2 border-stone-400;
+  }
+}
+
+@utility current-month-header {
+  .timeline > & {
+    @apply py-1 sm:font-semibold text-center text-white text-xs sm:text-base uppercase bg-green-700;
+  }
+}
+
+@utility interval {
+  .timeline > & {
+    @apply bg-stone-300 rounded-xl h-8 border-b-2 sm:border-b-4 my-0.5 sm:my-1 border-stone-400 flex items-center justify-center text-stone-800 text-sm sm:text-base sm:font-medium font-medium whitespace-nowrap;
+  }
+}
+
+@utility current-month {
+  .timeline > & {
+    @apply bg-green-600;
+  }
+}
+
+@utility tab {
+  @apply inline-flex items-center border-b-2 px-1 py-4 text-sm font-medium;
+}
+
+@utility tabs {
+  @apply block w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 bg-neutral-100;
+
+  & .inactive {
+    @apply border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700;
+  }
+
+  & .active {
+    @apply border-blue-500 text-blue-600;
+  }
+}
+
+@utility inactive {
+  .tabs & {
+    @apply border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700;
+  }
+}
+
+@utility active {
+  .tabs & {
+    @apply border-blue-500 text-blue-600;
+  }
+}
+
+@utility container {
+  @apply mx-auto max-w-4xl;
+}
+
+@utility simple-form-container {
+  @apply max-w-md mx-auto space-y-4 pt-2 pb-4;
+}
+
+@utility wide-form-container {
+  @apply max-w-4xl mx-auto space-y-4 py-8;
+}
+
+@utility form-button-container {
+  @apply pt-6 sm:col-span-2 space-y-4 sm:space-y-0 sm:space-x-2 sm:flex sm:justify-end;
+}
+
+@utility action-button-container {
+  @apply space-y-2 pt-2 sm:flex sm:grow sm:justify-end sm:gap-2 sm:space-y-0 sm:pt-0;
+}
+
+@utility modal-backdrop {
+  @apply fixed inset-0 z-10 w-full h-full transition-opacity;
+}
+
+@utility modal-full-screen {
+  @apply fixed inset-0 z-20 mx-auto w-full md:w-2/3 max-h-screen overflow-y-auto;
+}
+
+@utility modal-small {
+  @apply fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 w-full md:w-2/3 xl:w-1/2 bg-white shadow-lg h-auto;
+}
+
+@utility card {
+  @apply divide-y divide-gray-200 overflow-hidden rounded-lg bg-white border border-neutral-300;
+}
+
+@utility card-header {
+  @apply pt-4 pb-3 px-4 sm:px-6 border-b-4 border-blue-900 bg-linear-to-r from-blue-700 to-blue-600 text-white text-lg font-semibold;
+}
+
+@layer components {
+  h1 {
+    @apply text-4xl font-bold text-stone-800;
+  }
+
+  h2 {
+    @apply text-3xl font-bold text-stone-800;
+  }
+
+  h3 {
+    @apply text-base font-semibold text-stone-800;
+  }
+
+  input[type='checkbox'] {
+    @apply -mt-0.5 size-4 rounded-sm border-gray-400 text-blue-600 focus:ring-blue-600;
+  }
+}
