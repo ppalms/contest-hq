@@ -128,7 +128,7 @@
   }
 
   .modal-backdrop {
-    @apply fixed inset-0 z-10 w-full h-full bg-black bg-opacity-50 transition-opacity;
+    @apply fixed inset-0 z-10 w-full h-full transition-opacity;
   }
 
   .modal-full-screen {
