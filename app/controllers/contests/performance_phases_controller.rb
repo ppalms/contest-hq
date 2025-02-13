@@ -16,7 +16,7 @@ module Contests
 
       if @contest.save
         redirect_to contest_setup_path,
-          turbo_frame: "contest_phase_content",
+          turbo_frame: "contest_setup_content",
           notice: "Performance setup updated."
       else
         puts "Save failed: #{@contest.errors.full_messages.inspect}"
