@@ -2,7 +2,7 @@ module Contests
   class PerformancePhasesController < ApplicationController
     before_action :authenticate
     before_action :set_contest
-    # before_action :authorize_manager
+    before_action :authorize_manager
 
     def index
     end
@@ -57,10 +57,10 @@ module Contests
     end
 
     def authorize_manager
-      unless current_user.managed_contests.exists?(params[:contest_id])
-        redirect_to root_path,
-          alert: "You must be a manager of this contest to access this area",
-          turbo: false
+      unless current_user.manager? && current_user.managed_contests&.exists?(params[:contest_id])
+            redirect_to contest_schedule_path(@contest),
+              alert: "You must be a manager of this contest to access this area",
+              turbo_frame: "contest_setup_content"
       end
     end
 

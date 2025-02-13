@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     end
 
     patch "times", to: "contests#set_times"
+    get "schedule", to: "contests#schedule"
     get "setup", to: "contests#setup"
 
     resources :rooms, controller: "contests/rooms"

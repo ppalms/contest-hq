@@ -4,26 +4,52 @@
       <h2>Schedule Setup</h2>
 
       <%= link_to "Done",
-      contest_performance_phases_path,
+      contest_schedule_path,
       class: "btn-secondary-sm",
       data: {
         turbo_frame: "contest_setup_content",
       } %>
     </div>
 
-    <%= turbo_frame_tag "contest_room_content" do %>
-      <div class="pt-8">
-        <%= render partial: "contests/rooms/room_list", locals: { rooms: @contest.rooms } %>
-      </div>
-    <% end %>
+    <div class="tabs">
+      <button
+        class="tab-button active"
+        data-contest-setup-target="tab"
+        data-action="click->contest-setup#selectTab"
+        data-target="contest_room_content"
+      >Rooms</button>
+      <button
+        class="tab-button"
+        data-contest-setup-target="tab"
+        data-action="click->contest-setup#selectTab"
+        data-target="contest_phase_content"
+      >Phases</button>
+    </div>
 
-    <%= turbo_frame_tag "contest_phase_content" do %>
-      <div class="py-8">
-        <%= render partial: "contests/performance_phases/summary",
-        locals: {
-          contest: @contest,
-        } %>
+    <div class="tab-content">
+      <div
+        id="contest_room_content"
+        class="tab-pane active"
+        data-contest-setup-target="pane"
+      >
+        <%= turbo_frame_tag "contest_room_content" do %>
+          <div>
+            <%= render partial: "contests/rooms/room_list", locals: { rooms: @contest.rooms } %>
+          </div>
+        <% end %>
       </div>
-    <% end %>
+
+      <div
+        id="contest_phase_content"
+        class="tab-pane hidden"
+        data-contest-setup-target="pane"
+      >
+        <%= turbo_frame_tag "contest_phase_content" do %>
+          <div>
+            <%= render partial: "contests/performance_phases/summary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
 <% end %>

@@ -1,5 +1,5 @@
 class ContestsController < ApplicationController
-  before_action :set_contest, only: %i[ show edit update destroy setup ]
+  before_action :set_contest, only: %i[ show edit update destroy setup schedule ]
   before_action -> { require_role "AccountAdmin" }, only: %i[ create destroy ]
   before_action :set_breadcrumbs
 
@@ -48,6 +48,9 @@ class ContestsController < ApplicationController
         format.json { render json: @contest.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def schedule
   end
 
   # Set up contest performance phases

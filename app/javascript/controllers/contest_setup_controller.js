@@ -1,6 +1,29 @@
 import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
-  static targets = ["phases", "template", "phase", "phaseName", "destroy"]
+  static targets = [
+    "tab", "pane", "phases", "template", "phase", "phaseName", "destroy"
+  ]
+
+  connect() {
+    if (!this.tabTargets.find(tab => tab.classList.contains('active'))) {
+      this.selectTab({ target: this.tabTargets[0] })
+    }
+  }
+
+  selectTab(event) {
+    const clickedTab = event.target
+    const targetId = clickedTab.dataset.target
+
+    this.tabTargets.forEach(tab => {
+      tab.classList.toggle('active', tab === clickedTab)
+    })
+
+    this.paneTargets.forEach(pane => {
+      const isTarget = pane.id === targetId
+      pane.classList.toggle('active', isTarget)
+      pane.classList.toggle('hidden', !isTarget)
+    })
+  }
 
   addPhase(event) {
     event.preventDefault()
