@@ -1,0 +1,34 @@
+<%= turbo_frame_tag "contest_setup_content" do %>
+  <div class="flex justify-between">
+    <h2>Performance Phases</h2>
+
+    <%= link_to "Modify",
+    contest_setup_path(@contest),
+    class: "btn-secondary-sm",
+    data: {
+      turbo_frame: "contest_setup_content",
+    } %>
+  </div>
+
+  <div class="pt-6">
+    <ol class="list-decimal text-sm">
+      <% @contest.performance_phases&.each do |phase| %>
+        <li>
+          <div class="flex justify-between border-b">
+            <div>
+              <%= phase.name %>
+              -
+              <%= phase.duration %>
+              min.
+            </div>
+            <div>
+              <%= phase.room.name %>
+              -
+              <%= phase.room.room_number %>
+            </div>
+          </div>
+        </li>
+      <% end %>
+    </ol>
+  </div>
+<% end %>

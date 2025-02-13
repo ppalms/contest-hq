@@ -1,4 +1,4 @@
-<%= form_with(model: room, url: room.new_record? ? contest_schedule_rooms_path : contest_schedule_room_path(@contest, @schedule, room), class: "wide-form") do |form| %>
+<%= form_with(model: room, url: room.new_record? ? contest_rooms_path : contest_room_path(@room, @contest, room), class: "wide-form") do |form| %>
   <div class="sm:col-span-2">
     <%= form.label :name %>
     <%= form.text_field :name, class: "text-field", autofocus: true %>
@@ -12,9 +12,9 @@
   <div class="form-button-container">
     <%= form.submit submit_text, class: "btn-primary" %>
     <%= link_to "Cancel",
-    contest_schedule_setup_path,
+    contest_setup_path,
     data: {
-      turbo_frame: "schedule_room_content",
+      turbo_frame: "contest_room_content",
     },
     class: "btn-secondary",
     role: "button" %>

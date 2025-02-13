@@ -1,19 +1,15 @@
-<%= turbo_frame_tag "schedule_sequence_content" do %>
+<%= turbo_frame_tag "contest_phase_content" do %>
   <div class="pt-6">
     <div class="sm:flex sm:items-center">
       <div class="sm:flex-auto -mt-1">
-        <h2>Phases</h2>
+        <h3>Phases</h3>
       </div>
       <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
         <%= link_to "Edit",
-        edit_contest_schedule_sequence_path(
-          @contest,
-          @schedule,
-          @schedule.performance_sequence,
-        ),
+        contest_phase_bulk_edit_path(@contest),
         class: "btn btn-primary-sm",
         data: {
-          turbo_frame: "schedule_sequence_content",
+          turbo_frame: "contest_phase_content",
         } %>
       </div>
     </div>
@@ -54,15 +50,15 @@
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-200 bg-white">
-                <% @schedule.performance_sequence.performance_steps.each do |step| %>
+                <% @contest.performance_phases.each do |phase| %>
                   <tr>
-                    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-500 sm:pl-6"><%= step.ordinal %></td>
-                    <td class=" whitespace-nowrap py-4 pr-3 text-sm font-medium text-gray-900 "><%= step.name || "N/A" %></td>
-                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= step.room.name %>
+                    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-500 sm:pl-6"><%= phase.ordinal %></td>
+                    <td class=" whitespace-nowrap py-4 pr-3 text-sm font-medium text-gray-900 "><%= phase.name || "N/A" %></td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= phase.room.name %>
                       -
-                      <%= step.room.room_number %></td>
+                      <%= phase.room.room_number %></td>
                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      <%= step.duration %>
+                      <%= phase.duration %>
                     </td>
                   </tr>
                 <% end %>

@@ -1,56 +1,51 @@
-module Schedules
+module Contests
   class RoomsController < ApplicationController
     before_action :authenticate
     before_action :set_contest
-    before_action :set_schedule
     # before_action :authorize_manager
 
     def index
-      @rooms = @schedule.rooms
+      @rooms = @contest.rooms
     end
 
     def new
-      @room = @schedule.rooms.build
+      @room = @contest.rooms.build
     end
 
     def create
-      @room = @schedule.rooms.new(room_params)
+      @room = @contest.rooms.new(room_params)
 
       if @room.save
-        redirect_to contest_schedule_setup_path(@contest, @schedule), turbo_frame: "schedule_room_content", notice: "Room was successfully created."
+        redirect_to contest_setup_path(@contest, @contest), turbo_frame: "contest_room_content", notice: "Room was successfully created."
       else
         render :new
       end
     end
 
     def edit
-      @room = @schedule.rooms.find(params[:id])
+      @room = @contest.rooms.find(params[:id])
     end
 
     def update
-      @room = @schedule.rooms.find(params[:id])
+      @room = @contest.rooms.find(params[:id])
       if @room.update(room_params)
-        redirect_to contest_schedule_setup_path(@contest, @schedule), turbo_frame: "schedule_room_content", notice: "Room was successfully updated."
+        redirect_to contest_setup_path(@contest, @contest), turbo_frame: "contest_room_content", notice: "Room was successfully updated."
       else
         render :edit
       end
     end
 
     def destroy
-      @room = @schedule.rooms.find(params[:id])
+      @room = @contest.rooms.find(params[:id])
       @room.destroy
 
-      redirect_to contest_schedule_setup_path(@contest, @schedule), turbo_frame: "schedule_room_content", notice: "Room was successfully deleted."
+      redirect_to contest_setup_path(@contest), turbo_frame: "contest_room_content", notice: "Room was successfully deleted."
     end
 
     private
 
     def set_contest
       @contest = Contest.find(params[:contest_id])
-    end
-
-    def set_schedule
-      @schedule = Schedule.find(params[:schedule_id])
     end
 
     def authorize_manager

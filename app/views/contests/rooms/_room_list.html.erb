@@ -1,15 +1,15 @@
-<%= turbo_frame_tag "schedule_room_content" do %>
+<%= turbo_frame_tag "contest_room_content" do %>
   <div>
     <div class="sm:flex sm:items-center">
       <div class="sm:flex-auto -mt-1">
-        <h2>Rooms</h2>
+        <h3>Rooms</h3>
       </div>
       <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
         <%= link_to "Add Room",
-        new_contest_schedule_room_path(@contest, @schedule),
+        new_contest_room_path(@contest, @room),
         class: "btn btn-primary-sm",
         data: {
-          turbo_frame: "schedule_room_content",
+          turbo_frame: "contest_room_content",
         } %>
       </div>
     </div>
@@ -36,7 +36,7 @@
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-200 bg-white">
-                <% @schedule.rooms.order(:name).each do |room| %>
+                <% @contest.rooms.order(:name).each do |room| %>
                   <tr>
                     <td
                       class="
@@ -46,13 +46,13 @@
                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= room.room_number %></td>
                     <td class="flex justify-end space-x-2 p-2">
                       <%= link_to "Edit",
-                      edit_contest_schedule_room_path(@contest, @schedule, room),
+                      edit_contest_room_path(@contest, room),
                       data: {
-                        turbo_frame: "schedule_room_content",
+                        turbo_frame: "contest_room_content",
                       },
                       class: "btn-primary-sm" %>
                       <%= button_to "Delete",
-                      contest_schedule_room_path(@contest, @schedule, room),
+                      contest_room_path(@contest, room),
                       method: :delete,
                       class: "btn-danger-sm",
                       form: {

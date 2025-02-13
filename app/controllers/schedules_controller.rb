@@ -7,13 +7,6 @@ class SchedulesController < ApplicationController
   def index
   end
 
-  def setup
-    add_breadcrumb("Contests", contests_path)
-    add_breadcrumb(@contest.name, @contest)
-    add_breadcrumb("Schedule", contest_schedules_path(@contest))
-    add_breadcrumb("Setup")
-  end
-
   def show
   end
 
@@ -28,7 +21,7 @@ class SchedulesController < ApplicationController
   end
 
   def set_schedule
-    @schedule = Schedule.includes(:performance_sequence).find_or_create_by(contest_id: params[:contest_id])
+    @schedule = Schedule.includes(:performance_phase).find_or_create_by(contest_id: params[:contest_id])
   end
 
   def authorize_manager!

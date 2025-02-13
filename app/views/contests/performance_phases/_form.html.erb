@@ -1,0 +1,55 @@
+<div class="wide-form-container -mt-2">
+  <%= form_with(model: @contest, 
+                url: contest_phases_path(@contest), 
+                method: :put,
+                local: true,
+                class: "wide-form",
+                data: { controller: "contest-setup" }) do |f| %>
+    <div class="mb-4 col-span-2 flex justify-center">
+      <%= button_tag type: "button",
+          class: "btn-secondary-sm",
+          data: { action: "contest-setup#addPhase" } do %>
+        Add
+      <% end %>
+    </div>
+
+    <table class="col-span-2">
+      <thead class="text-sm">
+        <tr>
+          <th scope="col">Order</th>
+          <th scope="col">Name</th>
+          <th scope="col">Room</th>
+          <th scope="col">Duration</th>
+        </tr>
+      </thead>
+      <tbody data-contest-setup-target="phases">
+        <%= f.fields_for :performance_phases do |phase_f| %>
+          <%= render "phase_fields",
+          f: phase_f,
+          phases: @contest.performance_phases,
+          rooms: @contest.rooms %>
+        <% end %>
+      </tbody>
+    </table>
+
+    <template data-contest-setup-target="template">
+      <%= f.fields_for :performance_phases, PerformancePhase.new, child_index: 'NEW_RECORD' do |phase_f| %>
+        <%= render "phase_fields",
+        f: phase_f,
+        phases: @contest.performance_phases,
+        rooms: @contest.rooms %>
+      <% end %>
+    </template>
+
+    <div class="col-span-2 mx-auto mt-4">
+      <%= f.submit "Save", class: "btn-primary-sm" %>
+      <%= link_to "Cancel", contest_setup_path(@contest), class: "btn-secondary-sm" %>
+    </div>
+
+    <% if @contest.errors.any? %>
+      <div class="pt-2 sm:col-span-2">
+        <%= render "layouts/error_messages", errors: @contest.errors %>
+      </div>
+    <% end %>
+  <% end %>
+</div>

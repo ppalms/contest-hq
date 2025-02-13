@@ -2,13 +2,13 @@ class Schedule < ApplicationRecord
   include AccountScoped
 
   belongs_to :contest
-  has_one :performance_sequence, dependent: :destroy
+  has_one :performance_phase, dependent: :destroy
   has_many :days, dependent: :destroy
   has_many :rooms, dependent: :destroy
 
   validates :contest_id, uniqueness: true
 
-  after_create :initialize_performance_sequence
+  after_create :initialize_performance_phase
 
   def initialize_days(start_time, end_time)
     for date in contest.start_date..contest.end_date
@@ -34,7 +34,7 @@ class Schedule < ApplicationRecord
 
   private
 
-  def initialize_performance_sequence
-    self.performance_sequence ||= PerformanceSequence.new
+  def initialize_performance_phase
+    self.performance_phase ||= PerformancePhase.new
   end
 end

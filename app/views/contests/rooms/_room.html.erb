@@ -6,9 +6,9 @@
   </div>
 
   <%= link_to "Edit Room",
-  edit_contest_schedule_room_path(@contest, @schedule, room),
+  edit_contest_room_path(@room, @contest, room),
   class: "btn btn-secondary mt-4",
   data: {
-    turbo_frame: "schedule_room_content",
+    turbo_frame: "contest_room_content",
   } %>
 </div>

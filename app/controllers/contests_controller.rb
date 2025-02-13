@@ -1,6 +1,6 @@
 class ContestsController < ApplicationController
-  before_action :set_contest, only: %i[ show edit update destroy ]
-  before_action -> { require_role "AccountAdmin" }, except: %i[ index show ]
+  before_action :set_contest, only: %i[ show edit update destroy setup ]
+  before_action -> { require_role "AccountAdmin" }, only: %i[ create destroy ]
   before_action :set_breadcrumbs
 
   # GET /contests or /contests.json
@@ -50,6 +50,13 @@ class ContestsController < ApplicationController
     end
   end
 
+  # Set up contest performance phases
+  def setup
+    add_breadcrumb("Contests", contests_path)
+    add_breadcrumb(@contest.name, @contest)
+    add_breadcrumb("Setup")
+  end
+
   # PATCH/PUT /contests/1/times or /contests/1/times.json
   def set_times
     @contest = Contest.find(params[:contest_id])
@@ -77,7 +84,7 @@ class ContestsController < ApplicationController
   private
 
   def set_contest
-    @contest = Contest.find(params[:id])
+    @contest = Contest.find(params[:id] || params[:contest_id])
   end
 
   def contest_params
