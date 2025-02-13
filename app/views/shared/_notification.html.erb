@@ -1,7 +1,5 @@
 <div
   data-controller="notification"
-  data-notification-content-value="<%= message %>"
-  data-notification-type-value="<%= type %>"
   class="
     pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white
     shadow-lg ring-1 ring-black ring-black-50 p-4 transition
@@ -46,7 +44,7 @@
       <% end %>
     </div>
 
-    <p data-notification-target="message" class="text-sm font-medium text-gray-900"><%= message %></p>
+    <p class="text-sm font-medium text-gray-900"><%= message %></p>
 
     <button
       type="button"
