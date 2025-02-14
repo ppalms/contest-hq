@@ -15,9 +15,22 @@ module Contests
       PerformancePhaseOrderer.normalize_ordinals(@contest)
 
       if @contest.save
-        redirect_to contest_setup_path,
-          turbo_frame: "contest_setup_content",
-          notice: "Performance setup updated."
+        respond_to do |format|
+          format.turbo_stream do
+            flash[:notice] = "Performance setup updated."
+
+            render turbo_stream: [
+              turbo_stream.append("notifications", partial: "shared/notification"),
+              turbo_stream.replace("contest_phase_content", partial: "contests/performance_phases/summary")
+            ]
+
+            flash.discard(:notice)
+          end
+
+          format.html do
+            redirect_to contest_setup_path, turbo_frame: "contest_setup_content"
+          end
+        end
       else
         puts "Save failed: #{@contest.errors.full_messages.inspect}"
         render :edit
@@ -31,12 +44,10 @@ module Contests
 
       respond_to do |format|
         format.html { redirect_to contest_setup_path(contest), notice: "Phases reordered successfully." }
-        format.json { head :ok }
       end
     rescue ActiveRecord::RecordNotFound
       respond_to do |format|
         format.html { redirect_to contest_setup_path(contest), alert: "Invalid phase order provided." }
-        format.json { head :unprocessable_entity }
       end
     end
 

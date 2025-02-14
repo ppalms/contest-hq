@@ -12,6 +12,8 @@ export default class extends Controller {
 
   selectTab(event) {
     const clickedTab = event.target
+    if (!clickedTab) return
+
     const targetId = clickedTab.dataset.target
 
     this.tabTargets.forEach(tab => {
@@ -73,6 +75,7 @@ export default class extends Controller {
   updateOrdinals() {
     const visiblePhases = this.phaseTargets.filter(phase => {
       if (phase.style.display === 'none') return false
+
       const destroyInput = phase.querySelector('[data-contest-setup-target="destroy"]')
       return !destroyInput || destroyInput.value !== '1'
     })

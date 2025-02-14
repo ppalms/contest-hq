@@ -2,6 +2,7 @@ module Contests
   class RoomsController < ApplicationController
     before_action :authenticate
     before_action :set_contest
+    before_action :set_room, only: [ :edit, :update, :destroy ]
     before_action :authorize_manager
 
     def index
@@ -16,33 +17,84 @@ module Contests
       @room = @contest.rooms.new(room_params)
 
       if @room.save
-        redirect_to contest_setup_path(@contest, @contest), turbo_frame: "contest_room_content", notice: "Room was successfully created."
+        respond_to do |format|
+          format.turbo_stream do
+            flash[:notice] = "Room was successfully created."
+
+            render turbo_stream: [
+              turbo_stream.append("notifications", partial: "shared/notification"),
+              turbo_stream.replace("contest_room_content", partial: "contests/rooms/room_list")
+            ]
+
+            flash.discard(:notice)
+          end
+
+          format.html do
+            redirect_to contest_setup_path, turbo_frame: "contest_setup_content"
+          end
+        end
       else
+        puts "Save failed: #{@room.errors.full_messages.inspect}"
         render :new
       end
     end
 
     def edit
-      @room = @contest.rooms.find(params[:id])
     end
 
     def update
-      @room = @contest.rooms.find(params[:id])
       if @room.update(room_params)
-        redirect_to contest_setup_path(@contest, @contest), turbo_frame: "contest_room_content", notice: "Room was successfully updated."
+        respond_to do |format|
+          format.turbo_stream do
+            flash[:notice] = "Room was successfully updated."
+
+            render turbo_stream: [
+              turbo_stream.append("notifications", partial: "shared/notification"),
+              turbo_stream.replace("contest_room_content", partial: "contests/rooms/room_list")
+            ]
+
+            flash.discard(:notice)
+          end
+
+          format.html do
+            redirect_to contest_setup_path, turbo_frame: "contest_setup_content"
+          end
+        end
       else
+        puts "Save failed: #{@room.errors.full_messages.inspect}"
         render :edit
       end
     end
 
     def destroy
-      @room = @contest.rooms.find(params[:id])
-      @room.destroy
+      if @room.destroy
+        respond_to do |format|
+          format.turbo_stream do
+            flash[:notice] = "Room was successfully deleted."
 
-      redirect_to contest_setup_path(@contest), turbo_frame: "contest_room_content", notice: "Room was successfully deleted."
+            render turbo_stream: [
+              turbo_stream.append("notifications", partial: "shared/notification"),
+              turbo_stream.replace("contest_room_content", partial: "contests/rooms/room_list")
+            ]
+
+            flash.discard(:notice)
+          end
+
+          format.html do
+            redirect_to contest_setup_path, turbo_frame: "contest_setup_content"
+          end
+        end
+      else
+        puts "Save failed: #{@room.errors.full_messages.inspect}"
+        redirect_to contest_setup_path, turbo_frame: "contest_setup_content"
+      end
     end
 
     private
+
+    def set_room
+      @room = @contest.rooms.find(params[:id])
+    end
 
     def set_contest
       @contest = Contest.find(params[:contest_id])

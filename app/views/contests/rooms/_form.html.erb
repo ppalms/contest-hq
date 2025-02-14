@@ -1,4 +1,4 @@
-<%= form_with(model: room, url: room.new_record? ? contest_rooms_path : contest_room_path(@room, @contest, room), class: "wide-form") do |form| %>
+<%= form_with(model: room, url: room.new_record? ? contest_rooms_path : contest_room_path(@contest, @room), class: "wide-form") do |form| %>
   <div class="sm:col-span-2">
     <%= form.label :name %>
     <%= form.text_field :name, class: "text-field", autofocus: true %>
