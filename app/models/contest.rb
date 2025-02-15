@@ -15,6 +15,17 @@ class Contest < ApplicationRecord
   validate :start_date_before_end_date
   validate :unique_contest_phases
 
+  def delete_room_prompt(room)
+    message = "Are you sure?"
+
+    phases_to_delete = performance_phases.where(room_id: room.id)
+    if phases_to_delete.length > 0
+      message += " This will also delete the following performance phases: #{phases_to_delete.pluck(:name).join(", ")}."
+    end
+
+    message
+  end
+
   private
 
   def start_date_before_end_date

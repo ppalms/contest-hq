@@ -21,7 +21,7 @@ module Contests
 
             render turbo_stream: [
               turbo_stream.append("notifications", partial: "shared/notification"),
-              turbo_stream.replace("contest_phase_content", partial: "contests/performance_phases/summary")
+              turbo_stream.replace("contest_phase_content", partial: "contests/performance_phases/phase_list")
             ]
 
             flash.discard(:notice)

@@ -11,24 +11,28 @@
   </div>
 
   <div class="pt-6">
-    <ol class="list-decimal text-sm">
-      <% @contest.performance_phases&.each do |phase| %>
-        <li>
-          <div class="flex justify-between border-b">
-            <div>
-              <%= phase.name %>
-              -
-              <%= phase.duration %>
-              min.
+    <% if current_user.manager? && current_user.managed_contests&.exists?(@contest.id) && @contest.performance_phases&.length == 0 %>
+      <%= render partial: "unscheduled" %>
+    <% else %>
+      <ol class="list-decimal text-sm">
+        <% @contest.performance_phases&.each do |phase| %>
+          <li>
+            <div class="flex justify-between border-b">
+              <div>
+                <%= phase.name %>
+                -
+                <%= phase.duration %>
+                min.
+              </div>
+              <div>
+                <%= phase.room.name %>
+                -
+                <%= phase.room.room_number %>
+              </div>
             </div>
-            <div>
-              <%= phase.room.name %>
-              -
-              <%= phase.room.room_number %>
-            </div>
-          </div>
-        </li>
-      <% end %>
-    </ol>
+          </li>
+        <% end %>
+      </ol>
+    <% end %>
   </div>
 <% end %>

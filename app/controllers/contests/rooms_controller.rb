@@ -17,6 +17,8 @@ module Contests
       @room = @contest.rooms.new(room_params)
 
       if @room.save
+        set_contest
+
         respond_to do |format|
           format.turbo_stream do
             flash[:notice] = "Room was successfully created."
@@ -44,13 +46,16 @@ module Contests
 
     def update
       if @room.update(room_params)
+        set_contest
+
         respond_to do |format|
           format.turbo_stream do
             flash[:notice] = "Room was successfully updated."
 
             render turbo_stream: [
               turbo_stream.append("notifications", partial: "shared/notification"),
-              turbo_stream.replace("contest_room_content", partial: "contests/rooms/room_list")
+              turbo_stream.replace("contest_room_content", partial: "contests/rooms/room_list"),
+              turbo_stream.replace("contest_phase_content", partial: "contests/performance_phases/phase_list")
             ]
 
             flash.discard(:notice)
@@ -68,13 +73,16 @@ module Contests
 
     def destroy
       if @room.destroy
+        set_contest
+
         respond_to do |format|
           format.turbo_stream do
             flash[:notice] = "Room was successfully deleted."
 
             render turbo_stream: [
               turbo_stream.append("notifications", partial: "shared/notification"),
-              turbo_stream.replace("contest_room_content", partial: "contests/rooms/room_list")
+              turbo_stream.replace("contest_room_content", partial: "contests/rooms/room_list"),
+              turbo_stream.replace("contest_phase_content", partial: "contests/performance_phases/phase_list")
             ]
 
             flash.discard(:notice)
@@ -113,30 +121,3 @@ module Contests
     end
   end
 end
-
-#   class RoomsController < ApplicationController
-#     def index
-#       @rooms = Rooms.find_by(schedule_id: params[:schedule_id])
-#     end
-#
-#     def create
-#       Room.create(room_params)
-#
-#       respond_to do |format|
-#         if @room.save!
-#           format.html { redirect_to contest_schedules_path(params[:contest_id]), notice: "Room was successfully created." }
-#           format.json { render :index, status: :ok, rooms: @rooms }
-#         else
-#           format.html { render :edit, status: :unprocessable_entity }
-#           format.json { render json: @room.errors, status: :unprocessable_entity }
-#         end
-#       end
-#     end
-#
-#     private
-#
-#     def room_params
-#       params.expect(room: [ :name, :room_number, :schedule_id, :contest_id ])
-#     end
-#   end
-# end

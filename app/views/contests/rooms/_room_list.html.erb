@@ -57,7 +57,7 @@
                       class: "btn-danger-sm",
                       form: {
                         data: {
-                          turbo_confirm: "Are you sure?",
+                          turbo_confirm: @contest.delete_room_prompt(room),
                         },
                       } %>
                     </td>
