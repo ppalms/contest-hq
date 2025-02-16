@@ -21,10 +21,11 @@ Rails.application.routes.draw do
     get :performance_phases, path: "phases", to: "contests/performance_phases#index"
     get :performance_phases, as: "phase_bulk_edit", path: "phases/edit", to: "contests/performance_phases#edit"
     put :performance_phases, as: "phases", path: "phases", to: "contests/performance_phases#update"
+  end
 
-    resources :schedules, path: "schedule", only: [ :show ] do
-      resources :schedule_days, as: "days", path: "days"
-    end
+  post "schedules/:id/generate", as: "generate_schedule", to: "schedules#generate"
+  resources :schedules, only: [ :show ] do
+    resources :schedule_days, as: "days", path: "days"
   end
 
   namespace :roster do

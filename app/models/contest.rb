@@ -11,6 +11,10 @@ class Contest < ApplicationRecord
   has_many :performance_phases, dependent: :delete_all, inverse_of: :contest
   accepts_nested_attributes_for :performance_phases, allow_destroy: true, reject_if: :all_blank
 
+  has_many :schedules, dependent: :destroy
+
+  has_many :contest_entries, dependent: :destroy
+
   validates :name, presence: true
   validate :start_date_before_end_date
   validate :unique_contest_phases

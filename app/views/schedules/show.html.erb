@@ -27,3 +27,8 @@
     </ol>
   </div>
 </div>
+
+<%= button_to "Generate contest schedule",
+generate_schedule_path(@schedule),
+method: :post,
+class: "btn-primary-btn" %>

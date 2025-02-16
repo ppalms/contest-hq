@@ -9,10 +9,17 @@ class SchedulesController < ApplicationController
   def edit
   end
 
+  def generate
+    entries = @schedule.contest.contest_entries
+    entries.each do |entry|
+      puts entry.inspect
+    end
+  end
+
   private
 
   def set_schedule
-    @schedule = Schedule.find_or_create_by(contest_id: params[:contest_id])
+    @schedule = Schedule.find(params[:id])
   end
 
   def authorize_manager!
