@@ -2,12 +2,21 @@
   <div class="flex justify-between">
     <h2>Schedule</h2>
 
-    <%= link_to "Configure",
-    contest_setup_path(@contest),
-    class: "btn-secondary-sm",
-    data: {
-      turbo_frame: "contest_setup_content",
-    } %>
+    <div>
+      <%= link_to "Configure",
+      contest_setup_path(@contest),
+      class: "btn-secondary-sm",
+      data: {
+        turbo_frame: "contest_setup_content",
+      } %>
+
+      <%= link_to "View Schedule",
+      contest_schedule_path(@contest, @schedule),
+      class: "btn-secondary-sm",
+      data: {
+        turbo_frame: "_top",
+      } %>
+    </div>
   </div>
 
   <div class="pt-6">

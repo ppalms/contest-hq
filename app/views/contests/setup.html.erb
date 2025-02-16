@@ -4,7 +4,7 @@
       <h2>Schedule Setup</h2>
 
       <%= link_to "Done",
-      contest_schedule_path,
+      contest_schedule_summary_path(@contest),
       class: "btn-secondary-sm",
       data: {
         turbo_frame: "contest_setup_content",

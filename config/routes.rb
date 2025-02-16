@@ -13,7 +13,7 @@ Rails.application.routes.draw do
     end
 
     patch "times", to: "contests#set_times"
-    get "schedule", to: "contests#schedule"
+    get "schedule_summary", to: "contests#schedule"
     get "setup", to: "contests#setup"
 
     resources :rooms, controller: "contests/rooms"
@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     get :performance_phases, as: "phase_bulk_edit", path: "phases/edit", to: "contests/performance_phases#edit"
     put :performance_phases, as: "phases", path: "phases", to: "contests/performance_phases#update"
 
-    resources :schedules, path: "schedule" do
+    resources :schedules, path: "schedule", only: [ :show ] do
       resources :schedule_days, as: "days", path: "days"
     end
   end

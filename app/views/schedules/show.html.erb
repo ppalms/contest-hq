@@ -1,5 +1,29 @@
-<div class="py-8">
-  <h1><%= @contest.name %></h1>
+<% content_for :title, "Schedule" %>
+<div class="py-8 space-y-4">
+  <div class="flex justify-between">
+    <h1><%= @schedule.contest.name %>
+      Schedule</h1>
+  </div>
 
-  <%= link_to "Setup", contest_setup_path %>
+  <div>
+    <ol class="list-decimal text-sm">
+      <% @schedule.contest.performance_phases&.each do |step| %>
+        <li>
+          <div class="flex justify-between border-b">
+            <div>
+              <%= step.name %>
+              -
+              <%= step.duration %>
+              min.
+            </div>
+            <div>
+              <%= step.room.name %>
+              -
+              <%= step.room.room_number %>
+            </div>
+          </div>
+        </li>
+      <% end %>
+    </ol>
+  </div>
 </div>

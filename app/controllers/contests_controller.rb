@@ -1,5 +1,6 @@
 class ContestsController < ApplicationController
   before_action :set_contest, only: %i[ show edit update destroy setup schedule ]
+  before_action :set_schedule, only: %i[ show schedule ]
   before_action -> { require_role "AccountAdmin" }, only: %i[ create destroy ]
   before_action :set_breadcrumbs
 
@@ -88,6 +89,10 @@ class ContestsController < ApplicationController
 
   def set_contest
     @contest = Contest.find(params[:id] || params[:contest_id])
+  end
+
+  def set_schedule
+    @schedule = Schedule.find_by(contest_id: @contest.id)
   end
 
   def contest_params

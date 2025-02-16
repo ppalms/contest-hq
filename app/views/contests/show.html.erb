@@ -25,14 +25,23 @@
       <div class="flex justify-between">
         <h2>Schedule</h2>
 
-        <% if current_user.manager? && current_user.managed_contests&.exists?(@contest.id) %>
-          <%= link_to "Configure",
-          contest_setup_path(@contest),
+        <div>
+          <% if current_user.manager? && current_user.managed_contests&.exists?(@contest.id) %>
+            <%= link_to "Configure",
+            contest_setup_path(@contest),
+            class: "btn-secondary-sm",
+            data: {
+              turbo_frame: "contest_setup_content",
+            } %>
+          <% end %>
+
+          <%= link_to "View Schedule",
+          contest_schedule_path(@contest, @schedule),
           class: "btn-secondary-sm",
           data: {
-            turbo_frame: "contest_setup_content",
+            turbo_frame: "_top",
           } %>
-        <% end %>
+        </div>
       </div>
 
       <div class="pt-6">
