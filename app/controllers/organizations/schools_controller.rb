@@ -1,9 +1,11 @@
 class Organizations::SchoolsController < ApplicationController
+  include Pagy::Backend
+
   before_action :set_school, only: [ :show, :edit, :update, :destroy ]
   before_action :set_breadcrumbs
 
   def index
-    @schools = School.includes(:school_class).all.order(:name)
+    @pagy, @schools = pagy(School.where("name ILIKE ?", "%#{params[:name]}%"), limit: 6)
   end
 
   def new
