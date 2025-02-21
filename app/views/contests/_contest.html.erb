@@ -1,18 +1,23 @@
 <div id="<%= dom_id contest %>">
   <div class="grid grid-cols-1 sm:grid-cols-4 gap-6 pt-6">
-    <div class="sm:col-span-2">
+    <div class="sm:col-span-1">
       <strong class="block font-medium mb-1">Start Date</strong>
       <%= contest.contest_start&.strftime("%-m/%d/%Y") || "TBD" %>
     </div>
 
-    <div class="sm:col-span-2">
+    <div class="sm:col-span-1">
       <strong class="block font-medium mb-1">End Date</strong>
       <%= contest.contest_end&.strftime("%-m/%d/%Y") || "TBD" %>
     </div>
 
-    <div class="sm:col-span-1">
-      <strong class="block font-medium mb-1">Eligible School Classes</strong>
+    <div class="sm:col-span-2">
+      <strong class="block font-medium mb-1">Eligible Classes</strong>
       <%= contest.school_classes&.order(:ordinal).pluck(:name).join(", ") || "All" %>
+    </div>
+
+    <div class="sm:col-span-1">
+      <strong class="block font-medium mb-1">Entry Deadline</strong>
+      <%= contest.entry_deadline&.strftime("%-m/%d/%Y") || "TBD" %>
     </div>
   </div>
 </div>

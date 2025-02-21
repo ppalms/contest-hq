@@ -1,4 +1,6 @@
 class ContestsController < ApplicationController
+  include Pagy::Backend
+
   before_action :set_contest, only: %i[ show edit update destroy setup schedule ]
   before_action :set_schedule, only: %i[ show schedule ]
   before_action -> { require_role "AccountAdmin" }, only: %i[ create destroy ]
@@ -6,8 +8,7 @@ class ContestsController < ApplicationController
 
   # GET /contests or /contests.json
   def index
-    @contests = Contest.all.order(:contest_start)
-    @contests = @contests.where("name ILIKE ?", "%#{params[:name]}%") if params[:name].present?
+    @pagy, @contests = pagy(Contest.where("name ILIKE ?", "%#{params[:name]}%"), limit: 6)
   end
 
   # GET /contests/1 or /contests/1.json

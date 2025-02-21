@@ -17,6 +17,7 @@ class Contest < ApplicationRecord
 
   validates :name, presence: true
   validate :start_date_before_end_date
+  validate :entry_deadline_before_start_date
   validate :unique_contest_phases
 
   def delete_room_prompt(room)
@@ -35,6 +36,12 @@ class Contest < ApplicationRecord
   def start_date_before_end_date
     if contest_start.present? && contest_end.present? && contest_end < contest_start
       errors.add(:contest_end, "date must be after start date")
+    end
+  end
+
+  def entry_deadline_before_start_date
+    if entry_deadline.present? && contest_start.present? && entry_deadline > contest_start
+      errors.add(:entry_deadline, "must be on or before the contest start date")
     end
   end
 

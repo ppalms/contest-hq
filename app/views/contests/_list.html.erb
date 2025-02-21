@@ -1,4 +1,4 @@
-<ul role="list" class="divide-y divide-gray-100">
+<ul role="list" class="px-4 divide-y divide-gray-100">
   <% @contests.each do |contest| %>
     <li class="flex items-center justify-between gap-x-6 py-5">
       <div class="min-w-0">
@@ -33,3 +33,7 @@
     </li>
   <% end %>
 </ul>
+
+<div class="p-3 border-t">
+  <%== pagy_nav(@pagy) %>
+</div>
