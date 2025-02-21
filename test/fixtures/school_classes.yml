@@ -42,3 +42,28 @@ customer_school_class_f:
   name: 6-A
   ordinal: 6
   account: customer
+
+ossaa_class_6a:
+  name: 6A
+  ordinal: 5
+  account: ossaa
+
+ossaa_class_5a:
+  name: 5A
+  ordinal: 4
+  account: ossaa
+
+ossaa_class_4a:
+  name: 4A
+  ordinal: 3
+  account: ossaa
+
+ossaa_class_3a:
+  name: 3A
+  ordinal: 2
+  account: ossaa
+
+ossaa_class_2a:
+  name: 2A
+  ordinal: 1
+  account: ossaa

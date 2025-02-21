@@ -33,3 +33,19 @@ customer_director_a:
 customer_director_b:
   user: customer_director_b
   role: director
+
+ossaa_admin_a:
+  user: ossaa_admin_a
+  role: account_admin
+
+ossaa_director_a:
+  user: ossaa_director_a
+  role: director
+
+ossaa_manager_a:
+  user: ossaa_manager_a
+  role: manager
+
+ossaa_director_b:
+  user: ossaa_director_b
+  role: director

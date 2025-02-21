@@ -6,7 +6,7 @@ sys_admin_a:
   email: sa@contesthq.app
   password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
   verified: true
-  account: demo
+  account: contesthq
   time_zone: America/Chicago
 
 demo_admin_a:
@@ -71,3 +71,39 @@ customer_director_b:
   verified: true
   time_zone: America/Chicago
   account: customer
+
+ossaa_admin_a:
+  first_name: Sam
+  last_name: Vimes
+  email: sam@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_a:
+  first_name: Carrot
+  last_name: Ironfoundersson
+  email: carrot@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_b:
+  first_name: Angua
+  last_name: von Uberwald
+  email: angua@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_manager_a:
+  first_name: Nobby
+  last_name: Nobbs
+  email: nobby@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa

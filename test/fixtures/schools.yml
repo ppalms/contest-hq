@@ -37,3 +37,2406 @@ customer_school_d:
   name: North High School
   school_class: customer_school_class_b
   account: customer
+
+# 6A Schools
+ossaa_school_bartlesville:
+  name: Bartlesville
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_bixby:
+  name: Bixby
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_broken_arrow:
+  name: Broken Arrow
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_capitol_hill:
+  name: Capitol Hill
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_choctaw:
+  name: Choctaw
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_deer_creek_edmond:
+  name: Deer Creek (Edmond)
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_edmond_memorial:
+  name: Edmond Memorial
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_edmond_north:
+  name: Edmond North
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_edmond_santa_fe:
+  name: Edmond Santa Fe
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_eisenhower:
+  name: Eisenhower
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_enid:
+  name: Enid
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_jenks:
+  name: Jenks
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_moore:
+  name: Moore
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_muskogee:
+  name: Muskogee
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_mustang:
+  name: Mustang
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_norman:
+  name: Norman
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_norman_north:
+  name: Norman North
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_northwest_classen:
+  name: Northwest Classen
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_owasso:
+  name: Owasso
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_piedmont:
+  name: Piedmont
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_ponca_city:
+  name: Ponca City
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_putnam_city:
+  name: Putnam City
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_putnam_city_north:
+  name: Putnam City North
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_putnam_city_west:
+  name: Putnam City West
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_sand_springs:
+  name: Sand Springs
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_sapulpa:
+  name: Sapulpa
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_southmoore:
+  name: Southmoore
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_stillwater:
+  name: Stillwater
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_us_grant:
+  name: U. S. Grant
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_union:
+  name: Union
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_westmoore:
+  name: Westmoore
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_school_yukon:
+  name: Yukon
+  school_class: ossaa_class_6a
+  account: ossaa
+
+# 5A Schools
+ossaa_school_altus:
+  name: Altus
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_bishop_kelley:
+  name: Bishop Kelley
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_booker_t_washington:
+  name: Booker T Washington
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_carl_albert:
+  name: Carl Albert
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_claremore:
+  name: Claremore
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_classen_sas_at_ne:
+  name: Classen SAS at NE
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_collinsville:
+  name: Collinsville
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_coweta:
+  name: Coweta
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_del_city:
+  name: Del City
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_duncan:
+  name: Duncan
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_durant:
+  name: Durant
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_east_central:
+  name: East Central
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_edison_prep:
+  name: Edison Prep
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_el_reno:
+  name: El Reno
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_elgin:
+  name: Elgin
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_guthrie:
+  name: Guthrie
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_guymon:
+  name: Guymon
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_john_marshall:
+  name: John Marshall
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_lawton:
+  name: Lawton
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_macarthur:
+  name: MacArthur
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_mcalester:
+  name: McAlester
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_memorial_tulsa:
+  name: Memorial (Tulsa)
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_midwest_city:
+  name: Midwest City
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_nathan_hale:
+  name: Nathan Hale
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_noble:
+  name: Noble
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_pryor:
+  name: Pryor
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_santa_fe_south:
+  name: Santa Fe South
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_shawnee:
+  name: Shawnee
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_southeast:
+  name: Southeast
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_tahlequah:
+  name: Tahlequah
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_western_heights:
+  name: Western Heights
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_school_will_rogers:
+  name: Will Rogers
+  school_class: ossaa_class_5a
+  account: ossaa
+
+# 4A Schools
+ossaa_school_ada:
+  name: Ada
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_anadarko:
+  name: Anadarko
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_ardmore:
+  name: Ardmore
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_astec:
+  name: ASTEC
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_berryhill:
+  name: Berryhill
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_bethany:
+  name: Bethany
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_bishop_mcguinness:
+  name: Bishop McGuinness
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_blanchard:
+  name: Blanchard
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_bridge_creek:
+  name: Bridge Creek
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_bristow:
+  name: Bristow
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_broken_bow:
+  name: Broken Bow
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_byng:
+  name: Byng
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_cache:
+  name: Cache
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_catoosa:
+  name: Catoosa
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_checotah:
+  name: Checotah
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_chickasha:
+  name: Chickasha
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_cleveland:
+  name: Cleveland
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_clinton:
+  name: Clinton
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_cushing:
+  name: Cushing
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_douglass:
+  name: Douglass
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_dove_science_okc:
+  name: Dove Science (OKC)
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_elk_city:
+  name: Elk City
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_eufaula:
+  name: Eufaula
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_ft_gibson:
+  name: Ft. Gibson
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_glenpool:
+  name: Glenpool
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_grove:
+  name: Grove
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_harding_charter_prep:
+  name: Harding Charter Prep
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_harding_fine_arts_academy:
+  name: Harding Fine Arts Academy
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_harrah:
+  name: Harrah
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_hilldale:
+  name: Hilldale
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_idabel:
+  name: Idabel
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_inola:
+  name: Inola
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_jay:
+  name: Jay
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_kingfisher:
+  name: Kingfisher
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_locust_grove:
+  name: Locust Grove
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_lone_grove:
+  name: Lone Grove
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_madill:
+  name: Madill
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_mannford:
+  name: Mannford
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_mclain:
+  name: McLain
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_mcloud:
+  name: McLoud
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_miami:
+  name: Miami
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_mount_st_mary:
+  name: Mount St. Mary
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_muldrow:
+  name: Muldrow
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_newcastle:
+  name: Newcastle
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_north_rock_creek:
+  name: North Rock Creek
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_oologah_talala:
+  name: Oologah-Talala
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_pauls_valley:
+  name: Pauls Valley
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_perkins_tryon:
+  name: Perkins-Tryon
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_plainview:
+  name: Plainview
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_poteau:
+  name: Poteau
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_purcell:
+  name: Purcell
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_sallisaw:
+  name: Sallisaw
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_seminole:
+  name: Seminole
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_skiatook:
+  name: Skiatook
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_stigler:
+  name: Stigler
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_stilwell:
+  name: Stilwell
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_sulphur:
+  name: Sulphur
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_tecumseh:
+  name: Tecumseh
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_tuttle:
+  name: Tuttle
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_verdigris:
+  name: Verdigris
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_vinita:
+  name: Vinita
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_wagoner:
+  name: Wagoner
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_weatherford:
+  name: Weatherford
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_school_woodward:
+  name: Woodward
+  school_class: ossaa_class_4a
+  account: ossaa
+
+# 3A Schools (A-M)
+ossaa_school_adair:
+  name: Adair
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_alva:
+  name: Alva
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_antlers:
+  name: Antlers
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_atoka:
+  name: Atoka
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_beggs:
+  name: Beggs
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_bethel:
+  name: Bethel
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_blackwell:
+  name: Blackwell
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_calera:
+  name: Calera
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_caney_valley:
+  name: Caney Valley
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_casady:
+  name: Casady
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_cascia_hall:
+  name: Cascia Hall
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_cashion:
+  name: Cashion
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_central_sallisaw:
+  name: Central (Sallisaw)
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_central_tulsa:
+  name: Central (Tulsa)
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_chandler:
+  name: Chandler
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_chelsea:
+  name: Chelsea
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_chisholm:
+  name: Chisholm
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_chouteau_mazie:
+  name: Chouteau-Mazie
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_christian_heritage:
+  name: Christian Heritage
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_coalgate:
+  name: Coalgate
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_colbert:
+  name: Colbert
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_colcord:
+  name: Colcord
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_comanche:
+  name: Comanche
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_commerce:
+  name: Commerce
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_community_christian:
+  name: Community Christian
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_cordell:
+  name: Cordell
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_crescent:
+  name: Crescent
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_crooked_oak:
+  name: Crooked Oak
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_crossings_christian:
+  name: Crossings Christian
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_dale:
+  name: Dale
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_daniel_webster:
+  name: Daniel Webster
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_davis:
+  name: Davis
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_dewey:
+  name: Dewey
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_dibble:
+  name: Dibble
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_dickson:
+  name: Dickson
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_dove_science_tulsa:
+  name: Dove Science (Tulsa)
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_elmore_city_pernell:
+  name: Elmore City-Pernell
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_fairland:
+  name: Fairland
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_fairview:
+  name: Fairview
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_frederick:
+  name: Frederick
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_hartshorne:
+  name: Hartshorne
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_haskell:
+  name: Haskell
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_heavener:
+  name: Heavener
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_hennessey:
+  name: Hennessey
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_henryetta:
+  name: Henryetta
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_heritage_hall:
+  name: Heritage Hall
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_hinton:
+  name: Hinton
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_hobart:
+  name: Hobart
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_holdenville:
+  name: Holdenville
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_holland_hall:
+  name: Holland Hall
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_hooker:
+  name: Hooker
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_howe:
+  name: Howe
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_hugo:
+  name: Hugo
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_hulbert:
+  name: Hulbert
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_jones:
+  name: Jones
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_kansas:
+  name: Kansas
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_kellyville:
+  name: Kellyville
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_ketchum:
+  name: Ketchum
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_keys_parkhill:
+  name: Keys (Parkhill)
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_kiefer:
+  name: Kiefer
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_kingston:
+  name: Kingston
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_kipp_tulsa:
+  name: Kipp Tulsa
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_konawa:
+  name: Konawa
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_latta:
+  name: Latta
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_lexington:
+  name: Lexington
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_lincoln_christian:
+  name: Lincoln Christian
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_lindsay:
+  name: Lindsay
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_little_axe:
+  name: Little Axe
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_luther:
+  name: Luther
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_mangum:
+  name: Mangum
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_marietta:
+  name: Marietta
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_marlow:
+  name: Marlow
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_meeker:
+  name: Meeker
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_merritt:
+  name: Merritt
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_metro_christian:
+  name: Metro Christian
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_millwood:
+  name: Millwood
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_minco:
+  name: Minco
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_morris:
+  name: Morris
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_morrison:
+  name: Morrison
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_mounds:
+  name: Mounds
+  school_class: ossaa_class_3a
+  account: ossaa
+
+# 3A Schools (N-Z)
+ossaa_school_newkirk:
+  name: Newkirk
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_nowata:
+  name: Nowata
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_ok_christian_school:
+  name: OK Christian School
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_okemah:
+  name: Okemah
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_oklahoma_union:
+  name: Oklahoma Union
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_okmulgee:
+  name: Okmulgee
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_oktaha:
+  name: Oktaha
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_panama:
+  name: Panama
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_pathways:
+  name: Pathways
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_pawhuska:
+  name: Pawhuska
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_pawnee:
+  name: Pawnee
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_perry:
+  name: Perry
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_pocola:
+  name: Pocola
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_prague:
+  name: Prague
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_preston:
+  name: Preston
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_quapaw:
+  name: Quapaw
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_rejoice_christian:
+  name: Rejoice Christian
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_riverside:
+  name: Riverside
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_roland:
+  name: Roland
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_salina:
+  name: Salina
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_sayre:
+  name: Sayre
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_sequoyah_claremore:
+  name: Sequoyah (Claremore)
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_sequoyah_tahlequah:
+  name: Sequoyah (Tahlequah)
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_silo:
+  name: Silo
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_sperry:
+  name: Sperry
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_spiro:
+  name: Spiro
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_star_spencer:
+  name: Star-Spencer
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_stratford:
+  name: Stratford
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_stroud:
+  name: Stroud
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_talihina:
+  name: Talihina
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_tishomingo:
+  name: Tishomingo
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_tonkawa:
+  name: Tonkawa
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_tsas:
+  name: TSAS
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_tushka:
+  name: Tushka
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_valliant:
+  name: Valliant
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_vanoss:
+  name: Vanoss
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_vian:
+  name: Vian
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_victory_christian:
+  name: Victory Christian
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_walters:
+  name: Walters
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_warner:
+  name: Warner
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_washington:
+  name: Washington
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_watonga:
+  name: Watonga
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_westville:
+  name: Westville
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_wewoka:
+  name: Wewoka
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_wilburton:
+  name: Wilburton
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_wilson:
+  name: Wilson
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_wyandotte:
+  name: Wyandotte
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_school_wynnewood:
+  name: Wynnewood
+  school_class: ossaa_class_3a
+  account: ossaa
+
+# 2A Schools (A-F)
+ossaa_school_achille:
+  name: Achille
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_afton:
+  name: Afton
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_agra:
+  name: Agra
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_alex:
+  name: Alex
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_aline_cleo:
+  name: Aline-Cleo
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_allen:
+  name: Allen
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_amber_pocasset:
+  name: Amber-Pocasset
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_apache:
+  name: Apache
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_arapaho_butler:
+  name: Arapaho-Butler
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_arkoma:
+  name: Arkoma
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_arnett:
+  name: Arnett
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_asher:
+  name: Asher
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_balko:
+  name: Balko
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_barnsdall:
+  name: Barnsdall
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_battiest:
+  name: Battiest
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_beaver:
+  name: Beaver
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_bennington:
+  name: Bennington
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_big_pasture:
+  name: Big Pasture
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_billings:
+  name: Billings
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_binger_oney:
+  name: Binger-Oney
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_blair:
+  name: Blair
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_bluejacket:
+  name: Bluejacket
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_boise_city:
+  name: Boise City
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_bokoshe:
+  name: Bokoshe
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_boswell:
+  name: Boswell
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_bowlegs:
+  name: Bowlegs
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_braggs:
+  name: Braggs
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_bray_doyle:
+  name: Bray-Doyle
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_buffalo:
+  name: Buffalo
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_buffalo_valley:
+  name: Buffalo Valley
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_burlington:
+  name: Burlington
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_burns_flat_dill_city:
+  name: Burns Flat-Dill City
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_butner:
+  name: Butner
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_caddo:
+  name: Caddo
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_calumet:
+  name: Calumet
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_calvin:
+  name: Calvin
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_cameron:
+  name: Cameron
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_canadian:
+  name: Canadian
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_caney:
+  name: Caney
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_canton:
+  name: Canton
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_canute:
+  name: Canute
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_carnegie:
+  name: Carnegie
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_carney:
+  name: Carney
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_cave_springs:
+  name: Cave Springs
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_cement:
+  name: Cement
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_central_high:
+  name: Central High
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_chattanooga:
+  name: Chattanooga
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_cherokee:
+  name: Cherokee
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_cheyenne:
+  name: Cheyenne
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_cimarron:
+  name: Cimarron
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_clayton:
+  name: Clayton
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_coleman:
+  name: Coleman
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_copan:
+  name: Copan
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_corn_bible_academy:
+  name: Corn Bible Academy
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_covington_douglas:
+  name: Covington-Douglas
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_coyle:
+  name: Coyle
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_crowder:
+  name: Crowder
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_cyril:
+  name: Cyril
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_davenport:
+  name: Davenport
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_deer_creek_lamont:
+  name: Deer Creek-Lamont
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_depew:
+  name: Depew
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_dewar:
+  name: Dewar
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_dover:
+  name: Dover
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_drummond:
+  name: Drummond
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_drumright:
+  name: Drumright
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_duke:
+  name: Duke
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_eagletown:
+  name: Eagletown
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_earlsboro:
+  name: Earlsboro
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_empire:
+  name: Empire
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_erick:
+  name: Erick
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_fargo_gage:
+  name: Fargo-Gage
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_felt:
+  name: Felt
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_fletcher:
+  name: Fletcher
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_forgan:
+  name: Forgan
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_fort_cobb_broxton:
+  name: Fort Cobb-Broxton
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_fox:
+  name: Fox
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_foyil:
+  name: Foyil
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_freedom:
+  name: Freedom
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_frontier:
+  name: Frontier
+  school_class: ossaa_class_2a
+  account: ossaa
+
+# 2A Schools (G-M)
+ossaa_school_gans:
+  name: Gans
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_garber:
+  name: Garber
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_geary:
+  name: Geary
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_geronimo:
+  name: Geronimo
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_glencoe:
+  name: Glencoe
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_goodwell:
+  name: Goodwell
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_gore:
+  name: Gore
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_gracemont:
+  name: Gracemont
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_graham_dustin:
+  name: Graham-Dustin
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_grandfield:
+  name: Grandfield
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_granite:
+  name: Granite
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_haileyville:
+  name: Haileyville
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_hammon:
+  name: Hammon
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_hanna:
+  name: Hanna
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_hardesty:
+  name: Hardesty
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_haworth:
+  name: Haworth
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_healdton:
+  name: Healdton
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_hillsdale_christian:
+  name: Hillsdale Christian
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_hollis:
+  name: Hollis
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_hominy:
+  name: Hominy
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_hydro_eakly:
+  name: Hydro-Eakly
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_indiahoma:
+  name: Indiahoma
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_indianola:
+  name: Indianola
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_keota:
+  name: Keota
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_kinta:
+  name: Kinta
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_kiowa:
+  name: Kiowa
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_kremlin_hillsdale:
+  name: Kremlin-Hillsdale
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_laverne:
+  name: Laverne
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_lawton_academy_as:
+  name: Lawton Academy AS
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_leedey:
+  name: Leedey
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_leflore:
+  name: LeFlore
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_legacy_christian_school:
+  name: Legacy Christian School
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_liberty:
+  name: Liberty
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_lomega:
+  name: Lomega
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_lone_wolf:
+  name: Lone Wolf
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_lookeba_sickles:
+  name: Lookeba-Sickles
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_macomb:
+  name: Macomb
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_mason:
+  name: Mason
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_maud:
+  name: Maud
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_maysville:
+  name: Maysville
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_mccurtain:
+  name: McCurtain
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_medford:
+  name: Medford
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_midway:
+  name: Midway
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_milburn:
+  name: Milburn
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_mill_creek:
+  name: Mill Creek
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_mooreland:
+  name: Mooreland
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_moss:
+  name: Moss
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_moyers:
+  name: Moyers
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_mt_view_gotebo:
+  name: Mt. View-Gotebo
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_mulhall_orlando:
+  name: Mulhall-Orlando
+  school_class: ossaa_class_2a
+  account: ossaa
+
+# 2A Schools (N-Z)
+ossaa_school_navajo:
+  name: Navajo
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_new_lima:
+  name: New Lima
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_ninnekah:
+  name: Ninnekah
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_oaks:
+  name: Oaks
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_oilton:
+  name: Oilton
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_ok_christian_academy:
+  name: OK Christian Academy
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_ok_school_blind:
+  name: OK School Blind
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_ok_school_for_deaf:
+  name: OK School for Deaf
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_okarche:
+  name: Okarche
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_okay:
+  name: Okay
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_okeene:
+  name: Okeene
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_oklahoma_bible:
+  name: Oklahoma Bible
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_olive:
+  name: Olive
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_olustee_eldorado:
+  name: Olustee-Eldorado
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_paden:
+  name: Paden
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_paoli:
+  name: Paoli
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_pioneer_pleasant_vale:
+  name: Pioneer-Pleasant Vale
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_pittsburg:
+  name: Pittsburg
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_pond_creek_hunter:
+  name: Pond Creek-Hunter
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_porter_consolidated:
+  name: Porter Consolidated
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_porum:
+  name: Porum
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_prue:
+  name: Prue
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_quinton:
+  name: Quinton
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_rattan:
+  name: Rattan
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_red_oak:
+  name: Red Oak
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_regent_prep:
+  name: Regent Prep
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_reydon:
+  name: Reydon
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_ringling:
+  name: Ringling
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_ringwood:
+  name: Ringwood
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_ripley:
+  name: Ripley
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_riverfield_country_day:
+  name: Riverfield Country Day
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_rock_creek:
+  name: Rock Creek
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_roff:
+  name: Roff
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_rush_springs:
+  name: Rush Springs
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_ryan:
+  name: Ryan
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_sasakwa:
+  name: Sasakwa
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_savanna:
+  name: Savanna
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_schulter:
+  name: Schulter
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_seiling:
+  name: Seiling
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_sentinel:
+  name: Sentinel
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_sharon_mutual:
+  name: Sharon-Mutual
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_shattuck:
+  name: Shattuck
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_shidler:
+  name: Shidler
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_smithville:
+  name: Smithville
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_snyder:
+  name: Snyder
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_soper:
+  name: Soper
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_south_coffeyville:
+  name: South Coffeyville
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_southwest_covenant:
+  name: Southwest Covenant
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_springer:
+  name: Springer
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_sterling:
+  name: Sterling
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_stonewall:
+  name: Stonewall
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_stringtown:
+  name: Stringtown
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_strother:
+  name: Strother
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_stuart:
+  name: Stuart
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_summit_christian:
+  name: Summit Christian
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_sweetwater:
+  name: Sweetwater
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_taloga:
+  name: Taloga
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_temple:
+  name: Temple
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_texhoma:
+  name: Texhoma
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_thackerville:
+  name: Thackerville
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_the_academy:
+  name: The Academy
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_thomas_fay_custer:
+  name: Thomas-Fay-Custer
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_timberlake:
+  name: Timberlake
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_tipton:
+  name: Tipton
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_tupelo:
+  name: Tupelo
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_turner:
+  name: Turner
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_turpin:
+  name: Turpin
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_tyrone:
+  name: Tyrone
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_union_city:
+  name: Union City
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_varnum:
+  name: Varnum
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_velma_alma:
+  name: Velma-Alma
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_verden:
+  name: Verden
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_vici:
+  name: Vici
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_wanette:
+  name: Wanette
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_wapanucka:
+  name: Wapanucka
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_watts:
+  name: Watts
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_waukomis:
+  name: Waukomis
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_waurika:
+  name: Waurika
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_wayne:
+  name: Wayne
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_waynoka:
+  name: Waynoka
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_webbers_falls:
+  name: Webbers Falls
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_welch:
+  name: Welch
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_weleetka:
+  name: Weleetka
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_wellston:
+  name: Wellston
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_wesleyan_christian:
+  name: Wesleyan Christian
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_wetumka:
+  name: Wetumka
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_whitesboro:
+  name: Whitesboro
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_wilson_henryetta:
+  name: Wilson (Henryetta)
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_wister:
+  name: Wister
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_woodland:
+  name: Woodland
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_wright_city:
+  name: Wright City
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_wynona:
+  name: Wynona
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_yale:
+  name: Yale
+  school_class: ossaa_class_2a
+  account: ossaa
+
+ossaa_school_yarbrough:
+  name: Yarbrough
+  school_class: ossaa_class_2a
+  account: ossaa
