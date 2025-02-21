@@ -2,7 +2,7 @@
   data-turbo-prefetch="false"
   class="w-full bg-white border-b border-b-stone-300 shadow-2xs"
 >
-  <div class="flex items-center">
+  <div class="flex items-center justify-between">
     <div class="mt-1.5">
       <button
         class="hamburger hamburger--boring"
@@ -14,14 +14,20 @@
         </span>
       </button>
     </div>
-    <div class="absolute left-1/2 -translate-x-1/2 font-bold">
+
+    <div class="absolute left-1/2 transform -translate-x-1/2 font-bold text-center">
       <span>
-        <% if current_user %>
+        <% if current_user && current_user.sysadmin? == false %>
           <%= link_to "#{current_user.account.name} Contest HQ", root_path %>
         <% else %>
           <%= link_to "Contest HQ", root_path %>
         <% end %>
       </span>
+    </div>
+
+    <div class="hidden sm:block max-w-sm px-4 overflow-hidden text-ellipsis">
+      <%= link_to "#{current_user.first_name} #{current_user.last_name}",
+      edit_identity_profile_path %>
     </div>
   </div>
   <div
@@ -64,6 +70,7 @@
           <%= button_to sanitize("Sign out &rarr;"),
           session_path(Current.session),
           method: :delete,
+          class: "cursor-pointer",
           data: {
             turbo: false,
           } %>
