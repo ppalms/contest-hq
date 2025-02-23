@@ -52,9 +52,6 @@ class ContestsController < ApplicationController
     end
   end
 
-  def schedule
-  end
-
   # Set up contest performance phases
   def setup
     add_breadcrumb("Contests", contests_path)
@@ -93,7 +90,7 @@ class ContestsController < ApplicationController
   end
 
   def set_schedule
-    @schedule = Schedule.find_by(contest_id: @contest.id)
+    @schedule = Schedule.find_or_create_by(contest_id: @contest.id)
   end
 
   def contest_params

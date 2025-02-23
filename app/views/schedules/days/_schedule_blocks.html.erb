@@ -1,0 +1,45 @@
+<div id="schedule_day_content">
+  <% if day == nil %>
+    <div>No schedule blocks for this day</div>
+  <% else %>
+    <div>
+      <div class="tabs">
+        <% @schedule.days.each do |day| %>
+          <button class="tab-button"><%= day.schedule_date.strftime("%a %-m/%d") %></button>
+        <% end %>
+      </div>
+
+      <% if day.schedule_blocks.empty? %>
+        <div>No performances scheduled for
+          <%= day.schedule_date.strftime("%a") %></div>
+      <% else %>
+        <% day.schedule_blocks.in_order.group_by { |block| block.contest_entry.large_ensemble }.each do |large_ensemble, blocks| %>
+          <div class="flex justify-between border-b">
+            <div class="flex-col">
+              <div>
+                <%= large_ensemble.school.name %>
+              </div>
+              <div>
+                <%= large_ensemble.name %>
+                <% if large_ensemble.performance_class.abbreviation != nil %>
+                  -
+                  <%= large_ensemble.performance_class.abbreviation %>
+                <% end %>
+              </div>
+            </div>
+            <div>
+              <% blocks.each do |block| %>
+                <div class="text-right">
+                  <div>
+                    <%= block.performance_phase&.name %>
+                    <%= block.start_time.strftime("%l:%M %p") %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

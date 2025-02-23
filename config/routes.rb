@@ -24,8 +24,9 @@ Rails.application.routes.draw do
   end
 
   post "schedules/:id/generate", as: "generate_schedule", to: "schedules#generate"
+  post "schedules/:id/reset", as: "reset_schedule", to: "schedules#reset"
   resources :schedules, only: [ :show ] do
-    resources :schedule_days, as: "days", path: "days"
+    resources :schedule_days, as: "days", path: "days", controller: "schedules/days", only: [ :index, :show ]
   end
 
   namespace :roster do
