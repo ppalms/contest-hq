@@ -1,27 +1,63 @@
 demo_performance_class_a:
   name: A
   account: demo
+  ordinal: 1
 
 customer_performance_class_a:
   name: A
   account: customer
+  ordinal: 1
 
 customer_performance_class_b:
   name: B
   account: customer
+  ordinal: 2
 
 customer_performance_class_c:
   name: C
   account: customer
+  ordinal: 3
 
 customer_performance_class_d:
   name: D
   account: customer
+  ordinal: 4
 
 customer_performance_class_e:
   name: E
   account: customer
+  ordinal: 5
 
 customer_performance_class_f:
   name: F
   account: customer
+  ordinal: 6
+
+ossaa_first:
+  name: First
+  account: ossaa
+  ordinal: 1
+
+ossaa_second:
+  name: Second
+  abbreviation: E
+  account: ossaa
+  ordinal: 2
+
+ossaa_third:
+  name: Third
+  abbreviation: EE
+  account: ossaa
+  ordinal: 3
+
+ossaa_fourth:
+  name: Fourth
+  abbreviation: EEE
+  account: ossaa
+  ordinal: 4
+
+ossaa_fifth:
+  name: Fifth
+  abbreviation: EEEE
+  account: ossaa
+  ordinal: 5
