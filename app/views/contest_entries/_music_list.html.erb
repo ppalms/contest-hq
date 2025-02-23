@@ -17,17 +17,19 @@
         </div>
       </div>
 
-      <div class="flex flex-none items-center gap-x-4">
-        <%= button_to "Delete",
-        contest_entry_selection_path(entry_id: @contest_entry.id, id: music_selection),
-        method: :delete,
-        class: "btn-danger-sm sm:btn-danger",
-        form: {
-          data: {
-            turbo_confirm: "Are you sure?",
-          },
-        } %>
-      </div>
+      <% if current_user.contest_entries.include?(@contest_entry) %>
+        <div class="flex flex-none items-center gap-x-4">
+          <%= button_to "Delete",
+          contest_entry_selection_path(entry_id: @contest_entry.id, id: music_selection),
+          method: :delete,
+          class: "btn-danger-sm sm:btn-danger",
+          form: {
+            data: {
+              turbo_confirm: "Are you sure?",
+            },
+          } %>
+        </div>
+      <% end %>
     </li>
   <% end %>
 </ul>
