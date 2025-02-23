@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_11_220334) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_22_165020) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -55,6 +55,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_11_220334) do
     t.bigint "account_id", null: false
     t.time "start_time"
     t.time "end_time"
+    t.datetime "entry_deadline"
     t.index ["account_id"], name: "index_contests_on_account_id"
   end
 
@@ -107,6 +108,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_11_220334) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "account_id", null: false
+    t.string "abbreviation", limit: 10
+    t.integer "ordinal", null: false
+    t.index ["account_id", "ordinal"], name: "index_performance_classes_on_account_id_and_ordinal", unique: true
     t.index ["account_id"], name: "index_performance_classes_on_account_id"
   end
 
@@ -140,12 +144,27 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_11_220334) do
     t.index ["room_number", "contest_id"], name: "index_rooms_on_room_number_and_contest_id", unique: true
   end
 
+  create_table "schedule_blocks", force: :cascade do |t|
+    t.bigint "room_id", null: false
+    t.bigint "schedule_day_id", null: false
+    t.bigint "contest_entry_id", null: false
+    t.bigint "account_id", null: false
+    t.bigint "performance_phase_id"
+    t.datetime "start_time", null: false
+    t.datetime "end_time", null: false
+    t.index ["account_id"], name: "index_schedule_blocks_on_account_id"
+    t.index ["contest_entry_id"], name: "index_schedule_blocks_on_contest_entry_id"
+    t.index ["performance_phase_id"], name: "index_schedule_blocks_on_performance_phase_id"
+    t.index ["room_id"], name: "index_schedule_blocks_on_room_id"
+    t.index ["schedule_day_id"], name: "index_schedule_blocks_on_schedule_day_id"
+  end
+
   create_table "schedule_days", force: :cascade do |t|
-    t.date "date", null: false
-    t.time "start_time", null: false
-    t.time "end_time", null: false
+    t.date "schedule_date", null: false
     t.bigint "schedule_id", null: false
     t.bigint "account_id", null: false
+    t.datetime "start_time", null: false
+    t.datetime "end_time", null: false
     t.index ["account_id"], name: "index_schedule_days_on_account_id"
     t.index ["schedule_id"], name: "index_schedule_days_on_schedule_id"
   end
@@ -248,6 +267,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_11_220334) do
   add_foreign_key "performance_phases", "rooms"
   add_foreign_key "rooms", "accounts"
   add_foreign_key "rooms", "contests"
+  add_foreign_key "schedule_blocks", "accounts"
+  add_foreign_key "schedule_blocks", "contest_entries"
+  add_foreign_key "schedule_blocks", "performance_phases"
+  add_foreign_key "schedule_blocks", "rooms"
+  add_foreign_key "schedule_blocks", "schedule_days"
   add_foreign_key "schedule_days", "accounts"
   add_foreign_key "schedule_days", "schedules"
   add_foreign_key "schedules", "accounts"
