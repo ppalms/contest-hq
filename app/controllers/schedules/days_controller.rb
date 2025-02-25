@@ -4,10 +4,12 @@ module Schedules
 
     def index
       @days = @schedule.days
+      @selected_day = @days.first
     end
 
     def show
       @day = @schedule.days.find(params[:id])
+      @selected_day = @day
     end
 
     private

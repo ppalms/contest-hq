@@ -1,39 +1,7 @@
 <%= turbo_frame_tag "schedule_day_content" do %>
-  <div class="tabs">
-    <% @schedule.days.each do |day| %>
-      <%= link_to day.schedule_date.strftime("%a %-m/%d"),
-      schedule_day_path(@schedule, day),
-      class: "tab-button #{params[:id].to_i == day.id ? "active" : ""}",
-      data: {
-        turbo_frame: "schedule_day_content",
-      } %>
-    <% end %>
-  </div>
-
-  <% @day.schedule_blocks.in_order.group_by { |block| block.contest_entry.large_ensemble }.each do |large_ensemble, blocks| %>
-    <div class="flex justify-between border-b">
-      <div class="flex-col">
-        <div>
-          <%= large_ensemble.school.name %>
-        </div>
-        <div>
-          <%= large_ensemble.name %>
-          <% if large_ensemble.performance_class.abbreviation != nil %>
-            -
-            <%= large_ensemble.performance_class.abbreviation %>
-          <% end %>
-        </div>
-      </div>
-      <div>
-        <% blocks.each do |block| %>
-          <div class="text-right">
-            <div>
-              <%= block.performance_phase&.name %>
-              <%= block.start_time.strftime("%l:%M %p") %>
-            </div>
-          </div>
-        <% end %>
-      </div>
-    </div>
-  <% end %>
+  <%= render partial: "schedules/days/schedule_blocks",
+  locals: {
+    schedule: @schedule,
+    selected_day: @selected_day,
+  } %>
 <% end %>

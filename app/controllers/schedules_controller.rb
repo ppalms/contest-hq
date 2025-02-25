@@ -4,6 +4,7 @@ class SchedulesController < ApplicationController
   before_action :set_breadcrumbs
 
   def show
+    @selected_day = params[:day_id] ? @schedule.days.find(params[:day_id]) : @schedule.days.first
   end
 
   def edit
@@ -64,7 +65,7 @@ class SchedulesController < ApplicationController
 
         render turbo_stream: [
           turbo_stream.append("notifications", partial: "shared/notification"),
-          turbo_stream.replace("schedule_day_content", partial: "schedules/days/schedule_blocks", locals: { day: @schedule.days.first })
+          turbo_stream.replace("schedule_day_content", partial: "schedules/days/schedule_blocks", locals: { schedule: @schedule, selected_day: @schedule.days.first })
         ]
 
         flash.discard(:notice)
@@ -81,7 +82,7 @@ class SchedulesController < ApplicationController
 
         render turbo_stream: [
           turbo_stream.append("notifications", partial: "shared/notification"),
-          turbo_stream.replace("schedule_day_content", partial: "schedules/days/schedule_blocks", locals: { day: nil })
+          turbo_stream.replace("schedule_day_content", partial: "schedules/days/schedule_blocks", locals: { schedule: @schedule, selected_day: nil })
         ]
 
         flash.discard(:notice)
@@ -92,7 +93,20 @@ class SchedulesController < ApplicationController
   private
 
   def set_schedule
-    @schedule = Schedule.find(params[:id])
+    @schedule = Schedule.includes(
+      contest: {
+        performance_phases: [ :room ]
+      },
+      schedule_days: {
+        schedule_blocks: [
+          :performance_phase,
+          :room,
+          contest_entry: {
+            large_ensemble: [ :school, :performance_class ]
+          }
+        ]
+      }
+    ).find(params[:id])
   end
 
   def authorize_manager!

@@ -15,4 +15,15 @@ class ScheduleDay < ApplicationRecord
       errors.add(:end_time, "must be after start time")
     end
   end
+
+  def blocks_for_schedule
+    schedule_blocks
+      .includes(
+        :performance_phase,
+        contest_entry: {
+          large_ensemble: [ :school, :performance_class ]
+        }
+      )
+      .in_order
+  end
 end
