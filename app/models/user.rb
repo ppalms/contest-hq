@@ -46,27 +46,31 @@ class User < ApplicationRecord
     sessions.where.not(id: Current.session).delete_all
   end
 
+  def role_names
+    @role_names ||= roles.pluck(:name)
+  end
+
   def sysadmin?
-    roles.exists?(name: "SysAdmin")
+    role_names.include?("SysAdmin")
   end
 
   def tenant_admin?
-    roles.exists?(name: "AccountAdmin")
+    role_names.include?("AccountAdmin")
+  end
+
+  def director?
+    role_names.include?("Director")
+  end
+
+  def manager?
+    role_names.include?("Manager")
+  end
+
+  def judge?
+    role_names.include?("Judge")
   end
 
   def admin?
     sysadmin? || tenant_admin?
-  end
-
-  def director?
-    roles.exists?(name: "Director")
-  end
-
-  def manager?
-    roles.exists?(name: "Manager")
-  end
-
-  def judge?
-    roles.exists?(name: "Judge")
   end
 end
