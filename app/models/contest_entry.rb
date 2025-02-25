@@ -8,7 +8,7 @@ class ContestEntry < ApplicationRecord
   has_many :music_selections, dependent: :destroy
   has_many :schedule_blocks
 
-  scope :in_order, -> {
+  scope :performance_order, -> {
     joins(large_ensemble: :performance_class)
     .order("performance_classes.ordinal DESC")
   }

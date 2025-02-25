@@ -10,7 +10,7 @@ class ScheduleBlock < ApplicationRecord
   validate :end_time_after_start_time
   validate :no_overlap
 
-  scope :in_order, -> { order(:start_time) }
+  scope :by_start_time, -> { order(:start_time) }
 
   private
 

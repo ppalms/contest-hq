@@ -16,7 +16,7 @@ class ScheduleDay < ApplicationRecord
     end
   end
 
-  def blocks_for_schedule
+  def blocks_by_large_ensemble
     schedule_blocks
       .includes(
         :performance_phase,
@@ -24,6 +24,7 @@ class ScheduleDay < ApplicationRecord
           large_ensemble: [ :school, :performance_class ]
         }
       )
-      .in_order
+      .by_start_time
+      .group_by { |block| block.contest_entry.large_ensemble }
   end
 end

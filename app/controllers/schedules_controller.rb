@@ -24,7 +24,7 @@ class SchedulesController < ApplicationController
     # No gaps between schedule blocks for each entry
     # There may be gaps between entries
 
-    entries = @schedule.contest.contest_entries.in_order
+    entries = @schedule.contest.contest_entries.performance_order
     current_day = @schedule.days.first
 
     entries.each_with_index do |entry, index|
@@ -39,7 +39,7 @@ class SchedulesController < ApplicationController
       if index == 0 || increment_day == true
         start_time = current_day.start_time
       else
-        start_time = entries[index - 1].schedule_blocks.in_order.last.end_time
+        start_time = entries[index - 1].schedule_blocks.by_start_time.last.end_time
       end
 
       phase_start = start_time

@@ -1,5 +1,5 @@
 <% if day.present? %>
-  <% day.blocks_for_schedule.group_by { |block| block.contest_entry.large_ensemble }.each do |large_ensemble, blocks| %>
+  <% day.blocks_by_large_ensemble.each do |large_ensemble, blocks| %>
     <div class="flex justify-between border-b">
       <div class="flex-col">
         <div>
