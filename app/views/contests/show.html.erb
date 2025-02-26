@@ -71,8 +71,7 @@
       </div>
     <% end %>
   </div>
-  <!-- TODO: only show if director has eligible group -->
-  <% if current_user.director? %>
+  <% if current_user.director? && current_user.conducted_ensembles&.any? { |ensemble| @contest.school_classes.include?(ensemble.school.school_class) } %>
     <div class="pt-6">
       <%= render "my_entries" %>
     </div>

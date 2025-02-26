@@ -93,6 +93,26 @@ class ContestsTest < ApplicationSystemTestCase
     assert_no_text "New Contest"
   end
 
+  test "director sees register button for eligible contest" do
+    # Director with a level A group
+    log_in_as(users(:demo_director_a))
+
+    # Contest allows level A groups
+    elibile_contest = contests(:demo_contest_a)
+    visit contest_url elibile_contest.id
+    assert_text "Register"
+  end
+
+  test "director does not see register button for ineligible contest" do
+    # Director with a level A group
+    log_in_as(users(:demo_director_a))
+
+    # Contest does not allow level A groups
+    ineligible_contest = contests(:demo_contest_c)
+    visit contest_url ineligible_contest.id
+    assert_no_text "Register"
+  end
+
   # Scheduling tests
   test "managers can see contest schedule" do
     log_in_as(users(:demo_manager_a))
