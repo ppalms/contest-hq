@@ -12,8 +12,8 @@ class Roster::LargeEnsemblesController < ApplicationController
   end
 
   def show
-    @contests = Contest.joins(:contests_school_classes)
-      .where(contests_school_classes: { school_class_id: @large_ensemble.school.school_class.id })
+    @contests = Contest.left_outer_joins(:contests_school_classes)
+      .where("contests_school_classes.school_class_id IS NULL OR contests_school_classes.school_class_id = ?", @large_ensemble.school.school_class.id)
       .distinct
   end
 
