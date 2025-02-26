@@ -15,7 +15,7 @@ class UsersController < ApplicationController
 
   def edit
     if current_user.account != @user.account
-      redirect_to root_path, status: :forbidden
+      redirect_to root_path, status: :forbidden; return
     end
 
     @roles = Role.where(name: %w[Director Manager Judge AccountAdmin]).order(:name)
@@ -26,7 +26,7 @@ class UsersController < ApplicationController
 
   def update
     if current_user.account != @user.account
-      redirect_to root_path, status: :forbidden
+      redirect_to root_path, status: :forbidden; return
     end
 
     if @user.update(user_params)

@@ -1,6 +1,8 @@
 require "application_system_test_case"
 
 class OnboardingDirectorTest < ApplicationSystemTestCase
+  include LargeEnsemblesHelper
+
   setup do
     invite_new_director("peggy@school.org")
   end
@@ -19,7 +21,7 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
 
     fill_in "Name", with: "Symphonic Orchestra"
     assert_text schools(:demo_school_a).name
-    select performance_classes(:demo_performance_class_a).name, from: :performance_class_id
+    select display_name_with_abbreviation(performance_classes(:demo_performance_class_a)), from: :performance_class_id
     click_on "Create Large Ensemble"
     assert_text "Large ensemble was successfully created"
 
