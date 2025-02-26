@@ -1,4 +1,5 @@
 <nav
+  data-controller="dropdown"
   data-turbo-prefetch="false"
   class="w-full bg-white border-b border-b-stone-300 shadow-2xs"
 >
@@ -7,7 +8,8 @@
       <button
         class="hamburger hamburger--boring"
         type="button"
-        onclick="toggleNavMenu()"
+        data-dropdown-target="navMenuButton"
+        data-action="click->dropdown#toggleNavMenu"
       >
         <span class="hamburger-box">
           <span class="hamburger-inner"></span>
@@ -25,18 +27,92 @@
       </span>
     </div>
 
-    <div class="hidden sm:block max-w-sm px-4 overflow-hidden text-ellipsis">
-      <%= link_to "#{current_user.first_name} #{current_user.last_name}",
-      edit_identity_profile_path %>
-    </div>
+    <% if Current.session %>
+      <div class="lg:pl-72">
+        <div
+          class="
+            sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 bg-white px-4
+            shadow-xs sm:gap-x-6 sm:px-6 lg:px-8
+          "
+        >
+          <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
+            <div class="flex items-center gap-x-4 lg:gap-x-6">
+              <!-- Profile dropdown -->
+              <div class="relative">
+                <button
+                  type="button"
+                  class="-m-1.5 flex items-center p-1.5 hover:cursor-pointer"
+                  id="user-menu-button"
+                  aria-expanded="false"
+                  aria-haspopup="true"
+                  data-dropdown-target="button"
+                  data-action="dropdown#toggle"
+                >
+                  <span class="sr-only">Open user menu</span>
+                  <span class="hidden lg:flex lg:items-center">
+                    <span class="ml-4 text-sm/6 font-semibold text-gray-900" aria-hidden="true"><%= "#{current_user.first_name} #{current_user.last_name}" %></span>
+                    <svg
+                      class="ml-2 size-5 text-gray-400"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                      data-slot="icon"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </span>
+                </button>
+                <!-- Dropdown menu, show/hide based on menu state. Entering:
+                "transition ease-out duration-100" From: "transform opacity-0
+                scale-95" To: "transform opacity-100 scale-100" Leaving:
+                "transition ease-in duration-75" From: "transform opacity-100
+                scale-100" To: "transform opacity-0 scale-95" -->
+                <div
+                  id="user-menu"
+                  data-dropdown-target="menu"
+                  class="
+                    hidden absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white
+                    py-2 ring-1 shadow-lg ring-gray-900/5 focus:outline-hidden
+                  "
+                  role="menu"
+                  aria-orientation="vertical"
+                  aria-labelledby="user-menu-button"
+                  tabindex="-1"
+                >
+                  <!-- Active: "bg-gray-50 outline-hidden", Not Active: "" -->
+                  <%= link_to "Your profile",
+                  edit_identity_profile_path,
+                  class: "block px-3 py-1 text-sm/6 text-gray-900" %>
+
+                  <%= link_to "Settings",
+                  settings_path,
+                  class: "block px-3 py-1 text-sm/6 text-gray-900" %>
+
+                  <%= button_to "Sign out",
+                  Current.session,
+                  method: :delete,
+                  class: "block px-3 py-1 text-sm/6 text-gray-900 cursor-pointer" %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
   </div>
+
   <div
-    id="nav_menu"
+    id="nav-menu"
+    data-dropdown-target="navMenu"
     class="
       absolute hidden w-full pl-2 bg-white border-b border-b-stone-300 shadow z-50
     "
   >
-    <div class="p-2 pb-6 space-y-4">
+    <div class="p-2 pb-4 space-y-4">
       <% if Current.session %>
         <div class="pt-4">
           <%= link_to "Home", root_path %>
@@ -62,18 +138,18 @@
           </div>
         <% end %>
 
-        <div>
-          <%= link_to "Settings", settings_path %>
-        </div>
+        <div class="lg:hidden pb-4 space-y-4">
+          <div>
+            <%= link_to "Your profile", edit_identity_profile_path %>
+          </div>
 
-        <div>
-          <%= button_to sanitize("Sign out &rarr;"),
-          session_path(Current.session),
-          method: :delete,
-          class: "cursor-pointer",
-          data: {
-            turbo: false,
-          } %>
+          <div>
+            <%= link_to "Settings", settings_path %>
+          </div>
+
+          <div>
+            <%= button_to "Sign out", Current.session, method: :delete %>
+          </div>
         </div>
       <% else %>
         <%= button_to "Sign in", sign_in_path, method: :get %>
@@ -81,16 +157,3 @@
     </div>
   </div>
 </nav>
-
-<script>
-  function toggleNavMenu() {
-    document.querySelector('.hamburger').classList.toggle('is-active');
-    document.querySelector('#nav_menu').classList.toggle('hidden');
-  }
-
-  // Close nav menu on navigation to new page
-  document.addEventListener('turbo:visit', function() {
-    document.querySelector('#nav_menu').classList.add('hidden');
-    document.querySelector('.hamburger').classList.remove('is-active');
-  });
-</script>
