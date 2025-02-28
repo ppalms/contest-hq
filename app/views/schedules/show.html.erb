@@ -28,7 +28,7 @@
   </div>
 </div>
 
-<% if current_user.manager? && @schedule.contest.performance_phases.any? %>
+<% if current_user.manager? && @schedule.contest.performance_phases.any? && @schedule.contest.contest_start > DateTime.now %>
   <div class="flex justify-between pb-2">
     <!-- TODO: user selects start/end times -->
     <%= button_to "Generate contest schedule",
