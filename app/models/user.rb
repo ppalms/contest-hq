@@ -75,6 +75,10 @@ class User < ApplicationRecord
   end
 
   def manages_contest(contest_id)
-    managed_contests.where(id: contest_id).exists?
+    if !manager?
+      return false
+    end
+
+    managed_contests&.exists?(contest_id)
   end
 end

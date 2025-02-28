@@ -67,6 +67,5 @@ class ContestEntriesController < ApplicationController
   def set_breadcrumbs
     add_breadcrumb("Contests", contests_path)
     add_breadcrumb(@contest.name, @contest)
-    add_breadcrumb("Entries", contest_entries_path)
   end
 end

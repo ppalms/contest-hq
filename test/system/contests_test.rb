@@ -120,12 +120,10 @@ class ContestsTest < ApplicationSystemTestCase
     assert_no_text "Contest Entries"
   end
 
-  # Scheduling tests
-  test "managers can see contest schedule" do
-    log_in_as(users(:demo_manager_a))
-    visit contests_url
-    click_link(href: contest_path(@contest.id))
-
-    assert_text "Schedule"
+  test "director only sees their own entries" do
+    log_in_as(users(:demo_director_a))
+    visit contest_url(contests(:demo_contest_a))
+    assert_text "Ironfoundersson"
+    assert_text "Wind Ensemble"
   end
 end

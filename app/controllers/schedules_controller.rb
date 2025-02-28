@@ -39,7 +39,7 @@ class SchedulesController < ApplicationController
       if index == 0 || increment_day == true
         start_time = current_day.start_time
       else
-        start_time = entries[index - 1].schedule_blocks.by_start_time.last.end_time
+        start_time = entries[index - 1].schedule_blocks.by_start_time.last&.end_time
       end
 
       phase_start = start_time

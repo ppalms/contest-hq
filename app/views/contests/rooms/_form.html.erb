@@ -1,12 +1,15 @@
 <%= form_with(model: room, url: room.new_record? ? contest_rooms_path : contest_room_path(@contest, @room), class: "wide-form") do |form| %>
   <div class="sm:col-span-2">
     <%= form.label :name %>
-    <%= form.text_field :name, class: "text-field", autofocus: true %>
+    <%= form.text_field :name,
+                    placeholder: "Band Room",
+                    class: "text-field",
+                    autofocus: true %>
   </div>
 
   <div>
     <%= form.label :room_number %>
-    <%= form.text_field :room_number, class: "text-field" %>
+    <%= form.text_field :room_number, placeholder: "A-123", class: "text-field" %>
   </div>
 
   <div class="form-button-container">

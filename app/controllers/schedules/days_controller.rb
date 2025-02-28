@@ -8,8 +8,7 @@ module Schedules
     end
 
     def show
-      @day = @schedule.days.find(params[:id])
-      @selected_day = @day
+      @selected_day = @schedule.days.find(params[:id])
     end
 
     private

@@ -28,22 +28,24 @@
   </div>
 </div>
 
-<div class="flex justify-between pb-2">
-  <!-- TODO: user selects start/end times -->
-  <%= button_to "Generate contest schedule",
-  generate_schedule_path(
-    @schedule,
-    start_time: @schedule.contest.contest_start.beginning_of_day + (8 * 60 * 60),
-    end_time: @schedule.contest.contest_end.beginning_of_day + (17 * 60 * 60),
-  ),
-  method: :post,
-  class: "btn-primary-sm" %>
+<% if current_user.manager? && @schedule.contest.performance_phases.any? %>
+  <div class="flex justify-between pb-2">
+    <!-- TODO: user selects start/end times -->
+    <%= button_to "Generate contest schedule",
+    generate_schedule_path(
+      @schedule,
+      start_time: @schedule.contest.contest_start.beginning_of_day + (8 * 60 * 60),
+      end_time: @schedule.contest.contest_end.beginning_of_day + (17 * 60 * 60),
+    ),
+    method: :post,
+    class: "btn-primary-sm" %>
 
-  <%= button_to "Reset",
-  reset_schedule_path(@schedule),
-  method: :post,
-  class: "btn-danger-sm" %>
-</div>
+    <%= button_to "Reset",
+    reset_schedule_path(@schedule),
+    method: :post,
+    class: "btn-danger-sm" %>
+  </div>
+<% end %>
 
 <%= turbo_frame_tag "schedule_day_content" do %>
   <%= render partial: "schedules/days/schedule_blocks",
