@@ -1,5 +1,11 @@
+contesthq:
+  name: Contest HQ
+
 demo:
   name: Public Demo
 
 customer:
   name: Customer
+
+ossaa:
+  name: OSSAA

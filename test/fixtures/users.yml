@@ -6,7 +6,7 @@ sys_admin_a:
   email: sa@contesthq.app
   password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
   verified: true
-  account: demo
+  account: contesthq
   time_zone: America/Chicago
 
 demo_admin_a:
@@ -71,3 +71,399 @@ customer_director_b:
   verified: true
   time_zone: America/Chicago
   account: customer
+
+ossaa_admin_a:
+  first_name: Sam
+  last_name: Vimes
+  email: sam@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_a:
+  first_name: Carrot
+  last_name: Ironfoundersson
+  email: carrot@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_b:
+  first_name: Angua
+  last_name: von Uberwald
+  email: angua@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_manager_a:
+  first_name: Nobby
+  last_name: Nobbs
+  email: nobby@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_anderson:
+  first_name: Jennifer
+  last_name: Anderson
+  email: anderson@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_wilson:
+  first_name: Michael
+  last_name: Wilson
+  email: wilson@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_garcia:
+  first_name: David
+  last_name: Garcia
+  email: garcia@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_patel:
+  first_name: Priya
+  last_name: Patel
+  email: patel@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_martinez:
+  first_name: Carlos
+  last_name: Martinez
+  email: martinez@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_thompson:
+  first_name: Sarah
+  last_name: Thompson
+  email: thompson@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_nguyen:
+  first_name: Kevin
+  last_name: Nguyen
+  email: nguyen@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_brown:
+  first_name: Rachel
+  last_name: Brown
+  email: brown@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_kim:
+  first_name: James
+  last_name: Kim
+  email: kim@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_davis:
+  first_name: Elizabeth
+  last_name: Davis
+  email: davis@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_rodriguez:
+  first_name: Maria
+  last_name: Rodriguez
+  email: rodriguez@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_lee:
+  first_name: Daniel
+  last_name: Lee
+  email: lee@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_taylor:
+  first_name: Amanda
+  last_name: Taylor
+  email: taylor@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_white:
+  first_name: Christopher
+  last_name: White
+  email: white@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_jackson:
+  first_name: Michelle
+  last_name: Jackson
+  email: jackson@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_chen:
+  first_name: William
+  last_name: Chen
+  email: chen@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_johnson:
+  first_name: Katherine
+  last_name: Johnson
+  email: johnson@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_miller:
+  first_name: Robert
+  last_name: Miller
+  email: miller@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_clark:
+  first_name: Emily
+  last_name: Clark
+  email: clark@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_harris:
+  first_name: Thomas
+  last_name: Harris
+  email: harris@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_robinson:
+  first_name: Mark
+  last_name: Robinson
+  email: robinson@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_wright:
+  first_name: Jessica
+  last_name: Wright
+  email: wright@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_lewis:
+  first_name: Richard
+  last_name: Lewis
+  email: lewis@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_hall:
+  first_name: Laura
+  last_name: Hall
+  email: hall@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_young:
+  first_name: Stephen
+  last_name: Young
+  email: young@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_turner:
+  first_name: Angela
+  last_name: Turner
+  email: turner@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_scott:
+  first_name: Brian
+  last_name: Scott
+  email: scott@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_phillips:
+  first_name: Sandra
+  last_name: Phillips
+  email: phillips@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_morgan:
+  first_name: Jonathan
+  last_name: Morgan
+  email: morgan@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_howard:
+  first_name: Patricia
+  last_name: Howard
+  email: howard@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_cooper:
+  first_name: Andrew
+  last_name: Cooper
+  email: cooper@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_reed:
+  first_name: Nicole
+  last_name: Reed
+  email: reed@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_bailey:
+  first_name: Gregory
+  last_name: Bailey
+  email: bailey@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_rivera:
+  first_name: Rebecca
+  last_name: Rivera
+  email: rivera@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_price:
+  first_name: Timothy
+  last_name: Price
+  email: price@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_coleman:
+  first_name: Melissa
+  last_name: Coleman
+  email: coleman@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_brooks:
+  first_name: Jeffrey
+  last_name: Brooks
+  email: brooks@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_sanders:
+  first_name: Christina
+  last_name: Sanders
+  email: sanders@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_bennett:
+  first_name: Kenneth
+  last_name: Bennett
+  email: bennett@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa
+
+ossaa_director_wood:
+  first_name: Margaret
+  last_name: Wood
+  email: wood@ossaa.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: ossaa

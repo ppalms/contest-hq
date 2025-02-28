@@ -1,0 +1,7 @@
+<%= turbo_frame_tag "schedule_day_content" do %>
+  <%= render partial: "schedules/days/schedule_blocks",
+  locals: {
+    schedule: @schedule,
+    selected_day: @selected_day,
+  } %>
+<% end %>

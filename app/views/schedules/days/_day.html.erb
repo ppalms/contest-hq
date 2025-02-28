@@ -1,0 +1,28 @@
+<% if day.present? %>
+  <% day.blocks_by_large_ensemble.each do |large_ensemble, blocks| %>
+    <div class="flex justify-between border-b">
+      <div class="flex-col">
+        <div>
+          <%= large_ensemble.school.name %>
+        </div>
+        <div>
+          <%= large_ensemble.name %>
+          <% if large_ensemble.performance_class.abbreviation != nil %>
+            -
+            <%= large_ensemble.performance_class.abbreviation %>
+          <% end %>
+        </div>
+      </div>
+      <div>
+        <% blocks.each do |block| %>
+          <div class="text-right">
+            <div>
+              <%= block.performance_phase&.name %>
+              <%= block.start_time.strftime("%l:%M %p") %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

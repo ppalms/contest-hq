@@ -20,7 +20,62 @@
 
   <%= render @contest %>
 
-  <div class="pt-6">
-    <%= link_to sanitize("Schedule &rarr;"), contest_schedules_path(@contest) %>
+  <div class="pt-8">
+    <%= turbo_frame_tag "contest_setup_content" do %>
+      <div class="flex justify-between">
+        <h2>Schedule</h2>
+
+        <div>
+          <% if current_user.manager? && current_user.managed_contests&.exists?(@contest.id) %>
+            <%= link_to "Configure",
+            contest_setup_path(@contest),
+            class: "btn-secondary-sm",
+            data: {
+              turbo_frame: "contest_setup_content",
+            } %>
+          <% end %>
+
+          <%= link_to "View Full Schedule",
+          @schedule,
+          class: "btn-secondary-sm",
+          data: {
+            turbo_frame: "_top",
+          } %>
+        </div>
+      </div>
+
+      <div class="pt-6">
+        <% if current_user.manages_contest(@contest.id) && @contest.performance_phases&.length == 0 %>
+          <%= render partial: "no_setup" %>
+        <% else %>
+          <ol class="list-decimal text-sm">
+            <% @contest.performance_phases&.each do |phase| %>
+              <li>
+                <div class="flex justify-between border-b">
+                  <div>
+                    <%= phase.name %>
+                    -
+                    <%= phase.duration %>
+                    min.
+                  </div>
+                  <div>
+                    <%= phase.room.name %>
+                    -
+                    <%= phase.room.room_number %>
+                  </div>
+                </div>
+              </li>
+            <% end %>
+          </ol>
+        <% end %>
+      </div>
+    <% end %>
   </div>
+
+  <% if current_user.conducted_ensembles&.any? { |ensemble| @contest.school_classes.include?(ensemble.school.school_class) } %>
+    <%= render partial: "my_entries",
+    locals: {
+      entries: @contest.contest_entries.where(user_id: current_user.id),
+    } %>
+  <% end %>
 </div>

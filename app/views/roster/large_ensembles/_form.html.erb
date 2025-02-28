@@ -13,10 +13,15 @@
   </div>
 
   <div>
-    <%= form.label :performance_class, "Classification" %>
+    <%= form.label :performance_class, "Group Level" %>
     <%= form.select :performance_class_id,
-                performance_classes.map { |t| [t.name, t.id] },
-                { include_blank: "Select a classification" },
+                options_for_select(
+                  @performance_classes.map do |pc|
+                    [display_name_with_abbreviation(pc), pc.id]
+                  end,
+                  selected: @large_ensemble.performance_class_id,
+                ),
+                { include_blank: "Select a group level" },
                 { required: true, class: "text-field", id: :performance_class_id } %>
   </div>
 

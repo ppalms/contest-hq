@@ -4,6 +4,10 @@ class ContestEntriesController < ApplicationController
   before_action :set_breadcrumbs
 
   def index
+    if !current_user.manages_contest(@contest)
+      redirect_to contests_path, alert: "You do not manage this contest."
+    end
+
     @contest_entries = ContestEntry.all
   end
 
@@ -63,6 +67,5 @@ class ContestEntriesController < ApplicationController
   def set_breadcrumbs
     add_breadcrumb("Contests", contests_path)
     add_breadcrumb(@contest.name, @contest)
-    add_breadcrumb("Entries", contest_entries_path)
   end
 end

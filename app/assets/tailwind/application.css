@@ -47,7 +47,7 @@
 }
 
 @utility btn-danger {
-  @apply rounded-lg py-3 px-5 text-red-800 hover:bg-red-100 border border-b-4 border-red-200 block w-full sm:w-auto sm:inline-block hover:border-red-300 transition font-semibold;
+  @apply rounded-lg py-3 px-5 text-red-800 hover:bg-red-100 border border-b-4 border-red-200 block w-full sm:w-auto sm:inline-block hover:border-red-300 transition font-semibold cursor-pointer;
 }
 
 @utility btn-danger-sm {
@@ -209,5 +209,51 @@
 
   input[type='checkbox'] {
     @apply -mt-0.5 size-4 rounded-sm border-gray-400 text-blue-600 focus:ring-blue-600;
+  }
+}
+
+.tabs {
+  @apply flex space-x-4 mt-1 mb-4;
+}
+
+.tab-button {
+  @apply px-4 py-2 bg-gray-200 rounded cursor-pointer;
+}
+
+.tab-button.active {
+  @apply bg-blue-500 text-white;
+}
+
+.tab-content {
+  @apply border border-gray-200 rounded p-4;
+}
+
+.tab-pane {
+  @apply hidden;
+}
+
+.tab-pane.active {
+  @apply block;
+}
+
+.pagy {
+  @apply flex space-x-1 font-semibold text-sm text-gray-500;
+  a:not(.gap) {
+    @apply block rounded-lg px-3 py-1 bg-gray-200;
+    &:hover {
+      @apply bg-gray-300;
+    }
+    &:not([href]) { /* disabled links */
+      @apply text-gray-300 bg-gray-100 cursor-default;
+    }
+    &.current {
+      @apply text-white bg-gray-400;
+    }
+  }
+  label {
+    @apply inline-block whitespace-nowrap bg-gray-200 rounded-lg px-3 py-0.5;
+    input {
+      @apply bg-gray-100 border-none rounded-md;
+    }
   }
 }

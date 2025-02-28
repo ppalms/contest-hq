@@ -1,0 +1,14 @@
+<div class="room-card border rounded-lg p-4" data-controller="room">
+  <div class="flex justify-between items-center mb-4">
+    <h3 class="text-lg font-medium"><%= room.name %></h3>
+    <span class="text-gray-600">Room
+      <%= room.room_number %></span>
+  </div>
+
+  <%= link_to "Edit Room",
+  edit_contest_room_path(@room, @contest, room),
+  class: "btn btn-secondary mt-4",
+  data: {
+    turbo_frame: "contest_room_content",
+  } %>
+</div>

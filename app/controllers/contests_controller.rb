@@ -1,12 +1,14 @@
 class ContestsController < ApplicationController
-  before_action :set_contest, only: %i[ show edit update destroy ]
-  before_action -> { require_role "AccountAdmin" }, except: %i[ index show ]
+  include Pagy::Backend
+
+  before_action :set_contest, only: %i[ show edit update destroy setup schedule ]
+  before_action :set_schedule, only: %i[ show schedule ]
+  before_action -> { require_role "AccountAdmin" }, only: %i[ create destroy ]
   before_action :set_breadcrumbs
 
   # GET /contests or /contests.json
   def index
-    @contests = Contest.all.order(:contest_start)
-    @contests = @contests.where("name ILIKE ?", "%#{params[:name]}%") if params[:name].present?
+    @pagy, @contests = pagy(Contest.where("name ILIKE ?", "%#{params[:name]}%"), limit: 6)
   end
 
   # GET /contests/1 or /contests/1.json
@@ -50,6 +52,13 @@ class ContestsController < ApplicationController
     end
   end
 
+  # Set up contest performance phases
+  def setup
+    add_breadcrumb("Contests", contests_path)
+    add_breadcrumb(@contest.name, @contest)
+    add_breadcrumb("Setup")
+  end
+
   # PATCH/PUT /contests/1/times or /contests/1/times.json
   def set_times
     @contest = Contest.find(params[:contest_id])
@@ -77,7 +86,11 @@ class ContestsController < ApplicationController
   private
 
   def set_contest
-    @contest = Contest.find(params[:id])
+    @contest = Contest.find(params[:id] || params[:contest_id])
+  end
+
+  def set_schedule
+    @schedule = Schedule.find_or_create_by(contest_id: @contest.id)
   end
 
   def contest_params

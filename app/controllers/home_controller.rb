@@ -28,10 +28,6 @@ class HomeController < ApplicationController
     if current_user.director?
       @my_entries = ContestEntry.where(user: current_user)
       @my_scores = []
-
-      @upcoming_contests = Contest
-        .order("contest_start")
-        .limit(5)
     end
 
     if current_user.manager?
@@ -39,6 +35,11 @@ class HomeController < ApplicationController
         .order("contest_start")
         .limit(5)
     end
+
+    @upcoming_contests = Contest
+      .order("contest_start")
+      .where("contest_start > ?", Time.now)
+      .limit(5)
   end
 
   def settings

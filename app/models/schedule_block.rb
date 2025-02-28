@@ -1,12 +1,16 @@
 class ScheduleBlock < ApplicationRecord
   include AccountScoped
 
-  belongs_to :day
+  belongs_to :schedule_day
   belongs_to :room, optional: true
+  belongs_to :performance_phase, optional: true
+  belongs_to :contest_entry, optional: true
 
   validates :start_time, :end_time, presence: true
   validate :end_time_after_start_time
   validate :no_overlap
+
+  scope :by_start_time, -> { order(:start_time) }
 
   private
 
@@ -19,9 +23,9 @@ class ScheduleBlock < ApplicationRecord
   end
 
   def no_overlap
-    return unless day
+    return unless schedule_day
 
-    if day.schedule_blocks.any? do |block|
+    if schedule_day.schedule_blocks.any? do |block|
       block != self &&
         block.room == room &&
         block.start_time < end_time &&

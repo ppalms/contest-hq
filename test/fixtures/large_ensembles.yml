@@ -27,3 +27,243 @@ customer_school_b_ensemble_a:
   performance_class: customer_performance_class_c
   school: customer_school_b
   account: customer
+
+ossaa_broken_arrow_symphony:
+  name: Symphony Orchestra
+  performance_class: ossaa_first
+  school: ossaa_school_broken_arrow
+  account: ossaa
+
+ossaa_union_symphony:
+  name: Symphony Orchestra
+  performance_class: ossaa_first
+  school: ossaa_school_union
+  account: ossaa
+
+ossaa_edmond_north_symphony:
+  name: Symphony Orchestra
+  performance_class: ossaa_first
+  school: ossaa_school_edmond_north
+  account: ossaa
+
+ossaa_jenks_symphony:
+  name: Symphony Orchestra
+  performance_class: ossaa_first
+  school: ossaa_school_jenks
+  account: ossaa
+
+ossaa_norman_north_symphony:
+  name: Symphony Orchestra
+  performance_class: ossaa_first
+  school: ossaa_school_norman_north
+  account: ossaa
+
+ossaa_owasso_symphony:
+  name: Symphony Orchestra
+  performance_class: ossaa_first
+  school: ossaa_school_owasso
+  account: ossaa
+
+ossaa_bartlesville_symphony:
+  name: Symphony Orchestra
+  performance_class: ossaa_second
+  school: ossaa_school_bartlesville
+  account: ossaa
+
+ossaa_stillwater_chamber:
+  name: Chamber Orchestra
+  performance_class: ossaa_second
+  school: ossaa_school_stillwater
+  account: ossaa
+
+ossaa_edmond_memorial_string:
+  name: String Orchestra
+  performance_class: ossaa_first
+  school: ossaa_school_edmond_memorial
+  account: ossaa
+
+ossaa_mustang_chamber:
+  name: Chamber Orchestra
+  performance_class: ossaa_second
+  school: ossaa_school_mustang
+  account: ossaa
+
+ossaa_norman_symphony:
+  name: Symphony Orchestra
+  performance_class: ossaa_first
+  school: ossaa_school_norman
+  account: ossaa
+
+ossaa_westmoore_string:
+  name: String Orchestra
+  performance_class: ossaa_second
+  school: ossaa_school_westmoore
+  account: ossaa
+
+ossaa_booker_t_washington_symphony:
+  name: Symphony Orchestra
+  performance_class: ossaa_first
+  school: ossaa_school_booker_t_washington
+  account: ossaa
+
+ossaa_bishop_kelley_chamber:
+  name: Chamber Orchestra
+  performance_class: ossaa_second
+  school: ossaa_school_bishop_kelley
+  account: ossaa
+
+ossaa_edison_prep_string:
+  name: String Orchestra
+  performance_class: ossaa_second
+  school: ossaa_school_edison_prep
+  account: ossaa
+
+ossaa_deer_creek_edmond_symphony:
+  name: Symphony Orchestra
+  performance_class: ossaa_first
+  school: ossaa_school_deer_creek_edmond
+  account: ossaa
+
+ossaa_edmond_santa_fe_chamber:
+  name: Chamber Orchestra
+  performance_class: ossaa_first
+  school: ossaa_school_edmond_santa_fe
+  account: ossaa
+
+ossaa_ponca_city_string:
+  name: String Orchestra
+  performance_class: ossaa_second
+  school: ossaa_school_ponca_city
+  account: ossaa
+
+ossaa_midwest_city_chamber:
+  name: Chamber Orchestra
+  performance_class: ossaa_third
+  school: ossaa_school_midwest_city
+  account: ossaa
+
+ossaa_carl_albert_string:
+  name: String Orchestra
+  performance_class: ossaa_third
+  school: ossaa_school_carl_albert
+  account: ossaa
+
+ossaa_classen_sas_symphony:
+  name: Symphony Orchestra
+  performance_class: ossaa_second
+  school: ossaa_school_classen_sas_at_ne
+  account: ossaa
+
+ossaa_duncan_string:
+  name: String Orchestra
+  performance_class: ossaa_third
+  school: ossaa_school_duncan
+  account: ossaa
+
+ossaa_guthrie_chamber:
+  name: Chamber Orchestra
+  performance_class: ossaa_third
+  school: ossaa_school_guthrie
+  account: ossaa
+
+ossaa_heritage_hall_string:
+  name: String Orchestra
+  performance_class: ossaa_second
+  school: ossaa_school_heritage_hall
+  account: ossaa
+
+ossaa_holland_hall_symphony:
+  name: Symphony Orchestra
+  performance_class: ossaa_second
+  school: ossaa_school_holland_hall
+  account: ossaa
+
+ossaa_cascia_hall_chamber:
+  name: Chamber Orchestra
+  performance_class: ossaa_second
+  school: ossaa_school_cascia_hall
+  account: ossaa
+
+ossaa_mcguinness_string:
+  name: String Orchestra
+  performance_class: ossaa_third
+  school: ossaa_school_bishop_mcguinness
+  account: ossaa
+
+ossaa_mount_st_mary_chamber:
+  name: Chamber Orchestra
+  performance_class: ossaa_third
+  school: ossaa_school_mount_st_mary
+  account: ossaa
+
+ossaa_lincoln_christian_string:
+  name: String Orchestra
+  performance_class: ossaa_third
+  school: ossaa_school_lincoln_christian
+  account: ossaa
+
+ossaa_metro_christian_chamber:
+  name: Chamber Orchestra
+  performance_class: ossaa_third
+  school: ossaa_school_metro_christian
+  account: ossaa
+
+ossaa_victory_christian_string:
+  name: String Orchestra
+  performance_class: ossaa_fourth
+  school: ossaa_school_victory_christian
+  account: ossaa
+
+ossaa_christian_heritage_chamber:
+  name: Chamber Orchestra
+  performance_class: ossaa_fourth
+  school: ossaa_school_christian_heritage
+  account: ossaa
+
+ossaa_ok_christian_string:
+  name: String Orchestra
+  performance_class: ossaa_fourth
+  school: ossaa_school_ok_christian_school
+  account: ossaa
+
+ossaa_casady_symphony:
+  name: Symphony Orchestra
+  performance_class: ossaa_second
+  school: ossaa_school_casady
+  account: ossaa
+
+ossaa_harding_charter_chamber:
+  name: Chamber Orchestra
+  performance_class: ossaa_third
+  school: ossaa_school_harding_charter_prep
+  account: ossaa
+
+ossaa_harding_fine_arts_string:
+  name: String Orchestra
+  performance_class: ossaa_fourth
+  school: ossaa_school_harding_fine_arts_academy
+  account: ossaa
+
+ossaa_lawton_chamber:
+  name: Chamber Orchestra
+  performance_class: ossaa_third
+  school: ossaa_school_lawton
+  account: ossaa
+
+ossaa_altus_string:
+  name: String Orchestra
+  performance_class: ossaa_fourth
+  school: ossaa_school_altus
+  account: ossaa
+
+ossaa_ardmore_chamber:
+  name: Chamber Orchestra
+  performance_class: ossaa_fourth
+  school: ossaa_school_ardmore
+  account: ossaa
+
+ossaa_chickasha_string:
+  name: String Orchestra
+  performance_class: ossaa_fourth
+  school: ossaa_school_chickasha
+  account: ossaa

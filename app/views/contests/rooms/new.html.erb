@@ -1,0 +1,7 @@
+<%= turbo_frame_tag "contest_room_content" do %>
+  <div class="wide-form-container px-10">
+    <h2>New Room</h2>
+
+    <%= render "form", room: @room, submit_text: "Create Room" %>
+  </div>
+<% end %>

@@ -1,0 +1,31 @@
+<%= form_with(model: room, url: room.new_record? ? contest_rooms_path : contest_room_path(@contest, @room), class: "wide-form") do |form| %>
+  <div class="sm:col-span-2">
+    <%= form.label :name %>
+    <%= form.text_field :name,
+                    placeholder: "Band Room",
+                    class: "text-field",
+                    autofocus: true %>
+  </div>
+
+  <div>
+    <%= form.label :room_number %>
+    <%= form.text_field :room_number, placeholder: "A-123", class: "text-field" %>
+  </div>
+
+  <div class="form-button-container">
+    <%= form.submit submit_text, class: "btn-primary" %>
+    <%= link_to "Cancel",
+    contest_setup_path,
+    data: {
+      turbo_frame: "contest_room_content",
+    },
+    class: "btn-secondary",
+    role: "button" %>
+  </div>
+
+  <% if room.errors.any? %>
+    <div class="pt-2 sm:col-span-2">
+      <%= render "layouts/error_messages", errors: room.errors %>
+    </div>
+  <% end %>
+<% end %>

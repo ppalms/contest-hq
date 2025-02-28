@@ -37,3 +37,40 @@ customer_contest_a_class_6a:
   contest: customer_contest_a
   school_class: customer_school_class_f
   account: customer
+
+# State Orchestra Class Eligibility (All Classes)
+ossaa_state_orchestra_class_6a:
+  contest: ossaa_state_orchestra
+  school_class: ossaa_class_6a
+  account: ossaa
+
+ossaa_state_orchestra_class_5a:
+  contest: ossaa_state_orchestra
+  school_class: ossaa_class_5a
+  account: ossaa
+
+ossaa_state_orchestra_class_4a:
+  contest: ossaa_state_orchestra
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_state_orchestra_class_3a:
+  contest: ossaa_state_orchestra
+  school_class: ossaa_class_3a
+  account: ossaa
+
+ossaa_state_orchestra_class_2a:
+  contest: ossaa_state_orchestra
+  school_class: ossaa_class_2a
+  account: ossaa
+
+# 3A & 4A State Concert Band Contest Class Eligibility
+ossaa_3a_4a_state_band_class_4a:
+  contest: ossaa_3a_4a_state_band
+  school_class: ossaa_class_4a
+  account: ossaa
+
+ossaa_3a_4a_state_band_class_3a:
+  contest: ossaa_3a_4a_state_band
+  school_class: ossaa_class_3a
+  account: ossaa

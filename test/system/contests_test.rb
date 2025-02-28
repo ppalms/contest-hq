@@ -93,12 +93,37 @@ class ContestsTest < ApplicationSystemTestCase
     assert_no_text "New Contest"
   end
 
-  # Scheduling tests
-  test "managers can see contest schedule" do
-    log_in_as(users(:demo_manager_a))
-    visit contests_url
-    click_link(href: contest_path(@contest.id))
+  test "director sees register button for eligible contest" do
+    # Director with a level A group
+    log_in_as(users(:demo_director_a))
 
-    assert_text "Schedule"
+    # Contest allows level A groups
+    elibile_contest = contests(:demo_contest_b)
+    visit contest_url elibile_contest.id
+    assert_text "Register"
+  end
+
+  test "director does not see register button for ineligible contest" do
+    # Director with a level A group
+    log_in_as(users(:demo_director_a))
+
+    # Contest does not allow level A groups
+    ineligible_contest = contests(:demo_contest_c)
+    visit contest_url ineligible_contest.id
+    assert_no_text "Register"
+  end
+
+  test "director cannot view contest entry index" do
+    log_in_as(users(:demo_director_a))
+    visit contest_entries_url(contests(:demo_contest_b))
+    assert_text "Contests"
+    assert_no_text "Contest Entries"
+  end
+
+  test "director only sees their own entries" do
+    log_in_as(users(:demo_director_a))
+    visit contest_url(contests(:demo_contest_a))
+    assert_text "Ironfoundersson"
+    assert_text "Wind Ensemble"
   end
 end

@@ -13,13 +13,20 @@ Rails.application.routes.draw do
     end
 
     patch "times", to: "contests#set_times"
-    get "schedule/setup", to: "schedules#setup"
+    get "schedule_summary", to: "contests#schedule"
+    get "setup", to: "contests#setup"
 
-    resources :schedules, path: "schedule" do
-      resources :rooms, controller: "schedules/rooms"
-      resources :sequences, controller: "schedules/performance_sequences"
-      resources :schedule_days, as: "days", path: "days"
-    end
+    resources :rooms, controller: "contests/rooms"
+
+    get :performance_phases, path: "phases", to: "contests/performance_phases#index"
+    get :performance_phases, as: "phase_bulk_edit", path: "phases/edit", to: "contests/performance_phases#edit"
+    put :performance_phases, as: "phases", path: "phases", to: "contests/performance_phases#update"
+  end
+
+  post "schedules/:id/generate", as: "generate_schedule", to: "schedules#generate"
+  post "schedules/:id/reset", as: "reset_schedule", to: "schedules#reset"
+  resources :schedules, only: [ :show ] do
+    resources :schedule_days, as: "days", path: "days", controller: "schedules/days", only: [ :index, :show ]
   end
 
   namespace :roster do

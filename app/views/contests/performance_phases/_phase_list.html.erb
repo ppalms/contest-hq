@@ -1,0 +1,77 @@
+<%= turbo_frame_tag "contest_phase_content" do %>
+  <div>
+    <div class="sm:flex sm:items-center">
+      <div class="sm:flex-auto -mt-1">
+        <h3>Phases</h3>
+      </div>
+      <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+        <%= link_to "Edit",
+        contest_phase_bulk_edit_path(@contest),
+        class: "btn btn-primary-sm",
+        data: {
+          turbo_frame: "contest_phase_content",
+        } %>
+      </div>
+    </div>
+
+    <div class="mt-8 flow-root">
+      <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+          <div
+            class="
+              border border-gray-200 overflow-hidden shadow-2xs ring-1 ring-black/5
+              sm:rounded-lg
+            "
+          >
+            <table class="min-w-full divide-y divide-gray-300 table-auto">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th
+                    scope="col"
+                    class="
+                      py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6
+                    "
+                  >
+                    Order
+                  </th>
+                  <th
+                    scope="col"
+                    class="
+                      py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6
+                    "
+                  >Name</th>
+                  <th
+                    scope="col"
+                    class="
+                      px-3 py-3.5 text-left text-sm font-semibold text-gray-900
+                    "
+                  >Room</th>
+                  <th
+                    scope="col"
+                    class="
+                      px-3 py-3.5 text-left text-sm font-semibold text-gray-900
+                    "
+                  >Duration (minutes)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 bg-white">
+                <% @contest.performance_phases.each do |phase| %>
+                  <tr>
+                    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-500 sm:pl-6"><%= phase.ordinal %></td>
+                    <td class=" whitespace-nowrap py-4 pr-3 text-sm font-medium text-gray-900 "><%= phase.name || "N/A" %></td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= phase.room.name %>
+                      -
+                      <%= phase.room.room_number %></td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <%= phase.duration %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -14,7 +14,7 @@
     <%= link_to "Cancel",
     (
       if @contest_entry.id == nil
-        contest_entries_path
+        @contest
       else
         contest_entry_path(@contest_entry)
       end

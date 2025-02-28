@@ -29,6 +29,7 @@ class UserManagementTest < ApplicationSystemTestCase
   end
 
   test "should allow multiple roles" do
+    log_in_as(users(:demo_admin_a))
     visit edit_user_url(users(:demo_director_a))
 
     check "Judge"

@@ -1,0 +1,10 @@
+<div class="tabs">
+  <% @schedule.days.each do |day| %>
+    <%= link_to day.schedule_date.strftime("%a %-m/%d"),
+    schedule_day_path(@schedule, day),
+    class: "tab-button #{@selected_day.id == day.id ? "active" : ""}",
+    data: {
+      turbo_frame: "schedule_day_content",
+    } %>
+  <% end %>
+</div>

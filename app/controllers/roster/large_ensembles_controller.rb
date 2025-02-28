@@ -1,5 +1,6 @@
 class Roster::LargeEnsemblesController < ApplicationController
   before_action :set_large_ensemble, only: %i[show edit update destroy]
+  before_action :set_performance_classes, only: %i[show edit new create]
   before_action :set_breadcrumbs
 
   def index
@@ -11,18 +12,16 @@ class Roster::LargeEnsemblesController < ApplicationController
   end
 
   def show
-    @contests = Contest.joins(:contests_school_classes)
-      .where(contests_school_classes: { school_class_id: @large_ensemble.school.school_class.id })
+    @contests = Contest.left_outer_joins(:contests_school_classes)
+      .where("contests_school_classes.school_class_id IS NULL OR contests_school_classes.school_class_id = ?", @large_ensemble.school.school_class.id)
       .distinct
   end
 
   def edit
-    @performance_classes = PerformanceClass.all
   end
 
   def new
     @large_ensemble = LargeEnsemble.new
-    @performance_classes = PerformanceClass.all
 
     if current_user.schools.length == 1
       @large_ensemble.school = current_user.schools.first
@@ -31,7 +30,6 @@ class Roster::LargeEnsemblesController < ApplicationController
 
   def create
     @large_ensemble = LargeEnsemble.new(large_ensemble_params)
-    @performance_classes = PerformanceClass.all
 
     if @large_ensemble.save
       redirect_to roster_large_ensemble_path(@large_ensemble), notice: "Large ensemble was successfully created."
@@ -65,6 +63,10 @@ class Roster::LargeEnsemblesController < ApplicationController
 
     def set_large_ensemble
       @large_ensemble = LargeEnsemble.find(params[:id])
+    end
+
+    def set_performance_classes
+      @performance_classes = PerformanceClass.in_order.all
     end
 
     def large_ensemble_params
