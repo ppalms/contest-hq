@@ -98,7 +98,7 @@ class ContestsTest < ApplicationSystemTestCase
     log_in_as(users(:demo_director_a))
 
     # Contest allows level A groups
-    elibile_contest = contests(:demo_contest_a)
+    elibile_contest = contests(:demo_contest_b)
     visit contest_url elibile_contest.id
     assert_text "Register"
   end
@@ -111,6 +111,13 @@ class ContestsTest < ApplicationSystemTestCase
     ineligible_contest = contests(:demo_contest_c)
     visit contest_url ineligible_contest.id
     assert_no_text "Register"
+  end
+
+  test "director cannot view contest entry index" do
+    log_in_as(users(:demo_director_a))
+    visit contest_entries_url(contests(:demo_contest_b))
+    assert_text "Contests"
+    assert_no_text "Contest Entries"
   end
 
   # Scheduling tests

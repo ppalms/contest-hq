@@ -73,4 +73,8 @@ class User < ApplicationRecord
   def admin?
     sysadmin? || tenant_admin?
   end
+
+  def manages_contest(contest_id)
+    managed_contests.where(id: contest_id).exists?
+  end
 end
