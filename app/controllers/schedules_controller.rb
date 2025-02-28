@@ -12,6 +12,21 @@ class SchedulesController < ApplicationController
 
   # TODO: move to helper
   def generate
+    if @schedule.contest.contest_start < DateTime.now
+      respond_to do |format|
+        format.turbo_stream do
+        flash[:alert] = "Contest has already started. Cannot generate schedule."
+
+        render turbo_stream: [
+          turbo_stream.append("notifications", partial: "shared/notification")
+        ]
+
+        flash.discard(:alert)
+        end
+      end
+      return
+    end
+
     start_time = DateTime.parse(params[:start_time]).utc
     end_time = DateTime.parse(params[:end_time]).utc
 
@@ -74,6 +89,21 @@ class SchedulesController < ApplicationController
   end
 
   def reset
+    if @schedule.contest.contest_start < DateTime.now
+      respond_to do |format|
+        format.turbo_stream do
+        flash[:alert] = "Contest has already started. Cannot reset schedule."
+
+        render turbo_stream: [
+          turbo_stream.append("notifications", partial: "shared/notification")
+        ]
+
+        flash.discard(:alert)
+        end
+      end
+      return
+    end
+
     @schedule.schedule_days.destroy_all
 
     respond_to do |format|
