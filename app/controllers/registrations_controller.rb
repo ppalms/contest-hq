@@ -3,6 +3,8 @@ class RegistrationsController < ApplicationController
 
   def new
     @user = User.new
+    account = Account.find_by(name: "Contest HQ")
+    @user.account = account
   end
 
   def create
@@ -27,7 +29,7 @@ class RegistrationsController < ApplicationController
 
   private
     def user_params
-      params.permit(:first_name, :last_name, :email, :password, :password_confirmation, :role_ids, :time_zone)
+      params.expect(user: [ :first_name, :last_name, :email, :password, :password_confirmation, :time_zone, :account_id, role_ids: [] ])
     end
 
     def send_email_verification
