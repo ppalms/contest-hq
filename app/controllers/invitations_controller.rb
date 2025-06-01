@@ -1,13 +1,7 @@
 class InvitationsController < ApplicationController
   def new
     @user = User.new
-    if current_user.sysadmin?
-      @roles = Role.where(name: %w[Director Judge AccountAdmin]).order(:name)
-    else
-      @roles = Role.where(name: %w[Director Judge]).order(:name)
-    end
-    @organizations = School.all.order(:name)
-
+    set_form_variables
     render :new, locals: { roles: @roles, organizations: @organizations }
   end
 
@@ -17,7 +11,8 @@ class InvitationsController < ApplicationController
       send_invitation_instructions
       redirect_to new_invitation_path, notice: "An invitation email has been sent to #{@user.email}"
     else
-      render :new, status: :unprocessable_entity
+      set_form_variables
+      render :new, status: :unprocessable_entity, locals: { roles: @roles, organizations: @organizations }
     end
   end
 
@@ -25,6 +20,15 @@ class InvitationsController < ApplicationController
 
   def user_params
     params.expect(user: [ :email, :first_name, :last_name, :time_zone, role_ids: [], school_ids: [] ]).merge(password: SecureRandom.base58, verified: true)
+  end
+
+  def set_form_variables
+    if current_user.sysadmin?
+      @roles = Role.where(name: %w[Director Judge AccountAdmin]).order(:name)
+    else
+      @roles = Role.where(name: %w[Director Judge]).order(:name)
+    end
+    @organizations = School.all.order(:name)
   end
 
   def send_invitation_instructions
