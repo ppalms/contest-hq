@@ -7,6 +7,6 @@ class OrganizationsController < ApplicationController
     private
 
     def set_breadcrumbs
-      add_breadcrumb("Organizations", roster_path)
+      add_breadcrumb("Organizations", organizations_path)
     end
 end
