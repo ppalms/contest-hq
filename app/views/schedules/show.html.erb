@@ -43,7 +43,12 @@
     <%= button_to "Reset",
     reset_schedule_path(@schedule),
     method: :post,
-    class: "btn-danger-sm" %>
+    class: "btn-danger-sm",
+    form: {
+      data: {
+        turbo_confirm: "Are you sure?",
+      },
+    } %>
   </div>
 <% end %>
 
