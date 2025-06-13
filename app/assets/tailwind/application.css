@@ -213,15 +213,15 @@
 }
 
 .tabs {
-  @apply flex space-x-4 mt-1 mb-4;
+  @apply flex space-x-4;
 }
 
 .tab-button {
-  @apply px-4 py-2 bg-gray-200 rounded cursor-pointer;
+  @apply px-4 py-2 bg-gray-200 rounded-t cursor-pointer border border-neutral-300;
 }
 
 .tab-button.active {
-  @apply bg-blue-500 text-white;
+  @apply bg-white text-blue-600 border-b-0 font-semibold;
 }
 
 .tab-content {
