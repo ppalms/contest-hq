@@ -40,7 +40,7 @@ Run `bin/rails` to open the Rails console and `setup_session` to start a test se
 
 - Run e2e tests after making changes
 
-  - `bin/rails e2e:run`
+  - `bin/rails test:system`
 
 - Run in production mode (e.g., to test custom error pages)
 
