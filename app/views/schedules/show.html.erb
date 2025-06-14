@@ -17,39 +17,54 @@
       method: :post,
       class: "btn-primary-sm" %>
 
-      <%= button_to "Reset",
-      reset_schedule_path(@schedule),
-      method: :post,
-      class: "btn-danger-sm",
-      form: {
-        data: {
-          turbo_confirm: "Are you sure?",
-        },
-      } %>
+      <div class="flex space-x-2">
+        <%# TODO: add contest/user association %>
+        <%# if current_user.manager? && current_user.managed_contests&.exists?(@contest.id) %>
+        <% if current_user.manager? %>
+          <%= link_to "Configure",
+          contest_setup_path(@schedule.contest.id),
+          class: "btn-secondary-sm",
+          data: {
+            turbo_frame: "contest_setup_content",
+          } %>
+        <% end %>
+
+        <%= button_to "Reset",
+        reset_schedule_path(@schedule),
+        method: :post,
+        class: "btn-danger-sm",
+        form: {
+          data: {
+            turbo_confirm: "Are you sure?",
+          },
+        } %>
+      </div>
     </div>
   <% end %>
 
-  <div>
-    <ol class="list-decimal text-sm">
-      <% @schedule.contest.performance_phases&.each do |step| %>
-        <li>
-          <div class="flex justify-between border-b">
-            <div>
-              <%= step.name %>
-              -
-              <%= step.duration %>
-              min.
+  <%= turbo_frame_tag "contest_setup_content" do %>
+    <div>
+      <ol class="list-decimal text-sm pl-4">
+        <% @schedule.contest.performance_phases&.each do |step| %>
+          <li>
+            <div class="flex justify-between border-b">
+              <div>
+                <%= step.name %>
+                -
+                <%= step.duration %>
+                min.
+              </div>
+              <div>
+                <%= step.room.name %>
+                -
+                <%= step.room.room_number %>
+              </div>
             </div>
-            <div>
-              <%= step.room.name %>
-              -
-              <%= step.room.room_number %>
-            </div>
-          </div>
-        </li>
-      <% end %>
-    </ol>
-  </div>
+          </li>
+        <% end %>
+      </ol>
+    </div>
+  <% end %>
 </div>
 
 <%= turbo_frame_tag "schedule_day_content" do %>

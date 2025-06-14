@@ -225,7 +225,7 @@
 }
 
 .tab-content {
-  @apply border border-gray-200 rounded p-4;
+  @apply bg-white rounded-r-lg rounded-b-lg border border-neutral-300 overflow-hidden -mt-px;
 }
 
 .tab-pane {

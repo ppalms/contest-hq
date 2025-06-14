@@ -1,16 +1,5 @@
 <%= turbo_frame_tag "contest_setup_content" do %>
   <div data-controller="contest-setup">
-    <div class="flex justify-between">
-      <h2>Schedule Setup</h2>
-
-      <%= link_to "Done",
-      contest_schedule_summary_path(@contest),
-      class: "btn-secondary-sm",
-      data: {
-        turbo_frame: "contest_setup_content",
-      } %>
-    </div>
-
     <div class="tabs">
       <button
         class="tab-button active"
@@ -26,7 +15,16 @@
       >Phases</button>
     </div>
 
-    <div class="tab-content bg-white">
+    <div class="relative">
+      <%= link_to "Done",
+      contest_schedule_summary_path(@contest),
+      class: "btn-secondary-sm absolute bottom-2 right-0",
+      data: {
+        turbo_frame: "contest_setup_content",
+      } %>
+    </div>
+
+    <div class="tab-content bg-white -mt-px">
       <div
         id="contest_room_tab"
         class="tab-pane active"

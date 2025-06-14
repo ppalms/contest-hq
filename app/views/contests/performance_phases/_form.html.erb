@@ -1,24 +1,24 @@
-<div class="wide-form-container -mt-2">
+<div class="wide-form-container flex justify-center">
   <%= form_with(model: @contest, 
                 url: contest_phases_path(@contest), 
                 method: :put,
                 class: "wide-form",
                 data: { controller: "contest-setup" }) do |f| %>
-    <div class="mb-4 col-span-2 flex justify-center">
+    <div class="col-span-2 flex justify-end">
       <%= button_tag type: "button",
           class: "btn-secondary-sm",
           data: { action: "contest-setup#addPhase" } do %>
-        Add
+        Add Phase
       <% end %>
     </div>
 
-    <table class="col-span-2">
-      <thead class="text-sm">
+    <table class="col-span-2 px-2">
+      <thead class="text-sm text-left">
         <tr>
-          <th scope="col">Order</th>
-          <th scope="col">Name</th>
-          <th scope="col">Room</th>
-          <th scope="col">Duration</th>
+          <th scope="col" class="pl-1">Order</th>
+          <th scope="col" class="pl-1">Name</th>
+          <th scope="col" class="pl-1">Room</th>
+          <th scope="col" class="pl-1">Duration</th>
         </tr>
       </thead>
       <tbody data-contest-setup-target="phases">
@@ -31,18 +31,20 @@
       </tbody>
     </table>
 
-    <template data-contest-setup-target="template">
-      <%= f.fields_for :performance_phases, PerformancePhase.new, child_index: 'NEW_RECORD' do |phase_f| %>
-        <%= render "phase_fields",
-        f: phase_f,
-        phases: @contest.performance_phases,
-        rooms: @contest.rooms %>
-      <% end %>
-    </template>
+    <div class="col-span-2">
+      <template data-contest-setup-target="template">
+        <%= f.fields_for :performance_phases, PerformancePhase.new, child_index: 'NEW_RECORD' do |phase_f| %>
+          <%= render "phase_fields",
+          f: phase_f,
+          phases: @contest.performance_phases,
+          rooms: @contest.rooms %>
+        <% end %>
+      </template>
 
-    <div class="col-span-2 mx-auto mt-4">
-      <%= f.submit "Save", class: "btn-primary-sm" %>
-      <%= link_to "Cancel", contest_setup_path(@contest), class: "btn-secondary-sm" %>
+      <div class="flex justify-center space-x-2">
+        <%= f.submit "Save", class: "btn-primary-sm" %>
+        <%= link_to "Cancel", contest_setup_path(@contest), class: "btn-secondary-sm" %>
+      </div>
     </div>
 
     <% if @contest.errors.any? %>
