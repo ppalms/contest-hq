@@ -1,0 +1,36 @@
+<%= turbo_frame_tag "schedule_action_content" do %>
+  <div class="flex justify-between pb-2">
+    <!-- TODO: user selects start/end times -->
+    <% if schedule.days.length == 0 && schedule.contest.performance_phases.any? %>
+      <%= button_to "Generate contest schedule",
+      generate_schedule_path(
+        schedule,
+        start_time: schedule.contest.contest_start.beginning_of_day + (8 * 60 * 60),
+        end_time: schedule.contest.contest_end.beginning_of_day + (17 * 60 * 60),
+      ),
+      method: :post,
+      class: "btn-primary-sm" %>
+    <% else %>
+      <%= button_to "Reset contest schedule",
+      reset_schedule_path(schedule),
+      method: :post,
+      class: "btn-danger-sm",
+      form: {
+        data: {
+          turbo_confirm: "Are you sure?",
+        },
+      } %>
+    <% end %>
+
+    <%# TODO: add contest/user association %>
+    <%# if current_user.manager? && current_user.managed_contests&.exists?(@contest.id) %>
+    <% if current_user.manager? %>
+      <%= link_to "Configure",
+      contest_setup_path(schedule.contest.id),
+      class: class_names("btn-secondary-sm"),
+      data: {
+        turbo_frame: "contest_setup_content",
+      } %>
+    <% end %>
+  </div>
+<% end %>

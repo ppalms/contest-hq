@@ -39,7 +39,7 @@ class User < ApplicationRecord
   end
 
   before_validation on: :create do
-    self.account = Current.account
+    self.account ||= Current.account
   end
 
   after_update if: :password_digest_previously_changed? do

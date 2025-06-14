@@ -39,7 +39,7 @@
 }
 
 @utility btn-secondary {
-  @apply rounded-lg py-3 px-5 bg-gray-100 hover:bg-gray-200 border border-b-4 border-gray-400 block text-center sm:inline-block hover:border-gray-500 transition font-medium;
+  @apply rounded-lg py-3 px-5 bg-gray-100 hover:bg-gray-200 border border-b-4 border-gray-400 block text-center sm:inline-block hover:border-gray-500 transition font-medium cursor-pointer;
 }
 
 @utility btn-secondary-sm {
@@ -213,19 +213,19 @@
 }
 
 .tabs {
-  @apply flex space-x-4 mt-1 mb-4;
+  @apply flex space-x-2;
 }
 
 .tab-button {
-  @apply px-4 py-2 bg-gray-200 rounded cursor-pointer;
+  @apply px-4 py-2 bg-gray-200 rounded-t cursor-pointer border border-neutral-300 text-sm;
 }
 
 .tab-button.active {
-  @apply bg-blue-500 text-white;
+  @apply bg-white text-blue-600 border-b-0 font-semibold;
 }
 
 .tab-content {
-  @apply border border-gray-200 rounded p-4;
+  @apply bg-white rounded-r-lg rounded-b-lg border border-neutral-300 overflow-hidden -mt-px;
 }
 
 .tab-pane {

@@ -28,6 +28,9 @@
   <% end %>
 
   <div>
-    <%= link_to "Forgot your password?", new_identity_password_reset_path %>
+    <%= link_to "Create an account", sign_up_path, class: "hover:underline" %><br/>
+    <%= link_to "Forgot your password?",
+    new_identity_password_reset_path,
+    class: "hover:underline" %>
   </div>
 </div>

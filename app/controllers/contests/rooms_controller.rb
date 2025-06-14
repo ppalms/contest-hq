@@ -109,7 +109,9 @@ module Contests
     end
 
     def authorize_manager
-      unless current_user.manager? && current_user.managed_contests&.exists?(params[:contest_id])
+      # TODO: add contest/user association
+      # unless current_user.manager? && current_user.managed_contests&.exists?(params[:contest_id])
+      unless current_user.manager?
             redirect_to contest_schedule_summary_path(@contest),
               alert: "You must be a manager of this contest to access this area",
               turbo_frame: "contest_setup_content"

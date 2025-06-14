@@ -1,6 +1,6 @@
 <% if day.present? %>
   <% day.blocks_by_large_ensemble.each do |large_ensemble, blocks| %>
-    <div class="flex justify-between border-b">
+    <div class="flex justify-between border-b border-neutral-300 py-2 px-4">
       <div class="flex-col">
         <div>
           <%= large_ensemble.school.name %>

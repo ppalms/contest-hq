@@ -1,4 +1,5 @@
 <tr
+  class="py-1"
   data-contest-setup-target="phase"
   data-new-record="<%= f.object&.persisted? ? 'false' : 'true' %>"
 >
@@ -6,26 +7,26 @@
     <%= f.hidden_field :id if f.object&.persisted? %>
     <%= f.hidden_field :_destroy, data: { contest_setup_target: "destroy" } %>
   </td>
-  <td class="w-12">
+  <td class="px-0.5 py-0.5">
     <%= f.text_field :ordinal, class: "text-field" %>
   </td>
-  <td>
+  <td class="px-0.5">
     <%= f.text_field :name,
                  class: "text-field",
                  data: {
                    contest_setup_target: "phaseName",
                  } %>
   </td>
-  <td class="w-72">
+  <td class="px-0.5">
     <%= f.select :room_id,
              rooms&.order(:name).map { |t| [t.name, t.id] },
              { include_blank: "Select a room" },
              { required: true, class: "text-field" } %>
   </td>
-  <td class="w-20">
+  <td class="px-0.5">
     <%= f.text_field :duration, class: "text-field text-right", required: true %>
   </td>
-  <td>
+  <td class="px-0.5">
     <%= button_tag type: "button",
         class: "btn-danger-sm",
         data: { action: "contest-setup#removePhase" } do %>

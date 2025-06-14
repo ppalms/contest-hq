@@ -4,7 +4,7 @@ module AccountScoped
   included do
     belongs_to :account
 
-    # Ignore account scope for a block of code
+    # Ignore account scope for a block of code and then reapply
     def self.unscoped_by_account
       old_scope = default_scopes
       self.default_scopes = []

@@ -3,9 +3,11 @@
     <%= render "layouts/error_messages", errors: @user.errors %>
   <% end %>
 
-  <h1>Sign up</h1>
+  <h1>New user account</h1>
 
-  <%= form_with(url: sign_up_path, class: "simple-form") do |form| %>
+  <%= form_with(model: @user, url: sign_up_path, class: "simple-form") do |form| %>
+    <%= form.hidden_field :account_id, value: @user.account_id %>
+
     <div>
       <%= form.label :first_name %>
       <%= form.text_field :first_name,
@@ -49,7 +51,7 @@
                           class: "text-field" %>
     </div>
 
-    <div>
+    <div class="hidden">
       <%= form.label :role_ids, "Roles", style: "display: block" %>
       <div
         class="
@@ -81,6 +83,7 @@
 
     <div>
       <%= form.submit "Sign up", class: "btn-primary" %>
+      <%= link_to "Cancel", sign_in_path, class: "btn-secondary" %>
     </div>
   <% end %>
 </div>
@@ -88,8 +91,11 @@
 <script>
   function setDefaultTimeZone() {
     const defaultTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    document.querySelector("#time_zone").value = defaultTimeZone;
+    const time_zone_field = document.querySelector("#user_time_zone")
+    if (time_zone_field && !time_zone_field.value) {
+      time_zone_field.value = defaultTimeZone;
+    }
   }
 
-  document.addEventListener("DOMContentLoaded", setDefaultTimeZone);
+  document.addEventListener("turbo:render", setDefaultTimeZone);
 </script>

@@ -34,6 +34,7 @@ class SchedulesController < ApplicationController
 
     # Create schedule blocks for each entry based on contest performance phases
     #
+    # TODO: write tests
     # Each contest entry should have a schedule block for each phase
     # Schedule blocks cannot overlap within a room
     # No gaps between schedule blocks for each entry
@@ -43,6 +44,7 @@ class SchedulesController < ApplicationController
     current_day = @schedule.days.first
 
     entries.each_with_index do |entry, index|
+      # TODO: increment day based on performance end time
       increment_day = index > 0 && index % 20 == 0
       if increment_day == true
         next_day = @schedule.days.find_by(schedule_date: current_day.schedule_date + 1)
@@ -80,7 +82,8 @@ class SchedulesController < ApplicationController
 
         render turbo_stream: [
           turbo_stream.append("notifications", partial: "shared/notification"),
-          turbo_stream.replace("schedule_day_content", partial: "schedules/days/schedule_blocks", locals: { schedule: @schedule, selected_day: @schedule.days.first })
+          turbo_stream.replace("schedule_day_content", partial: "schedules/days/schedule_blocks", locals: { schedule: @schedule, selected_day: @schedule.days.first }),
+          turbo_stream.replace("schedule_action_content", partial: "schedules/action_buttons", locals: { schedule: @schedule })
         ]
 
         flash.discard(:notice)
@@ -112,7 +115,8 @@ class SchedulesController < ApplicationController
 
         render turbo_stream: [
           turbo_stream.append("notifications", partial: "shared/notification"),
-          turbo_stream.replace("schedule_day_content", partial: "schedules/days/schedule_blocks", locals: { schedule: @schedule, selected_day: nil })
+          turbo_stream.replace("schedule_day_content", partial: "schedules/days/schedule_blocks", locals: { schedule: @schedule, selected_day: nil }),
+          turbo_stream.replace("schedule_action_content", partial: "schedules/action_buttons", locals: { schedule: @schedule })
         ]
 
         flash.discard(:notice)
@@ -140,7 +144,8 @@ class SchedulesController < ApplicationController
   end
 
   def authorize_manager!
-    unless current_user.managed_contests&.exists?(@schedule.contest.id)
+    # TODO: add contest/user association
+    unless current_user.manager?
       flash[:alert] = "You must be a manager of this contest to access this area"
       redirect_to root_path
     end
