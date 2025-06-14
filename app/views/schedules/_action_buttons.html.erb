@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "schedule_action_content" do %>
   <div class="flex justify-between pb-2">
     <!-- TODO: user selects start/end times -->
-    <% if schedule.days.length == 0 %>
+    <% if schedule.days.length == 0 && schedule.contest.performance_phases.any? %>
       <%= button_to "Generate contest schedule",
       generate_schedule_path(
         schedule,
