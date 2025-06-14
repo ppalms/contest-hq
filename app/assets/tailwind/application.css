@@ -39,7 +39,7 @@
 }
 
 @utility btn-secondary {
-  @apply rounded-lg py-3 px-5 bg-gray-100 hover:bg-gray-200 border border-b-4 border-gray-400 block text-center sm:inline-block hover:border-gray-500 transition font-medium;
+  @apply rounded-lg py-3 px-5 bg-gray-100 hover:bg-gray-200 border border-b-4 border-gray-400 block text-center sm:inline-block hover:border-gray-500 transition font-medium cursor-pointer;
 }
 
 @utility btn-secondary-sm {
@@ -217,7 +217,7 @@
 }
 
 .tab-button {
-  @apply px-4 py-2 bg-gray-200 rounded-t cursor-pointer border border-neutral-300;
+  @apply px-4 py-2 bg-gray-200 rounded-t cursor-pointer border border-neutral-300 text-sm;
 }
 
 .tab-button.active {

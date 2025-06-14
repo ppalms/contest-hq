@@ -5,13 +5,13 @@
       Schedule</h1>
   </div>
 
-  <%= turbo_frame_tag "schedule_action_content" do %>
-    <% if current_user.manager? && @schedule.contest.performance_phases.any? && @schedule.contest.contest_start > DateTime.now %>
-      <%= render partial: "schedules/action_buttons", locals: { schedule: @schedule } %>
-    <% end %>
-  <% end %>
-
   <%= turbo_frame_tag "contest_setup_content" do %>
+    <%= turbo_frame_tag "schedule_action_content" do %>
+      <% if current_user.manager? %>
+        <%= render partial: "schedules/action_buttons", locals: { schedule: @schedule } %>
+      <% end %>
+    <% end %>
+
     <div class="pt-4">
       <ol class="list-decimal text-sm pl-4">
         <% @schedule.contest.performance_phases&.each do |step| %>
