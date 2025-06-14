@@ -5,6 +5,30 @@
       Schedule</h1>
   </div>
 
+  <% if current_user.manager? && @schedule.contest.performance_phases.any? && @schedule.contest.contest_start > DateTime.now %>
+    <div class="flex justify-between pb-2">
+      <!-- TODO: user selects start/end times -->
+      <%= button_to "Generate contest schedule",
+      generate_schedule_path(
+        @schedule,
+        start_time: @schedule.contest.contest_start.beginning_of_day + (8 * 60 * 60),
+        end_time: @schedule.contest.contest_end.beginning_of_day + (17 * 60 * 60),
+      ),
+      method: :post,
+      class: "btn-primary-sm" %>
+
+      <%= button_to "Reset",
+      reset_schedule_path(@schedule),
+      method: :post,
+      class: "btn-danger-sm",
+      form: {
+        data: {
+          turbo_confirm: "Are you sure?",
+        },
+      } %>
+    </div>
+  <% end %>
+
   <div>
     <ol class="list-decimal text-sm">
       <% @schedule.contest.performance_phases&.each do |step| %>
@@ -27,30 +51,6 @@
     </ol>
   </div>
 </div>
-
-<% if current_user.manager? && @schedule.contest.performance_phases.any? && @schedule.contest.contest_start > DateTime.now %>
-  <div class="flex justify-between pb-2">
-    <!-- TODO: user selects start/end times -->
-    <%= button_to "Generate contest schedule",
-    generate_schedule_path(
-      @schedule,
-      start_time: @schedule.contest.contest_start.beginning_of_day + (8 * 60 * 60),
-      end_time: @schedule.contest.contest_end.beginning_of_day + (17 * 60 * 60),
-    ),
-    method: :post,
-    class: "btn-primary-sm" %>
-
-    <%= button_to "Reset",
-    reset_schedule_path(@schedule),
-    method: :post,
-    class: "btn-danger-sm",
-    form: {
-      data: {
-        turbo_confirm: "Are you sure?",
-      },
-    } %>
-  </div>
-<% end %>
 
 <%= turbo_frame_tag "schedule_day_content" do %>
   <%= render partial: "schedules/days/schedule_blocks",
