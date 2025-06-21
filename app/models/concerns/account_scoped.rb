@@ -4,6 +4,10 @@ module AccountScoped
   included do
     belongs_to :account
 
+    before_validation on: :create do
+      self.account ||= Current.account
+    end
+
     # Ignore account scope for a block of code and then reapply
     def self.unscoped_by_account
       old_scope = default_scopes

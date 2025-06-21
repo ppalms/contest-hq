@@ -38,10 +38,6 @@ class User < ApplicationRecord
     self.verified = false
   end
 
-  before_validation on: :create do
-    self.account ||= Current.account
-  end
-
   after_update if: :password_digest_previously_changed? do
     sessions.where.not(id: Current.session).delete_all
   end
