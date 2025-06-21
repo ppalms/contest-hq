@@ -26,7 +26,7 @@ class ContestsController < ApplicationController
 
   # POST /contests or /contests.json
   def create
-    @contest = Contest.build(contest_params)
+    @contest = Contest.new(contest_params)
 
     respond_to do |format|
       if @contest.save

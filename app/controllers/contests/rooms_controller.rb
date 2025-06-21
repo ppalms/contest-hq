@@ -10,7 +10,7 @@ module Contests
     end
 
     def new
-      @room = @contest.rooms.build
+      @room = @contest.rooms.new
     end
 
     def create
