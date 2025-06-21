@@ -23,7 +23,7 @@ class Schedule < ApplicationRecord
         min: end_time.min
       )
 
-      day = days.build(
+      day = days.new(
         schedule_date: date,
         start_time: contest_start_time,
         end_time: contest_end_time
