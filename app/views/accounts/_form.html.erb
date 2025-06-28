@@ -1,0 +1,17 @@
+<%= form_with(model: account, class: "wide-form") do |form| %>
+  <div class="sm:col-span-2">
+    <%= form.label :name %>
+    <%= form.text_field :name, class: "text-field", autofocus: true %>
+  </div>
+
+  <div class="form-button-container">
+    <%= form.submit class: "btn-primary" %>
+    <%= link_to "Cancel", account, class: "btn-secondary", role: "button" %>
+  </div>
+
+  <% if account.errors.any? %>
+    <div class="pt-2 sm:col-span-2">
+      <%= render "layouts/error_messages", errors: account.errors %>
+    </div>
+  <% end %>
+<% end %>

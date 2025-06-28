@@ -13,7 +13,7 @@
     <div class="px-4 py-5 sm:p-6">
       <% @new_accounts&.each do |account| %>
         <div>
-          <%= account.name %>
+          <%= link_to account.name, account %>
         </div>
       <% end %>
     </div>
