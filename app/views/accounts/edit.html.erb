@@ -1,0 +1,7 @@
+<% content_for :title, "Editing account" %>
+
+<div class="wide-form-container" id="edit_<%= dom_id @account %>">
+  <h1>Editing account</h1>
+
+  <%= render "form", account: @account %>
+</div>

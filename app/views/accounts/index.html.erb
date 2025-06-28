@@ -1,0 +1,24 @@
+<% content_for :title, "Accounts" %>
+
+<div class="py-8 space-y-4" id="accounts">
+  <div class="flex justify-between">
+    <h1>Accounts</h1>
+
+    <% if current_user.admin? %>
+      <div class="flex gap-2">
+        <%= link_to "New Account", new_account_path, class: "btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div
+    id="account_list"
+    class="rounded-md bg-white border border-neutral-200 shadow-2xs"
+  >
+    <% if @accounts.empty? %>
+      <p class="text-center">No accounts found.</p>
+    <% else %>
+      <%= render "accounts/list", locals: { accounts: @accounts } %>
+    <% end %>
+  </div>
+</div>
