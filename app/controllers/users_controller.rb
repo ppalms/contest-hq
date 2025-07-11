@@ -14,7 +14,7 @@ class UsersController < ApplicationController
   end
 
   def edit
-    if current_user.account != @user.account
+    if current_user.account != @user.account && !current_user.sysadmin?
       redirect_to root_path, status: :forbidden; return
     end
 
@@ -25,7 +25,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    if current_user.account != @user.account
+    if current_user.account != @user.account && !current_user.sysadmin?
       redirect_to root_path, status: :forbidden; return
     end
 
