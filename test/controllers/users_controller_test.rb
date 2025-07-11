@@ -9,16 +9,16 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "sysadmin should access edit user from any account" do
-    sign_in @sysadmin
-    
+    sign_in_as @sysadmin
+
     # Sysadmin should be able to edit user from customer account
     get edit_user_url(@customer_director)
     assert_response :success
   end
 
   test "sysadmin should update user from any account" do
-    sign_in @sysadmin
-    
+    sign_in_as @sysadmin
+
     # Sysadmin should be able to update user from customer account
     patch user_url(@customer_director), params: {
       user: {
@@ -31,16 +31,16 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "account admin should not access edit user from different account" do
-    sign_in @demo_admin
-    
+    sign_in_as @demo_admin
+
     # Demo account admin should not be able to edit user from customer account
     get edit_user_url(@customer_director)
     assert_response :forbidden
   end
 
   test "account admin should not update user from different account" do
-    sign_in @demo_admin
-    
+    sign_in_as @demo_admin
+
     # Demo account admin should not be able to update user from customer account
     patch user_url(@customer_director), params: {
       user: {
@@ -49,11 +49,5 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       }
     }
     assert_response :forbidden
-  end
-
-  private
-
-  def sign_in(user)
-    post sign_in_url, params: { email: user.email, password: "Secret1*3*5*" }
   end
 end
