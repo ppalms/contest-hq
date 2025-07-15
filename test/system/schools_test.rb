@@ -74,4 +74,27 @@ class SchoolsTest < ApplicationSystemTestCase
     visit new_organizations_school_url
     assert_text "You do not have permission to create schools."
   end
+
+  test "should have search functionality" do
+    visit organizations_schools_url
+    assert_selector "input[placeholder='Search by school name']"
+    assert_selector "input[value='Search']"
+    assert_link "Reset"
+  end
+
+  test "should search schools by name" do
+    visit organizations_schools_url
+    fill_in "name", with: "Kennedy"
+    click_on "Search"
+    assert_text "Kennedy High School"
+    assert_no_text "Washington High School"
+  end
+
+  test "schools should be sorted alphabetically by name" do
+    visit organizations_schools_url
+    # Get all school names from the page
+    school_names = all('p.font-semibold.text-gray-900').map(&:text)
+    # Verify they are sorted alphabetically
+    assert_equal school_names.sort, school_names, "Schools should be sorted alphabetically by name"
+  end
 end
