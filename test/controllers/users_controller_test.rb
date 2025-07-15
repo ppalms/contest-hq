@@ -35,7 +35,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
     # Demo account admin should not be able to edit user from customer account
     get edit_user_url(@customer_director)
-    assert_response :forbidden
+    assert_response :not_found
   end
 
   test "account admin should not update user from different account" do
@@ -48,6 +48,6 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
         last_name: "Name"
       }
     }
-    assert_response :forbidden
+    assert_response :not_found
   end
 end
