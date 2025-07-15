@@ -93,7 +93,7 @@ class SchoolsTest < ApplicationSystemTestCase
   test "schools should be sorted alphabetically by name" do
     visit organizations_schools_url
     # Get all school names from the page
-    school_names = all('p.font-semibold.text-gray-900').map(&:text)
+    school_names = all("p.font-semibold.text-gray-900").map(&:text)
     # Verify they are sorted alphabetically
     assert_equal school_names.sort, school_names, "Schools should be sorted alphabetically by name"
   end
