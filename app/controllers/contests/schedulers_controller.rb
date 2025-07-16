@@ -6,6 +6,7 @@ module Contests
     before_action :set_contest
     before_action :set_contest_scheduler, only: [ :destroy ]
     before_action -> { require_role "AccountAdmin" }
+    before_action :set_breadcrumbs
 
     def index
       @contest_schedulers = @contest.contest_schedulers.includes(:user)
@@ -48,6 +49,12 @@ module Contests
 
     def contest_scheduler_params
       params.require(:contest_scheduler).permit(:user_id)
+    end
+
+    def set_breadcrumbs
+      add_breadcrumb("Contests", contests_path)
+      add_breadcrumb(@contest.name, @contest) if @contest
+      add_breadcrumb("Schedulers")
     end
   end
 end

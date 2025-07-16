@@ -84,4 +84,12 @@ class User < ApplicationRecord
 
     managed_contests&.exists?(contest_id)
   end
+
+  def schedules_contest(contest_id)
+    if !scheduler?
+      return false
+    end
+
+    scheduled_contests&.exists?(contest_id)
+  end
 end
