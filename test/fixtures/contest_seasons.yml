@@ -1,0 +1,19 @@
+demo_season_a:
+  name: "2024"
+  account: demo
+
+demo_season_b:
+  name: "2025"
+  account: demo
+
+customer_season_a:
+  name: "2024"
+  account: customer
+
+ossaa_season_a:
+  name: "2024"
+  account: ossaa
+
+ossaa_season_b:
+  name: "2025"
+  account: ossaa

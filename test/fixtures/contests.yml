@@ -2,24 +2,28 @@ demo_contest_a:
   name: District Orchestra
   contest_start: 2024-10-23 13:00:00
   contest_end: 2024-10-23 22:00:00
+  contest_season: demo_season_a
   account: demo
 
 demo_contest_b:
   name: Regional Orchestra
   contest_start: 2024-10-23 14:00:00
   contest_end: 2024-10-23 17:00:00
+  contest_season: demo_season_a
   account: demo
 
 demo_contest_c:
   name: 2A, 3A State Orchestra
   contest_start: 2025-02-18 14:00:00
   contest_end: 2025-02-19 23:00:00
+  contest_season: demo_season_b
   account: demo
 
 customer_contest_a:
   name: All State
   contest_start: 2024-11-01 12:00:00
   contest_end: 2024-11-02 20:00:00
+  contest_season: customer_season_a
   account: customer
 
 ossaa_ne_regional_marching:
@@ -27,6 +31,7 @@ ossaa_ne_regional_marching:
   contest_start: 2024-10-15 13:00:00
   contest_end: 2024-10-16 03:00:00
   entry_deadline: 2024-09-19 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_se_regional_marching:
@@ -34,6 +39,7 @@ ossaa_se_regional_marching:
   contest_start: 2024-10-16 13:00:00
   contest_end: 2024-10-17 03:00:00
   entry_deadline: 2024-09-19 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_sw_regional_marching:
@@ -41,6 +47,7 @@ ossaa_sw_regional_marching:
   contest_start: 2024-10-22 13:00:00
   contest_end: 2024-10-23 03:00:00
   entry_deadline: 2024-09-19 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_nw_regional_marching:
@@ -48,6 +55,7 @@ ossaa_nw_regional_marching:
   contest_start: 2024-10-23 13:00:00
   contest_end: 2024-10-24 03:00:00
   entry_deadline: 2024-09-19 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_west_regional_marching:
@@ -55,6 +63,7 @@ ossaa_west_regional_marching:
   contest_start: 2024-10-29 13:00:00
   contest_end: 2024-10-30 03:00:00
   entry_deadline: 2024-09-19 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_east_regional_marching:
@@ -62,6 +71,7 @@ ossaa_east_regional_marching:
   contest_start: 2024-10-30 13:00:00
   contest_end: 2024-10-31 03:00:00
   entry_deadline: 2024-09-19 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_string_orchestra:
@@ -69,6 +79,7 @@ ossaa_string_orchestra:
   contest_start: 2024-11-19 14:00:00
   contest_end: 2024-11-21 04:00:00
   entry_deadline: 2024-10-17 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_state_orchestra:
@@ -76,6 +87,7 @@ ossaa_state_orchestra:
   contest_start: 2025-02-18 14:00:00
   contest_end: 2025-02-20 04:00:00
   entry_deadline: 2025-01-21 14:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_3a_4a_state_band:
@@ -83,6 +95,7 @@ ossaa_3a_4a_state_band:
   contest_start: 2025-04-01 13:00:00
   contest_end: 2025-04-05 03:00:00
   entry_deadline: 2025-03-13 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_state_vocal_5a_6a_e:
@@ -90,6 +103,7 @@ ossaa_state_vocal_5a_6a_e:
   contest_start: 2025-04-02 13:00:00
   contest_end: 2025-04-03 03:00:00
   entry_deadline: 2025-03-13 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_2a_3a_4a_state_chorus:
@@ -97,6 +111,7 @@ ossaa_2a_3a_4a_state_chorus:
   contest_start: 2025-04-03 13:00:00
   contest_end: 2025-04-05 03:00:00
   entry_deadline: 2025-03-13 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_2a_state_band:
@@ -104,6 +119,7 @@ ossaa_2a_state_band:
   contest_start: 2025-04-04 13:00:00
   contest_end: 2025-04-05 03:00:00
   entry_deadline: 2025-03-13 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_west_mh_5a_chorus:
@@ -111,6 +127,7 @@ ossaa_west_mh_5a_chorus:
   contest_start: 2025-04-08 13:00:00
   contest_end: 2025-04-09 03:00:00
   entry_deadline: 2025-03-13 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_east_mh_5a_chorus:
@@ -118,6 +135,7 @@ ossaa_east_mh_5a_chorus:
   contest_start: 2025-04-09 13:00:00
   contest_end: 2025-04-10 03:00:00
   entry_deadline: 2025-03-13 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_west_6a_chorus:
@@ -125,6 +143,7 @@ ossaa_west_6a_chorus:
   contest_start: 2025-04-09 13:00:00
   contest_end: 2025-04-10 03:00:00
   entry_deadline: 2025-03-13 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_east_6a_chorus:
@@ -132,6 +151,7 @@ ossaa_east_6a_chorus:
   contest_start: 2025-04-10 13:00:00
   contest_end: 2025-04-11 03:00:00
   entry_deadline: 2025-03-13 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_west_e_ee_eee_band:
@@ -139,6 +159,7 @@ ossaa_west_e_ee_eee_band:
   contest_start: 2025-04-14 13:00:00
   contest_end: 2025-04-15 03:00:00
   entry_deadline: 2025-03-13 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_east_5a_mh_band:
@@ -146,6 +167,7 @@ ossaa_east_5a_mh_band:
   contest_start: 2025-04-15 13:00:00
   contest_end: 2025-04-16 03:00:00
   entry_deadline: 2025-03-13 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_east_e_band:
@@ -153,6 +175,7 @@ ossaa_east_e_band:
   contest_start: 2025-04-15 13:00:00
   contest_end: 2025-04-16 03:00:00
   entry_deadline: 2025-03-13 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_west_5a_mh_band:
@@ -160,6 +183,7 @@ ossaa_west_5a_mh_band:
   contest_start: 2025-04-16 13:00:00
   contest_end: 2025-04-17 03:00:00
   entry_deadline: 2025-03-13 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_west_e_band:
@@ -167,6 +191,7 @@ ossaa_west_e_band:
   contest_start: 2025-04-16 13:00:00
   contest_end: 2025-04-17 03:00:00
   entry_deadline: 2025-03-13 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_west_6a_band:
@@ -174,6 +199,7 @@ ossaa_west_6a_band:
   contest_start: 2025-04-17 13:00:00
   contest_end: 2025-04-18 03:00:00
   entry_deadline: 2025-03-13 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_east_6a_band:
@@ -181,6 +207,7 @@ ossaa_east_6a_band:
   contest_start: 2025-04-18 13:00:00
   contest_end: 2025-04-19 03:00:00
   entry_deadline: 2025-03-13 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_instrumental_solo_ensemble:
@@ -188,6 +215,7 @@ ossaa_instrumental_solo_ensemble:
   contest_start: 2025-04-22 13:00:00
   contest_end: 2025-04-25 03:00:00
   entry_deadline: 2025-03-13 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_vocal_solo_ensemble:
@@ -195,6 +223,7 @@ ossaa_vocal_solo_ensemble:
   contest_start: 2025-04-24 13:00:00
   contest_end: 2025-04-26 03:00:00
   entry_deadline: 2025-03-13 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_2a_3a_4a_jazz:
@@ -202,6 +231,7 @@ ossaa_2a_3a_4a_jazz:
   contest_start: 2025-04-29 13:00:00
   contest_end: 2025-04-30 03:00:00
   entry_deadline: 2025-03-13 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa
 
 ossaa_5a_6a_e_jazz:
@@ -209,4 +239,5 @@ ossaa_5a_6a_e_jazz:
   contest_start: 2025-04-30 13:00:00
   contest_end: 2025-05-01 03:00:00
   entry_deadline: 2025-03-13 13:00:00
+  contest_season: ossaa_season_b
   account: ossaa

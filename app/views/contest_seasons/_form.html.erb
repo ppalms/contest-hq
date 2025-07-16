@@ -1,7 +1,10 @@
 <%= form_with(model: contest_season, class: "wide-form") do |form| %>
   <div class="sm:col-span-2">
     <%= form.label :name %>
-    <%= form.text_field :name, class: "text-field", autofocus: true %>
+    <%= form.text_field :name, 
+        class: "text-field", 
+        autofocus: true,
+        value: contest_season.name.presence || Date.current.year.to_s %>
   </div>
 
   <div class="form-button-container">

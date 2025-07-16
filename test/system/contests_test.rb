@@ -16,6 +16,7 @@ class ContestsTest < ApplicationSystemTestCase
     click_on "New Contest"
 
     fill_in "Name", with: "New Demo Contest"
+    select contest_seasons(:demo_season_a).name, from: "Contest Season"
     check "1-A"
     check "2-A"
     fill_in "Start date", with: @contest.contest_start
@@ -61,12 +62,44 @@ class ContestsTest < ApplicationSystemTestCase
     click_on "New Contest"
 
     fill_in "Name", with: "Contest With TBD Dates"
+    select contest_seasons(:demo_season_a).name, from: "Contest Season"
     click_on "Create Contest"
 
     assert_text "Contest was successfully created"
 
     assert_text "Start Date\nTBD"
     assert_text "End Date\nTBD"
+  end
+
+  test "contest season is required when creating contest" do
+    visit contests_url
+    click_on "New Contest"
+
+    fill_in "Name", with: "Contest Without Season"
+    check "1-A"
+    fill_in "Start date", with: @contest.contest_start
+    fill_in "End date", with: @contest.contest_end
+    click_on "Create Contest"
+
+    assert_text "Contest season is required"
+  end
+
+  test "contest season is required when editing contest" do
+    visit contest_url(@contest)
+    click_on "Edit", match: :first
+
+    select "Select a contest season", from: "Contest Season"
+    click_on "Update Contest"
+
+    assert_text "Contest season is required"
+  end
+
+  test "contest shows selected contest season in form" do
+    visit contest_url(@contest)
+    click_on "Edit", match: :first
+
+    # Should have the current contest season selected
+    assert_selector "select#contest_contest_season_id option[selected]", text: @contest.contest_season.name
   end
 
   test "should prevent saving end date before start date" do
