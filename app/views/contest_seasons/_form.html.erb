@@ -8,7 +8,7 @@
   </div>
 
   <div class="form-button-container">
-    <%= form.submit class: "btn-primary" %>
+    <%= form.submit contest_season.persisted? ? "Update Contest Season" : "Create Contest Season", class: "btn-primary" %>
     <%= link_to "Cancel", contest_seasons_path, class: "btn-secondary", role: "button" %>
   </div>
 
