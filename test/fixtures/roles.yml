@@ -12,6 +12,3 @@ manager:
 
 judge:
   name: Judge
-
-scheduler:
-  name: Scheduler

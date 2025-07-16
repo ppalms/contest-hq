@@ -1,18 +1,18 @@
 <div class="py-8">
   <div class="flex flex-col sm:flex-row">
-    <h1>Schedulers for <%= @contest.name %></h1>
+    <h1>Managers for <%= @contest.name %></h1>
     
     <% if current_user.tenant_admin? %>
       <div class="action-button-container">
-        <%= link_to "Add Scheduler", new_contest_scheduler_path(@contest), class: "btn-secondary-sm" %>
+        <%= link_to "Add Manager", new_contest_manager_path(@contest), class: "btn-secondary-sm" %>
       </div>
     <% end %>
   </div>
 
   <div class="pt-8">
-    <h2>Associated Schedulers</h2>
+    <h2>Associated Managers</h2>
     
-    <% if @contest_schedulers.any? %>
+    <% if @contest_managers.any? %>
       <div class="pt-6">
         <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
           <table class="min-w-full divide-y divide-gray-300">
@@ -24,23 +24,23 @@
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-              <% @contest_schedulers.each do |contest_scheduler| %>
+              <% @contest_managers.each do |contest_manager| %>
                 <tr>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    <%= contest_scheduler.user.first_name %> <%= contest_scheduler.user.last_name %>
+                    <%= contest_manager.user.first_name %> <%= contest_manager.user.last_name %>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <%= contest_scheduler.user.email %>
+                    <%= contest_manager.user.email %>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <% if current_user.tenant_admin? %>
                       <%= button_to "Remove", 
-                          contest_scheduler_path(@contest, contest_scheduler), 
+                          contest_manager_path(@contest, contest_manager), 
                           method: :delete,
                           class: "btn-danger-sm",
                           form: {
                             data: {
-                              turbo_confirm: "Are you sure you want to remove this scheduler from the contest?",
+                              turbo_confirm: "Are you sure you want to remove this manager from the contest?",
                             },
                           } %>
                     <% end %>
@@ -53,7 +53,7 @@
       </div>
     <% else %>
       <div class="pt-6">
-        <p class="text-gray-500">No schedulers are currently associated with this contest.</p>
+        <p class="text-gray-500">No managers are currently associated with this contest.</p>
       </div>
     <% end %>
   </div>

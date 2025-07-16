@@ -7,9 +7,6 @@ class Contest < ApplicationRecord
   has_many :contest_managers, dependent: :delete_all
   has_many :managers, through: :contest_managers, source: :user
 
-  has_many :contest_schedulers, dependent: :delete_all
-  has_many :schedulers, through: :contest_schedulers, source: :user
-
   has_many :rooms
   has_many :performance_phases, dependent: :delete_all, inverse_of: :contest
   accepts_nested_attributes_for :performance_phases, allow_destroy: true, reject_if: :all_blank

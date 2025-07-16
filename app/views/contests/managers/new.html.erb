@@ -1,13 +1,13 @@
 <div class="py-8">
   <div class="wide-form-container px-10">
-    <h1>Add Scheduler to <%= @contest.name %></h1>
+    <h1>Add Manager to <%= @contest.name %></h1>
 
-    <%= form_with(model: [@contest, @contest_scheduler], local: true) do |form| %>
-      <% if @contest_scheduler.errors.any? %>
+    <%= form_with(model: [@contest, @contest_manager], local: true) do |form| %>
+      <% if @contest_manager.errors.any? %>
         <div id="error_explanation" class="alert alert-danger">
-          <h2><%= pluralize(@contest_scheduler.errors.count, "error") %> prohibited this scheduler association from being saved:</h2>
+          <h2><%= pluralize(@contest_manager.errors.count, "error") %> prohibited this manager association from being saved:</h2>
           <ul>
-            <% @contest_scheduler.errors.full_messages.each do |message| %>
+            <% @contest_manager.errors.full_messages.each do |message| %>
               <li><%= message %></li>
             <% end %>
           </ul>
@@ -15,9 +15,9 @@
       <% end %>
 
       <div class="pt-6">
-        <h2>Search Scheduler Users</h2>
+        <h2>Search Manager Users</h2>
         
-        <%= form_with url: new_contest_scheduler_path(@contest), method: :get, local: true, class: "pb-6" do |search_form| %>
+        <%= form_with url: new_contest_manager_path(@contest), method: :get, local: true, class: "pb-6" do |search_form| %>
           <div class="flex gap-4">
             <%= search_form.text_field :search, 
                 placeholder: "Search by name or email...", 
@@ -39,7 +39,7 @@
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
                 <% @users.each do |user| %>
-                  <% already_associated = @contest.schedulers.include?(user) %>
+                  <% already_associated = @contest.managers.include?(user) %>
                   <tr class="<%= 'bg-gray-100' if already_associated %>">
                     <td class="px-6 py-4 whitespace-nowrap">
                       <% if already_associated %>
@@ -63,11 +63,11 @@
           <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
 
           <div class="pt-6">
-            <%= form.submit "Add Scheduler", class: "btn-primary" %>
-            <%= link_to "Cancel", contest_schedulers_path(@contest), class: "btn-secondary" %>
+            <%= form.submit "Add Manager", class: "btn-primary" %>
+            <%= link_to "Cancel", contest_managers_path(@contest), class: "btn-secondary" %>
           </div>
         <% else %>
-          <p class="text-gray-500">No scheduler users found. <%= params[:search].present? ? "Try a different search term." : "There are no users with the Scheduler role." %></p>
+          <p class="text-gray-500">No manager users found. <%= params[:search].present? ? "Try a different search term." : "There are no users with the Manager role." %></p>
         <% end %>
       </div>
     <% end %>

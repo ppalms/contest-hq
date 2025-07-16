@@ -14,10 +14,6 @@ demo_manager_a:
   user: demo_manager_a
   role: manager
 
-demo_scheduler_a:
-  user: demo_scheduler_a
-  role: scheduler
-
 demo_director_b:
   user: demo_director_b
   role: director

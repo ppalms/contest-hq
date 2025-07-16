@@ -61,26 +61,26 @@
     <% if current_user.tenant_admin? %>
       <div class="pt-8">
         <div class="flex justify-between">
-          <h2>Schedulers</h2>
-          <%= link_to "Manage Schedulers", contest_schedulers_path(@contest), class: "btn-secondary-sm" %>
+          <h2>Managers</h2>
+          <%= link_to "Manage Managers", contest_managers_path(@contest), class: "btn-secondary-sm" %>
         </div>
         
         <div class="pt-6">
-          <% if @contest.schedulers.any? %>
+          <% if @contest.managers.any? %>
             <div class="text-sm">
-              <% @contest.schedulers.each do |scheduler| %>
+              <% @contest.managers.each do |manager| %>
                 <div class="flex justify-between border-b py-2">
                   <div>
-                    <%= scheduler.first_name %> <%= scheduler.last_name %>
+                    <%= manager.first_name %> <%= manager.last_name %>
                   </div>
                   <div class="text-gray-500">
-                    <%= scheduler.email %>
+                    <%= manager.email %>
                   </div>
                 </div>
               <% end %>
             </div>
           <% else %>
-            <p class="text-gray-500 text-sm">No schedulers are currently associated with this contest.</p>
+            <p class="text-gray-500 text-sm">No managers are currently associated with this contest.</p>
           <% end %>
         </div>
       </div>
