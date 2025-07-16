@@ -19,5 +19,40 @@
     <% end %>
   </div>
 
-  <%= render @contest_season %>
+  <div class="pt-6">
+    <h2>Contests</h2>
+    <% if @contest_season.contests.empty? %>
+      <p class="text-gray-500">No contests in this season yet.</p>
+    <% else %>
+      <div class="mt-4 space-y-4">
+        <% @contest_season.contests.order(:contest_start).each do |contest| %>
+          <div class="border rounded-lg p-4 bg-white shadow-sm">
+            <div class="flex justify-between items-start">
+              <div>
+                <h3 class="font-semibold">
+                  <%= link_to contest.name, contest, class: "text-blue-600 hover:text-blue-800" %>
+                </h3>
+                <div class="mt-1 text-sm text-gray-500">
+                  <% if contest.contest_start.present? %>
+                    <%= contest.contest_start.strftime("%-m/%d/%Y") %>
+                    <% if contest.contest_end.present? && contest.contest_start.to_date != contest.contest_end.to_date %>
+                      - <%= contest.contest_end.strftime("%-m/%d/%Y") %>
+                    <% end %>
+                  <% else %>
+                    Dates TBD
+                  <% end %>
+                </div>
+                <div class="mt-1 text-sm text-gray-500">
+                  <%= pluralize(contest.contest_entries.count, 'entry') %>
+                </div>
+              </div>
+              <div>
+                <%= link_to "View", contest, class: "btn-secondary-sm" %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
 </div>

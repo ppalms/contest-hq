@@ -122,6 +122,12 @@
           <%= link_to "Contests", contests_path %>
         </div>
 
+        <% if current_user.admin? %>
+          <div>
+            <%= link_to "Contest Seasons", contest_seasons_path %>
+          </div>
+        <% end %>
+
         <% if current_user.director? %>
           <div>
             <%= link_to "Roster", roster_path %>

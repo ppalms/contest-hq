@@ -6,9 +6,10 @@
 
   <div class="sm:col-span-2">
     <%= form.label :contest_season_id, "Contest Season" %>
-    <%= form.collection_select :contest_season_id, ContestSeason.all.order(:name), :id, :name, 
-        { prompt: "Select a contest season" }, 
-        { required: true, class: "text-field" } %>
+    <%= form.select :contest_season_id,
+                options_from_collection_for_select(ContestSeason.all.order(:name), :id, :name, contest.contest_season_id),
+                { prompt: "Select a contest season" },
+                { required: true, class: "text-field" } %>
   </div>
 
   <div>
