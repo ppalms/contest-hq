@@ -1,6 +1,8 @@
 class Contest < ApplicationRecord
   include AccountScoped
 
+  belongs_to :contest_season
+
   has_many :contests_school_classes, dependent: :delete_all
   has_many :school_classes, through: :contests_school_classes
 
@@ -16,6 +18,7 @@ class Contest < ApplicationRecord
   has_many :contest_entries, dependent: :destroy
 
   validates :name, presence: true
+  validates :contest_season, presence: true
   validate :start_date_before_end_date
   validate :entry_deadline_before_start_date
   validate :unique_contest_phases

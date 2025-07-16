@@ -4,6 +4,13 @@
     <%= form.text_field :name, class: "text-field", autofocus: true %>
   </div>
 
+  <div class="sm:col-span-2">
+    <%= form.label :contest_season_id, "Contest Season" %>
+    <%= form.collection_select :contest_season_id, ContestSeason.all.order(:name), :id, :name, 
+        { prompt: "Select a contest season" }, 
+        { required: true, class: "text-field" } %>
+  </div>
+
   <div>
     <%= form.label :contest_start, "Start date" %>
     <%= form.date_field :contest_start, class: "text-field" %>

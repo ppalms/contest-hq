@@ -1,0 +1,23 @@
+<% content_for :title, @contest_season.name %>
+<div class="py-8" id="show_<%= dom_id @contest_season %>">
+  <div class="flex flex-col sm:flex-row">
+    <h1><%= @contest_season.name %></h1>
+
+    <% if current_user.admin? %>
+      <div class="action-button-container">
+        <%= link_to "Edit", edit_contest_season_path(@contest_season), class: "btn-secondary-sm" %>
+        <%= button_to "Delete",
+        @contest_season,
+        method: :delete,
+        class: "btn-danger-sm",
+        form: {
+          data: {
+            turbo_confirm: "Are you sure?",
+          },
+        } %>
+      </div>
+    <% end %>
+  </div>
+
+  <%= render @contest_season %>
+</div>

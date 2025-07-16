@@ -1,0 +1,42 @@
+<div id="<%= dom_id contest_season %>">
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-6">
+    <div class="sm:col-span-1">
+      <strong class="block font-medium mb-1">Name</strong>
+      <%= contest_season.name %>
+    </div>
+
+    <div class="sm:col-span-1">
+      <strong class="block font-medium mb-1">Contests</strong>
+      <%= pluralize(contest_season.contests.count, 'contest') %>
+    </div>
+  </div>
+
+  <% if contest_season.contests.any? %>
+    <div class="pt-8">
+      <h2>Contests</h2>
+      <div class="mt-4 overflow-hidden bg-white shadow-sm border border-gray-200 rounded-lg">
+        <ul class="divide-y divide-gray-200">
+          <% contest_season.contests.order(:name).each do |contest| %>
+            <li class="px-6 py-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-lg font-medium text-gray-900">
+                    <%= link_to contest.name, contest, class: "text-blue-600 hover:text-blue-800" %>
+                  </h3>
+                  <% if contest.contest_start.present? && contest.contest_end.present? %>
+                    <p class="text-sm text-gray-500">
+                      <%= contest.contest_start.strftime("%-m/%d/%Y") %> - <%= contest.contest_end.strftime("%-m/%d/%Y") %>
+                    </p>
+                  <% end %>
+                </div>
+                <div class="text-sm text-gray-500">
+                  <%= pluralize(contest.contest_entries.count, 'entry') %>
+                </div>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+</div>

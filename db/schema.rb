@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_22_165020) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_15_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -46,6 +46,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_22_165020) do
     t.index ["user_id"], name: "index_contest_managers_on_user_id"
   end
 
+  create_table "contest_seasons", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "account_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_contest_seasons_on_account_id"
+    t.index ["name", "account_id"], name: "index_contest_seasons_on_name_and_account_id", unique: true
+  end
+
   create_table "contests", force: :cascade do |t|
     t.string "name"
     t.datetime "contest_start"
@@ -56,7 +65,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_22_165020) do
     t.time "start_time"
     t.time "end_time"
     t.datetime "entry_deadline"
+    t.bigint "contest_season_id", null: false
     t.index ["account_id"], name: "index_contests_on_account_id"
+    t.index ["contest_season_id"], name: "index_contests_on_contest_season_id"
   end
 
   create_table "contests_school_classes", id: false, force: :cascade do |t|
@@ -249,7 +260,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_22_165020) do
   add_foreign_key "contest_managers", "accounts"
   add_foreign_key "contest_managers", "contests"
   add_foreign_key "contest_managers", "users"
+  add_foreign_key "contest_seasons", "accounts"
   add_foreign_key "contests", "accounts"
+  add_foreign_key "contests", "contest_seasons"
   add_foreign_key "contests_school_classes", "accounts"
   add_foreign_key "contests_school_classes", "contests"
   add_foreign_key "contests_school_classes", "school_classes"

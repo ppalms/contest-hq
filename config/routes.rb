@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :accounts
   resources :users, only: [ :index, :edit, :update ]
+  resources :contest_seasons
 
   namespace :organizations do
     get "/", to: "index"

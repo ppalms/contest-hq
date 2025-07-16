@@ -1,0 +1,6 @@
+<% content_for :title, "Edit #{@contest_season.name}" %>
+<div class="py-8" id="edit_<%= dom_id @contest_season %>">
+  <h1>Edit <%= @contest_season.name %></h1>
+
+  <%= render "form", contest_season: @contest_season %>
+</div>

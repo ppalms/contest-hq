@@ -1,0 +1,23 @@
+<% content_for :title, "Contest Seasons" %>
+<div class="py-8 space-y-4" id="contest_seasons">
+  <div class="flex justify-between">
+    <h1>Contest Seasons</h1>
+
+    <% if current_user.admin? %>
+      <div class="flex gap-2">
+        <%= link_to "New Contest Season", new_contest_season_path, class: "btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div
+    id="contest_season_list"
+    class="rounded-md bg-white border border-neutral-200 shadow-2xs"
+  >
+    <% if @contest_seasons.empty? %>
+      <p class="text-center p-6">No contest seasons found.</p>
+    <% else %>
+      <%= render "contest_seasons/list" %>
+    <% end %>
+  </div>
+</div>

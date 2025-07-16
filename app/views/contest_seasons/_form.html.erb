@@ -1,0 +1,17 @@
+<%= form_with(model: contest_season, class: "wide-form") do |form| %>
+  <div class="sm:col-span-2">
+    <%= form.label :name %>
+    <%= form.text_field :name, class: "text-field", autofocus: true %>
+  </div>
+
+  <div class="form-button-container">
+    <%= form.submit class: "btn-primary" %>
+    <%= link_to "Cancel", contest_season_path(contest_season), class: "btn-secondary", role: "button" %>
+  </div>
+
+  <% if contest_season.errors.any? %>
+    <div class="pt-2 sm:col-span-2">
+      <%= render "layouts/error_messages", errors: contest_season.errors %>
+    </div>
+  <% end %>
+<% end %>

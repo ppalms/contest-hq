@@ -94,7 +94,7 @@ class ContestsController < ApplicationController
   end
 
   def contest_params
-    params.expect(contest: [ :name, :contest_start, :contest_end, school_class_ids: [] ])
+    params.expect(contest: [ :name, :contest_start, :contest_end, :contest_season_id, school_class_ids: [] ])
   end
 
   def schedule_params
