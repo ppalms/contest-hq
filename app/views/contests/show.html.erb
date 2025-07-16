@@ -58,6 +58,34 @@
       <% end %>
     </div>
 
+    <% if current_user.tenant_admin? %>
+      <div class="pt-8">
+        <div class="flex justify-between">
+          <h2>Schedulers</h2>
+          <%= link_to "Manage Schedulers", contest_schedulers_path(@contest), class: "btn-secondary-sm" %>
+        </div>
+        
+        <div class="pt-6">
+          <% if @contest.schedulers.any? %>
+            <div class="text-sm">
+              <% @contest.schedulers.each do |scheduler| %>
+                <div class="flex justify-between border-b py-2">
+                  <div>
+                    <%= scheduler.first_name %> <%= scheduler.last_name %>
+                  </div>
+                  <div class="text-gray-500">
+                    <%= scheduler.email %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <p class="text-gray-500 text-sm">No schedulers are currently associated with this contest.</p>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
     <%# TODO: only show if director has conducted groups that are elibiglbe for the contest %>
     <% if current_user.director? %>
       <div class="py-8">

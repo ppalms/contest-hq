@@ -20,6 +20,9 @@ class User < ApplicationRecord
   has_many :contest_managers, dependent: :delete_all
   has_many :managed_contests, through: :contest_managers, source: :contest
 
+  has_many :contest_schedulers, dependent: :delete_all
+  has_many :scheduled_contests, through: :contest_schedulers, source: :contest
+
   has_many :contest_entries
 
   has_many :user_roles, dependent: :delete_all
@@ -64,6 +67,10 @@ class User < ApplicationRecord
 
   def judge?
     role_names.include?("Judge")
+  end
+
+  def scheduler?
+    role_names.include?("Scheduler")
   end
 
   def admin?

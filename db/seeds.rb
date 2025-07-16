@@ -15,7 +15,8 @@ roles = [
   { name: 'AccountAdmin' },
   { name: 'Director' },
   { name: 'Manager' },
-  { name: 'Judge' }
+  { name: 'Judge' },
+  { name: 'Scheduler' }
 ]
 
 roles.each do |role|

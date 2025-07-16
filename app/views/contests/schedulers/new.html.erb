@@ -1,0 +1,75 @@
+<div class="py-8">
+  <div class="wide-form-container px-10">
+    <h1>Add Scheduler to <%= @contest.name %></h1>
+
+    <%= form_with(model: [@contest, @contest_scheduler], local: true) do |form| %>
+      <% if @contest_scheduler.errors.any? %>
+        <div id="error_explanation" class="alert alert-danger">
+          <h2><%= pluralize(@contest_scheduler.errors.count, "error") %> prohibited this scheduler association from being saved:</h2>
+          <ul>
+            <% @contest_scheduler.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="pt-6">
+        <h2>Search Scheduler Users</h2>
+        
+        <%= form_with url: new_contest_scheduler_path(@contest), method: :get, local: true, class: "pb-6" do |search_form| %>
+          <div class="flex gap-4">
+            <%= search_form.text_field :search, 
+                placeholder: "Search by name or email...", 
+                value: params[:search],
+                class: "form-input flex-1" %>
+            <%= search_form.submit "Search", class: "btn-secondary" %>
+          </div>
+        <% end %>
+
+        <% if @users.any? %>
+          <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+            <table class="min-w-full divide-y divide-gray-300">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Select</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <% @users.each do |user| %>
+                  <% already_associated = @contest.schedulers.include?(user) %>
+                  <tr class="<%= 'bg-gray-100' if already_associated %>">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <% if already_associated %>
+                        <span class="text-sm text-gray-500">Already associated</span>
+                      <% else %>
+                        <%= form.radio_button :user_id, user.id, class: "form-radio" %>
+                      <% end %>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <%= user.first_name %> <%= user.last_name %>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <%= user.email %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+
+          <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
+
+          <div class="pt-6">
+            <%= form.submit "Add Scheduler", class: "btn-primary" %>
+            <%= link_to "Cancel", contest_schedulers_path(@contest), class: "btn-secondary" %>
+          </div>
+        <% else %>
+          <p class="text-gray-500">No scheduler users found. <%= params[:search].present? ? "Try a different search term." : "There are no users with the Scheduler role." %></p>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
