@@ -127,4 +127,51 @@ class ContestsTest < ApplicationSystemTestCase
     assert_text "Ironfoundersson"
     assert_text "Wind Ensemble"
   end
+
+  test "manager list is visible on contest detail view for all users" do
+    # Test as Account Admin
+    log_in_as(users(:demo_admin_a))
+    visit contest_url(contests(:demo_contest_a))
+    assert_text "Managers"
+    assert_text "Nobby Nobbs"
+
+    # Test as Director
+    log_in_as(users(:demo_director_a))
+    visit contest_url(contests(:demo_contest_a))
+    assert_text "Managers"
+    assert_text "Nobby Nobbs"
+
+    # Test as Manager
+    log_in_as(users(:demo_manager_a))
+    visit contest_url(contests(:demo_contest_a))
+    assert_text "Managers"
+    assert_text "Nobby Nobbs"
+  end
+
+  test "only account admins can add or remove contest managers" do
+    # Account Admin can see Manage Managers link
+    log_in_as(users(:demo_admin_a))
+    visit contest_url(contests(:demo_contest_a))
+    assert_text "Manage Managers"
+
+    # Director cannot see Manage Managers link
+    log_in_as(users(:demo_director_a))
+    visit contest_url(contests(:demo_contest_a))
+    assert_no_text "Manage Managers"
+
+    # Manager cannot see Manage Managers link
+    log_in_as(users(:demo_manager_a))
+    visit contest_url(contests(:demo_contest_a))
+    assert_no_text "Manage Managers"
+
+    # Director cannot access managers controller directly
+    log_in_as(users(:demo_director_a))
+    visit contest_managers_path(contests(:demo_contest_a))
+    assert_text "Contests" # Should redirect to home/contests due to authorization failure
+
+    # Manager cannot access managers controller directly
+    log_in_as(users(:demo_manager_a))
+    visit contest_managers_path(contests(:demo_contest_a))
+    assert_text "Contests" # Should redirect to home/contests due to authorization failure
+  end
 end
