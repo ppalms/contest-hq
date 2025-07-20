@@ -58,6 +58,34 @@
       <% end %>
     </div>
 
+    <div class="pt-8">
+      <div class="flex justify-between">
+        <h2>Managers</h2>
+        <% if current_user.tenant_admin? %>
+          <%= link_to "Manage Managers", contest_managers_path(@contest), class: "btn-secondary-sm" %>
+        <% end %>
+      </div>
+      
+      <div class="pt-6">
+        <% if @contest.managers.any? %>
+          <div class="text-sm">
+            <% @contest.managers.each do |manager| %>
+              <div class="flex justify-between border-b py-2">
+                <div>
+                  <%= manager.first_name %> <%= manager.last_name %>
+                </div>
+                <div class="text-gray-500">
+                  <%= manager.email %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="text-gray-500 text-sm">No managers are currently associated with this contest.</p>
+        <% end %>
+      </div>
+    </div>
+
     <%# TODO: only show if director has conducted groups that are elibiglbe for the contest %>
     <% if current_user.director? %>
       <div class="py-8">
