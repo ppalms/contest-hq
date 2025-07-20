@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_22_165020) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_20_221326) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -34,7 +34,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_22_165020) do
     t.index ["user_id"], name: "index_contest_entries_on_user_id"
   end
 
-  create_table "contest_managers", id: false, force: :cascade do |t|
+  create_table "contest_managers", force: :cascade do |t|
     t.bigint "contest_id", null: false
     t.bigint "user_id", null: false
     t.bigint "account_id", null: false

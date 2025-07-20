@@ -18,7 +18,7 @@ Rails.application.routes.draw do
     get "setup", to: "contests#setup"
 
     resources :rooms, controller: "contests/rooms"
-    resources :managers, controller: "contests/managers", only: [:index, :new, :create, :destroy]
+    resources :managers, controller: "contests/managers", only: [ :index, :new, :create, :destroy ]
 
     get :performance_phases, path: "phases", to: "contests/performance_phases#index"
     get :performance_phases, as: "phase_bulk_edit", path: "phases/edit", to: "contests/performance_phases#edit"

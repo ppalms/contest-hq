@@ -58,3 +58,4 @@ module Contests
     end
   end
 end
+
