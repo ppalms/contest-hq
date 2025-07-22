@@ -13,8 +13,22 @@ class ContestEntriesController < ApplicationController
 
   def new
     @contest_entry = ContestEntry.new
+    
+    # If user has no large ensembles, redirect to create one first
+    if current_user.conducted_ensembles.count == 0
+      redirect_to new_roster_large_ensemble_path(redirect_to_contest_entry: @contest.id), notice: "You need to create a large ensemble before registering for a contest."
+      return
+    end
+    
+    # If user has exactly one ensemble, pre-select it
     if current_user.conducted_ensembles.count == 1
       @contest_entry.large_ensemble = current_user.conducted_ensembles.first
+    end
+    
+    # If returning from ensemble creation, pre-select the specified ensemble
+    if params[:large_ensemble_id].present?
+      ensemble = current_user.conducted_ensembles.find_by(id: params[:large_ensemble_id])
+      @contest_entry.large_ensemble = ensemble if ensemble
     end
   end
 

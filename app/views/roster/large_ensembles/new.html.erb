@@ -1,5 +1,12 @@
 <div class="wide-form-container" id="new_contest">
   <h1>New Large Ensemble</h1>
+  
+  <% if params[:redirect_to_contest_entry].present? %>
+    <p class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md text-blue-800">
+      You need to create a large ensemble before you can register for the contest. 
+      After creating your ensemble, you'll be redirected back to complete your contest registration.
+    </p>
+  <% end %>
 
   <%= render "form",
   large_ensemble: @large_ensemble,
