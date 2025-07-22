@@ -15,7 +15,18 @@ module Contests
 
     def new
       @contest_manager = @contest.contest_managers.new
-      @pagy, @users = pagy(User.joins(:roles).where(roles: { name: "Manager" }), limit: 10)
+
+      if params[:search].present?
+        @pagy, @users = pagy(
+          User.joins(:roles)
+              .where(roles: { name: "Manager" })
+              .where("first_name ILIKE ? OR last_name ILIKE ? OR email ILIKE ?",
+                     "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%"),
+          limit: 10
+        )
+      else
+        @pagy, @users = pagy(User.joins(:roles).where(roles: { name: "Manager" }), limit: 10)
+      end
     end
 
     def create
