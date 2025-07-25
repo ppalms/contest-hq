@@ -18,6 +18,10 @@ demo_director_b:
   user: demo_director_b
   role: director
 
+demo_director_c:
+  user: demo_director_c
+  role: director
+
 customer_admin_a:
   user: customer_admin_a
   role: account_admin

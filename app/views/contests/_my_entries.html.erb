@@ -1,19 +1,26 @@
 <% if entries.any? %>
   <% entries.each do |entry| %>
-    <div class="flex justify-between border-b mx-1">
-      <div>
-        <%= entry.user.last_name %>
-      </div>
+    <div class="flex justify-between border-b py-1 text-sm">
       <div>
         <%= entry.large_ensemble.name %>
-      </div>
-      <div>
+        -
         <%= entry.large_ensemble.school.name %>
+      </div>
+      <div class="text-gray-500">
+        <% entry.music_selections&.each do |selection| %>
+          <%= selection.title %>
+          -
+          <%= selection.composer %>
+        <% end %>
       </div>
     </div>
   <% end %>
 <% else %>
-  <div class="text-center p-6 border border-gray-200 rounded-lg bg-white">
+  <div
+    class="
+      text-center text-gray-500 p-6 border border-gray-200 rounded-lg bg-white
+    "
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
