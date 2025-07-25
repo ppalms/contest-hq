@@ -22,6 +22,37 @@
 
   <div class="pt-8">
     <div class="flex justify-between">
+      <h2>Managers</h2>
+      <% if current_user.tenant_admin? %>
+        <%= link_to "Manage Managers",
+        contest_managers_path(@contest),
+        class: "btn-secondary-sm" %>
+      <% end %>
+    </div>
+
+    <div class="pt-4">
+      <% if @contest.managers.any? %>
+        <div class="text-sm">
+          <% @contest.managers.each do |manager| %>
+            <div class="flex justify-between border-b py-1">
+              <div>
+                <%= manager.first_name %>
+                <%= manager.last_name %>
+              </div>
+              <div class="text-gray-500">
+                <%= manager.email %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-gray-500 text-sm">No managers are currently associated with this contest.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="pt-8">
+    <div class="flex justify-between">
       <h2>Schedule</h2>
 
       <% if (@contest.performance_phases.length || 0) > 0 %>
@@ -34,7 +65,7 @@
       <% end %>
     </div>
 
-    <div class="pt-6">
+    <div class="pt-4">
       <% if current_user.manages_contest(@contest.id) && @contest.performance_phases&.length == 0 %>
         <p class="text-gray-500">
           Contest schedule is not configured -
@@ -45,14 +76,14 @@
         <ol class="list-decimal text-sm pl-4">
           <% @contest.performance_phases&.each do |phase| %>
             <li>
-              <div class="flex justify-between border-b">
+              <div class="flex justify-between border-b py-1">
                 <div>
                   <%= phase.name %>
                   -
                   <%= phase.duration %>
                   min.
                 </div>
-                <div>
+                <div class="text-gray-500">
                   <%= phase.room.name %>
                   -
                   <%= phase.room.room_number %>
@@ -64,43 +95,12 @@
       <% end %>
     </div>
 
-    <div class="pt-8">
-      <div class="flex justify-between">
-        <h2>Managers</h2>
-        <% if current_user.tenant_admin? %>
-          <%= link_to "Manage Managers",
-          contest_managers_path(@contest),
-          class: "btn-secondary-sm" %>
-        <% end %>
-      </div>
-
-      <div class="pt-6">
-        <% if @contest.managers.any? %>
-          <div class="text-sm">
-            <% @contest.managers.each do |manager| %>
-              <div class="flex justify-between border-b py-2">
-                <div>
-                  <%= manager.first_name %>
-                  <%= manager.last_name %>
-                </div>
-                <div class="text-gray-500">
-                  <%= manager.email %>
-                </div>
-              </div>
-            <% end %>
-          </div>
-        <% else %>
-          <p class="text-gray-500 text-sm">No managers are currently associated with this contest.</p>
-        <% end %>
-      </div>
-    </div>
-
     <%# TODO: only show if director has conducted groups that are elibiglbe for the contest %>
     <% if current_user.director? %>
       <div class="py-8">
         <h2>Entries</h2>
 
-        <div class="pt-6">
+        <div class="pt-4">
           <%= render partial: "my_entries",
           locals: {
             entries: @contest.contest_entries.where(user_id: current_user.id),

@@ -36,6 +36,15 @@ demo_director_b:
   time_zone: America/Chicago
   account: demo
 
+demo_director_c:
+  first_name: Fred
+  last_name: Colon
+  email: fred@demo.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: demo
+
 demo_manager_a:
   first_name: Nobby
   last_name: Nobbs

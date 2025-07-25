@@ -65,7 +65,6 @@ module Contests
     def set_breadcrumbs
       add_breadcrumb("Contests", contests_path)
       add_breadcrumb(@contest.name, @contest) if @contest
-      add_breadcrumb("Managers")
     end
   end
 end

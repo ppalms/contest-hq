@@ -8,6 +8,11 @@ demo_school_a_director_b:
   user: demo_director_b
   account: demo
 
+demo_school_a_director_c:
+  school: demo_school_a
+  user: demo_director_c
+  account: demo
+
 customer_school_a_director_a:
   school: customer_school_a
   user: customer_director_a
