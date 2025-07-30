@@ -1,6 +1,9 @@
 <%= form_with(model: @large_ensemble, url: @large_ensemble.new_record? ? roster_large_ensembles_path : roster_large_ensemble_path(@large_ensemble), class: "wide-form") do |form| %>
-  <%= hidden_field_tag :redirect_to_contest_entry, params[:redirect_to_contest_entry] if params[:redirect_to_contest_entry].present? %>
-  
+  <%= if params[:redirect_to_contest_entry].present?
+    hidden_field_tag :redirect_to_contest_entry,
+    params[:redirect_to_contest_entry]
+  end %>
+
   <div class="sm:col-span-2">
     <%= form.label :name %>
     <%= form.text_field :name, class: "text-field", autofocus: true %>
