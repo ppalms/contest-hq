@@ -32,7 +32,14 @@ class Roster::LargeEnsemblesController < ApplicationController
     @large_ensemble = LargeEnsemble.new(large_ensemble_params)
 
     if @large_ensemble.save
-      redirect_to roster_large_ensemble_path(@large_ensemble), notice: "Large ensemble was successfully created."
+      # Check if we need to redirect back to contest entry creation
+      if params[:redirect_to_contest_entry].present?
+        contest_id = params[:redirect_to_contest_entry]
+        redirect_to new_contest_entry_path(contest_id: contest_id, large_ensemble_id: @large_ensemble.id),
+                    notice: "Large ensemble was successfully created. Now you can register for the contest."
+      else
+        redirect_to roster_large_ensemble_path(@large_ensemble), notice: "Large ensemble was successfully created."
+      end
     else
       render :new, status: :unprocessable_entity
     end

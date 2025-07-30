@@ -1,7 +1,7 @@
 <div class="py-8 space-y-4">
   <div class="flex justify-between items-start">
-    <h1 class="pr-4">Managers for
-      <%= @contest.name %></h1>
+    <h1 class="pr-4"><%= @contest.name %>
+      Managers</h1>
 
     <% if current_user.tenant_admin? %>
       <div class="action-button-container flex-shrink-0">
