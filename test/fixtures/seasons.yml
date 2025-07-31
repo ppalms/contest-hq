@@ -1,0 +1,14 @@
+one:
+  name: "2024"
+  archived: false
+  account: contesthq
+
+two:
+  name: "2023" 
+  archived: true
+  account: contesthq
+
+three:
+  name: "2024"
+  archived: false
+  account: demo

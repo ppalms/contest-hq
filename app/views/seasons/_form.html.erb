@@ -1,0 +1,30 @@
+<%= form_with(model: season, class: "wide-form") do |form| %>
+  <div class="sm:col-span-2">
+    <%= form.label :name %>
+    <%= form.text_field :name, class: "text-field", autofocus: true, placeholder: "e.g., 2025" %>
+    <small class="help-text">
+      Season name (typically the year for the school year)
+    </small>
+  </div>
+
+  <div class="sm:col-span-2">
+    <%= form.label :archived, class: "checkbox-label" do %>
+      <%= form.check_box :archived, class: "checkbox" %>
+      Archive this season
+    <% end %>
+    <small class="help-text">
+      Archived seasons are still available in the filter but marked as archived
+    </small>
+  </div>
+
+  <div class="form-button-container">
+    <%= form.submit class: "btn-primary" %>
+    <%= link_to "Cancel", seasons_path, class: "btn-secondary", role: "button" %>
+  </div>
+
+  <% if season.errors.any? %>
+    <div class="pt-2 sm:col-span-2">
+      <%= render "layouts/error_messages", errors: season.errors %>
+    </div>
+  <% end %>
+<% end %>
