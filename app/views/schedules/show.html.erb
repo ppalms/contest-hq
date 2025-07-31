@@ -33,6 +33,26 @@
         <% end %>
       </ol>
     </div>
+
+    <% if @schedule.days.any? && @schedule.days.first.schedule_blocks.any? %>
+      <div class="pt-4 border-t">
+        <h3 class="text-sm font-medium text-gray-900 mb-2">Time Preference Legend</h3>
+        <div class="flex flex-wrap gap-4 text-xs">
+          <div class="flex items-center">
+            <div class="w-4 h-4 bg-green-100 border border-green-300 rounded mr-2"></div>
+            <span>Scheduled within preferred time</span>
+          </div>
+          <div class="flex items-center">
+            <div class="w-4 h-4 bg-yellow-100 border border-yellow-300 rounded mr-2"></div>
+            <span>Has preference but scheduled outside it</span>
+          </div>
+          <div class="flex items-center">
+            <div class="w-4 h-4 bg-gray-100 border border-gray-300 rounded mr-2"></div>
+            <span>No time preference specified</span>
+          </div>
+        </div>
+      </div>
+    <% end %>
   <% end %>
 </div>
 
