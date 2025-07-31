@@ -4,6 +4,9 @@
 
     <% if @contest_entry.user == current_user %>
       <div class="action-button-container">
+        <%= link_to "Edit",
+        edit_contest_entry_path(@contest_entry.contest, @contest_entry),
+        class: "btn-secondary-sm sm:btn-secondary" %>
         <%= button_to "Delete",
         contest_entry_path(@contest_entry.contest, @contest_entry),
         method: :delete,
@@ -16,6 +19,21 @@
       </div>
     <% end %>
   </div>
+
+  <% if @contest_entry.has_time_preference? %>
+    <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+      <h3 class="text-sm font-medium text-blue-900 mb-2">Preferred Performance Time</h3>
+      <p class="text-sm text-blue-800">
+        <% if @contest_entry.full_time_preference? %>
+          <%= @contest_entry.preferred_time_start.strftime('%l:%M %p') %> - <%= @contest_entry.preferred_time_end.strftime('%l:%M %p') %>
+        <% elsif @contest_entry.preferred_time_start.present? %>
+          After <%= @contest_entry.preferred_time_start.strftime('%l:%M %p') %>
+        <% elsif @contest_entry.preferred_time_end.present? %>
+          Before <%= @contest_entry.preferred_time_end.strftime('%l:%M %p') %>
+        <% end %>
+      </p>
+    </div>
+  <% end %>
 
   <%= render @contest_entry %>
 </div>
