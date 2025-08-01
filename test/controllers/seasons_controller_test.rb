@@ -50,7 +50,7 @@ class SeasonsControllerTest < ActionDispatch::IntegrationTest
 
   test "should destroy season without contests" do
     season_without_contests = Season.create!(name: "Empty Season", account: @season.account)
-    
+
     assert_difference("Season.count", -1) do
       delete season_url(season_without_contests)
     end
@@ -62,7 +62,7 @@ class SeasonsControllerTest < ActionDispatch::IntegrationTest
   test "should not destroy season with contests" do
     # Create a contest for this season to test restriction
     Contest.create!(name: "Test Contest", season: @season, account: @season.account)
-    
+
     assert_no_difference("Season.count") do
       delete season_url(@season)
     end

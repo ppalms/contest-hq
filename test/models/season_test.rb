@@ -10,7 +10,7 @@ class SeasonTest < ActiveSupport::TestCase
   test "validates uniqueness of name within account" do
     account = accounts(:one)
     Season.create!(name: "2024", account: account)
-    
+
     duplicate_season = Season.new(name: "2024", account: account)
     assert_not duplicate_season.valid?
     assert_includes duplicate_season.errors[:name], "has already been taken"
@@ -19,7 +19,7 @@ class SeasonTest < ActiveSupport::TestCase
   test "allows same name across different accounts" do
     account_one = accounts(:one)
     account_two = accounts(:two)
-    
+
     Season.create!(name: "2024", account: account_one)
     season_two = Season.new(name: "2024", account: account_two)
     
@@ -45,7 +45,7 @@ class SeasonTest < ActiveSupport::TestCase
   test "display_name shows archived status" do
     season = Season.new(name: "2024", archived: false)
     assert_equal "2024", season.display_name
-    
+
     season.archived = true
     assert_equal "2024 (Archived)", season.display_name
   end

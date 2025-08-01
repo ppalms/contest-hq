@@ -11,7 +11,7 @@ class ContestsController < ApplicationController
     # Get selected season or default to current season
     @selected_season_id = params[:season_id]
     @seasons = Season.by_name
-    
+
     if @selected_season_id.present?
       @selected_season = Season.find(@selected_season_id)
     else

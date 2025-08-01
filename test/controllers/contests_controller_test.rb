@@ -43,7 +43,7 @@ class ContestsControllerTest < ActionDispatch::IntegrationTest
   test "should default to current season" do
     # Mark our season as current (non-archived)
     @season.update!(archived: false)
-    
+
     get contests_url
     assert_response :success
     # Should show the current season
