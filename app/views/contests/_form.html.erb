@@ -5,6 +5,16 @@
   </div>
 
   <div>
+    <%= form.label :season_id, "Season" %>
+    <%= form.collection_select :season_id, Season.by_name, :id, :display_name, 
+        { prompt: "Select a season" }, 
+        { class: "text-field" } %>
+    <small class="help-text">
+      Select the season for this contest. <%= link_to "Manage seasons", seasons_path, class: "text-blue-600" if current_user.admin? %>
+    </small>
+  </div>
+
+  <div>
     <%= form.label :contest_start, "Start date" %>
     <%= form.date_field :contest_start, class: "text-field" %>
   </div>

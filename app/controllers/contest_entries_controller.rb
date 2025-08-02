@@ -43,8 +43,8 @@ class ContestEntriesController < ApplicationController
         format.html { redirect_to contest_entry_path(id: @contest_entry.id), notice: "Contest entry was successfully created." }
         format.json { render :show, status: :created, contest_entry: @contest_entry }
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @contest_entry.errors, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_content }
+        format.json { render json: @contest_entry.errors, status: :unprocessable_content }
       end
     end
   end

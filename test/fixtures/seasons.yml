@@ -1,0 +1,39 @@
+contesthq_2024:
+  name: "2024"
+  archived: false
+  account: contesthq
+
+contesthq_2023:
+  name: "2023"
+  archived: true
+  account: contesthq
+
+demo_2025:
+  name: "2025"
+  archived: false
+  account: demo
+
+demo_2024:
+  name: "2024"
+  archived: false
+  account: demo
+
+demo_2023:
+  name: "2023"
+  archived: true
+  account: demo
+
+ossaa_2024:
+  name: "2024"
+  archived: false
+  account: ossaa
+
+ossaa_2023:
+  name: "2023"
+  archived: true
+  account: ossaa
+
+customer_2024:
+  name: "2024"
+  archived: false
+  account: customer

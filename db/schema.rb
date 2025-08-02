@@ -56,7 +56,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_20_221326) do
     t.time "start_time"
     t.time "end_time"
     t.datetime "entry_deadline"
+    t.bigint "season_id", null: false
     t.index ["account_id"], name: "index_contests_on_account_id"
+    t.index ["season_id"], name: "index_contests_on_season_id"
   end
 
   create_table "contests_school_classes", id: false, force: :cascade do |t|
@@ -208,6 +210,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_20_221326) do
     t.index ["school_class_id"], name: "index_schools_on_school_class_id"
   end
 
+  create_table "seasons", force: :cascade do |t|
+    t.string "name", null: false
+    t.boolean "archived", default: false, null: false
+    t.bigint "account_id", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.index ["account_id", "name"], name: "index_seasons_on_account_id_and_name", unique: true
+    t.index ["account_id"], name: "index_seasons_on_account_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "user_agent"
@@ -250,6 +262,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_20_221326) do
   add_foreign_key "contest_managers", "contests"
   add_foreign_key "contest_managers", "users"
   add_foreign_key "contests", "accounts"
+  add_foreign_key "contests", "seasons"
   add_foreign_key "contests_school_classes", "accounts"
   add_foreign_key "contests_school_classes", "contests"
   add_foreign_key "contests_school_classes", "school_classes"
@@ -282,6 +295,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_20_221326) do
   add_foreign_key "school_directors", "users"
   add_foreign_key "schools", "accounts"
   add_foreign_key "schools", "school_classes"
+  add_foreign_key "seasons", "accounts"
   add_foreign_key "sessions", "users"
   add_foreign_key "user_roles", "roles"
   add_foreign_key "user_roles", "users"

@@ -5,7 +5,25 @@
 
     <% if current_user.admin? %>
       <div class="flex gap-2">
+        <%= link_to "Manage Seasons", seasons_path, class: "btn-secondary" %>
         <%= link_to "New Contest", new_contest_path, class: "btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+  <!-- Season Filter -->
+  <div class="bg-white border border-neutral-200 rounded-md p-4 shadow-2xs">
+    <%= form_with url: contests_path, method: :get, class: "flex items-center gap-4", local: true do |form| %>
+      <div class="flex items-center gap-2">
+        <%= form.label :season_id, "Season:", class: "font-medium" %>
+        <%= form.collection_select :season_id,
+                               @seasons,
+                               :id,
+                               :display_name,
+                               { selected: @selected_season_id },
+                               {
+                                 class: "text-field border-gray-300 rounded-md",
+                                 onchange: "this.form.submit();",
+                               } %>
       </div>
     <% end %>
   </div>

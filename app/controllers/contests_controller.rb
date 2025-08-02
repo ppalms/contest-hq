@@ -8,7 +8,23 @@ class ContestsController < ApplicationController
 
   # GET /contests or /contests.json
   def index
-    @pagy, @contests = pagy(Contest.where("name ILIKE ?", "%#{params[:name]}%"), limit: 6)
+    # Get selected season or default to current season
+    @selected_season_id = params[:season_id]
+    @seasons = Season.by_name
+
+    if @selected_season_id.present?
+      @selected_season = Season.find(@selected_season_id)
+    else
+      @selected_season = Season.current_season
+      @selected_season_id = @selected_season&.id
+    end
+
+    # Filter contests by season and search term
+    contests_scope = Contest.joins(:season).order(:contest_start)
+    contests_scope = contests_scope.where(season_id: @selected_season_id) if @selected_season_id.present?
+    contests_scope = contests_scope.where("contests.name ILIKE ?", "%#{params[:name]}%") if params[:name].present?
+
+    @pagy, @contests = pagy(contests_scope, limit: 6)
   end
 
   # GET /contests/1 or /contests/1.json
@@ -18,6 +34,8 @@ class ContestsController < ApplicationController
   # GET /contests/new
   def new
     @contest = Contest.new
+    # Default to current season if available
+    @contest.season = Season.current_season
   end
 
   # GET /contests/1/edit
@@ -33,8 +51,8 @@ class ContestsController < ApplicationController
         format.html { redirect_to contest_url(@contest), notice: "Contest was successfully created." }
         format.json { render :show, status: :created, contest: @contest }
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @contest.errors, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_content }
+        format.json { render json: @contest.errors, status: :unprocessable_content }
       end
     end
   end
@@ -46,13 +64,12 @@ class ContestsController < ApplicationController
         format.html { redirect_to contest_url(@contest), notice: "Contest was successfully updated." }
         format.json { render :show, status: :ok, contest: @contest }
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @contest.errors, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
+        format.json { render json: @contest.errors, status: :unprocessable_content }
       end
     end
   end
 
-  # Set up contest performance phases
   def setup
     add_breadcrumb("Contests", contests_path)
     add_breadcrumb(@contest.name, @contest)
@@ -67,8 +84,8 @@ class ContestsController < ApplicationController
         format.html { redirect_to contest_url(@contest), notice: "Contest times were successfully updated." }
         format.json { render :show, status: :ok, contest: @contest }
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @contest.errors, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
+        format.json { render json: @contest.errors, status: :unprocessable_content }
       end
     end
   end
@@ -94,7 +111,7 @@ class ContestsController < ApplicationController
   end
 
   def contest_params
-    params.expect(contest: [ :name, :contest_start, :contest_end, school_class_ids: [] ])
+    params.expect(contest: [ :name, :contest_start, :contest_end, :season_id, school_class_ids: [] ])
   end
 
   def schedule_params

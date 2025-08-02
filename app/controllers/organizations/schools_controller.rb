@@ -21,7 +21,7 @@ class Organizations::SchoolsController < ApplicationController
     if @school.save
       redirect_to organizations_schools_path, notice: "School was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -31,8 +31,8 @@ class Organizations::SchoolsController < ApplicationController
         format.html { redirect_to organizations_school_url(@school), notice: "School was successfully updated." }
         format.json { render :show, status: :ok, school: @school }
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @school.errors, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
+        format.json { render json: @school.errors, status: :unprocessable_content }
       end
     end
   end

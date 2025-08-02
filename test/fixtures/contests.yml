@@ -3,24 +3,28 @@ demo_contest_a:
   contest_start: 2024-10-23 13:00:00
   contest_end: 2024-10-23 22:00:00
   account: demo
+  season: demo_2024
 
 demo_contest_b:
   name: Regional Orchestra
   contest_start: 2024-10-23 14:00:00
   contest_end: 2024-10-23 17:00:00
   account: demo
+  season: demo_2024
 
 demo_contest_c:
   name: 2A, 3A State Orchestra
   contest_start: 2025-02-18 14:00:00
   contest_end: 2025-02-19 23:00:00
   account: demo
+  season: demo_2025
 
 customer_contest_a:
   name: All State
   contest_start: 2024-11-01 12:00:00
   contest_end: 2024-11-02 20:00:00
   account: customer
+  season: customer_2024
 
 ossaa_ne_regional_marching:
   name: NE Regional Marching Band Contest
@@ -28,6 +32,7 @@ ossaa_ne_regional_marching:
   contest_end: 2024-10-16 03:00:00
   entry_deadline: 2024-09-19 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_se_regional_marching:
   name: SE Regional Marching Band Contest
@@ -35,6 +40,7 @@ ossaa_se_regional_marching:
   contest_end: 2024-10-17 03:00:00
   entry_deadline: 2024-09-19 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_sw_regional_marching:
   name: SW Regional Marching Band Contest
@@ -42,6 +48,7 @@ ossaa_sw_regional_marching:
   contest_end: 2024-10-23 03:00:00
   entry_deadline: 2024-09-19 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_nw_regional_marching:
   name: NW Regional Marching Band Contest
@@ -49,6 +56,7 @@ ossaa_nw_regional_marching:
   contest_end: 2024-10-24 03:00:00
   entry_deadline: 2024-09-19 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_west_regional_marching:
   name: West Regional Marching Band Contest
@@ -56,6 +64,7 @@ ossaa_west_regional_marching:
   contest_end: 2024-10-30 03:00:00
   entry_deadline: 2024-09-19 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_east_regional_marching:
   name: East Regional Marching Contest
@@ -63,6 +72,7 @@ ossaa_east_regional_marching:
   contest_end: 2024-10-31 03:00:00
   entry_deadline: 2024-09-19 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_string_orchestra:
   name: String Orchestra Contest
@@ -70,6 +80,7 @@ ossaa_string_orchestra:
   contest_end: 2024-11-21 04:00:00
   entry_deadline: 2024-10-17 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_state_orchestra:
   name: State Orchestra- all HS Classes
@@ -77,6 +88,7 @@ ossaa_state_orchestra:
   contest_end: 2025-02-20 04:00:00
   entry_deadline: 2025-01-21 14:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_3a_4a_state_band:
   name: 3A & 4A State Concert Band Contest
@@ -84,6 +96,7 @@ ossaa_3a_4a_state_band:
   contest_end: 2025-04-05 03:00:00
   entry_deadline: 2025-03-13 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_state_vocal_5a_6a_e:
   name: State Vocal 5A-6A Class E
@@ -91,6 +104,7 @@ ossaa_state_vocal_5a_6a_e:
   contest_end: 2025-04-03 03:00:00
   entry_deadline: 2025-03-13 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_2a_3a_4a_state_chorus:
   name: 2A-3A-4A State Chorus Contest
@@ -98,6 +112,7 @@ ossaa_2a_3a_4a_state_chorus:
   contest_end: 2025-04-05 03:00:00
   entry_deadline: 2025-03-13 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_2a_state_band:
   name: 2A State Concert Band Contest
@@ -105,6 +120,7 @@ ossaa_2a_state_band:
   contest_end: 2025-04-05 03:00:00
   entry_deadline: 2025-03-13 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_west_mh_5a_chorus:
   name: West MH-5A State Chorus Contest
@@ -112,6 +128,7 @@ ossaa_west_mh_5a_chorus:
   contest_end: 2025-04-09 03:00:00
   entry_deadline: 2025-03-13 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_east_mh_5a_chorus:
   name: East MH-5A State Chorus Contest
@@ -119,6 +136,7 @@ ossaa_east_mh_5a_chorus:
   contest_end: 2025-04-10 03:00:00
   entry_deadline: 2025-03-13 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_west_6a_chorus:
   name: West 6A State Chorus Contest
@@ -126,6 +144,7 @@ ossaa_west_6a_chorus:
   contest_end: 2025-04-10 03:00:00
   entry_deadline: 2025-03-13 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_east_6a_chorus:
   name: East 6A State Chorus Contest
@@ -133,6 +152,7 @@ ossaa_east_6a_chorus:
   contest_end: 2025-04-11 03:00:00
   entry_deadline: 2025-03-13 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_west_e_ee_eee_band:
   name: West EE, EEE, EEEE State Band Contest
@@ -140,6 +160,7 @@ ossaa_west_e_ee_eee_band:
   contest_end: 2025-04-15 03:00:00
   entry_deadline: 2025-03-13 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_east_5a_mh_band:
   name: East 5A & MH State Band Contest
@@ -147,6 +168,7 @@ ossaa_east_5a_mh_band:
   contest_end: 2025-04-16 03:00:00
   entry_deadline: 2025-03-13 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_east_e_band:
   name: East E State Band Contest
@@ -154,6 +176,7 @@ ossaa_east_e_band:
   contest_end: 2025-04-16 03:00:00
   entry_deadline: 2025-03-13 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_west_5a_mh_band:
   name: West 5A & MH State Band Contest
@@ -161,6 +184,7 @@ ossaa_west_5a_mh_band:
   contest_end: 2025-04-17 03:00:00
   entry_deadline: 2025-03-13 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_west_e_band:
   name: West E Bands State Contest
@@ -168,6 +192,7 @@ ossaa_west_e_band:
   contest_end: 2025-04-17 03:00:00
   entry_deadline: 2025-03-13 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_west_6a_band:
   name: West 6A State Band Contest
@@ -175,6 +200,7 @@ ossaa_west_6a_band:
   contest_end: 2025-04-18 03:00:00
   entry_deadline: 2025-03-13 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_east_6a_band:
   name: East 6A State Band Contest
@@ -182,6 +208,7 @@ ossaa_east_6a_band:
   contest_end: 2025-04-19 03:00:00
   entry_deadline: 2025-03-13 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_instrumental_solo_ensemble:
   name: State Instrumental Solo and Ensemble Contest
@@ -189,6 +216,7 @@ ossaa_instrumental_solo_ensemble:
   contest_end: 2025-04-25 03:00:00
   entry_deadline: 2025-03-13 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_vocal_solo_ensemble:
   name: State Vocal Solo/Ensemble Contest
@@ -196,6 +224,7 @@ ossaa_vocal_solo_ensemble:
   contest_end: 2025-04-26 03:00:00
   entry_deadline: 2025-03-13 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_2a_3a_4a_jazz:
   name: 2A, 3A, 4A State Jazz Band/Jazz Combo Contest
@@ -203,6 +232,7 @@ ossaa_2a_3a_4a_jazz:
   contest_end: 2025-04-30 03:00:00
   entry_deadline: 2025-03-13 13:00:00
   account: ossaa
+  season: ossaa_2024
 
 ossaa_5a_6a_e_jazz:
   name: 5A, 6A, E State Jazz Band/Jazz Combo Contest
@@ -210,3 +240,4 @@ ossaa_5a_6a_e_jazz:
   contest_end: 2025-05-01 03:00:00
   entry_deadline: 2025-03-13 13:00:00
   account: ossaa
+  season: ossaa_2024

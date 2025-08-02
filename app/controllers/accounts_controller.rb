@@ -27,8 +27,8 @@ class AccountsController < ApplicationController
         format.html { redirect_to @account, notice: "Account was successfully created." }
         format.json { render :show, status: :created, location: @account }
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @account.errors, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_content }
+        format.json { render json: @account.errors, status: :unprocessable_content }
       end
     end
   end
@@ -39,8 +39,8 @@ class AccountsController < ApplicationController
         format.html { redirect_to @account, notice: "Account was successfully updated." }
         format.json { render :show, status: :ok, location: @account }
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @account.errors, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
+        format.json { render json: @account.errors, status: :unprocessable_content }
       end
     end
   end
