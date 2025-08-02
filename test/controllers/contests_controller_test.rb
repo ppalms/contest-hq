@@ -31,12 +31,12 @@ class ContestsControllerTest < ActionDispatch::IntegrationTest
     # Test filtering by first season
     get contests_url, params: { season_id: @season.id }
     assert_response :success
-    assert_select "strong", text: @season.display_name
+    assert_select "select#season_id option[selected][value=?]", @season.id.to_s
 
     # Test filtering by second season
     get contests_url, params: { season_id: next_season.id }
     assert_response :success
-    assert_select "strong", text: next_season.display_name
+    assert_select "select#season_id option[selected][value=?]", next_season.id.to_s
   end
 
   test "should default to current season" do
@@ -46,7 +46,7 @@ class ContestsControllerTest < ActionDispatch::IntegrationTest
     get contests_url
     assert_response :success
     # Should show the current season
-    assert_select "strong", text: @season.display_name
+    assert_select "select#season_id option[selected][value=?]", @season.id.to_s
   end
 
   test "should create contest with season" do

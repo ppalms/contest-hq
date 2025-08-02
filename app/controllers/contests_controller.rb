@@ -70,7 +70,6 @@ class ContestsController < ApplicationController
     end
   end
 
-  # Set up contest performance phases
   def setup
     add_breadcrumb("Contests", contests_path)
     add_breadcrumb(@contest.name, @contest)

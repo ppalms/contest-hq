@@ -1,10 +1,10 @@
-<%= form_with(model: season, class: "wide-form") do |form| %>
+<%= form_with(model: season, class: "wide-form pt-4") do |form| %>
   <div class="sm:col-span-2">
     <%= form.label :name %>
-    <%= form.text_field :name, class: "text-field", autofocus: true, placeholder: "e.g., 2025" %>
-    <small class="help-text">
-      Season name (typically the year for the school year)
-    </small>
+    <%= form.text_field :name,
+                    class: "text-field",
+                    autofocus: true,
+                    placeholder: "e.g., 2025" %>
   </div>
 
   <div class="sm:col-span-2">
@@ -12,9 +12,11 @@
       <%= form.check_box :archived, class: "checkbox" %>
       Archive this season
     <% end %>
-    <small class="help-text">
-      Archived seasons are still available in the filter but marked as archived
-    </small>
+    <div>
+      <small class="help-text">
+        Archive past seasons to prevent new contests from being added.
+      </small>
+    </div>
   </div>
 
   <div class="form-button-container">
@@ -28,3 +30,4 @@
     </div>
   <% end %>
 <% end %>
+
