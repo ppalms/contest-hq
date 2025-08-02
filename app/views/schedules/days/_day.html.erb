@@ -1,8 +1,39 @@
 <% if day.present? %>
   <% day.blocks_by_large_ensemble.each do |large_ensemble, blocks| %>
-    <div class="flex justify-between border-b border-neutral-300 py-2 px-4">
+    <%
+      contest_entry = blocks.first.contest_entry
+      first_block_time = blocks.first.start_time
+      
+      # Determine preference status and background color
+      if contest_entry.has_time_preference?
+        within_preference = contest_entry.within_preferred_time?(first_block_time)
+        bg_class = within_preference ? "bg-green-50 border-green-200" : "bg-yellow-50 border-yellow-200"
+        preference_icon = within_preference ? "✓" : "⚠"
+        preference_color = within_preference ? "text-green-600" : "text-yellow-600"
+      else
+        bg_class = "bg-gray-50 border-gray-200"
+        preference_icon = ""
+        preference_color = ""
+      end
+    %>
+    
+    <div class="flex justify-between border-b border-neutral-300 py-2 px-4 <%= bg_class %>" 
+         title="<%= if contest_entry.has_time_preference?
+                     if contest_entry.full_time_preference?
+                       "Preferred time: #{contest_entry.preferred_time_start.strftime('%l:%M %p')} - #{contest_entry.preferred_time_end.strftime('%l:%M %p')}"
+                     elsif contest_entry.preferred_time_start.present?
+                       "Preferred time: After #{contest_entry.preferred_time_start.strftime('%l:%M %p')}"
+                     elsif contest_entry.preferred_time_end.present?
+                       "Preferred time: Before #{contest_entry.preferred_time_end.strftime('%l:%M %p')}"
+                     end
+                   else
+                     "No time preference specified"
+                   end %>">
       <div class="flex-col">
-        <div>
+        <div class="flex items-center">
+          <% if preference_icon.present? %>
+            <span class="<%= preference_color %> mr-2 font-semibold"><%= preference_icon %></span>
+          <% end %>
           <%= large_ensemble.school.name %>
         </div>
         <div>
