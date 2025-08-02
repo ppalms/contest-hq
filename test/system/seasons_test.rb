@@ -3,7 +3,7 @@ require "application_system_test_case"
 class SeasonsTest < ApplicationSystemTestCase
   def setup
     @admin_user = users(:demo_admin_a)
-    sign_in_as(@admin_user)
+    log_in_as(@admin_user)
   end
 
   test "admin can manage seasons" do
@@ -32,19 +32,12 @@ class SeasonsTest < ApplicationSystemTestCase
 
   test "non-admin cannot access seasons" do
     # Sign out admin and sign in as director
+    find_button(@admin_user.last_name, match: :first).click
     find_button("Sign out", match: :first).click
-    sign_in_as(users(:demo_director_a))
+
+    log_in_as(users(:demo_director_a))
 
     visit seasons_path
     assert_current_path root_path
-  end
-
-  private
-
-  def sign_in_as(user)
-    visit sign_in_path
-    fill_in "Email", with: user.email
-    fill_in "Password", with: "Secret1*3*5*"
-    click_button "Sign in"
   end
 end
