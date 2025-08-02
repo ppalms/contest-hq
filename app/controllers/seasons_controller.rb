@@ -37,8 +37,8 @@ class SeasonsController < ApplicationController
         format.html { redirect_to seasons_url, notice: "Season was successfully created." }
         format.json { render :show, status: :created, location: @season }
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @season.errors, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_content }
+        format.json { render json: @season.errors, status: :unprocessable_content }
       end
     end
   end
@@ -50,8 +50,8 @@ class SeasonsController < ApplicationController
         format.html { redirect_to seasons_url, notice: "Season was successfully updated." }
         format.json { render :show, status: :ok, location: @season }
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @season.errors, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
+        format.json { render json: @season.errors, status: :unprocessable_content }
       end
     end
   end
@@ -61,7 +61,7 @@ class SeasonsController < ApplicationController
     respond_to do |format|
       if @season.contests.any?
         format.html { redirect_to seasons_url, alert: "Cannot delete season with contests. Archive it instead." }
-        format.json { render json: { error: "Cannot delete season with contests" }, status: :unprocessable_entity }
+        format.json { render json: { error: "Cannot delete season with contests" }, status: :unprocessable_content }
       else
         @season.destroy!
         format.html { redirect_to seasons_url, notice: "Season was successfully deleted." }

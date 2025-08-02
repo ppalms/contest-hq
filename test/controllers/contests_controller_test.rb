@@ -76,6 +76,6 @@ class ContestsControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 end

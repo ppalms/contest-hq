@@ -33,7 +33,7 @@ class SeasonsControllerTest < ActionDispatch::IntegrationTest
       post seasons_url, params: { season: { name: @season.name, archived: false } }
     end
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   test "should get edit" do

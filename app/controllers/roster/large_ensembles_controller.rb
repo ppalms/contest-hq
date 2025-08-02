@@ -41,7 +41,7 @@ class Roster::LargeEnsemblesController < ApplicationController
         redirect_to roster_large_ensemble_path(@large_ensemble), notice: "Large ensemble was successfully created."
       end
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -51,8 +51,8 @@ class Roster::LargeEnsemblesController < ApplicationController
         format.html { redirect_to roster_large_ensemble_path(@large_ensemble), notice: "Large ensemble was successfully updated." }
         format.json { render :show, status: :ok, large_ensemble: @large_ensemble }
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @large_ensemble.errors, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
+        format.json { render json: @large_ensemble.errors, status: :unprocessable_content }
       end
     end
   end
