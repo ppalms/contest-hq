@@ -4,7 +4,7 @@ class SeasonsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @user = users(:demo_admin_a)
     sign_in_as(@user)
-    @season = seasons(:one)
+    @season = seasons(:demo_2024)
   end
 
   test "should get index" do
@@ -21,7 +21,7 @@ class SeasonsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create season" do
     assert_difference("Season.count") do
-      post seasons_url, params: { season: { name: "2025", archived: false } }
+      post seasons_url, params: { season: { name: "2026", archived: false } }
     end
 
     assert_redirected_to seasons_url
@@ -60,7 +60,6 @@ class SeasonsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not destroy season with contests" do
-    # Create a contest for this season to test restriction
     Contest.create!(name: "Test Contest", season: @season, account: @season.account)
 
     assert_no_difference("Season.count") do
@@ -72,7 +71,6 @@ class SeasonsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should require admin role" do
-    # Sign in as non-admin user
     sign_out
     sign_in_as(users(:demo_director_a))
 

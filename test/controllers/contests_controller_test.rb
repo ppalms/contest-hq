@@ -4,7 +4,7 @@ class ContestsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @user = users(:demo_admin_a)
     sign_in_as(@user)
-    @season = seasons(:one)
+    @season = seasons(:demo_2025)
     @contest = Contest.create!(
       name: "Test Contest",
       season: @season,
@@ -20,11 +20,10 @@ class ContestsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should filter contests by season" do
-    # Create a second season with a contest
-    season2 = Season.create!(name: "2025", account: @season.account)
-    contest2 = Contest.create!(
+    next_season = Season.create!(name: "2026", account: @season.account)
+    Contest.create!(
       name: "Future Contest",
-      season: season2,
+      season: next_season,
       account: @season.account,
       contest_start: Date.current + 1.year
     )
@@ -35,9 +34,9 @@ class ContestsControllerTest < ActionDispatch::IntegrationTest
     assert_select "strong", text: @season.display_name
 
     # Test filtering by second season
-    get contests_url, params: { season_id: season2.id }
+    get contests_url, params: { season_id: next_season.id }
     assert_response :success
-    assert_select "strong", text: season2.display_name
+    assert_select "strong", text: next_season.display_name
   end
 
   test "should default to current season" do
@@ -52,13 +51,13 @@ class ContestsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create contest with season" do
     assert_difference("Contest.count") do
-      post contests_url, params: { 
-        contest: { 
-          name: "New Contest", 
+      post contests_url, params: {
+        contest: {
+          name: "New Contest",
           season_id: @season.id,
           contest_start: Date.current,
           contest_end: Date.current + 1.day
-        } 
+        }
       }
     end
 
@@ -68,12 +67,12 @@ class ContestsControllerTest < ActionDispatch::IntegrationTest
 
   test "should require season for new contest" do
     assert_no_difference("Contest.count") do
-      post contests_url, params: { 
-        contest: { 
+      post contests_url, params: {
+        contest: {
           name: "New Contest",
           contest_start: Date.current,
           contest_end: Date.current + 1.day
-        } 
+        }
       }
     end
 

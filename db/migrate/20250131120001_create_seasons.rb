@@ -8,7 +8,7 @@ class CreateSeasons < ActiveRecord::Migration[8.0]
       t.timestamps default: -> { "CURRENT_TIMESTAMP" }, null: false
     end
 
-    add_index :seasons, [:account_id, :name], unique: true
+    add_index :seasons, [ :account_id, :name ], unique: true
     add_index :seasons, :account_id
   end
 end

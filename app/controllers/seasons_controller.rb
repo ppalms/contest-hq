@@ -77,7 +77,7 @@ class SeasonsController < ApplicationController
   end
 
   def season_params
-    params.expect(season: [:name, :archived])
+    params.expect(season: [ :name, :archived ])
   end
 
   def set_breadcrumbs

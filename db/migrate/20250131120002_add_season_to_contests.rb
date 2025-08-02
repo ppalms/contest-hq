@@ -14,7 +14,7 @@ class AddSeasonToContests < ActiveRecord::Migration[8.0]
                            .sort
 
       # If no contests have dates, create a current year season
-      contest_years = [Date.current.year] if contest_years.empty?
+      contest_years = [ Date.current.year ] if contest_years.empty?
 
       # Create seasons for each year and assign contests
       contest_years.each do |year|
