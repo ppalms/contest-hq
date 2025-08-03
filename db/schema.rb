@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_20_221326) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_31_124725) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -27,6 +27,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_20_221326) do
     t.bigint "account_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.time "preferred_time_start"
+    t.time "preferred_time_end"
     t.index ["account_id"], name: "index_contest_entries_on_account_id"
     t.index ["contest_id", "large_ensemble_id", "account_id"], name: "index_contest_entries_unique", unique: true
     t.index ["contest_id"], name: "index_contest_entries_on_contest_id"

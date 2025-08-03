@@ -25,9 +25,9 @@ class ContestEntry < ApplicationRecord
 
   def within_preferred_time?(schedule_time)
     return true unless has_time_preference?
-    
+
     time_only = schedule_time.strftime("%H:%M:%S")
-    
+
     if full_time_preference?
       start_str = preferred_time_start.strftime("%H:%M:%S")
       end_str = preferred_time_end.strftime("%H:%M:%S")
