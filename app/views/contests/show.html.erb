@@ -43,32 +43,38 @@
     </div>
   <% end %>
 
-  <% if @contest.managers.any? %>
+  <% if @contest.managers.any? || current_user.tenant_admin? %>
     <div class="pt-8">
       <div class="flex justify-between">
         <h2>Managers</h2>
 
         <% if current_user.tenant_admin? %>
-          <%= link_to "Manage Managers",
+          <%= link_to "Assign Managers",
           contest_managers_path(@contest),
           class: "btn-primary-sm" %>
         <% end %>
       </div>
 
       <div class="pt-4">
-        <div class="text-sm">
-          <% @contest.managers.each do |manager| %>
-            <div class="flex justify-between border-b py-1">
-              <div>
-                <%= manager.first_name %>
-                <%= manager.last_name %>
+        <% if @contest.managers.empty? %>
+          <p class="text-sm text-gray-500">
+            No managers have been assigned to this contest.
+          </p>
+        <% else %>
+          <div class="text-sm">
+            <% @contest.managers.each do |manager| %>
+              <div class="flex justify-between border-b py-1">
+                <div>
+                  <%= manager.first_name %>
+                  <%= manager.last_name %>
+                </div>
+                <div class="text-gray-500">
+                  <%= manager.email %>
+                </div>
               </div>
-              <div class="text-gray-500">
-                <%= manager.email %>
-              </div>
-            </div>
-          <% end %>
-        </div>
+            <% end %>
+          </div>
+        <% end %>
       </div>
     </div>
   <% end %>
@@ -115,7 +121,7 @@
           <% end %>
         </ol>
       <% else %>
-        <div class="text-sm">
+        <div class="text-sm text-gray-500">
           A schedule has not been posted for this contest.
         </div>
       <% end %>
