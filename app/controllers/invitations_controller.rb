@@ -12,7 +12,7 @@ class InvitationsController < ApplicationController
       redirect_to new_invitation_path, notice: "An invitation email has been sent to #{@user.email}"
     else
       set_form_variables
-      render :new, status: :unprocessable_entity, locals: { roles: @roles, organizations: @organizations }
+      render :new, status: :unprocessable_content, locals: { roles: @roles, organizations: @organizations }
     end
   end
 

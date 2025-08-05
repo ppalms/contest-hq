@@ -36,7 +36,7 @@ module Contests
         redirect_to contest_managers_path(@contest), notice: "Manager was successfully associated with the contest."
       else
         @pagy, @users = pagy(User.joins(:roles).where(roles: { name: "Manager" }), limit: 10)
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 

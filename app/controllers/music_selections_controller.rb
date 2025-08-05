@@ -19,8 +19,8 @@ class MusicSelectionsController < ApplicationController
         format.html { redirect_to contest_entry_path(id: @contest_entry.id), notice: "Music selection added to contest entry." }
         format.json { render :show, status: :created, music_selection: @music_selection }
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @music_selection.errors, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_content }
+        format.json { render json: @music_selection.errors, status: :unprocessable_content }
       end
     end
   end

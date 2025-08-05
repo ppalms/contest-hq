@@ -33,8 +33,8 @@ class ContestsController < ApplicationController
         format.html { redirect_to contest_url(@contest), notice: "Contest was successfully created." }
         format.json { render :show, status: :created, contest: @contest }
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @contest.errors, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_content }
+        format.json { render json: @contest.errors, status: :unprocessable_content }
       end
     end
   end
@@ -46,8 +46,8 @@ class ContestsController < ApplicationController
         format.html { redirect_to contest_url(@contest), notice: "Contest was successfully updated." }
         format.json { render :show, status: :ok, contest: @contest }
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @contest.errors, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
+        format.json { render json: @contest.errors, status: :unprocessable_content }
       end
     end
   end
@@ -67,8 +67,8 @@ class ContestsController < ApplicationController
         format.html { redirect_to contest_url(@contest), notice: "Contest times were successfully updated." }
         format.json { render :show, status: :ok, contest: @contest }
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @contest.errors, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
+        format.json { render json: @contest.errors, status: :unprocessable_content }
       end
     end
   end

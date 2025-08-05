@@ -32,7 +32,7 @@ class UsersController < ApplicationController
     if @user.update(user_params)
       redirect_to users_path, notice: "User updated successfully."
     else
-      render :edit, status: :unprocessable_entity, error: "Failed to update user."
+      render :edit, status: :unprocessable_content, error: "Failed to update user."
     end
   end
 

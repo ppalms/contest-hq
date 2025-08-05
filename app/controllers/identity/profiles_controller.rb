@@ -11,7 +11,7 @@ class Identity::ProfilesController < ApplicationController
     if @user.update(user_params)
       redirect_to settings_path, notice: "Your profile has been updated"
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
