@@ -54,7 +54,5 @@ class MusicSelectionsController < ApplicationController
   def set_breadcrumbs
     add_breadcrumb("Contests", contests_path)
     add_breadcrumb(@contest_entry.contest.name, @contest_entry.contest)
-    add_breadcrumb("Entries", contest_entries_path)
-    add_breadcrumb(@contest_entry.large_ensemble.name, contest_entry_path(id: @contest_entry.contest.id, entry_id: @contest_entry.id))
   end
 end
