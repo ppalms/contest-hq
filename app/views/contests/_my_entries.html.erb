@@ -2,9 +2,12 @@
   <% entries.each do |entry| %>
     <div class="flex justify-between border-b py-1 text-sm">
       <div>
-        <%= entry.large_ensemble.name %>
-        -
-        <%= entry.large_ensemble.school.name %>
+        <%= link_to contest_entry_path(entry.contest, entry), class: "hover:underline" do %>
+          <%= entry.large_ensemble.name %>
+          <%= entry.large_ensemble.name %>
+          -
+          <%= entry.large_ensemble.school.name %>
+        <% end %>
       </div>
       <div class="text-gray-500">
         <% entry.music_selections&.each do |selection| %>

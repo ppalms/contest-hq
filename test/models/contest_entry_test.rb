@@ -2,7 +2,7 @@ require "test_helper"
 
 class ContestEntryTest < ActiveSupport::TestCase
   setup do
-    @contest_entry = contest_entries(:contest_a_school_a_ensemble_a)
+    @contest_entry = contest_entries(:contest_a_school_a_ensemble_b)
     @contest = @contest_entry.contest
   end
 
