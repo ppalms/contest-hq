@@ -152,17 +152,17 @@ class ContestsTest < ApplicationSystemTestCase
     # Account Admin can see Manage Managers link
     log_in_as(users(:demo_admin_a))
     visit contest_url(contests(:demo_contest_a))
-    assert_text "Manage Managers"
+    assert_text "Assign Managers"
 
     # Director cannot see Manage Managers link
     log_in_as(users(:demo_director_a))
     visit contest_url(contests(:demo_contest_a))
-    assert_no_text "Manage Managers"
+    assert_no_text "Assign Managers"
 
     # Manager cannot see Manage Managers link
     log_in_as(users(:demo_manager_a))
     visit contest_url(contests(:demo_contest_a))
-    assert_no_text "Manage Managers"
+    assert_no_text "Assign Managers"
 
     # Director cannot access managers controller directly
     log_in_as(users(:demo_director_a))
