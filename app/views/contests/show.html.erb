@@ -94,7 +94,7 @@
     </div>
 
     <div class="pt-4">
-      <% if current_user.manages_contest(@contest.id) && @contest.performance_phases&.length == 0 %>
+      <% if @contest.schedules.any? && current_user.manages_contest(@contest.id) && @contest.performance_phases&.length == 0 %>
         <p class="text-sm text-gray-500">
           Contest schedule is not configured -
           <%= link_to "click here", schedule_path(@schedule), class: "italic hover:underline" %>
