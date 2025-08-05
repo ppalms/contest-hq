@@ -1,48 +1,55 @@
-<%= form_with(model: contest_entry, url: @contest_entry.new_record? ? contest_entries_path : contest_entry_path(@contest_entry), class: "wide-form") do |form| %>
+<%= form_with(model: contest_entry, url: @contest_entry.new_record? ? contest_entries_path : contest_entry_path(@contest.id, @contest_entry.id)) do |form| %>
   <%= form.hidden_field :contest_id, value: @contest.id %>
 
-  <div>
-    <%= form.label :large_ensemble %>
-    <%= form.select :large_ensemble_id,
-                current_user.conducted_ensembles.all.map { |t| [t.name, t.id] },
-                { include_blank: "Select a large ensemble" },
-                { required: true, class: "text-field", id: :large_ensemble_id } %>
-  </div>
+  <% unless @contest_entry.id %>
+    <div>
+      <%= form.label :large_ensemble %>
+      <%= form.select :large_ensemble_id,
+                  current_user.conducted_ensembles.all.map { |t| [t.name, t.id] },
+                  { include_blank: "Select a large ensemble" },
+                  { required: true, class: "text-field", id: :large_ensemble_id } %>
+    </div>
+  <% end %>
 
   <div class="space-y-4 border-t pt-4 mt-4">
     <h3 class="text-lg font-medium text-gray-900">Preferred Performance Time (Optional)</h3>
     <p class="text-sm text-gray-600">
-      Help us schedule your performance at a convenient time. You can specify a specific time or a time range.
+      Specify a preferred performance time for your large ensemble.
       <% if @contest.start_time && @contest.end_time %>
-        Contest hours: <%= @contest.start_time.strftime('%l:%M %p') %> - <%= @contest.end_time.strftime('%l:%M %p') %>
+        Contest hours:
+        <%= @contest.start_time.strftime("%l:%M %p") %>
+        -
+        <%= @contest.end_time.strftime("%l:%M %p") %>
       <% end %>
     </p>
-    
+
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div>
         <%= form.label :preferred_time_start, "Earliest preferred time" %>
         <%= form.time_field :preferred_time_start, class: "text-field" %>
       </div>
-      
+
       <div>
         <%= form.label :preferred_time_end, "Latest preferred time" %>
         <%= form.time_field :preferred_time_end, class: "text-field" %>
       </div>
     </div>
-    
+
     <p class="text-xs text-gray-500">
-      Leave both fields blank for no preference, fill one field for a minimum/maximum time, or fill both for a time range.
+      Leave both fields blank for no preference, fill one field for a
+      minimum/maximum time, or fill both for a time range.
     </p>
   </div>
 
   <div class="form-button-container">
-    <%= form.submit "Continue", class: "btn-primary" %>
+    <% button_text = @contest_entry.id ? "Update" : "Continue" %>
+    <%= form.submit button_text, class: "btn-primary" %>
     <%= link_to "Cancel",
     (
       if @contest_entry.id == nil
         @contest
       else
-        contest_entry_path(@contest_entry)
+        contest_entry_path(@contest, @contest_entry)
       end
     ),
     class: "btn-secondary",

@@ -3,6 +3,8 @@ contest_a_school_a_ensemble_a:
   large_ensemble: demo_school_a_ensemble_a
   user: demo_director_a
   account: demo
+  preferred_time_start: 2024-10-23 16:00:00
+  preferred_time_end: 2024-10-23 21:00:00
 
 contest_a_school_a_ensemble_b:
   contest: demo_contest_a
