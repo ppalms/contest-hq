@@ -51,37 +51,44 @@
         </div>
         
         <% if current_user&.manager? %>
-          <div class="flex gap-2 mt-2">
+          <div class="flex gap-2 mt-2" data-controller="reschedule">
             <!-- Move Up Button -->
             <% if index > 0 %>
-              <%= button_to "↑", 
-                  schedule_move_entry_up_path(day.schedule, contest_entry),
+              <%= button_to schedule_move_entry_up_path(day.schedule, contest_entry),
                   method: :post,
-                  class: "btn-xs bg-blue-500 text-white hover:bg-blue-600 px-2 py-1 text-xs rounded",
-                  title: "Move up in schedule" %>
+                  class: "btn-primary-sm px-2 py-1",
+                  title: "Move #{large_ensemble.name} up in schedule",
+                  "aria-label": "Move up in schedule" do %>
+                <span aria-hidden="true">↑</span> Up
+              <% end %>
             <% end %>
 
             <!-- Move Down Button -->
             <% if index < day.blocks_by_large_ensemble.size - 1 %>
-              <%= button_to "↓", 
-                  schedule_move_entry_down_path(day.schedule, contest_entry),
+              <%= button_to schedule_move_entry_down_path(day.schedule, contest_entry),
                   method: :post,
-                  class: "btn-xs bg-blue-500 text-white hover:bg-blue-600 px-2 py-1 text-xs rounded",
-                  title: "Move down in schedule" %>
+                  class: "btn-primary-sm px-2 py-1",
+                  title: "Move #{large_ensemble.name} down in schedule",
+                  "aria-label": "Move down in schedule" do %>
+                <span aria-hidden="true">↓</span> Down
+              <% end %>
             <% end %>
 
             <!-- Swap Dropdown -->
             <% other_entries = all_entries.reject { |_, entry| entry == contest_entry } %>
             <% if other_entries.any? %>
-              <%= form_with url: "", method: :post, class: "inline-block" do |form| %>
-                <%= form.select :target_entry_id, 
-                    options_for_select([["Swap with...", ""]] + other_entries.map { |le, entry| ["#{le.school.name} - #{le.name}", entry.id] }),
-                    {},
-                    { 
-                      class: "text-xs border border-gray-300 rounded px-1 py-0.5",
-                      onchange: "this.form.action = '/schedules/#{day.schedule.id}/contest_entries/#{contest_entry.id}/swap/' + this.value; if(this.value) this.form.submit();"
-                    } %>
-              <% end %>
+              <%= select_tag :target_entry_id, 
+                  options_for_select([["Swap with...", ""]] + other_entries.map { |le, entry| ["#{le.school.name} - #{le.name}", entry.id] }),
+                  {
+                    class: "text-xs border border-gray-300 rounded px-2 py-1",
+                    "aria-label": "Select entry to swap with #{large_ensemble.name}",
+                    data: { 
+                      reschedule_target: "swapSelect",
+                      schedule_id: day.schedule.id,
+                      entry_id: contest_entry.id,
+                      action: "change->reschedule#handleSwap"
+                    }
+                  } %>
             <% end %>
           </div>
         <% end %>

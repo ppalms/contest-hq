@@ -372,7 +372,11 @@ class SchedulesController < ApplicationController
     end
     
     true
-  rescue ActiveRecord::RecordInvalid
+  rescue ActiveRecord::RecordInvalid => e
+    Rails.logger.error "Failed to swap schedule blocks: #{e.message}"
+    false
+  rescue StandardError => e
+    Rails.logger.error "Unexpected error swapping schedule blocks: #{e.message}"
     false
   end
 end
