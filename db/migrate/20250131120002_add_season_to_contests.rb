@@ -9,7 +9,7 @@ class AddSeasonToContests < ActiveRecord::Migration[8.0]
       contest_years = Contest.where(account: account)
                            .where.not(contest_start: nil)
                            .distinct
-                           .pluck("EXTRACT(YEAR FROM contest_start)::integer")
+                           .pluck(Arel.sql("EXTRACT(YEAR FROM contest_start)::integer"))
                            .sort
 
       # If no contests have dates, create a current year season
@@ -25,7 +25,7 @@ class AddSeasonToContests < ActiveRecord::Migration[8.0]
 
         # Assign contests from this year to this season
         Contest.where(account: account)
-               .where("EXTRACT(YEAR FROM contest_start) = ?", year)
+               .where(Arel.sql("EXTRACT(YEAR FROM contest_start) = ?", year))
                .update_all(season_id: season.id)
       end
 
