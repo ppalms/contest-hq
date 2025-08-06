@@ -2,7 +2,7 @@ class ContestsController < ApplicationController
   include Pagy::Backend
 
   before_action :set_contest, only: %i[ show edit update destroy setup schedule ]
-  before_action :set_schedule, only: %i[ show schedule ]
+  before_action :set_schedule, only: %i[ show setup schedule ]
   before_action -> { require_role "AccountAdmin" }, only: %i[ create destroy ]
   before_action :set_breadcrumbs
 
@@ -48,6 +48,7 @@ class ContestsController < ApplicationController
 
     respond_to do |format|
       if @contest.save
+        @contest.create_schedule!
         format.html { redirect_to contest_url(@contest), notice: "Contest was successfully created." }
         format.json { render :show, status: :created, contest: @contest }
       else
@@ -107,7 +108,8 @@ class ContestsController < ApplicationController
   end
 
   def set_schedule
-    @schedule = Schedule.find_or_create_by(contest_id: @contest.id)
+    @schedule = @contest.schedules.first
+    # TODO: handle missing schedule
   end
 
   def contest_params

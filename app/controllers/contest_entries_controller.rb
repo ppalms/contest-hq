@@ -1,6 +1,6 @@
 class ContestEntriesController < ApplicationController
   before_action :set_contest
-  before_action :set_contest_entry, only: %i[ show destroy ]
+  before_action :set_contest_entry, only: %i[ show edit update destroy ]
   before_action :set_breadcrumbs
 
   def index
@@ -52,6 +52,21 @@ class ContestEntriesController < ApplicationController
   def show
   end
 
+  def edit
+  end
+
+  def update
+    respond_to do |format|
+      if @contest_entry.update(contest_entry_params)
+        format.html { redirect_to contest_entry_path(id: @contest_entry.id), notice: "Contest entry was successfully updated." }
+        format.json { render :show, status: :ok, contest_entry: @contest_entry }
+      else
+        format.html { render :edit, status: :unprocessable_content }
+        format.json { render json: @contest_entry.errors, status: :unprocessable_content }
+      end
+    end
+  end
+
   def destroy
     @contest_entry.destroy!
 
@@ -72,7 +87,7 @@ class ContestEntriesController < ApplicationController
   end
 
   def contest_entry_params
-    params.expect(contest_entry: [ :contest_id, :large_ensemble_id ])
+    params.expect(contest_entry: [ :contest_id, :large_ensemble_id, :preferred_time_start, :preferred_time_end ])
   end
 
   def set_breadcrumbs

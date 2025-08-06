@@ -22,6 +22,10 @@ class Contest < ApplicationRecord
   validate :entry_deadline_before_start_date
   validate :unique_contest_phases
 
+  def create_schedule!
+    Schedule.create!(contest: self)
+  end
+
   def delete_room_prompt(room)
     message = "Are you sure?"
 

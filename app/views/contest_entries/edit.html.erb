@@ -1,0 +1,11 @@
+<div class="wide-form-container" id="edit_contest_entry_<%= @contest_entry.id %>">
+  <h1>Edit Contest Entry</h1>
+
+  <p>
+    <span class="block text-xl font-bold"><%= @contest.name %></span>
+    <span class="block"><%= @contest.contest_start.strftime("%A %-m/%d/%Y") %></span>
+    <span class="block text-lg"><%= @contest_entry.large_ensemble.name %></span>
+  </p>
+
+  <%= render "form", contest_entry: @contest_entry %>
+</div>

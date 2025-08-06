@@ -4,6 +4,9 @@
 
     <% if @contest_entry.user == current_user %>
       <div class="action-button-container">
+        <%= link_to "Edit",
+        edit_contest_entry_path(@contest_entry.contest, @contest_entry),
+        class: "btn-secondary-sm sm:btn-secondary" %>
         <%= button_to "Delete",
         contest_entry_path(@contest_entry.contest, @contest_entry),
         method: :delete,

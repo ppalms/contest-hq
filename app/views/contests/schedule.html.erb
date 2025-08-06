@@ -1,6 +1,7 @@
 <%= turbo_frame_tag "contest_setup_content" do %>
   <%= turbo_frame_tag "schedule_action_content" do %>
     <% if current_user.manager? %>
+      <%#TODO: limit to user's managed contests %>
       <%= render partial: "schedules/action_buttons", locals: { schedule: @schedule } %>
     <% end %>
   <% end %>

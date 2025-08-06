@@ -2,6 +2,10 @@ sys_admin_a:
   user: sys_admin_a
   role: sys_admin
 
+sys_admin_a_demo_admin:
+  user: sys_admin_a
+  role: account_admin
+
 demo_admin_a:
   user: demo_admin_a
   role: account_admin

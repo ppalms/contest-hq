@@ -20,36 +20,64 @@
 
   <%= render @contest %>
 
-  <div class="pt-8">
-    <div class="flex justify-between">
-      <h2>Managers</h2>
-      <% if current_user.tenant_admin? %>
-        <%= link_to "Manage Managers",
-        contest_managers_path(@contest),
-        class: "btn-secondary-sm" %>
-      <% end %>
-    </div>
+  <%# TODO: only show if director conducts an eligible large ensemble %>
+  <% if current_user.director? %>
+    <div class="pt-8">
+      <div class="flex justify-between">
+        <h2>Entries</h2>
 
-    <div class="pt-4">
-      <% if @contest.managers.any? %>
-        <div class="text-sm">
-          <% @contest.managers.each do |manager| %>
-            <div class="flex justify-between border-b py-1">
-              <div>
-                <%= manager.first_name %>
-                <%= manager.last_name %>
-              </div>
-              <div class="text-gray-500">
-                <%= manager.email %>
-              </div>
-            </div>
-          <% end %>
-        </div>
-      <% else %>
-        <p class="text-gray-500 text-sm">No managers are currently associated with this contest.</p>
-      <% end %>
+        <%= link_to "Register",
+        new_contest_entry_path(contest_id: @contest.id),
+        class: "btn-primary-sm",
+        data: {
+          turbo_frame: "_top",
+        } %>
+      </div>
+
+      <div class="pt-4">
+        <%= render partial: "my_entries",
+        locals: {
+          entries: @contest.contest_entries.where(user_id: current_user.id),
+        } %>
+      </div>
     </div>
-  </div>
+  <% end %>
+
+  <% if @contest.managers.any? || current_user.tenant_admin? %>
+    <div class="pt-8">
+      <div class="flex justify-between">
+        <h2>Managers</h2>
+
+        <% if current_user.tenant_admin? %>
+          <%= link_to "Assign Managers",
+          contest_managers_path(@contest),
+          class: "btn-primary-sm" %>
+        <% end %>
+      </div>
+
+      <div class="pt-4">
+        <% if @contest.managers.empty? %>
+          <p class="text-sm text-gray-500">
+            No managers have been assigned to this contest.
+          </p>
+        <% else %>
+          <div class="text-sm">
+            <% @contest.managers.each do |manager| %>
+              <div class="flex justify-between border-b py-1">
+                <div>
+                  <%= manager.first_name %>
+                  <%= manager.last_name %>
+                </div>
+                <div class="text-gray-500">
+                  <%= manager.email %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 
   <div class="pt-8">
     <div class="flex justify-between">
@@ -58,7 +86,7 @@
       <% if (@contest.performance_phases.length || 0) > 0 %>
         <%= link_to "View Schedule",
         @schedule,
-        class: "btn-secondary-sm",
+        class: "btn-primary-sm",
         data: {
           turbo_frame: "_top",
         } %>
@@ -66,13 +94,13 @@
     </div>
 
     <div class="pt-4">
-      <% if current_user.manages_contest(@contest.id) && @contest.performance_phases&.length == 0 %>
-        <p class="text-gray-500">
+      <% if @contest.schedules.any? && current_user.manages_contest(@contest.id) && @contest.performance_phases&.length == 0 %>
+        <p class="text-sm text-gray-500">
           Contest schedule is not configured -
           <%= link_to "click here", schedule_path(@schedule), class: "italic hover:underline" %>
           to begin.
         </p>
-      <% else %>
+      <% elsif @contest.performance_phases.length > 0 %>
         <ol class="list-decimal text-sm pl-4">
           <% @contest.performance_phases&.each do |phase| %>
             <li>
@@ -92,21 +120,12 @@
             </li>
           <% end %>
         </ol>
+      <% else %>
+        <div class="text-sm text-gray-500">
+          A schedule has not been posted for this contest.
+        </div>
       <% end %>
     </div>
 
-    <%# TODO: only show if director has conducted groups that are elibiglbe for the contest %>
-    <% if current_user.director? %>
-      <div class="py-8">
-        <h2>Entries</h2>
-
-        <div class="pt-4">
-          <%= render partial: "my_entries",
-          locals: {
-            entries: @contest.contest_entries.where(user_id: current_user.id),
-          } %>
-        </div>
-      </div>
-    <% end %>
   </div>
 </div>

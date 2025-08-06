@@ -1,5 +1,5 @@
 class SchedulesController < ApplicationController
-  # before_action :authorize_manager!
+  before_action :authorize_manager!, only: [ :generate, :reset ]
   before_action :set_schedule
   before_action :set_breadcrumbs
 
