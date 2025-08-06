@@ -1,0 +1,39 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# Entry 1 blocks (contest_a_school_a_ensemble_a)
+entry1_warmup:
+  schedule_day: demo_schedule_day_1
+  contest_entry: contest_a_school_a_ensemble_a
+  performance_phase: demo_contest_warmup
+  room: demo_contest_practice_room
+  start_time: 2024-11-01 08:00:00
+  end_time: 2024-11-01 08:15:00
+  account: demo
+
+entry1_performance:
+  schedule_day: demo_schedule_day_1
+  contest_entry: contest_a_school_a_ensemble_a
+  performance_phase: demo_contest_performance
+  room: demo_contest_main_hall
+  start_time: 2024-11-01 08:15:00
+  end_time: 2024-11-01 08:35:00
+  account: demo
+
+# Entry 2 blocks (contest_a_school_a_ensemble_b)  
+entry2_warmup:
+  schedule_day: demo_schedule_day_1
+  contest_entry: contest_a_school_a_ensemble_b
+  performance_phase: demo_contest_warmup
+  room: demo_contest_practice_room
+  start_time: 2024-11-01 08:35:00
+  end_time: 2024-11-01 08:50:00
+  account: demo
+
+entry2_performance:
+  schedule_day: demo_schedule_day_1
+  contest_entry: contest_a_school_a_ensemble_b
+  performance_phase: demo_contest_performance
+  room: demo_contest_main_hall
+  start_time: 2024-11-01 08:50:00
+  end_time: 2024-11-01 09:10:00
+  account: demo
