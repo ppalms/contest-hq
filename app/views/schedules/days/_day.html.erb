@@ -1,5 +1,5 @@
 <% if day.present? %>
-  <% day.blocks_by_large_ensemble.each do |large_ensemble, blocks| %>
+  <% day.blocks_by_large_ensemble.each_with_index do |(large_ensemble, blocks), index| %>
     <%
       contest_entry = blocks.first.contest_entry
       first_block_time = blocks.first.start_time
@@ -15,6 +15,12 @@
         preference_icon = ""
         preference_color = ""
       end
+
+      # Get all entries for swap dropdown
+      all_entries = day.blocks_by_large_ensemble.keys.map { |le| 
+        blocks_for_entry = day.blocks_by_large_ensemble[le]
+        [le, blocks_for_entry.first.contest_entry] 
+      }
     %>
     
     <div class="flex justify-between border-b border-neutral-300 py-2 px-4 <%= bg_class %>" 
@@ -43,6 +49,49 @@
             <%= large_ensemble.performance_class.abbreviation %>
           <% end %>
         </div>
+        
+        <% if current_user&.manager? %>
+          <div class="flex gap-2 mt-2" data-controller="reschedule">
+            <!-- Move Up Button -->
+            <% if index > 0 %>
+              <%= button_to schedule_move_entry_up_path(day.schedule, contest_entry),
+                  method: :post,
+                  class: "btn-primary-sm px-2 py-1",
+                  title: "Move #{large_ensemble.name} up in schedule",
+                  "aria-label": "Move up in schedule" do %>
+                <span aria-hidden="true">↑</span> Up
+              <% end %>
+            <% end %>
+
+            <!-- Move Down Button -->
+            <% if index < day.blocks_by_large_ensemble.size - 1 %>
+              <%= button_to schedule_move_entry_down_path(day.schedule, contest_entry),
+                  method: :post,
+                  class: "btn-primary-sm px-2 py-1",
+                  title: "Move #{large_ensemble.name} down in schedule",
+                  "aria-label": "Move down in schedule" do %>
+                <span aria-hidden="true">↓</span> Down
+              <% end %>
+            <% end %>
+
+            <!-- Swap Dropdown -->
+            <% other_entries = all_entries.reject { |_, entry| entry == contest_entry } %>
+            <% if other_entries.any? %>
+              <%= select_tag :target_entry_id, 
+                  options_for_select([["Swap with...", ""]] + other_entries.map { |le, entry| ["#{le.school.name} - #{le.name}", entry.id] }),
+                  {
+                    class: "text-xs border border-gray-300 rounded px-2 py-1",
+                    "aria-label": "Select entry to swap with #{large_ensemble.name}",
+                    data: { 
+                      reschedule_target: "swapSelect",
+                      schedule_id: day.schedule.id,
+                      entry_id: contest_entry.id,
+                      action: "change->reschedule#handleSwap"
+                    }
+                  } %>
+            <% end %>
+          </div>
+        <% end %>
       </div>
       <div>
         <% blocks.each do |block| %>

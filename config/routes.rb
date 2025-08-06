@@ -30,6 +30,10 @@ Rails.application.routes.draw do
   post "schedules/:id/reset", as: "reset_schedule", to: "schedules#reset"
   resources :schedules, only: [ :show ] do
     resources :schedule_days, as: "days", path: "days", controller: "schedules/days", only: [ :index, :show ]
+    # Reschedule actions
+    post "contest_entries/:contest_entry_id/move_up", as: "move_entry_up", to: "schedules#move_entry_up"
+    post "contest_entries/:contest_entry_id/move_down", as: "move_entry_down", to: "schedules#move_entry_down"  
+    post "contest_entries/:contest_entry_id/swap/:target_entry_id", as: "swap_entries", to: "schedules#swap_entries"
   end
 
   namespace :roster do

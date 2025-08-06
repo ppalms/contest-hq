@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+demo_schedule_day_1:
+  schedule_date: 2024-11-01
+  schedule: demo_district_schedule
+  account: demo
+  start_time: 2024-11-01 08:00:00
+  end_time: 2024-11-01 17:00:00
+
+ossaa_schedule_day_1:
+  schedule_date: 2024-11-15
+  schedule: demo_district_schedule  # This should be ossaa_state_schedule but we only have one schedule fixture
+  account: ossaa  
+  start_time: 2024-11-15 08:00:00
+  end_time: 2024-11-15 17:00:00

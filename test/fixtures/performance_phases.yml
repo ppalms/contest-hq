@@ -1,0 +1,33 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+demo_contest_warmup:
+  name: "Warm-up"
+  duration: 15
+  ordinal: 1
+  room: demo_contest_practice_room
+  contest: demo_contest_a
+  account: demo
+
+demo_contest_performance:
+  name: "Performance"
+  duration: 20
+  ordinal: 2  
+  room: demo_contest_main_hall
+  contest: demo_contest_a
+  account: demo
+
+ossaa_state_orchestra_warmup:
+  name: "Warm-up"
+  duration: 10
+  ordinal: 1
+  room: ossaa_state_warm_up_room
+  contest: ossaa_state_orchestra
+  account: ossaa
+
+ossaa_state_orchestra_performance:
+  name: "Performance" 
+  duration: 25
+  ordinal: 2
+  room: ossaa_state_orchestra_hall
+  contest: ossaa_state_orchestra
+  account: ossaa
