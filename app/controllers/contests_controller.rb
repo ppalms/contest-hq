@@ -48,6 +48,7 @@ class ContestsController < ApplicationController
 
     respond_to do |format|
       if @contest.save
+        @contest.create_schedule!
         format.html { redirect_to contest_url(@contest), notice: "Contest was successfully created." }
         format.json { render :show, status: :created, contest: @contest }
       else

@@ -5,12 +5,7 @@ class ContestsControllerTest < ActionDispatch::IntegrationTest
     @user = users(:demo_admin_a)
     sign_in_as(@user)
     @season = seasons(:demo_2025)
-    @contest = Contest.create!(
-      name: "Test Contest",
-      season: @season,
-      account: @season.account,
-      contest_start: Date.current
-    )
+    @contest = contests(:demo_contest_c)
   end
 
   test "should get index" do
