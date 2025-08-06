@@ -2,7 +2,6 @@ class AddSeasonToContests < ActiveRecord::Migration[8.0]
   def up
     # Add the season_id column without making it required yet
     add_reference :contests, :season, null: true, foreign_key: true
-    add_index :contests, :season_id
 
     # Create default seasons and assign contests
     Account.find_each do |account|
