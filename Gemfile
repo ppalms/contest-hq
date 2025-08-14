@@ -69,4 +69,4 @@ group :test do
 end
 
 gem "authentication-zero", "~> 4.0"
-gem "pagy", "~> 9.3"
+gem "pagy", "~> 9.4"
