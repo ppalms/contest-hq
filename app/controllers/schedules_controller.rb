@@ -128,13 +128,15 @@ class SchedulesController < ApplicationController
     @contest_entry = ContestEntry.find(params[:contest_entry_id])
     @schedule_days = @schedule.days
     @current_blocks = @contest_entry.schedule_blocks.includes(:schedule_day, :performance_phase)
+    @errors = {}
     
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: [
           turbo_stream.update("modal_container", partial: "schedules/reschedule_modal", 
                             locals: { schedule: @schedule, contest_entry: @contest_entry, 
-                                    schedule_days: @schedule_days, current_blocks: @current_blocks })
+                                    schedule_days: @schedule_days, current_blocks: @current_blocks,
+                                    errors: @errors })
         ]
       end
     end
@@ -142,46 +144,136 @@ class SchedulesController < ApplicationController
 
   def update_schedule
     @contest_entry = ContestEntry.find(params[:contest_entry_id])
-    target_day = @schedule.days.find(params[:target_day_id])
-    target_time = Time.parse(params[:target_time])
-    reschedule_method = params[:reschedule_method] # 'swap' or 'shift'
+    @schedule_days = @schedule.days
+    @current_blocks = @contest_entry.schedule_blocks.includes(:schedule_day, :performance_phase)
+    @errors = {}
 
+    # Validation checks
     if @schedule.contest.contest_start < DateTime.now
+      @errors[:base] = "Contest has already started. Cannot reschedule."
+    elsif params[:target_day_id].blank?
+      @errors[:target_day_id] = "Please select a day"
+    elsif params[:target_time_slot].blank?
+      @errors[:target_time_slot] = "Please select a time slot"
+    elsif params[:reschedule_method].blank?
+      @errors[:reschedule_method] = "Please select a reschedule method"
+    end
+
+    if @errors.any?
       respond_to do |format|
         format.turbo_stream do
-          flash[:alert] = "Contest has already started. Cannot reschedule."
           render turbo_stream: [
-            turbo_stream.append("notifications", partial: "shared/notification")
+            turbo_stream.update("modal_container", partial: "schedules/reschedule_modal", 
+                              locals: { schedule: @schedule, contest_entry: @contest_entry, 
+                                      schedule_days: @schedule_days, current_blocks: @current_blocks,
+                                      errors: @errors })
           ]
-          flash.discard(:alert)
         end
       end
       return
     end
 
-    case reschedule_method
-    when 'swap'
-      perform_swap_reschedule(@contest_entry, target_day, target_time)
-    when 'shift'
-      perform_shift_reschedule(@contest_entry, target_day, target_time)
-    end
+    target_day = @schedule.days.find(params[:target_day_id])
+    target_time = Time.parse(params[:target_time_slot])
+    reschedule_method = params[:reschedule_method] # 'swap' or 'shift'
 
-    respond_to do |format|
-      format.turbo_stream do
-        flash[:notice] = "Successfully rescheduled #{@contest_entry.large_ensemble.name}."
-        
-        # Find the day containing the moved entry for redirection
-        updated_day = @contest_entry.schedule_blocks.first&.schedule_day
-
-        render turbo_stream: [
-          turbo_stream.append("notifications", partial: "shared/notification"),
-          turbo_stream.replace("schedule_day_content", partial: "schedules/days/schedule_blocks", 
-                              locals: { schedule: @schedule, selected_day: updated_day }),
-          turbo_stream.update("modal_container", "")
-        ]
-
-        flash.discard(:notice)
+    begin
+      case reschedule_method
+      when 'swap'
+        result = perform_swap_reschedule(@contest_entry, target_day, target_time)
+      when 'shift'
+        result = perform_shift_reschedule(@contest_entry, target_day, target_time)
       end
+
+      if result == false
+        @errors[:base] = "Unable to reschedule to the selected time slot. Please try a different time or method."
+        
+        respond_to do |format|
+          format.turbo_stream do
+            render turbo_stream: [
+              turbo_stream.update("modal_container", partial: "schedules/reschedule_modal", 
+                                locals: { schedule: @schedule, contest_entry: @contest_entry, 
+                                        schedule_days: @schedule_days, current_blocks: @current_blocks,
+                                        errors: @errors })
+            ]
+          end
+        end
+        return
+      end
+
+      respond_to do |format|
+        format.turbo_stream do
+          flash[:notice] = "Successfully rescheduled #{@contest_entry.large_ensemble.name}."
+          
+          # Find the day containing the moved entry for redirection
+          updated_day = @contest_entry.schedule_blocks.first&.schedule_day
+
+          render turbo_stream: [
+            turbo_stream.append("notifications", partial: "shared/notification"),
+            turbo_stream.replace("schedule_day_content", partial: "schedules/days/schedule_blocks", 
+                                locals: { schedule: @schedule, selected_day: updated_day }),
+            turbo_stream.update("modal_container", "")
+          ]
+
+          flash.discard(:notice)
+        end
+      end
+    rescue => e
+      @errors[:base] = "An error occurred during rescheduling: #{e.message}"
+      
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: [
+            turbo_stream.update("modal_container", partial: "schedules/reschedule_modal", 
+                              locals: { schedule: @schedule, contest_entry: @contest_entry, 
+                                      schedule_days: @schedule_days, current_blocks: @current_blocks,
+                                      errors: @errors })
+          ]
+        end
+      end
+    end
+  end
+
+  def get_day_time_slots
+    day = @schedule.days.find(params[:day_id])
+    time_slots = []
+    
+    # Get all existing schedule blocks for this day, ordered by start time
+    existing_blocks = day.schedule_blocks
+                         .includes(contest_entry: { large_ensemble: [:school, :performance_class] })
+                         .order(:start_time)
+    
+    # Generate time slots every 15 minutes from day start to day end
+    current_time = day.start_time
+    while current_time < day.end_time
+      # Find any blocks that start at this time
+      blocks_at_time = existing_blocks.select { |block| block.start_time == current_time }
+      
+      time_slot = {
+        time: current_time.strftime("%H:%M"),
+        time_value: current_time.strftime("%H:%M:%S"),
+        display: current_time.strftime("%l:%M %p").strip,
+        available: blocks_at_time.empty?,
+        entry: nil
+      }
+      
+      if blocks_at_time.any?
+        block = blocks_at_time.first
+        entry = block.contest_entry
+        time_slot[:entry] = {
+          id: entry.id,
+          name: entry.large_ensemble.name,
+          school: entry.large_ensemble.school.name,
+          performance_class: entry.large_ensemble.performance_class&.abbreviation
+        }
+      end
+      
+      time_slots << time_slot
+      current_time += 15.minutes
+    end
+    
+    respond_to do |format|
+      format.json { render json: { time_slots: time_slots } }
     end
   end
 
@@ -223,10 +315,10 @@ class SchedulesController < ApplicationController
                               .where("start_time <= ? AND end_time > ?", target_time, target_time)
                               .includes(:contest_entry)
 
-    return if target_blocks.empty?
+    return false if target_blocks.empty?
 
     target_entry = target_blocks.first.contest_entry
-    return if target_entry == contest_entry
+    return false if target_entry == contest_entry
 
     # Get all blocks for both entries
     entry_blocks = contest_entry.schedule_blocks.includes(:performance_phase).order(:start_time)
@@ -259,11 +351,13 @@ class SchedulesController < ApplicationController
         schedule_day: original_day
       )
     end
+
+    true
   end
 
   def perform_shift_reschedule(contest_entry, target_day, target_time)
     entry_blocks = contest_entry.schedule_blocks.includes(:performance_phase).order(:start_time)
-    return if entry_blocks.empty?
+    return false if entry_blocks.empty?
 
     # Calculate total duration of this entry's performance
     total_duration = entry_blocks.sum { |block| (block.end_time - block.start_time) }
@@ -307,5 +401,7 @@ class SchedulesController < ApplicationController
         schedule_day: target_day
       )
     end
+
+    true
   end
 end

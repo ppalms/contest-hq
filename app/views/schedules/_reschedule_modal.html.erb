@@ -19,11 +19,22 @@
         <% end %>
       </div>
 
+      <% if errors.any? %>
+        <div class="bg-red-50 border border-red-200 rounded-md p-3 mb-4">
+          <div class="text-sm text-red-800">
+            <% errors.each do |field, message| %>
+              <p><%= message %></p>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
       <%= form_with url: update_schedule_entry_path(schedule, contest_entry), 
                     method: :patch, 
                     local: false,
                     data: { turbo_frame: "_top" },
-                    class: "space-y-4" do |form| %>
+                    class: "space-y-4",
+                    id: "reschedule_form" do |form| %>
         
         <div>
           <%= form.label :target_day_id, "Select Day:", class: "block text-sm font-medium text-gray-700" %>
@@ -31,14 +42,27 @@
                           options_from_collection_for_select(schedule_days, :id, 
                             ->(day) { day.schedule_date.strftime("%a %-m/%d") }),
                           { prompt: "Choose a day" },
-                          { class: "mt-1 block w-full border border-gray-300 rounded-md px-3 py-2", required: true } %>
+                          { class: "mt-1 block w-full border border-gray-300 rounded-md px-3 py-2", 
+                            required: true,
+                            data: { 
+                              action: "change->reschedule#dayChanged",
+                              schedule_id: schedule.id
+                            } } %>
         </div>
 
         <div>
-          <%= form.label :target_time, "New Time:", class: "block text-sm font-medium text-gray-700" %>
-          <%= form.time_field :target_time, 
-                              class: "mt-1 block w-full border border-gray-300 rounded-md px-3 py-2", 
-                              required: true %>
+          <%= form.label :target_time_slot, "Select Time Slot:", class: "block text-sm font-medium text-gray-700" %>
+          <%= form.select :target_time_slot, [], 
+                          { prompt: "Choose a time slot" },
+                          { class: "mt-1 block w-full border border-gray-300 rounded-md px-3 py-2", 
+                            required: true,
+                            disabled: true,
+                            data: { action: "change->reschedule#timeSlotChanged" } } %>
+        </div>
+
+        <div id="existing_entry_info" class="hidden bg-blue-50 border border-blue-200 rounded-md p-3">
+          <p class="text-sm font-medium text-blue-800">Entry at selected time slot:</p>
+          <div id="existing_entry_details" class="text-sm text-blue-700 mt-1"></div>
         </div>
 
         <div>
@@ -68,3 +92,69 @@
     </div>
   </div>
 </div>
+
+<script data-turbo-temporary="true">
+  // Initialize Stimulus controller for reschedule modal
+  if (!window.rescheduleController) {
+    window.rescheduleController = {
+      async dayChanged(event) {
+        const dayId = event.target.value;
+        const scheduleId = event.target.dataset.scheduleId;
+        const timeSlotSelect = document.querySelector('#reschedule_form select[name="target_time_slot"]');
+        const existingEntryInfo = document.getElementById('existing_entry_info');
+        
+        // Reset time slot dropdown
+        timeSlotSelect.innerHTML = '<option value="">Choose a time slot</option>';
+        timeSlotSelect.disabled = true;
+        existingEntryInfo.classList.add('hidden');
+        
+        if (!dayId) return;
+        
+        try {
+          const response = await fetch(`/schedules/${scheduleId}/day_time_slots/${dayId}`);
+          const data = await response.json();
+          
+          // Populate time slot options
+          data.time_slots.forEach(slot => {
+            const option = document.createElement('option');
+            option.value = slot.time_value;
+            option.textContent = `${slot.display}${slot.available ? ' (Available)' : ' (Occupied)'}`;
+            option.dataset.entry = slot.entry ? JSON.stringify(slot.entry) : '';
+            timeSlotSelect.appendChild(option);
+          });
+          
+          timeSlotSelect.disabled = false;
+        } catch (error) {
+          console.error('Error fetching time slots:', error);
+        }
+      },
+      
+      timeSlotChanged(event) {
+        const selectedOption = event.target.selectedOptions[0];
+        const existingEntryInfo = document.getElementById('existing_entry_info');
+        const existingEntryDetails = document.getElementById('existing_entry_details');
+        
+        if (selectedOption && selectedOption.dataset.entry) {
+          const entry = JSON.parse(selectedOption.dataset.entry);
+          existingEntryDetails.innerHTML = `
+            <p><strong>${entry.name}</strong></p>
+            <p>${entry.school}</p>
+            ${entry.performance_class ? `<p>Class: ${entry.performance_class}</p>` : ''}
+          `;
+          existingEntryInfo.classList.remove('hidden');
+        } else {
+          existingEntryInfo.classList.add('hidden');
+        }
+      }
+    };
+  }
+  
+  // Add event listeners
+  document.addEventListener('change', function(event) {
+    if (event.target.matches('#reschedule_form select[name="target_day_id"]')) {
+      window.rescheduleController.dayChanged(event);
+    } else if (event.target.matches('#reschedule_form select[name="target_time_slot"]')) {
+      window.rescheduleController.timeSlotChanged(event);
+    }
+  });
+</script>
