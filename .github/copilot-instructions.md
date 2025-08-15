@@ -220,6 +220,8 @@ The codebase contains several TODO comments indicating areas under development:
 **Email:** AWS SES integration via Action Mailer (production)
 **Deployment:** Kamal for containerized deployment to DigitalOcean
 **Database:** PostgreSQL with multi-database configuration (main, cache, queue, cable)
+**Credentials:** Uses Rails encrypted credentials (`config/credentials.yml.enc` and `config/credentials/production.yml.enc`)
+**Secrets:** Kamal secrets stored in `.kamal/secrets` (excluded from version control)
 
 ## Development Workflow Recommendations
 
