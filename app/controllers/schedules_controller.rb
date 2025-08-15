@@ -265,22 +265,31 @@ class SchedulesController < ApplicationController
     entry_blocks = contest_entry.schedule_blocks.includes(:performance_phase).order(:start_time)
     return if entry_blocks.empty?
 
-    first_block = entry_blocks.first
-    original_start = first_block.start_time
-    
     # Calculate total duration of this entry's performance
     total_duration = entry_blocks.sum { |block| (block.end_time - block.start_time) }
+    new_end_time = target_time + total_duration
     
-    # Find blocks that need to be shifted
+    # Find all blocks that would overlap with the new time slot
     blocks_to_shift = target_day.schedule_blocks
-                               .where("start_time >= ?", target_time)
+                               .where("(start_time < ? AND end_time > ?) OR start_time >= ?", 
+                                      new_end_time, target_time, target_time)
                                .where.not(contest_entry: contest_entry)
                                .includes(:contest_entry, :performance_phase)
                                .order(:start_time)
 
-    # Shift existing blocks after the target time
-    blocks_to_shift.group_by(&:contest_entry).each do |entry, blocks|
-      time_offset = total_duration
+    # Shift overlapping blocks forward
+    blocks_to_shift.group_by(&:contest_entry).each do |other_entry, blocks|
+      # Find the earliest start time for this entry that conflicts
+      earliest_block = blocks.min_by(&:start_time)
+      
+      # If the earliest block starts before our new slot, shift to our end time
+      # If it starts after our new slot, shift by our total duration
+      if earliest_block.start_time < target_time
+        time_offset = new_end_time - earliest_block.start_time
+      else
+        time_offset = total_duration
+      end
+      
       blocks.each do |block|
         block.update!(
           start_time: block.start_time + time_offset,
@@ -290,7 +299,7 @@ class SchedulesController < ApplicationController
     end
 
     # Move the entry to the new time
-    time_offset = target_time - original_start
+    time_offset = target_time - entry_blocks.first.start_time
     entry_blocks.each do |block|
       block.update!(
         start_time: block.start_time + time_offset,
