@@ -28,6 +28,8 @@ Rails.application.routes.draw do
 
   post "schedules/:id/generate", as: "generate_schedule", to: "schedules#generate"
   post "schedules/:id/reset", as: "reset_schedule", to: "schedules#reset"
+  get "schedules/:id/reschedule/:contest_entry_id", as: "reschedule_entry", to: "schedules#reschedule"
+  patch "schedules/:id/reschedule/:contest_entry_id", as: "update_schedule_entry", to: "schedules#update_schedule"
   resources :schedules, only: [ :show ] do
     resources :schedule_days, as: "days", path: "days", controller: "schedules/days", only: [ :index, :show ]
   end
