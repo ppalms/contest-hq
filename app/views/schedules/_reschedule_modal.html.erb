@@ -29,6 +29,12 @@
         </div>
       <% end %>
 
+      <% 
+        # Ensure current_time_slot and current_day_id have default values
+        current_time_slot_val = local_assigns[:current_time_slot] || nil
+        current_day_id_val = local_assigns[:current_day_id] || nil
+      %>
+
       <%= form_with url: update_schedule_entry_path(schedule, contest_entry), 
                     method: :patch, 
                     local: false,
@@ -46,7 +52,8 @@
                             required: true,
                             data: { 
                               action: "change->reschedule#dayChanged",
-                              schedule_id: schedule.id
+                              schedule_id: schedule.id,
+                              contest_entry_id: contest_entry.id
                             } } %>
         </div>
 
@@ -60,7 +67,9 @@
                             value: form_values[:target_time_slot],
                             data: { 
                               action: "change->reschedule#timeSlotChanged",
-                              selected_time_slot: form_values[:target_time_slot]
+                              selected_time_slot: form_values[:target_time_slot],
+                              current_time_slot: current_time_slot_val,
+                              current_day_id: current_day_id_val
                             } } %>
         </div>
 
@@ -94,6 +103,7 @@
             Cancel
           </button>
           <%= form.submit "Reschedule", 
+                          id: "reschedule_submit_btn",
                           class: "px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700" %>
         </div>
       <% end %>
@@ -109,13 +119,19 @@
     const existingEntryInfo = document.getElementById('existing_entry_info');
     const rescheduleMethodSection = document.getElementById('reschedule_method_section');
     const swapRadio = document.querySelector('#reschedule_form input[value="swap"]');
+    const submitBtn = document.getElementById('reschedule_submit_btn');
     
     if (!daySelect || !timeSlotSelect) return;
+    
+    // Get current time slot information
+    const currentTimeSlot = timeSlotSelect.dataset.currentTimeSlot;
+    const currentDayId = timeSlotSelect.dataset.currentDayId;
     
     // Day change handler
     async function dayChanged(event) {
       const dayId = event.target.value;
       const scheduleId = event.target.dataset.scheduleId;
+      const contestEntryId = event.target.dataset.contestEntryId;
       const selectedTimeSlot = timeSlotSelect.dataset.selectedTimeSlot;
       
       // Reset time slot dropdown and hide sections
@@ -124,19 +140,35 @@
       existingEntryInfo.classList.add('hidden');
       rescheduleMethodSection.classList.add('hidden');
       
+      // Reset submit button
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+      submitBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+      
       if (!dayId) return;
       
       try {
-        const response = await fetch(`/schedules/${scheduleId}/day_time_slots/${dayId}`);
+        const response = await fetch(`/schedules/${scheduleId}/day_time_slots/${dayId}?contest_entry_id=${contestEntryId}`);
         const data = await response.json();
         
         // Populate time slot options
         data.time_slots.forEach(slot => {
           const option = document.createElement('option');
           option.value = slot.time_value;
-          option.textContent = `${slot.display}${slot.available ? ' (Available)' : ' (Occupied)'}`;
+          
+          let displayText = `${slot.display}`;
+          if (slot.is_current) {
+            displayText += ' (Current)';
+          } else if (slot.available) {
+            displayText += ' (Available)';
+          } else {
+            displayText += ' (Occupied)';
+          }
+          
+          option.textContent = displayText;
           option.dataset.entry = slot.entry ? JSON.stringify(slot.entry) : '';
           option.dataset.available = slot.available;
+          option.dataset.isCurrent = slot.is_current;
           
           // Pre-select the time slot if it matches the preserved value
           if (selectedTimeSlot && slot.time_value === selectedTimeSlot) {
@@ -162,7 +194,30 @@
       const selectedOption = event.target.selectedOptions[0];
       const existingEntryDetails = document.getElementById('existing_entry_details');
       
-      if (selectedOption && selectedOption.dataset.entry) {
+      // Check if this is the current time slot
+      const isCurrentSlot = selectedOption && selectedOption.dataset.isCurrent === 'true';
+      
+      if (isCurrentSlot) {
+        // Disable submit button for current time slot
+        submitBtn.disabled = true;
+        submitBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+        submitBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
+        
+        // Hide other sections
+        existingEntryInfo.classList.add('hidden');
+        rescheduleMethodSection.classList.add('hidden');
+        
+        // Clear any selected reschedule method
+        const checkedMethod = document.querySelector('#reschedule_form input[name="reschedule_method"]:checked');
+        if (checkedMethod) {
+          checkedMethod.checked = false;
+        }
+      } else if (selectedOption && selectedOption.dataset.entry) {
+        // Enable submit button for valid selections
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+        submitBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+        
         // Time slot is occupied - show entry details and reschedule method section
         const entry = JSON.parse(selectedOption.dataset.entry);
         existingEntryDetails.innerHTML = `
@@ -178,6 +233,11 @@
           swapRadio.checked = true;
         }
       } else {
+        // Enable submit button for available slots
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+        submitBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+        
         // Time slot is available - hide sections and clear reschedule method
         existingEntryInfo.classList.add('hidden');
         rescheduleMethodSection.classList.add('hidden');

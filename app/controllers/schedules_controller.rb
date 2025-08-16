@@ -128,6 +128,16 @@ class SchedulesController < ApplicationController
     @contest_entry = ContestEntry.find(params[:contest_entry_id])
     @schedule_days = @schedule.days
     @current_blocks = @contest_entry.schedule_blocks.includes(:schedule_day, :performance_phase)
+    
+    # Get current time slot information
+    current_time_slot = nil
+    current_day_id = nil
+    if @current_blocks.any?
+      first_block = @current_blocks.first
+      current_time_slot = first_block.start_time.strftime("%H:%M:%S")
+      current_day_id = first_block.schedule_day_id
+    end
+    
     @errors = {}
     @form_values = {
       target_day_id: @schedule_days.first&.id,
@@ -141,7 +151,8 @@ class SchedulesController < ApplicationController
           turbo_stream.update("modal_container", partial: "schedules/reschedule_modal", 
                             locals: { schedule: @schedule, contest_entry: @contest_entry, 
                                     schedule_days: @schedule_days, current_blocks: @current_blocks,
-                                    errors: @errors, form_values: @form_values })
+                                    errors: @errors, form_values: @form_values,
+                                    current_time_slot: current_time_slot, current_day_id: current_day_id })
         ]
       end
     end
@@ -151,6 +162,16 @@ class SchedulesController < ApplicationController
     @contest_entry = ContestEntry.find(params[:contest_entry_id])
     @schedule_days = @schedule.days
     @current_blocks = @contest_entry.schedule_blocks.includes(:schedule_day, :performance_phase)
+    
+    # Get current time slot information
+    current_time_slot = nil
+    current_day_id = nil
+    if @current_blocks.any?
+      first_block = @current_blocks.first
+      current_time_slot = first_block.start_time.strftime("%H:%M:%S")
+      current_day_id = first_block.schedule_day_id
+    end
+    
     @errors = {}
     @form_values = {
       target_day_id: params[:target_day_id],
@@ -165,6 +186,10 @@ class SchedulesController < ApplicationController
       @errors[:target_day_id] = "Please select a day"
     elsif params[:target_time_slot].blank?
       @errors[:target_time_slot] = "Please select a time slot"
+    elsif current_day_id && current_time_slot && 
+          params[:target_day_id].to_i == current_day_id && 
+          params[:target_time_slot] == current_time_slot
+      @errors[:target_time_slot] = "Cannot reschedule to the current time slot"
     else
       # Check if the selected time slot is occupied before requiring reschedule method
       target_day = @schedule.days.find(params[:target_day_id])
@@ -195,7 +220,8 @@ class SchedulesController < ApplicationController
             turbo_stream.update("modal_container", partial: "schedules/reschedule_modal", 
                               locals: { schedule: @schedule, contest_entry: @contest_entry, 
                                       schedule_days: @schedule_days, current_blocks: @current_blocks,
-                                      errors: @errors, form_values: @form_values })
+                                      errors: @errors, form_values: @form_values,
+                                      current_time_slot: current_time_slot, current_day_id: current_day_id })
           ]
         end
       end
@@ -242,7 +268,8 @@ class SchedulesController < ApplicationController
               turbo_stream.update("modal_container", partial: "schedules/reschedule_modal", 
                                 locals: { schedule: @schedule, contest_entry: @contest_entry, 
                                         schedule_days: @schedule_days, current_blocks: @current_blocks,
-                                        errors: @errors, form_values: @form_values })
+                                        errors: @errors, form_values: @form_values,
+                                        current_time_slot: current_time_slot, current_day_id: current_day_id })
             ]
           end
         end
@@ -275,7 +302,8 @@ class SchedulesController < ApplicationController
             turbo_stream.update("modal_container", partial: "schedules/reschedule_modal", 
                               locals: { schedule: @schedule, contest_entry: @contest_entry, 
                                       schedule_days: @schedule_days, current_blocks: @current_blocks,
-                                      errors: @errors, form_values: @form_values })
+                                      errors: @errors, form_values: @form_values,
+                                      current_time_slot: current_time_slot, current_day_id: current_day_id })
           ]
         end
       end
@@ -285,6 +313,15 @@ class SchedulesController < ApplicationController
   def get_day_time_slots
     day = @schedule.days.find(params[:day_id])
     time_slots = []
+    
+    # Get contest entry if provided to identify current time slot
+    contest_entry_id = params[:contest_entry_id]
+    current_entry_time = nil
+    if contest_entry_id
+      contest_entry = ContestEntry.find(contest_entry_id)
+      current_blocks = contest_entry.schedule_blocks.where(schedule_day_id: day.id)
+      current_entry_time = current_blocks.first&.start_time
+    end
     
     # Get all existing schedule blocks for this day, ordered by start time
     existing_blocks = day.schedule_blocks
@@ -300,11 +337,14 @@ class SchedulesController < ApplicationController
       # Find any blocks that start at this time
       blocks_at_time = existing_blocks.select { |block| block.start_time == current_time }
       
+      is_current_slot = current_entry_time && current_time == current_entry_time
+      
       time_slot = {
         time: current_time.strftime("%H:%M"),
         time_value: current_time.strftime("%H:%M:%S"),
         display: current_time.strftime("%l:%M %p").strip,
         available: blocks_at_time.empty?,
+        is_current: is_current_slot,
         entry: nil
       }
       
