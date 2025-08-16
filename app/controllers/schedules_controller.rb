@@ -184,7 +184,12 @@ class SchedulesController < ApplicationController
     end
 
     target_day = @schedule.days.find(params[:target_day_id])
-    target_time = Time.parse(params[:target_time_slot])
+    # Parse the time string and combine it with the target day's date
+    time_parts = params[:target_time_slot].split(':')
+    target_time = target_day.schedule_date.beginning_of_day + 
+                  time_parts[0].to_i.hours + 
+                  time_parts[1].to_i.minutes + 
+                  (time_parts[2] ? time_parts[2].to_i.seconds : 0)
     reschedule_method = params[:reschedule_method] # 'swap' or 'shift'
 
     begin
