@@ -129,6 +129,11 @@ class SchedulesController < ApplicationController
     @schedule_days = @schedule.days
     @current_blocks = @contest_entry.schedule_blocks.includes(:schedule_day, :performance_phase)
     @errors = {}
+    @form_values = {
+      target_day_id: nil,
+      target_time_slot: nil,
+      reschedule_method: nil
+    }
     
     respond_to do |format|
       format.turbo_stream do
@@ -136,7 +141,7 @@ class SchedulesController < ApplicationController
           turbo_stream.update("modal_container", partial: "schedules/reschedule_modal", 
                             locals: { schedule: @schedule, contest_entry: @contest_entry, 
                                     schedule_days: @schedule_days, current_blocks: @current_blocks,
-                                    errors: @errors })
+                                    errors: @errors, form_values: @form_values })
         ]
       end
     end
@@ -147,6 +152,11 @@ class SchedulesController < ApplicationController
     @schedule_days = @schedule.days
     @current_blocks = @contest_entry.schedule_blocks.includes(:schedule_day, :performance_phase)
     @errors = {}
+    @form_values = {
+      target_day_id: params[:target_day_id],
+      target_time_slot: params[:target_time_slot],
+      reschedule_method: params[:reschedule_method]
+    }
 
     # Validation checks
     if @schedule.contest.contest_start < DateTime.now
@@ -166,7 +176,7 @@ class SchedulesController < ApplicationController
             turbo_stream.update("modal_container", partial: "schedules/reschedule_modal", 
                               locals: { schedule: @schedule, contest_entry: @contest_entry, 
                                       schedule_days: @schedule_days, current_blocks: @current_blocks,
-                                      errors: @errors })
+                                      errors: @errors, form_values: @form_values })
           ]
         end
       end
@@ -194,7 +204,7 @@ class SchedulesController < ApplicationController
               turbo_stream.update("modal_container", partial: "schedules/reschedule_modal", 
                                 locals: { schedule: @schedule, contest_entry: @contest_entry, 
                                         schedule_days: @schedule_days, current_blocks: @current_blocks,
-                                        errors: @errors })
+                                        errors: @errors, form_values: @form_values })
             ]
           end
         end
@@ -227,7 +237,7 @@ class SchedulesController < ApplicationController
             turbo_stream.update("modal_container", partial: "schedules/reschedule_modal", 
                               locals: { schedule: @schedule, contest_entry: @contest_entry, 
                                       schedule_days: @schedule_days, current_blocks: @current_blocks,
-                                      errors: @errors })
+                                      errors: @errors, form_values: @form_values })
           ]
         end
       end
@@ -243,7 +253,10 @@ class SchedulesController < ApplicationController
                          .includes(contest_entry: { large_ensemble: [:school, :performance_class] })
                          .order(:start_time)
     
-    # Generate time slots every 15 minutes from day start to day end
+    # Calculate total duration of all performance phases for this contest
+    total_phase_duration = @schedule.contest.performance_phases.sum(:duration)
+    
+    # Generate time slots using the total phase duration as interval
     current_time = day.start_time
     while current_time < day.end_time
       # Find any blocks that start at this time
@@ -269,7 +282,7 @@ class SchedulesController < ApplicationController
       end
       
       time_slots << time_slot
-      current_time += 15.minutes
+      current_time += total_phase_duration.minutes
     end
     
     respond_to do |format|

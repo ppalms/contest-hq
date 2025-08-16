@@ -40,7 +40,7 @@
           <%= form.label :target_day_id, "Select Day:", class: "block text-sm font-medium text-gray-700" %>
           <%= form.select :target_day_id, 
                           options_from_collection_for_select(schedule_days, :id, 
-                            ->(day) { day.schedule_date.strftime("%a %-m/%d") }),
+                            ->(day) { day.schedule_date.strftime("%a %-m/%d") }, form_values[:target_day_id]),
                           { prompt: "Choose a day" },
                           { class: "mt-1 block w-full border border-gray-300 rounded-md px-3 py-2", 
                             required: true,
@@ -56,8 +56,12 @@
                           { prompt: "Choose a time slot" },
                           { class: "mt-1 block w-full border border-gray-300 rounded-md px-3 py-2", 
                             required: true,
-                            disabled: true,
-                            data: { action: "change->reschedule#timeSlotChanged" } } %>
+                            disabled: form_values[:target_day_id].blank?,
+                            value: form_values[:target_time_slot],
+                            data: { 
+                              action: "change->reschedule#timeSlotChanged",
+                              selected_time_slot: form_values[:target_time_slot]
+                            } } %>
         </div>
 
         <div id="existing_entry_info" class="hidden bg-blue-50 border border-blue-200 rounded-md p-3">
@@ -69,11 +73,15 @@
           <%= form.label :reschedule_method, "Reschedule Method:", class: "block text-sm font-medium text-gray-700" %>
           <div class="mt-2 space-y-2">
             <label class="flex items-center">
-              <%= form.radio_button :reschedule_method, "swap", class: "mr-2", required: true %>
+              <%= form.radio_button :reschedule_method, "swap", 
+                                    { class: "mr-2", required: true, 
+                                      checked: form_values[:reschedule_method] == "swap" } %>
               <span class="text-sm">Swap time slots with existing entry</span>
             </label>
             <label class="flex items-center">
-              <%= form.radio_button :reschedule_method, "shift", class: "mr-2", required: true %>
+              <%= form.radio_button :reschedule_method, "shift", 
+                                    { class: "mr-2", required: true,
+                                      checked: form_values[:reschedule_method] == "shift" } %>
               <span class="text-sm">Shift other entries to make room</span>
             </label>
           </div>
@@ -102,6 +110,7 @@
         const scheduleId = event.target.dataset.scheduleId;
         const timeSlotSelect = document.querySelector('#reschedule_form select[name="target_time_slot"]');
         const existingEntryInfo = document.getElementById('existing_entry_info');
+        const selectedTimeSlot = timeSlotSelect.dataset.selectedTimeSlot;
         
         // Reset time slot dropdown
         timeSlotSelect.innerHTML = '<option value="">Choose a time slot</option>';
@@ -120,10 +129,21 @@
             option.value = slot.time_value;
             option.textContent = `${slot.display}${slot.available ? ' (Available)' : ' (Occupied)'}`;
             option.dataset.entry = slot.entry ? JSON.stringify(slot.entry) : '';
+            
+            // Pre-select the time slot if it matches the preserved value
+            if (selectedTimeSlot && slot.time_value === selectedTimeSlot) {
+              option.selected = true;
+            }
+            
             timeSlotSelect.appendChild(option);
           });
           
           timeSlotSelect.disabled = false;
+          
+          // If a time slot was pre-selected, trigger the change event to show entry details
+          if (selectedTimeSlot) {
+            timeSlotSelect.dispatchEvent(new Event('change'));
+          }
         } catch (error) {
           console.error('Error fetching time slots:', error);
         }
@@ -157,4 +177,20 @@
       window.rescheduleController.timeSlotChanged(event);
     }
   });
+  
+  // Auto-trigger day change if a day is pre-selected (form state preservation)
+  document.addEventListener('DOMContentLoaded', function() {
+    const daySelect = document.querySelector('#reschedule_form select[name="target_day_id"]');
+    if (daySelect && daySelect.value) {
+      daySelect.dispatchEvent(new Event('change'));
+    }
+  });
+  
+  // Also trigger immediately since the modal is loaded dynamically
+  const daySelect = document.querySelector('#reschedule_form select[name="target_day_id"]');
+  if (daySelect && daySelect.value) {
+    setTimeout(() => {
+      daySelect.dispatchEvent(new Event('change'));
+    }, 100);
+  }
 </script>
