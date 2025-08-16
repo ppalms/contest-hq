@@ -10,10 +10,10 @@ class AccountSwitchingTest < ApplicationSystemTestCase
 
   test "sysadmin can see account switcher in profile dropdown" do
     visit root_path
-    
+
     # Click on profile dropdown
     click_on "#{@sys_admin.first_name} #{@sys_admin.last_name}"
-    
+
     # Should see account switcher with "All Accounts" selected
     assert_selector "select[name='account_id']"
     assert_text "Account Context"
@@ -22,22 +22,22 @@ class AccountSwitchingTest < ApplicationSystemTestCase
 
   test "sysadmin can switch to specific account" do
     visit users_path
-    
+
     # Initially should see users from all accounts
     assert_text users(:demo_director_a).email
     assert_text users(:customer_director_a).email
-    
+
     # Click on profile dropdown and switch to demo account
     click_on "#{@sys_admin.first_name} #{@sys_admin.last_name}"
     select "Public Demo", from: "account_id"
-    
+
     # Should see confirmation message
     assert_text "Switched to Public Demo"
-    
+
     # Should now only see demo account users
     assert_text users(:demo_director_a).email
     assert_no_text users(:customer_director_a).email
-    
+
     # Title should reflect selected account
     assert_text "Public Demo Contest HQ"
   end
@@ -48,14 +48,14 @@ class AccountSwitchingTest < ApplicationSystemTestCase
     click_on "#{@sys_admin.first_name} #{@sys_admin.last_name}"
     select "Public Demo", from: "account_id"
     assert_text "Switched to Public Demo"
-    
+
     # Now switch back to all accounts
     click_on "#{@sys_admin.first_name} #{@sys_admin.last_name}"
     select "All Accounts", from: "account_id"
-    
+
     # Should see confirmation message
     assert_text "Switched to all accounts view"
-    
+
     # Should see users from all accounts again
     visit users_path
     assert_text users(:demo_director_a).email
@@ -65,10 +65,10 @@ class AccountSwitchingTest < ApplicationSystemTestCase
   test "regular user should not see account switcher" do
     log_in_as(users(:demo_admin_a))
     visit root_path
-    
+
     # Click on profile dropdown
     click_on "#{users(:demo_admin_a).first_name} #{users(:demo_admin_a).last_name}"
-    
+
     # Should not see account switcher
     assert_no_text "Account Context"
     assert_no_selector "select[name='account_id']"
@@ -79,12 +79,12 @@ class AccountSwitchingTest < ApplicationSystemTestCase
     visit root_path
     click_on "#{@sys_admin.first_name} #{@sys_admin.last_name}"
     select "Public Demo", from: "account_id"
-    
+
     # Visit different pages and ensure only demo account data is shown
     visit users_path
     assert_text users(:demo_director_a).email
     assert_no_text users(:customer_director_a).email
-    
+
     # The account scoping should persist across requests
     visit root_path
     visit users_path
