@@ -1,24 +1,33 @@
 <% if day.present? %>
   <% day.blocks_by_large_ensemble.each do |large_ensemble, blocks| %>
-    <%
-      contest_entry = blocks.first.contest_entry
-      first_block_time = blocks.first.start_time
-      
-      # Determine preference status and background color
-      if contest_entry.has_time_preference?
-        within_preference = contest_entry.within_preferred_time?(first_block_time)
-        bg_class = within_preference ? "bg-green-50 border-green-200" : "bg-yellow-50 border-yellow-200"
-        preference_icon = within_preference ? "✓" : "⚠"
-        preference_color = within_preference ? "text-green-600" : "text-yellow-600"
-      else
-        bg_class = "bg-gray-50 border-gray-200"
-        preference_icon = ""
-        preference_color = ""
-      end
-    %>
+    <% contest_entry = blocks.first.contest_entry
+    first_block_time = blocks.first.start_time
     
-    <div class="flex justify-between border-b border-neutral-300 py-2 px-4 <%= bg_class %>" 
-         title="<%= if contest_entry.has_time_preference?
+    # Determine preference status and background color
+    if contest_entry.has_time_preference?
+      within_preference = contest_entry.within_preferred_time?(first_block_time)
+      bg_class =
+        (
+          if within_preference
+            "bg-green-50 border-green-200"
+          else
+            "bg-yellow-50 border-yellow-200"
+          end
+        )
+      preference_icon = within_preference ? "✓" : "⚠"
+      preference_color = within_preference ? "text-green-600" : "text-yellow-600"
+    else
+      bg_class = "bg-gray-50 border-gray-200"
+      preference_icon = ""
+      preference_color = ""
+    end %>
+
+    <div
+      class="
+        flex justify-between border-b border-neutral-300 py-2 px-4
+        <%= bg_class %>
+      "
+      title="<%= if contest_entry.has_time_preference?
                      if contest_entry.full_time_preference?
                        "Preferred time: #{contest_entry.preferred_time_start.strftime('%l:%M %p')} - #{contest_entry.preferred_time_end.strftime('%l:%M %p')}"
                      elsif contest_entry.preferred_time_start.present?
@@ -28,7 +37,8 @@
                      end
                    else
                      "No time preference specified"
-                   end %>">
+                   end %>"
+    >
       <div class="flex-col">
         <div class="flex items-center">
           <% if preference_icon.present? %>
@@ -57,12 +67,17 @@
         </div>
         <% if defined?(current_user) && current_user&.manager? %>
           <div>
-            <%= link_to reschedule_entry_path(day.schedule, contest_entry), 
+            <%= link_to reschedule_entry_path(day.schedule, contest_entry, format: :turbo_stream), 
                         method: :get,
                         data: { turbo_frame: "_top" },
                         class: "inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 bg-blue-100 border border-blue-200 rounded hover:bg-blue-200" do %>
               <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
               Reschedule
             <% end %>
