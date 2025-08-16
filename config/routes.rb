@@ -3,6 +3,10 @@ Rails.application.routes.draw do
   resources :users, only: [ :index, :edit, :update ]
   resources :seasons, except: [ :show ]
 
+  # Account switching for sysadmins
+  post "switch_account", to: "account_switching#switch"
+  delete "switch_account", to: "account_switching#clear"
+
   namespace :organizations do
     get "/", to: "index"
     resources :schools

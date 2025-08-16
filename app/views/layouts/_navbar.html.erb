@@ -19,7 +19,9 @@
 
     <div class="absolute left-1/2 transform -translate-x-1/2 font-bold text-center">
       <span>
-        <% if Current.account&.name != "Contest HQ" && current_user&.sysadmin? == false %>
+        <% if Current.selected_account %>
+          <%= link_to "#{Current.selected_account.name} Contest HQ", root_path %>
+        <% elsif Current.account&.name != "Contest HQ" && current_user&.sysadmin? == false %>
           <%= link_to "#{current_user.account.name} Contest HQ", root_path %>
         <% else %>
           <%= link_to "Contest HQ", root_path %>
@@ -75,7 +77,7 @@
                   id="user-menu"
                   data-dropdown-target="menu"
                   class="
-                    hidden absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white
+                    hidden absolute right-0 z-10 mt-2.5 w-64 origin-top-right rounded-md bg-white
                     py-2 ring-1 shadow-lg ring-gray-900/5 focus:outline-hidden
                   "
                   role="menu"
@@ -84,6 +86,16 @@
                   tabindex="-1"
                 >
                   <!-- Active: "bg-gray-50 outline-hidden", Not Active: "" -->
+                  <% if current_user&.sysadmin? %>
+                    <div class="px-3 py-2 text-xs text-gray-500 border-b">
+                      Account Context
+                    </div>
+                    <div class="px-3 py-2">
+                      <%= render "shared/account_switcher" %>
+                    </div>
+                    <div class="border-t border-gray-200 my-1"></div>
+                  <% end %>
+                  
                   <%= link_to "Your profile",
                   edit_identity_profile_path,
                   class: "block px-3 py-1 text-sm/6 text-gray-900" %>
