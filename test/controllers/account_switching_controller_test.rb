@@ -60,13 +60,13 @@ class AccountSwitchingControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
   end
 
-  test "account switching preserves selected account in Current" do
+  test "account switching preserves selected account in session" do
     sign_in_as @sys_admin
 
     post switch_account_path, params: { account_id: @demo_account.id }
 
-    # Make another request and verify Current.selected_account is set
+    # Make another request and verify selected account is set
     get root_path
-    assert_equal @demo_account, Current.selected_account
+    assert_equal @demo_account.id, session[:selected_account_id]
   end
 end
