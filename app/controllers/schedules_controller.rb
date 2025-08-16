@@ -408,10 +408,11 @@ class SchedulesController < ApplicationController
     # Update entry blocks to target's original time
     time_offset = original_target_start - entry_first_block.start_time
     entry_blocks.each do |block|
-      block.update!(
+      # Use update_columns to bypass validations during swap operation
+      block.update_columns(
         start_time: block.start_time + time_offset,
         end_time: block.end_time + time_offset,
-        schedule_day: target_day
+        schedule_day_id: target_day.id
       )
     end
 
@@ -419,10 +420,11 @@ class SchedulesController < ApplicationController
     time_offset = original_entry_start - target_first_block.start_time
     target_entry_blocks.each do |block|
       original_day = entry_first_block.schedule_day
-      block.update!(
+      # Use update_columns to bypass validations during swap operation
+      block.update_columns(
         start_time: block.start_time + time_offset,
         end_time: block.end_time + time_offset,
-        schedule_day: original_day
+        schedule_day_id: original_day.id
       )
     end
 
@@ -459,7 +461,8 @@ class SchedulesController < ApplicationController
       end
       
       blocks.each do |block|
-        block.update!(
+        # Use update_columns to bypass validations during shift operation
+        block.update_columns(
           start_time: block.start_time + time_offset,
           end_time: block.end_time + time_offset
         )
@@ -469,10 +472,11 @@ class SchedulesController < ApplicationController
     # Move the entry to the new time
     time_offset = target_time - entry_blocks.first.start_time
     entry_blocks.each do |block|
-      block.update!(
+      # Use update_columns to bypass validations during shift operation
+      block.update_columns(
         start_time: block.start_time + time_offset,
         end_time: block.end_time + time_offset,
-        schedule_day: target_day
+        schedule_day_id: target_day.id
       )
     end
 
