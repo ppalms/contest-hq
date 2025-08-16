@@ -130,9 +130,9 @@ class SchedulesController < ApplicationController
     @current_blocks = @contest_entry.schedule_blocks.includes(:schedule_day, :performance_phase)
     @errors = {}
     @form_values = {
-      target_day_id: nil,
+      target_day_id: @schedule_days.first&.id,
       target_time_slot: nil,
-      reschedule_method: nil
+      reschedule_method: 'swap'
     }
     
     respond_to do |format|
@@ -165,8 +165,27 @@ class SchedulesController < ApplicationController
       @errors[:target_day_id] = "Please select a day"
     elsif params[:target_time_slot].blank?
       @errors[:target_time_slot] = "Please select a time slot"
-    elsif params[:reschedule_method].blank?
-      @errors[:reschedule_method] = "Please select a reschedule method"
+    else
+      # Check if the selected time slot is occupied before requiring reschedule method
+      target_day = @schedule.days.find(params[:target_day_id])
+      time_parts = params[:target_time_slot].split(':')
+      target_time = target_day.schedule_date.beginning_of_day + 
+                    time_parts[0].to_i.hours + 
+                    time_parts[1].to_i.minutes + 
+                    (time_parts[2] ? time_parts[2].to_i.seconds : 0)
+      
+      # Check if there's an existing entry at the target time
+      existing_block = ScheduleBlock.where(
+        account_id: Current.account.id,
+        schedule_day_id: target_day.id
+      ).where(
+        "start_time <= ? AND end_time > ?", target_time, target_time
+      ).first
+      
+      # Only require reschedule method if the time slot is occupied
+      if existing_block && params[:reschedule_method].blank?
+        @errors[:reschedule_method] = "Please select a reschedule method"
+      end
     end
 
     if @errors.any?
@@ -193,11 +212,25 @@ class SchedulesController < ApplicationController
     reschedule_method = params[:reschedule_method] # 'swap' or 'shift'
 
     begin
-      case reschedule_method
-      when 'swap'
-        result = perform_swap_reschedule(@contest_entry, target_day, target_time)
-      when 'shift'
-        result = perform_shift_reschedule(@contest_entry, target_day, target_time)
+      # Check if target time slot is available
+      existing_block = ScheduleBlock.where(
+        account_id: Current.account.id,
+        schedule_day_id: target_day.id
+      ).where(
+        "start_time <= ? AND end_time > ?", target_time, target_time
+      ).first
+
+      if existing_block.nil?
+        # Target slot is available, just move the entry
+        result = perform_simple_reschedule(@contest_entry, target_day, target_time)
+      else
+        # Target slot is occupied, use specified method
+        case reschedule_method
+        when 'swap'
+          result = perform_swap_reschedule(@contest_entry, target_day, target_time)
+        when 'shift'
+          result = perform_shift_reschedule(@contest_entry, target_day, target_time)
+        end
       end
 
       if result == false
@@ -325,6 +358,29 @@ class SchedulesController < ApplicationController
   def set_breadcrumbs
     add_breadcrumb("Contests", contests_path)
     add_breadcrumb(@schedule.contest.name, @schedule.contest)
+  end
+
+  def perform_simple_reschedule(contest_entry, target_day, target_time)
+    # Simple move to an available time slot
+    entry_blocks = contest_entry.schedule_blocks.includes(:performance_phase).order(:start_time)
+    
+    # Calculate the time difference
+    original_start_time = entry_blocks.first.start_time
+    time_difference = target_time - original_start_time
+    
+    # Update all blocks for this entry
+    entry_blocks.each do |block|
+      new_start_time = block.start_time + time_difference
+      new_end_time = block.end_time + time_difference
+      
+      block.update!(
+        schedule_day: target_day,
+        start_time: new_start_time,
+        end_time: new_end_time
+      )
+    end
+    
+    true
   end
 
   def perform_swap_reschedule(contest_entry, target_day, target_time)

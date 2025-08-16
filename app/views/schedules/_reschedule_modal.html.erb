@@ -41,7 +41,7 @@
           <%= form.select :target_day_id, 
                           options_from_collection_for_select(schedule_days, :id, 
                             ->(day) { day.schedule_date.strftime("%a %-m/%d") }, form_values[:target_day_id]),
-                          { prompt: "Choose a day" },
+                          {},
                           { class: "mt-1 block w-full border border-gray-300 rounded-md px-3 py-2", 
                             required: true,
                             data: { 
@@ -69,18 +69,18 @@
           <div id="existing_entry_details" class="text-sm text-blue-700 mt-1"></div>
         </div>
 
-        <div>
+        <div id="reschedule_method_section" class="<%= errors[:reschedule_method].present? || form_values[:reschedule_method].present? ? '' : 'hidden' %>">
           <%= form.label :reschedule_method, "Reschedule Method:", class: "block text-sm font-medium text-gray-700" %>
           <div class="mt-2 space-y-2">
             <label class="flex items-center">
               <%= form.radio_button :reschedule_method, "swap", 
-                                    { class: "mr-2", required: true, 
+                                    { class: "mr-2", 
                                       checked: form_values[:reschedule_method] == "swap" } %>
               <span class="text-sm">Swap time slots with existing entry</span>
             </label>
             <label class="flex items-center">
               <%= form.radio_button :reschedule_method, "shift", 
-                                    { class: "mr-2", required: true,
+                                    { class: "mr-2",
                                       checked: form_values[:reschedule_method] == "shift" } %>
               <span class="text-sm">Shift other entries to make room</span>
             </label>
@@ -107,6 +107,8 @@
     const daySelect = document.querySelector('#reschedule_form select[name="target_day_id"]');
     const timeSlotSelect = document.querySelector('#reschedule_form select[name="target_time_slot"]');
     const existingEntryInfo = document.getElementById('existing_entry_info');
+    const rescheduleMethodSection = document.getElementById('reschedule_method_section');
+    const swapRadio = document.querySelector('#reschedule_form input[value="swap"]');
     
     if (!daySelect || !timeSlotSelect) return;
     
@@ -116,10 +118,11 @@
       const scheduleId = event.target.dataset.scheduleId;
       const selectedTimeSlot = timeSlotSelect.dataset.selectedTimeSlot;
       
-      // Reset time slot dropdown
+      // Reset time slot dropdown and hide sections
       timeSlotSelect.innerHTML = '<option value="">Choose a time slot</option>';
       timeSlotSelect.disabled = true;
       existingEntryInfo.classList.add('hidden');
+      rescheduleMethodSection.classList.add('hidden');
       
       if (!dayId) return;
       
@@ -133,6 +136,7 @@
           option.value = slot.time_value;
           option.textContent = `${slot.display}${slot.available ? ' (Available)' : ' (Occupied)'}`;
           option.dataset.entry = slot.entry ? JSON.stringify(slot.entry) : '';
+          option.dataset.available = slot.available;
           
           // Pre-select the time slot if it matches the preserved value
           if (selectedTimeSlot && slot.time_value === selectedTimeSlot) {
@@ -159,6 +163,7 @@
       const existingEntryDetails = document.getElementById('existing_entry_details');
       
       if (selectedOption && selectedOption.dataset.entry) {
+        // Time slot is occupied - show entry details and reschedule method section
         const entry = JSON.parse(selectedOption.dataset.entry);
         existingEntryDetails.innerHTML = `
           <p><strong>${entry.name}</strong></p>
@@ -166,8 +171,22 @@
           ${entry.performance_class ? `<p>Class: ${entry.performance_class}</p>` : ''}
         `;
         existingEntryInfo.classList.remove('hidden');
+        rescheduleMethodSection.classList.remove('hidden');
+        
+        // Set swap as default if no method is currently selected
+        if (swapRadio && !document.querySelector('#reschedule_form input[name="reschedule_method"]:checked')) {
+          swapRadio.checked = true;
+        }
       } else {
+        // Time slot is available - hide sections and clear reschedule method
         existingEntryInfo.classList.add('hidden');
+        rescheduleMethodSection.classList.add('hidden');
+        
+        // Clear any selected reschedule method for available slots
+        const checkedMethod = document.querySelector('#reschedule_form input[name="reschedule_method"]:checked');
+        if (checkedMethod) {
+          checkedMethod.checked = false;
+        }
       }
     }
     
