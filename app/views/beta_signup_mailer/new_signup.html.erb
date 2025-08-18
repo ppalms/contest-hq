@@ -1,0 +1,14 @@
+<h2>New Beta Access Request</h2>
+
+<p><strong>Organization:</strong>
+  <%= @organization %></p>
+<p><strong>Name:</strong>
+  <%= @name %></p>
+<p><strong>Email:</strong>
+  <%= @email %></p>
+<p><strong>Contest Types:</strong></p>
+<p><%= simple_format(@contests) %></p>
+
+<hr>
+<p><em>Received at
+    <%= Time.current.strftime("%B %d, %Y at %I:%M %p") %></em></p>

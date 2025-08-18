@@ -1,27 +1,315 @@
-<div class="space-y-4">
-  <%= render "home/dashboards/director" if current_user.director? %>
-  <%= render "home/dashboards/manager" if current_user.manager? %>
-  <%= render "home/dashboards/shared" %>
+<% if Current.session %>
+  <!-- Existing authenticated dashboard -->
+  <div class="space-y-4">
+    <%= render "home/dashboards/director" if current_user.director? %>
+    <%= render "home/dashboards/manager" if current_user.manager? %>
+    <%= render "home/dashboards/shared" %>
 
-  <% if current_user.admin? %>
-    <div
-      class="
-        relative border border-neutral-300 px-4 pb-4 space-y-4 shadow-sm bg-neutral-50
-      "
-    >
-      <div class="flex justify-center">
-        <div
-          class="
-            absolute -top-2 px-2 border border-neutral-400 rounded-sm bg-white
-            text-neutral-600 font-semibold text-xs uppercase
-          "
-        >
-          Administration
+    <% if current_user.admin? %>
+      <div
+        class="
+          relative border border-neutral-300 px-4 pb-4 space-y-4 shadow-sm bg-neutral-50
+        "
+      >
+        <div class="flex justify-center">
+          <div
+            class="
+              absolute -top-2 px-2 border border-neutral-400 rounded-sm bg-white
+              text-neutral-600 font-semibold text-xs uppercase
+            "
+          >
+            Administration
+          </div>
+        </div>
+
+        <%= render "home/dashboards/sysadmin" if current_user.sysadmin? %>
+        <%= render "home/dashboards/tenant_admin" if current_user.tenant_admin? %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <!-- New unauthenticated landing page --> <!-- Hero Section -->
+  <section class="text-center py-16 -mt-6">
+    <h1 class="mb-6">Contest Management for State Music Organizations</h1>
+    <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+      Manage your band and orchestra contests with Contest HQ. A simple
+      solution for state music organizations running multi-day competitions.
+    </p>
+    <%= link_to "Request Beta Access",
+    "#beta-signup",
+    class: "btn-primary text-lg px-8 py-4",
+    data: {
+      turbo_scroll: :smooth,
+    } %>
+  </section>
+  <!-- Features Section -->
+  <section class="py-16">
+    <h2 class="text-center mb-12">Features for Managing Music Contests</h2>
+
+    <div class="grid md:grid-cols-2 gap-8">
+      <!-- Large Ensemble Management -->
+      <div class="card">
+        <div class="card-header">
+          Large Ensemble Contests
+        </div>
+        <div class="p-6">
+          <p class="text-gray-600 mb-4">
+            Manage band and orchestra competitions with support for your
+            organization's performance levels.
+          </p>
+          <ul class="space-y-2 text-sm">
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
+              Multi-day contest scheduling
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
+              Performance level management
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
+              Entry deadline tracking
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
+              Schedule updates
+            </li>
+          </ul>
         </div>
       </div>
-
-      <%= render "home/dashboards/sysadmin" if current_user.sysadmin? %>
-      <%= render "home/dashboards/tenant_admin" if current_user.tenant_admin? %>
+      <!-- Contest Scheduling -->
+      <div class="card">
+        <div class="card-header">
+          Contest Scheduling
+        </div>
+        <div class="p-6">
+          <p class="text-gray-600 mb-4">
+            Organize performance times and manage room assignments.
+          </p>
+          <ul class="space-y-2 text-sm">
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
+              Room management
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
+              Performance phase setup
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
+              Schedule generation
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
+              Conflict management
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- Entry Management -->
+      <div class="card">
+        <div class="card-header">
+          Entry Management
+        </div>
+        <div class="p-6">
+          <p class="text-gray-600 mb-4">
+            Handle school registrations and contest entries online.
+          </p>
+          <ul class="space-y-2 text-sm">
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
+              School registration
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
+              Director account management
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
+              Entry deadline management
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
+              Music selection tracking
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- Organization Tools -->
+      <div class="card">
+        <div class="card-header">
+          Organization Tools
+        </div>
+        <div class="p-6">
+          <p class="text-gray-600 mb-4">
+            Manage your organization's schools, directors, and contest
+            structure.
+          </p>
+          <ul class="space-y-2 text-sm">
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
+              School and director database
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
+              Performance level setup
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
+              User role management
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
+              Contest templates
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
-  <% end %>
-</div>
+  </section>
+  <!-- Benefits Section -->
+  <section class="py-16 bg-white rounded-lg border border-neutral-300 my-8">
+    <div class="px-8">
+      <h2 class="text-center mb-12">Built for State Music Organizations</h2>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="text-center">
+          <div
+            class="
+              w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4
+            "
+          >
+            <svg
+              class="w-8 h-8 text-blue-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+          </div>
+          <h3 class="mb-3">Organize Contest Data</h3>
+          <p class="text-gray-600">Keep track of schools, directors, entries, and schedules in one
+            place instead of spreadsheets.</p>
+        </div>
+
+        <div class="text-center">
+          <div
+            class="
+              w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4
+            "
+          >
+            <svg
+              class="w-8 h-8 text-blue-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+          </div>
+          <h3 class="mb-3">Manage Scheduling</h3>
+          <p class="text-gray-600">Generate and update contest schedules with room assignments and
+            performance phases.</p>
+        </div>
+
+        <div class="text-center">
+          <div
+            class="
+              w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4
+            "
+          >
+            <svg
+              class="w-8 h-8 text-blue-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              ></path>
+            </svg>
+          </div>
+          <h3 class="mb-3">Online Access</h3>
+          <p class="text-gray-600">Directors can register entries and view schedules online. Contest
+            managers can update information as needed.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Beta Signup Section -->
+  <section id="beta-signup" class="py-16">
+    <div
+      class="
+        max-w-2xl mx-auto bg-white rounded-lg border border-neutral-300 p-8
+      "
+    >
+      <div class="card-header mb-6">
+        Request Beta Access
+      </div>
+      <div class="space-y-6">
+        <p class="text-gray-600">
+          Contest HQ is currently in beta. Request access to try the system
+          with your organization.
+        </p>
+
+        <%= form_with url: "/beta_signup", local: true, class: "space-y-4" do |form| %>
+          <div>
+            <%= form.label :organization,
+                       "Organization Name",
+                       class: "block text-sm font-medium text-gray-700 mb-2" %>
+            <%= form.text_field :organization, required: true, class: "text-field" %>
+          </div>
+
+          <div>
+            <%= form.label :name,
+                       "Your Name",
+                       class: "block text-sm font-medium text-gray-700 mb-2" %>
+            <%= form.text_field :name, required: true, class: "text-field" %>
+          </div>
+
+          <div>
+            <%= form.label :email,
+                       "Email Address",
+                       class: "block text-sm font-medium text-gray-700 mb-2" %>
+            <%= form.email_field :email, required: true, class: "text-field" %>
+          </div>
+
+          <div>
+            <%= form.label :contests,
+                       "Types of contests you manage",
+                       class: "block text-sm font-medium text-gray-700 mb-2" %>
+            <%= form.text_area :contests,
+                           rows: 3,
+                           placeholder:
+                             "e.g., State Orchestra, Regional Marching Band, Solo & Ensemble...",
+                           class: "text-field" %>
+          </div>
+
+          <%= form.submit "Request Beta Access", class: "btn-primary w-full" %>
+        <% end %>
+
+        <div class="text-center text-sm text-gray-500">
+          Questions? Email us at
+          <%= mail_to "hello@contesthq.app",
+          "hello@contesthq.app",
+          class: "text-blue-600 hover:underline" %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<% end %>
