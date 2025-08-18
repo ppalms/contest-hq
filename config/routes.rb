@@ -3,6 +3,9 @@ Rails.application.routes.draw do
   resources :users, only: [ :index, :edit, :update ]
   resources :seasons, except: [ :show ]
 
+  get "landing", to: "public#landing"
+  post "beta_signup", to: "beta_signups#create"
+
   # Account switching for sysadmins
   post "switch_account", to: "account_switching#switch"
   delete "switch_account", to: "account_switching#clear"

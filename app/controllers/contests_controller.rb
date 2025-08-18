@@ -121,6 +121,6 @@ class ContestsController < ApplicationController
   end
 
   def set_breadcrumbs
-    add_breadcrumb("Contests", contests_path)
+    add_breadcrumb("Contests", contests_path(season_id: @contest.season_id)) if @contest
   end
 end

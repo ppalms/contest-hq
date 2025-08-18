@@ -396,7 +396,7 @@ class SchedulesController < ApplicationController
   end
 
   def set_breadcrumbs
-    add_breadcrumb("Contests", contests_path)
+    add_breadcrumb("Contests", contests_path(season_id: @schedule.contest.season_id))
     add_breadcrumb(@schedule.contest.name, @schedule.contest)
   end
 
