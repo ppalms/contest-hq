@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
 
   before_action :set_current_request_details
   before_action :authenticate
+  before_action :set_selected_account
 
   around_action :set_time_zone, if: :current_user
 
@@ -20,6 +21,12 @@ class ApplicationController < ActionController::Base
       else
         redirect_to landing_path
       end
+    end
+  end
+
+  def set_selected_account
+    if current_user&.sysadmin? && session[:selected_account_id]
+      Current.selected_account = Account.find_by(id: session[:selected_account_id])
     end
   end
 
