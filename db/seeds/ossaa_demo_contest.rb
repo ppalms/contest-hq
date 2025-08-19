@@ -205,10 +205,13 @@ demo_entries_data.each_with_index do |entry_data, index|
       
       # Temporarily set Current.session for the after_create callback
       temp_session = Session.create(user: director)
-      Current.session = temp_session
-      large_ensemble.save!
-      Current.session = nil
-      temp_session.destroy
+      begin
+        Current.session = temp_session
+        large_ensemble.save!
+      ensure
+        Current.session = nil
+        temp_session.destroy
+      end
     else
       # Ensure conductor relationship exists
       LargeEnsembleConductor.find_or_create_by(
