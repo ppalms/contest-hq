@@ -39,12 +39,15 @@ Contest HQ is a Ruby on Rails application for managing band and orchestra contes
 ```bash
 # 1. Install dependencies
 bundle install
+# NEVER CANCEL: Takes ~40 seconds to complete. Set timeout to 120+ seconds.
 
 # 2. Start database (required before db commands)
 docker compose up -d db --wait
+# NEVER CANCEL: Takes ~6 seconds with --wait. Set timeout to 60+ seconds.
 
 # 3. Run full setup script
 bin/setup
+# NEVER CANCEL: Takes ~10 seconds total. Set timeout to 60+ seconds.
 ```
 
 **Alternative Manual Setup:**
@@ -83,21 +86,26 @@ bin/rails log:clear tmp:clear
 bin/dev
 # Runs on http://localhost:3000
 # Includes: rails server + tailwindcss:watch
+# NEVER CANCEL: Takes ~2 seconds to start, wait for "Listening on" message
 ```
 
 ### Testing Commands
 ```bash
 # Run all tests (unit + integration)
 bin/rails test
+# NEVER CANCEL: Takes ~36 seconds to complete. Set timeout to 120+ seconds.
 
 # Run system tests (end-to-end with browser)
 bin/rails test:system
+# NEVER CANCEL: Takes ~6.5 minutes to complete. Set timeout to 600+ seconds.
 
 # Prepare test database
 bin/rails db:test:prepare
+# Takes ~1.5 seconds
 
 # Full CI-like test run
 bin/rails db:test:prepare test test:system
+# NEVER CANCEL: Takes ~7 minutes total. Set timeout to 900+ seconds.
 ```
 
 **Test Environment Notes:**
@@ -114,36 +122,45 @@ bin/rails db:test:prepare test test:system
 ```bash
 # Code style linting (uses rails-omakase configuration)
 bin/rubocop -f github
+# Takes ~3 seconds
 
 # Security vulnerability scanning for Ruby
 bin/brakeman --no-pager
+# Takes ~5 seconds
 
 # JavaScript dependency security audit
 bin/importmap audit
+# Takes ~0.6 seconds
 ```
 
 ### Database Operations
 ```bash
 # Create and migrate database
 bin/rails db:prepare
+# Takes ~1.5 seconds
 
 # Reset database (danger: destroys data)
 bin/rails db:reset
+# Takes ~2-3 seconds
 
 # Run migrations only
 bin/rails db:migrate
+# Takes ~1 second for typical migrations
 
 # Seed database
 bin/rails db:seed
+# Time varies based on seed data size
 ```
 
 ### Production Commands
 ```bash
 # Precompile assets for production
 RAILS_ENV=production bundle exec bin/rails assets:precompile
+# NEVER CANCEL: Takes ~1.2 seconds. Requires SECRET_KEY_BASE_DUMMY=1 for testing.
 
 # Run production server
 bin/rails s -e production
+# Requires proper credentials setup in production
 
 # View production logs (requires kamal setup)
 kamal app logs -g <request ID>
@@ -234,9 +251,39 @@ The codebase contains several TODO comments indicating areas under development:
 
 **Time Estimates:**
 - Initial setup: 5-10 minutes (depending on Ruby installation)
-- Full test suite: 2-3 minutes
-- Asset precompilation: 1-2 minutes
-- Docker database startup: 30-60 seconds
+- Full test suite: 7 minutes (36 seconds unit + 6.5 minutes system tests)
+- Asset precompilation: 1-2 seconds
+- Docker database startup: 6 seconds with --wait
+- Bundle install: 40 seconds
+
+## Validation Requirements
+
+**MANUAL VALIDATION REQUIREMENT:** After building and running the application, you MUST test actual functionality by running through complete user scenarios. Simply starting and stopping the application is NOT sufficient validation.
+
+**Essential Test Scenarios:**
+1. **Login Flow:** Create a user, log in, and perform a basic action
+2. **Contest Management:** Create a contest, add entries, test scheduling
+3. **User Roles:** Test different user roles (SysAdmin, AccountAdmin, Director, Judge)
+4. **Database Operations:** Verify database migrations and seeding work correctly
+
+**Validation Commands (run after any changes):**
+```bash
+# 1. Verify application starts correctly
+bin/dev
+# Should see "Listening on http://127.0.0.1:3000" within 2 seconds
+
+# 2. Test basic HTTP response
+curl -I http://localhost:3000
+# Should return HTTP 302 redirect to /landing
+
+# 3. Test landing page content
+curl -s http://localhost:3000/landing | head -10
+# Should return HTML with "Contest HQ" title
+
+# 4. Run full CI validation pipeline
+bin/rails db:test:prepare test test:system && bin/rubocop && bin/brakeman --no-pager && bin/importmap audit
+# NEVER CANCEL: Takes ~7.5 minutes total. Set timeout to 600+ seconds.
+```
 
 ## Agent Instructions
 

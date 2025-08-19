@@ -171,7 +171,7 @@
 }
 
 @utility action-button-container {
-  @apply space-y-2 pt-2 sm:flex sm:grow sm:justify-end sm:gap-2 sm:space-y-0 sm:pt-0;
+  @apply space-y-2 pt-2 sm:flex sm:grow sm:items-start sm:justify-end sm:gap-2 sm:space-y-0 sm:pt-0;
 }
 
 @utility modal-backdrop {
