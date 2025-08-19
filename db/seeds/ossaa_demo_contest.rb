@@ -42,12 +42,15 @@ end
 # Link contest to all school classes
 school_classes = SchoolClass.where(account: ossaa_account)
 school_classes.each do |school_class|
-  ContestsSchoolClass.find_or_create_by(
+  csc = ContestsSchoolClass.find_or_create_by(
     contest: demo_contest,
-    school_class: school_class
+    school_class: school_class,
+    account: ossaa_account  # Add this line
   )
+  unless csc.persisted?
+    puts "❌ Error linking #{school_class.name}: #{csc.errors.full_messages.join(', ')}"
+  end
 end
-
 puts "  📚 Linked to #{school_classes.count} school classes"
 
 # Get existing schools from ossaa_schools.rb seed data
@@ -72,37 +75,37 @@ demo_entries_data = []
 def generate_preferred_time(index)
   case index % 10
   when 0..6 # 70% mid-morning (9:00-11:00 AM)
-    ["09:00", "09:30", "10:00", "10:30"].sample
+    [ "09:00", "09:30", "10:00", "10:30" ].sample
   when 7..8 # 20% late morning (10:30 AM-12:00 PM)
-    ["10:30", "11:00", "11:30"].sample
+    [ "10:30", "11:00", "11:30" ].sample
   else # 10% early morning or afternoon
-    ["08:30", "13:00", "14:00"].sample
+    [ "08:30", "13:00", "14:00" ].sample
   end
 end
 
 # Generate realistic Oklahoma director names and schools
 oklahoma_director_names = [
-  ["Sarah", "Johnson"], ["Michael", "Williams"], ["Jennifer", "Brown"],
-  ["David", "Davis"], ["Lisa", "Miller"], ["Robert", "Wilson"],
-  ["Mary", "Moore"], ["James", "Taylor"], ["Patricia", "Anderson"],
-  ["John", "Thomas"], ["Linda", "Jackson"], ["William", "White"],
-  ["Barbara", "Harris"], ["Richard", "Martin"], ["Susan", "Thompson"],
-  ["Joseph", "Garcia"], ["Jessica", "Martinez"], ["Thomas", "Robinson"],
-  ["Nancy", "Clark"], ["Christopher", "Rodriguez"], ["Karen", "Lewis"],
-  ["Daniel", "Lee"], ["Betty", "Walker"], ["Matthew", "Hall"],
-  ["Helen", "Allen"], ["Mark", "Young"], ["Donna", "Hernandez"],
-  ["Steven", "King"], ["Carol", "Wright"], ["Paul", "Lopez"],
-  ["Ruth", "Hill"], ["Andrew", "Scott"], ["Sharon", "Green"],
-  ["Joshua", "Adams"], ["Michelle", "Baker"], ["Kenneth", "Gonzalez"],
-  ["Sarah", "Nelson"], ["Kevin", "Carter"], ["Deborah", "Mitchell"],
-  ["Brian", "Perez"], ["Dorothy", "Roberts"], ["George", "Turner"],
-  ["Emily", "Phillips"], ["Ronald", "Campbell"], ["Kimberly", "Parker"],
-  ["Anthony", "Evans"], ["Lisa", "Edwards"], ["Edward", "Collins"],
-  ["Nancy", "Stewart"], ["Ryan", "Sanchez"], ["Sandra", "Morris"],
-  ["Jason", "Reed"], ["Ashley", "Cook"], ["Jeffrey", "Bailey"],
-  ["Amanda", "Rivera"], ["Jacob", "Cooper"], ["Stephanie", "Richardson"],
-  ["Gary", "Cox"], ["Cynthia", "Howard"], ["Nicholas", "Ward"],
-  ["Amy", "Torres"], ["Jonathan", "Peterson"]
+  [ "Sarah", "Johnson" ], [ "Michael", "Williams" ], [ "Jennifer", "Brown" ],
+  [ "David", "Davis" ], [ "Lisa", "Miller" ], [ "Robert", "Wilson" ],
+  [ "Mary", "Moore" ], [ "James", "Taylor" ], [ "Patricia", "Anderson" ],
+  [ "John", "Thomas" ], [ "Linda", "Jackson" ], [ "William", "White" ],
+  [ "Barbara", "Harris" ], [ "Richard", "Martin" ], [ "Susan", "Thompson" ],
+  [ "Joseph", "Garcia" ], [ "Jessica", "Martinez" ], [ "Thomas", "Robinson" ],
+  [ "Nancy", "Clark" ], [ "Christopher", "Rodriguez" ], [ "Karen", "Lewis" ],
+  [ "Daniel", "Lee" ], [ "Betty", "Walker" ], [ "Matthew", "Hall" ],
+  [ "Helen", "Allen" ], [ "Mark", "Young" ], [ "Donna", "Hernandez" ],
+  [ "Steven", "King" ], [ "Carol", "Wright" ], [ "Paul", "Lopez" ],
+  [ "Ruth", "Hill" ], [ "Andrew", "Scott" ], [ "Sharon", "Green" ],
+  [ "Joshua", "Adams" ], [ "Michelle", "Baker" ], [ "Kenneth", "Gonzalez" ],
+  [ "Sarah", "Nelson" ], [ "Kevin", "Carter" ], [ "Deborah", "Mitchell" ],
+  [ "Brian", "Perez" ], [ "Dorothy", "Roberts" ], [ "George", "Turner" ],
+  [ "Emily", "Phillips" ], [ "Ronald", "Campbell" ], [ "Kimberly", "Parker" ],
+  [ "Anthony", "Evans" ], [ "Lisa", "Edwards" ], [ "Edward", "Collins" ],
+  [ "Nancy", "Stewart" ], [ "Ryan", "Sanchez" ], [ "Sandra", "Morris" ],
+  [ "Jason", "Reed" ], [ "Ashley", "Cook" ], [ "Jeffrey", "Bailey" ],
+  [ "Amanda", "Rivera" ], [ "Jacob", "Cooper" ], [ "Stephanie", "Richardson" ],
+  [ "Gary", "Cox" ], [ "Cynthia", "Howard" ], [ "Nicholas", "Ward" ],
+  [ "Amy", "Torres" ], [ "Jonathan", "Peterson" ]
 ]
 
 # Music selections database for realistic repertoire
@@ -151,8 +154,8 @@ entry_index = 0
 ].each do |group|
   group[:schools].first(group[:count]).each do |school|
     director_name = oklahoma_director_names[entry_index]
-    ensemble_type = ["Symphony Orchestra", "Chamber Orchestra", "String Orchestra", "Concert Orchestra"].sample
-    
+    ensemble_type = [ "Symphony Orchestra", "Chamber Orchestra", "String Orchestra", "Concert Orchestra" ].sample
+
     demo_entries_data << {
       school: school,
       ensemble_name: ensemble_type,
@@ -164,7 +167,7 @@ entry_index = 0
       preferred_time_end: nil, # Contest manager will set duration
       music_selections: classical_repertoire.sample(3)
     }
-    
+
     entry_index += 1
   end
 end
@@ -181,7 +184,7 @@ demo_entries_data.each_with_index do |entry_data, index|
       email: entry_data[:director_email],
       account: ossaa_account
     )
-    
+
     if director.new_record?
       director.assign_attributes(
         first_name: entry_data[:director_first_name],
@@ -192,17 +195,17 @@ demo_entries_data.each_with_index do |entry_data, index|
       )
       director.save!
     end
-    
+
     # Create or find large ensemble
     large_ensemble = LargeEnsemble.find_or_initialize_by(
       name: entry_data[:ensemble_name],
       school: entry_data[:school],
       account: ossaa_account
     )
-    
+
     if large_ensemble.new_record?
       large_ensemble.performance_class = entry_data[:performance_class]
-      
+
       # Temporarily set Current.session for the after_create callback
       temp_session = Session.create(user: director)
       begin
@@ -219,14 +222,14 @@ demo_entries_data.each_with_index do |entry_data, index|
         user: director
       )
     end
-    
+
     # Create contest entry
     contest_entry = ContestEntry.find_or_initialize_by(
       contest: demo_contest,
       large_ensemble: large_ensemble,
       account: ossaa_account
     )
-    
+
     if contest_entry.new_record?
       contest_entry.assign_attributes(
         user: director,
@@ -243,7 +246,7 @@ demo_entries_data.each_with_index do |entry_data, index|
         contest_entry.preferred_time_start = entry_data[:preferred_time_start]
         time_changed = true
       end
-      
+
       if time_changed
         contest_entry.save!
         updated_count += 1
@@ -253,7 +256,7 @@ demo_entries_data.each_with_index do |entry_data, index|
         print "."
       end
     end
-    
+
     # Create music selections
     entry_data[:music_selections].each do |music_data|
       MusicSelection.find_or_create_by(
@@ -263,12 +266,12 @@ demo_entries_data.each_with_index do |entry_data, index|
         account: ossaa_account
       )
     end
-    
+
     # Progress indicator every 10 entries
     if (index + 1) % 10 == 0
       puts " (#{index + 1}/#{demo_entries_data.count})"
     end
-    
+
   rescue => e
     puts "\n❌ Error creating entry for #{entry_data[:school].name}: #{e.message}"
     next
