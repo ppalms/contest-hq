@@ -1,7 +1,20 @@
+# Schedule fixtures - each contest should have exactly one schedule
+# These are used for testing schedule management and authorization
+
+# Demo account schedules
 demo_district_schedule:
   contest: demo_contest_a
   account: demo
 
+demo_regional_schedule:
+  contest: demo_contest_b
+  account: demo
+
+demo_state_schedule:
+  contest: demo_contest_c
+  account: demo
+
+# OSSAA account schedules
 ossaa_state_orchestra_schedule:
   contest: ossaa_state_orchestra
   account: ossaa
