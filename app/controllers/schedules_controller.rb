@@ -388,8 +388,7 @@ class SchedulesController < ApplicationController
   end
 
   def authorize_manager!
-    # TODO: add contest/user association
-    unless current_user.manager?
+    unless current_user.manages_contest(@schedule.contest.id)
       flash[:alert] = "You must be a manager of this contest to access this area"
       redirect_to root_path
     end

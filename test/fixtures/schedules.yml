@@ -1,3 +1,7 @@
 demo_district_schedule:
   contest: demo_contest_a
   account: demo
+
+ossaa_state_orchestra_schedule:
+  contest: ossaa_state_orchestra
+  account: ossaa
