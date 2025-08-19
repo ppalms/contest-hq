@@ -54,6 +54,15 @@ demo_manager_a:
   time_zone: America/Chicago
   account: demo
 
+demo_manager_b:
+  first_name: Samuel
+  last_name: Vimes
+  email: vimes@demo.org
+  password_digest: <%= BCrypt::Password.create("Secret1*3*5*") %>
+  verified: true
+  time_zone: America/Chicago
+  account: demo
+
 customer_admin_a:
   first_name: Hank
   last_name: Hill

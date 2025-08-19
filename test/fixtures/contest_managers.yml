@@ -1,8 +1,18 @@
+# Contest Manager Assignments
+# These define which users can manage which contests within their account
+
+# Demo account managers
 manager_a_contest_a:
   user: demo_manager_a
   contest: demo_contest_a
   account: demo
 
+manager_b_contest_b:
+  user: demo_manager_b
+  contest: demo_contest_b
+  account: demo
+
+# OSSAA account managers  
 nobby_state_orchestra:
   user: ossaa_manager_a
   contest: ossaa_state_orchestra

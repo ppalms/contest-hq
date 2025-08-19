@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "schedule_action_content" do %>
   <div class="flex justify-between pb-2">
     <!-- TODO: add configuration for contest day start/end times -->
-    <% if current_user.manager? && current_user.managed_contests&.exists?(@schedule.contest.id) && schedule.days.length == 0 %>
+    <% if current_user.manages_contest(@schedule.contest.id) && schedule.days.length == 0 %>
       <%= link_to "Configure",
       contest_setup_path(schedule.contest.id),
       class: class_names("btn-secondary-sm"),

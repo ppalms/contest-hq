@@ -1,3 +1,4 @@
+# System-wide roles
 sys_admin_a:
   user: sys_admin_a
   role: sys_admin
@@ -6,6 +7,7 @@ sys_admin_a_demo_admin:
   user: sys_admin_a
   role: account_admin
 
+# Demo account roles
 demo_admin_a:
   user: demo_admin_a
   role: account_admin
@@ -13,10 +15,6 @@ demo_admin_a:
 demo_director_a:
   user: demo_director_a
   role: director
-
-demo_manager_a:
-  user: demo_manager_a
-  role: manager
 
 demo_director_b:
   user: demo_director_b
@@ -26,6 +24,16 @@ demo_director_c:
   user: demo_director_c
   role: director
 
+# Demo account managers - used for authorization testing
+demo_manager_a:
+  user: demo_manager_a
+  role: manager
+
+demo_manager_b:
+  user: demo_manager_b
+  role: manager
+
+# Customer account roles
 customer_admin_a:
   user: customer_admin_a
   role: account_admin
@@ -38,6 +46,7 @@ customer_director_b:
   user: customer_director_b
   role: director
 
+# OSSAA account roles
 ossaa_admin_a:
   user: ossaa_admin_a
   role: account_admin
@@ -46,10 +55,10 @@ ossaa_director_a:
   user: ossaa_director_a
   role: director
 
-ossaa_manager_a:
-  user: ossaa_manager_a
-  role: manager
-
 ossaa_director_b:
   user: ossaa_director_b
   role: director
+
+ossaa_manager_a:
+  user: ossaa_manager_a
+  role: manager
