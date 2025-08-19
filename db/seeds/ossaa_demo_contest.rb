@@ -209,7 +209,7 @@ demo_entries_data.each_with_index do |entry_data, index|
         Current.session = temp_session
         large_ensemble.save!
       ensure
-        Current.session = nil
+        Current.reset
         temp_session.destroy
       end
     else
