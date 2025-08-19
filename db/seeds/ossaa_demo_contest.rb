@@ -203,10 +203,12 @@ demo_entries_data.each_with_index do |entry_data, index|
     if large_ensemble.new_record?
       large_ensemble.performance_class = entry_data[:performance_class]
       
-      # Temporarily set Current.user for the after_create callback
-      Current.user = director
+      # Temporarily set Current.session for the after_create callback
+      temp_session = Session.create(user: director)
+      Current.session = temp_session
       large_ensemble.save!
-      Current.user = nil
+      Current.session = nil
+      temp_session.destroy
     else
       # Ensure conductor relationship exists
       LargeEnsembleConductor.find_or_create_by(
