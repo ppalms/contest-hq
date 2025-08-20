@@ -1,22 +1,20 @@
 # OSSAA Demo Contest Entries Seed Script
 # Run with: rails runner db/seeds/ossaa_demo_contest.rb
+#
+# This script generates demo contest entries with preferred times stored in UTC.
 
 puts "🎼 Seeding OSSAA Demo Contest Entries..."
 
-# Find OSSAA Account
 ossaa_account = Account.find_or_create_by(name: "OSSAA") do |account|
   puts "  📋 Creating OSSAA account..."
 end
 
-# Find or create 2025 season
 ossaa_season = Season.find_or_create_by(name: "2025", account: ossaa_account) do |season|
   season.archived = false
   puts "  📅 Creating OSSAA 2025 season..."
 end
 
-# Calculate realistic contest dates (6-8 weeks from now)
 contest_start_date = Date.current + 7.weeks
-# Ensure it's a Friday
 until contest_start_date.friday?
   contest_start_date += 1.day
 end
@@ -27,7 +25,6 @@ entry_deadline = contest_start_date - 3.weeks
 puts "  📅 Contest dates: #{contest_start_date.strftime('%A, %B %d')} - #{contest_end_date.strftime('%A, %B %d, %Y')}"
 puts "  📅 Entry deadline: #{entry_deadline.strftime('%A, %B %d, %Y')}"
 
-# Create demo contest
 demo_contest = Contest.find_or_create_by(
   name: "2025 OSSAA Demo State Orchestra Contest",
   account: ossaa_account
@@ -39,7 +36,6 @@ demo_contest = Contest.find_or_create_by(
   puts "  🏆 Creating demo contest..."
 end
 
-# Link contest to all school classes
 school_classes = SchoolClass.where(account: ossaa_account)
 school_classes.each do |school_class|
   csc = ContestsSchoolClass.find_or_create_by(
@@ -53,14 +49,12 @@ school_classes.each do |school_class|
 end
 puts "  📚 Linked to #{school_classes.count} school classes"
 
-# Get existing schools from ossaa_schools.rb seed data
 schools_6a = School.joins(:school_class).where(account: ossaa_account, school_classes: { name: "6A" }).limit(15)
 schools_5a = School.joins(:school_class).where(account: ossaa_account, school_classes: { name: "5A" }).limit(12)
 schools_4a = School.joins(:school_class).where(account: ossaa_account, school_classes: { name: "4A" }).limit(12)
 schools_3a = School.joins(:school_class).where(account: ossaa_account, school_classes: { name: "3A" }).limit(12)
 schools_2a = School.joins(:school_class).where(account: ossaa_account, school_classes: { name: "2A" }).limit(9)
 
-# Get performance classes for orchestras
 performance_classes = {
   "Symphony Orchestra" => PerformanceClass.find_by(name: "First", account: ossaa_account),
   "Chamber Orchestra" => PerformanceClass.find_by(name: "Second", account: ossaa_account),
@@ -68,22 +62,27 @@ performance_classes = {
   "Concert Orchestra" => PerformanceClass.find_by(name: "Fourth", account: ossaa_account)
 }
 
-# Demo contest entries data with realistic preferred times
 demo_entries_data = []
 
 # Helper to generate preferred start times with realistic distribution
+# Returns Time objects in UTC that represent local contest times
 def generate_preferred_time(index)
   case index % 10
-  when 0..6 # 70% mid-morning (9:00-11:00 AM)
-    [ "09:00", "09:30", "10:00", "10:30" ].sample
-  when 7..8 # 20% late morning (10:30 AM-12:00 PM)
-    [ "10:30", "11:00", "11:30" ].sample
-  else # 10% early morning or afternoon
-    [ "08:30", "13:00", "14:00" ].sample
+  when 0..6 # 70% mid-morning (9:00-11:00 AM local time)
+    time_strings = [ "09:00", "09:30", "10:00", "10:30" ]
+  when 7..8 # 20% late morning (10:30 AM-12:00 PM local time)
+    time_strings = [ "10:30", "11:00", "11:30" ]
+  else # 10% early morning or afternoon (local time)
+    time_strings = [ "08:30", "13:00", "14:00" ]
   end
+
+  time_string = time_strings.sample
+  central_tz = ActiveSupport::TimeZone.new('America/Chicago')
+  local_time = central_tz.parse("2000-01-01 #{time_string}:00")
+
+  local_time.utc
 end
 
-# Generate realistic Oklahoma director names and schools
 oklahoma_director_names = [
   [ "Sarah", "Johnson" ], [ "Michael", "Williams" ], [ "Jennifer", "Brown" ],
   [ "David", "Davis" ], [ "Lisa", "Miller" ], [ "Robert", "Wilson" ],
@@ -108,7 +107,6 @@ oklahoma_director_names = [
   [ "Amy", "Torres" ], [ "Jonathan", "Peterson" ]
 ]
 
-# Music selections database for realistic repertoire
 classical_repertoire = [
   { title: "Symphony No. 40 in G minor", composer: "Wolfgang Amadeus Mozart" },
   { title: "Symphony No. 5 in C minor", composer: "Ludwig van Beethoven" },
@@ -144,7 +142,6 @@ classical_repertoire = [
 
 entry_index = 0
 
-# Process each school class
 [
   { schools: schools_6a, count: 15 },
   { schools: schools_5a, count: 12 },
@@ -172,14 +169,12 @@ entry_index = 0
   end
 end
 
-# Create contest entries with supporting data
 created_count = 0
 updated_count = 0
 skipped_count = 0
 
 demo_entries_data.each_with_index do |entry_data, index|
   begin
-    # Create or find director
     director = User.find_or_initialize_by(
       email: entry_data[:director_email],
       account: ossaa_account
@@ -196,7 +191,6 @@ demo_entries_data.each_with_index do |entry_data, index|
       director.save!
     end
 
-    # Create or find large ensemble
     large_ensemble = LargeEnsemble.find_or_initialize_by(
       name: entry_data[:ensemble_name],
       school: entry_data[:school],
@@ -216,14 +210,12 @@ demo_entries_data.each_with_index do |entry_data, index|
         temp_session.destroy
       end
     else
-      # Ensure conductor relationship exists
       LargeEnsembleConductor.find_or_create_by(
         large_ensemble: large_ensemble,
         user: director
       )
     end
 
-    # Create contest entry
     contest_entry = ContestEntry.find_or_initialize_by(
       contest: demo_contest,
       large_ensemble: large_ensemble,
@@ -240,10 +232,12 @@ demo_entries_data.each_with_index do |entry_data, index|
       created_count += 1
       print "+"
     else
-      # Update preferred times if they've changed
       time_changed = false
-      if contest_entry.preferred_time_start&.strftime("%H:%M") != entry_data[:preferred_time_start]
-        contest_entry.preferred_time_start = entry_data[:preferred_time_start]
+      new_preferred_time = entry_data[:preferred_time_start]
+
+      if contest_entry.preferred_time_start.nil? ||
+         contest_entry.preferred_time_start.utc.strftime("%H:%M") != new_preferred_time.utc.strftime("%H:%M")
+        contest_entry.preferred_time_start = new_preferred_time
         time_changed = true
       end
 
@@ -257,7 +251,6 @@ demo_entries_data.each_with_index do |entry_data, index|
       end
     end
 
-    # Create music selections
     entry_data[:music_selections].each do |music_data|
       MusicSelection.find_or_create_by(
         contest_entry: contest_entry,
@@ -291,18 +284,19 @@ puts "   - Total Entries Processed: #{demo_entries_data.count}"
 puts "\n   📈 Progress Legend:"
 puts "   + = Created, u = Updated, . = Skipped (every 10 entries)"
 
-# Verification
 puts "\n   🔍 Verification:"
 actual_entry_count = ContestEntry.where(contest: demo_contest).count
 puts "   - Total contest entries in demo contest: #{actual_entry_count}"
 
 # Show preferred time distribution
 time_distribution = ContestEntry.where(contest: demo_contest)
-  .group("TO_CHAR(preferred_time_start, 'HH24:MI')")
+  .where.not(preferred_time_start: nil)
+  .group("preferred_time_start::text")
   .count
+  .transform_keys { |key| Time.parse(key).strftime("%H:%M") }
   .sort
 
-puts "\n   ⏰ Preferred Time Distribution:"
+puts "\n   ⏰ Preferred Time Distribution (stored as UTC):"
 time_distribution.each do |time, count|
   next if time.nil?
   percentage = (count.to_f / actual_entry_count * 100).round(1)
