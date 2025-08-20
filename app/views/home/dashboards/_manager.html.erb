@@ -23,15 +23,65 @@
         <p class="mt-1 text-sm text-gray-500">You are not managing any contests</p>
       </div>
     <% else %>
-      <% @managed_contests&.each do |contest| %>
-        <div>
-          <%= link_to contest do %>
-            <%= contest.name %>
-            -
-            <%= contest.contest_start&.strftime("%m-%d-%Y") || "TBD" %>
-          <% end %>
-        </div>
-      <% end %>
+      <div class="space-y-3">
+        <h3 class="text-lg font-semibold text-gray-900">Your Managed Contests</h3>
+        
+        <% @managed_contests&.each do |contest| %>
+          <div class="border border-gray-200 rounded-lg p-4 bg-white">
+            <div class="flex items-start justify-between">
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="text-lg">🎵</span>
+                  <h4 class="text-lg font-medium text-gray-900">
+                    <%= contest.name %>
+                  </h4>
+                </div>
+                <div class="space-y-1 text-sm text-gray-600">
+                  <div class="flex items-center gap-2">
+                    <span class="font-medium">Status:</span>
+                    <span class="<%= case contest.setup_status
+                                   when 'Needs Setup'
+                                     'text-amber-700 bg-amber-50 border border-amber-200'
+                                   when 'Ready to Schedule'
+                                     'text-blue-700 bg-blue-50 border border-blue-200'
+                                   when 'Scheduled'
+                                     'text-green-700 bg-green-50 border border-green-200'
+                                   end %> px-2 py-1 rounded-md text-xs font-medium">
+                      <%= contest.setup_status %>
+                    </span>
+                  </div>
+                  <div>
+                    <span class="font-medium">Dates:</span>
+                    <%= if contest.contest_start && contest.contest_end
+                          if contest.contest_start.to_date == contest.contest_end.to_date
+                            contest.contest_start.strftime("%B %d, %Y")
+                          else
+                            "#{contest.contest_start.strftime("%B %d")}-#{contest.contest_end.strftime("%d, %Y")}"
+                          end
+                        else
+                          "TBD"
+                        end %>
+                  </div>
+                </div>
+              </div>
+              <div class="flex gap-2 ml-4">
+                <% if contest.setup_status == "Needs Setup" %>
+                  <%= link_to "Setup Contest", 
+                      contest_setup_path(contest), 
+                      class: "btn-primary-sm" %>
+                <% else %>
+                  <%= link_to "View Schedule", 
+                      contest.schedules.first, 
+                      class: "btn-primary-sm" %>
+                <% end %>
+                <%= link_to "View Details", 
+                    contest, 
+                    class: "btn-secondary-sm" %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
     <% end %>
   </div>
 </div>

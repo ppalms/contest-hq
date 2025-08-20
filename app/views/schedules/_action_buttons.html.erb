@@ -1,35 +1,56 @@
 <%= turbo_frame_tag "schedule_action_content" do %>
   <div class="flex justify-between pb-2">
-    <!-- TODO: add configuration for contest day start/end times -->
-    <% if current_user.manages_contest(@schedule.contest.id) && schedule.days.length == 0 %>
-      <%= link_to "Configure",
-      contest_setup_path(schedule.contest.id),
-      class: class_names("btn-secondary-sm"),
-      data: {
-        turbo_frame: "contest_setup_content",
-      } %>
+    <!-- Setup and scheduling status messaging -->
+    <% if current_user.manages_contest(@schedule.contest.id) %>
+      <% if !@schedule.contest.setup_complete? %>
+        <div class="flex items-center gap-3 flex-1">
+          <div class="flex items-center gap-2 px-3 py-2 bg-amber-50 border border-amber-200 rounded-md">
+            <span class="text-amber-600">⚠️</span>
+            <span class="text-sm font-medium text-amber-800">Contest Setup Required</span>
+          </div>
+          <p class="text-sm text-gray-600">
+            The scheduler needs rooms and performance phases configured first.
+          </p>
+          <%= link_to "Configure Contest",
+          contest_setup_path(@schedule.contest.id),
+          class: "btn-primary-sm ml-auto" %>
+        </div>
+      <% elsif @schedule.days.length == 0 %>
+        <div class="flex items-center gap-3 flex-1">
+          <div class="flex items-center gap-2 px-3 py-2 bg-green-50 border border-green-200 rounded-md">
+            <span class="text-green-600">✓</span>
+            <span class="text-sm font-medium text-green-800">Contest is configured and ready</span>
+          </div>
+          <p class="text-sm text-gray-600">
+            Generate a schedule to assign time slots for all registered entries.
+          </p>
+        </div>
+      <% end %>
     <% end %>
 
-    <% if schedule.days.length == 0 && schedule.contest.performance_phases.any? %>
-      <%= button_to "Generate contest schedule",
-      generate_schedule_path(
-        schedule,
-        start_time: schedule.contest.contest_start.beginning_of_day + (8 * 60 * 60),
-        end_time: schedule.contest.contest_end.beginning_of_day + (17 * 60 * 60),
-      ),
-      method: :post,
-      class: "btn-primary-sm" %>
-    <% elsif schedule.days.length > 0 %>
-      <%= button_to "Reset contest schedule",
-      reset_schedule_path(schedule),
-      method: :post,
-      class: "btn-danger-sm",
-      form: {
-        data: {
-          turbo_confirm: "Are you sure?",
-        },
-      } %>
-    <% end %>
+    <!-- Action buttons -->
+    <div class="flex gap-2">
+      <% if schedule.days.length == 0 && schedule.contest.performance_phases.any? %>
+        <%= button_to "Generate Contest Schedule",
+        generate_schedule_path(
+          schedule,
+          start_time: schedule.contest.contest_start.beginning_of_day + (8 * 60 * 60),
+          end_time: schedule.contest.contest_end.beginning_of_day + (17 * 60 * 60),
+        ),
+        method: :post,
+        class: "btn-primary-sm" %>
+      <% elsif schedule.days.length > 0 %>
+        <%= button_to "Reset contest schedule",
+        reset_schedule_path(schedule),
+        method: :post,
+        class: "btn-danger-sm",
+        form: {
+          data: {
+            turbo_confirm: "Are you sure?",
+          },
+        } %>
+      <% end %>
+    </div>
 
   </div>
 <% end %>
