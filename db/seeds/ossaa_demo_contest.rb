@@ -36,6 +36,13 @@ demo_contest = Contest.find_or_create_by(
   puts "  🏆 Creating demo contest..."
 end
 
+if demo_contest.schedules.empty?
+  Current.account = ossaa_account
+  demo_contest.create_schedule!
+  puts "  📅 Creating contest schedule..."
+  Current.reset
+end
+
 school_classes = SchoolClass.where(account: ossaa_account)
 school_classes.each do |school_class|
   csc = ContestsSchoolClass.find_or_create_by(

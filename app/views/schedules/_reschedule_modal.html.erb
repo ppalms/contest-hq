@@ -19,6 +19,25 @@
         <% end %>
       </div>
 
+      <% if contest_entry.has_time_preference? %>
+        <div class="text-sm text-gray-600 mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+          <p><strong>Preferred Performance Time:</strong></p>
+          <p class="text-green-800">
+            <% if contest_entry.full_time_preference? %>
+              <%= contest_entry.preferred_time_start.strftime("%l:%M %p") %>
+              -
+              <%= contest_entry.preferred_time_end.strftime("%l:%M %p") %>
+            <% elsif contest_entry.preferred_time_start.present? %>
+              After
+              <%= contest_entry.preferred_time_start.strftime("%l:%M %p") %>
+            <% elsif contest_entry.preferred_time_end.present? %>
+              Before
+              <%= contest_entry.preferred_time_end.strftime("%l:%M %p") %>
+            <% end %>
+          </p>
+        </div>
+      <% end %>
+
       <% if errors.any? %>
         <div class="bg-red-50 border border-red-200 rounded-md p-3 mb-4">
           <div class="text-sm text-red-800">
@@ -224,6 +243,7 @@
           <p><strong>${entry.name}</strong></p>
           <p>${entry.school}</p>
           ${entry.performance_class ? `<p>Class: ${entry.performance_class}</p>` : ''}
+          ${entry.preferred_times ? `<p><strong>Preferred Times:</strong> ${entry.preferred_times}</p>` : '<p class="text-gray-500">No time preference specified</p>'}
         `;
         existingEntryInfo.classList.remove('hidden');
         rescheduleMethodSection.classList.remove('hidden');
