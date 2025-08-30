@@ -1,0 +1,25 @@
+<% if current_user.manages_contest(schedule.contest.id) %>
+  <%= render partial: "schedules/action_buttons", locals: { schedule: schedule } %>
+<% end %>
+
+<div class="pt-4">
+  <ol class="list-decimal text-sm pl-4">
+    <% schedule.contest.performance_phases&.each do |step| %>
+      <li>
+        <div class="flex justify-between border-b">
+          <div>
+            <%= step.name %>
+            -
+            <%= step.duration %>
+            min.
+          </div>
+          <div>
+            <%= step.room.name %>
+            -
+            <%= step.room.room_number %>
+          </div>
+        </div>
+      </li>
+    <% end %>
+  </ol>
+</div>

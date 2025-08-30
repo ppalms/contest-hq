@@ -28,7 +28,8 @@ module Contests
           end
 
           format.html do
-            redirect_to contest_setup_path, turbo_frame: "contest_setup_content"
+            flash[:notice] = "Performance setup updated."
+            redirect_to contest_setup_path(@contest)
           end
         end
       else
@@ -71,8 +72,7 @@ module Contests
       # TODO: add contest/user association
       unless current_user.manager?
         redirect_to contest_schedule_summary_path(@contest),
-          alert: "You must be a manager of this contest to access this area",
-          turbo_frame: "contest_setup_content"
+          alert: "You must be a manager of this contest to access this area"
       end
     end
 
