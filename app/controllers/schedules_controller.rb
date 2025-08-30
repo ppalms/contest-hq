@@ -1,5 +1,6 @@
 class SchedulesController < ApplicationController
   before_action :set_schedule
+  before_action :authorize_view_access!, only: [ :show ]
   before_action :authorize_manager!, only: [ :generate, :reset, :reschedule, :update_schedule ]
   before_action :set_breadcrumbs
 
@@ -10,18 +11,22 @@ class SchedulesController < ApplicationController
   def edit
   end
 
-  # TODO: move to helper
+  # TODO: move scheduling business logic to service class
   def generate
     if @schedule.contest.contest_start < DateTime.now
       respond_to do |format|
         format.turbo_stream do
-        flash[:alert] = "Contest has already started. Cannot generate schedule."
+          flash[:alert] = "Contest has already started. Cannot generate schedule."
 
-        render turbo_stream: [
-          turbo_stream.append("notifications", partial: "shared/notification")
-        ]
+          render turbo_stream: [
+            turbo_stream.append("notifications", partial: "shared/notification")
+          ]
 
-        flash.discard(:alert)
+          flash.discard(:alert)
+        end
+        format.html do
+          flash[:alert] = "Contest has already started. Cannot generate schedule."
+          redirect_to @schedule
         end
       end
       return
@@ -83,10 +88,14 @@ class SchedulesController < ApplicationController
         render turbo_stream: [
           turbo_stream.append("notifications", partial: "shared/notification"),
           turbo_stream.replace("schedule_day_content", partial: "schedules/days/schedule_blocks", locals: { schedule: @schedule, selected_day: @schedule.days.first }),
-          turbo_stream.replace("schedule_action_content", partial: "schedules/action_buttons", locals: { schedule: @schedule })
+          turbo_stream.replace("contest_setup_content", partial: "contests/schedule_content", locals: { schedule: @schedule })
         ]
 
         flash.discard(:notice)
+      end
+      format.html do
+        flash[:notice] = "Generated contest schedule."
+        redirect_to @schedule
       end
     end
   end
@@ -95,13 +104,17 @@ class SchedulesController < ApplicationController
     if @schedule.contest.contest_start < DateTime.now
       respond_to do |format|
         format.turbo_stream do
-        flash[:alert] = "Contest has already started. Cannot reset schedule."
+          flash[:alert] = "Contest has already started. Cannot reset schedule."
 
-        render turbo_stream: [
-          turbo_stream.append("notifications", partial: "shared/notification")
-        ]
+          render turbo_stream: [
+            turbo_stream.append("notifications", partial: "shared/notification")
+          ]
 
-        flash.discard(:alert)
+          flash.discard(:alert)
+        end
+        format.html do
+          flash[:alert] = "Contest has already started. Cannot reset schedule."
+          redirect_to @schedule
         end
       end
       return
@@ -116,10 +129,14 @@ class SchedulesController < ApplicationController
         render turbo_stream: [
           turbo_stream.append("notifications", partial: "shared/notification"),
           turbo_stream.replace("schedule_day_content", partial: "schedules/days/schedule_blocks", locals: { schedule: @schedule, selected_day: nil }),
-          turbo_stream.replace("schedule_action_content", partial: "schedules/action_buttons", locals: { schedule: @schedule })
+          turbo_stream.replace("contest_setup_content", partial: "contests/schedule_content", locals: { schedule: @schedule })
         ]
 
         flash.discard(:notice)
+      end
+      format.html do
+        flash[:notice] = "Reset contest schedule."
+        redirect_to @schedule
       end
     end
   end
@@ -314,12 +331,13 @@ class SchedulesController < ApplicationController
     day = @schedule.days.find(params[:day_id])
     time_slots = []
 
-    # Get contest entry if provided to identify current time slot
+    # Get contest entry if provided to identify current time slot and include preferred times
     contest_entry_id = params[:contest_entry_id]
     current_entry_time = nil
+    current_entry = nil
     if contest_entry_id
-      contest_entry = ContestEntry.find(contest_entry_id)
-      current_blocks = contest_entry.schedule_blocks.where(schedule_day_id: day.id)
+      current_entry = ContestEntry.find(contest_entry_id)
+      current_blocks = current_entry.schedule_blocks.where(schedule_day_id: day.id)
       current_entry_time = current_blocks.first&.start_time
     end
 
@@ -330,6 +348,19 @@ class SchedulesController < ApplicationController
 
     # Calculate total duration of all performance phases for this contest
     total_phase_duration = @schedule.contest.performance_phases.sum(:duration)
+
+    # Helper method to format preferred times
+    def format_preferred_times(entry)
+      return nil unless entry.has_time_preference?
+
+      if entry.full_time_preference?
+        "#{entry.preferred_time_start.strftime('%l:%M %p').strip} - #{entry.preferred_time_end.strftime('%l:%M %p').strip}"
+      elsif entry.preferred_time_start.present?
+        "After #{entry.preferred_time_start.strftime('%l:%M %p').strip}"
+      elsif entry.preferred_time_end.present?
+        "Before #{entry.preferred_time_end.strftime('%l:%M %p').strip}"
+      end
+    end
 
     # Generate time slots using the total phase duration as interval
     current_time = day.start_time
@@ -345,7 +376,8 @@ class SchedulesController < ApplicationController
         display: current_time.strftime("%l:%M %p").strip,
         available: blocks_at_time.empty?,
         is_current: is_current_slot,
-        entry: nil
+        entry: nil,
+        current_entry_preferred_times: current_entry ? format_preferred_times(current_entry) : nil
       }
 
       if blocks_at_time.any?
@@ -355,7 +387,8 @@ class SchedulesController < ApplicationController
           id: entry.id,
           name: entry.large_ensemble.name,
           school: entry.large_ensemble.school.name,
-          performance_class: entry.large_ensemble.performance_class&.abbreviation
+          performance_class: entry.large_ensemble.performance_class&.abbreviation,
+          preferred_times: format_preferred_times(entry)
         }
       end
 
@@ -392,6 +425,22 @@ class SchedulesController < ApplicationController
       flash[:alert] = "You must be a manager of this contest to access this area"
       redirect_to root_path
     end
+  end
+
+  def authorize_view_access!
+    # Allow sysadmins and tenant admins to view any schedule
+    return if current_user.admin?
+
+    # Allow contest managers to view schedules for contests they manage
+    return if current_user.manages_contest(@schedule.contest.id)
+
+    # Allow directors to view schedules for contests they have entries in
+    if current_user.director?
+      return if @schedule.contest.contest_entries.where(user_id: current_user.id).exists?
+    end
+
+    flash[:alert] = "You do not have permission to view this schedule"
+    redirect_to root_path
   end
 
   def set_breadcrumbs

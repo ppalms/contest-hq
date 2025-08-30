@@ -72,9 +72,7 @@ class ContestsController < ApplicationController
   end
 
   def setup
-    add_breadcrumb("Contests", contests_path)
     add_breadcrumb(@contest.name, @contest)
-    add_breadcrumb("Setup")
   end
 
   # PATCH/PUT /contests/1/times or /contests/1/times.json

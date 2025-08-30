@@ -32,7 +32,8 @@ module Contests
           end
 
           format.html do
-            redirect_to contest_setup_path, turbo_frame: "contest_setup_content"
+            flash[:notice] = "Room was successfully created."
+            redirect_to contest_setup_path(@contest)
           end
         end
       else
@@ -62,7 +63,8 @@ module Contests
           end
 
           format.html do
-            redirect_to contest_setup_path, turbo_frame: "contest_setup_content"
+            flash[:notice] = "Room was successfully updated."
+            redirect_to contest_setup_path(@contest)
           end
         end
       else
@@ -89,12 +91,13 @@ module Contests
           end
 
           format.html do
-            redirect_to contest_setup_path, turbo_frame: "contest_setup_content"
+            flash[:notice] = "Room was successfully deleted."
+            redirect_to contest_setup_path(@contest)
           end
         end
       else
         puts "Save failed: #{@room.errors.full_messages.inspect}"
-        redirect_to contest_setup_path, turbo_frame: "contest_setup_content"
+        redirect_to contest_setup_path(@contest)
       end
     end
 
@@ -113,8 +116,7 @@ module Contests
       # unless current_user.manager? && current_user.managed_contests&.exists?(params[:contest_id])
       unless current_user.manager?
             redirect_to contest_schedule_summary_path(@contest),
-              alert: "You must be a manager of this contest to access this area",
-              turbo_frame: "contest_setup_content"
+              alert: "You must be a manager of this contest to access this area"
       end
     end
 

@@ -37,6 +37,16 @@ class Contest < ApplicationRecord
     message
   end
 
+  def setup_complete?
+    rooms.any? && performance_phases.any?
+  end
+
+  def setup_status
+    return "Scheduled" if schedules.any? && schedules.first.days.any?
+    return "Ready to Schedule" if setup_complete?
+    "Needs Setup"
+  end
+
   private
 
   def start_date_before_end_date

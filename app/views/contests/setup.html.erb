@@ -1,5 +1,11 @@
-<%= turbo_frame_tag "contest_setup_content" do %>
-  <div data-controller="contest-setup">
+<% content_for :title, "Schedule" %>
+<div class="py-8 space-y-4">
+  <div class="flex justify-between">
+    <h1><%= @schedule.contest.name %>
+      Schedule Setup</h1>
+  </div>
+
+  <div id="tab_container">
     <div class="tabs">
       <button
         class="tab-button active"
@@ -17,11 +23,8 @@
 
     <div class="relative">
       <%= link_to "Done",
-      contest_schedule_summary_path(@contest),
-      class: "btn-secondary-sm absolute bottom-2 right-0",
-      data: {
-        turbo_frame: "contest_setup_content",
-      } %>
+      schedule_path(@contest.schedules.first),
+      class: "btn-secondary-sm absolute bottom-2 right-0" %>
     </div>
 
     <div class="tab-content bg-white -mt-px">
@@ -50,4 +53,4 @@
       </div>
     </div>
   </div>
-<% end %>
+</div>
