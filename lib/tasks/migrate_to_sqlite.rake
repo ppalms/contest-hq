@@ -12,7 +12,7 @@ namespace :db do
       end
 
       # Check database configuration
-      unless ActiveRecord::Base.connection.adapter_name == 'SQLite'
+      unless ActiveRecord::Base.connection.adapter_name == "SQLite"
         puts "❌ Current database is not SQLite. Please ensure database.yml is configured for SQLite."
         exit 1
       end
@@ -21,11 +21,11 @@ namespace :db do
 
       # PostgreSQL connection details (from environment or secrets)
       pg_config = {
-        host: ENV['OLD_DB_HOST'] || '167.71.21.241',
-        port: ENV['OLD_POSTGRES_PORT'] || 5432,
-        database: ENV['OLD_POSTGRES_DB'] || 'contest_hq_production',
-        username: ENV['OLD_POSTGRES_USER'],
-        password: ENV['OLD_POSTGRES_PASSWORD']
+        host: ENV["OLD_DB_HOST"] || "167.71.21.241",
+        port: ENV["OLD_POSTGRES_PORT"] || 5432,
+        database: ENV["OLD_POSTGRES_DB"] || "contest_hq_production",
+        username: ENV["OLD_POSTGRES_USER"],
+        password: ENV["OLD_POSTGRES_PASSWORD"]
       }
 
       # Verify PostgreSQL credentials are available
@@ -39,7 +39,7 @@ namespace :db do
       # Connect to PostgreSQL
       pg_connection = nil
       begin
-        require 'pg'
+        require "pg"
         pg_connection = PG.connect(
           host: pg_config[:host],
           port: pg_config[:port],
@@ -63,7 +63,7 @@ namespace :db do
         ORDER BY table_name;
       SQL
 
-      pg_tables = pg_connection.exec(tables_query).map { |row| row['table_name'] }
+      pg_tables = pg_connection.exec(tables_query).map { |row| row["table_name"] }
       puts "📋 Found #{pg_tables.length} tables to migrate: #{pg_tables.join(', ')}"
 
       # Start transaction for SQLite
@@ -93,7 +93,7 @@ namespace :db do
             values = row.values.map do |value|
               case value
               when nil
-                'NULL'
+                "NULL"
               when String
                 "'#{value.gsub("'", "''")}'"  # Escape single quotes
               when Time, Date
@@ -157,7 +157,6 @@ namespace :db do
           puts "\n❌ Some verification checks failed. Rolling back transaction."
           raise "Data verification failed"
         end
-
       end # transaction
 
     rescue => e
@@ -195,7 +194,7 @@ namespace :db do
     end
 
     desc "Restore SQLite database from backup"
-    task :restore_sqlite, [:timestamp] => :environment do |t, args|
+    task :restore_sqlite, [ :timestamp ] => :environment do |t, args|
       timestamp = args[:timestamp]
 
       if timestamp.blank?
