@@ -10,7 +10,7 @@ module Contests
 
     def index
       @contest_managers = @contest.contest_managers.includes(:user)
-      @pagy, @users = pagy(User.joins(:roles).where(roles: { name: "Manager" }).where("first_name ILIKE ? OR last_name ILIKE ? OR email ILIKE ?", "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%"), limit: 10)
+      @pagy, @users = pagy(User.joins(:roles).where(roles: { name: "Manager" }).where("first_name LIKE ? OR last_name LIKE ? OR email LIKE ?", "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%"), limit: 10)
     end
 
     def new
@@ -20,7 +20,7 @@ module Contests
         @pagy, @users = pagy(
           User.joins(:roles)
               .where(roles: { name: "Manager" })
-              .where("first_name ILIKE ? OR last_name ILIKE ? OR email ILIKE ?",
+              .where("first_name LIKE ? OR last_name LIKE ? OR email LIKE ?",
                      "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%"),
           limit: 10
         )

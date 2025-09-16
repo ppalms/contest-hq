@@ -22,7 +22,7 @@ class ContestsController < ApplicationController
     # Filter contests by season and search term
     contests_scope = Contest.joins(:season).order(:contest_start)
     contests_scope = contests_scope.where(season_id: @selected_season_id) if @selected_season_id.present?
-    contests_scope = contests_scope.where("contests.name ILIKE ?", "%#{params[:name]}%") if params[:name].present?
+    contests_scope = contests_scope.where("contests.name LIKE ?", "%#{params[:name]}%") if params[:name].present?
 
     @pagy, @contests = pagy(contests_scope, limit: 6)
   end
