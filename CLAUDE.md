@@ -12,9 +12,6 @@ bin/setup
 # Start development server with Tailwind CSS watcher
 bin/dev
 # Runs on http://localhost:3000
-
-# Start database (required before any db operations)
-docker compose up -d db --wait
 ```
 
 ### Testing
@@ -76,7 +73,7 @@ kamal app logs -g <request_id>
 ### Core Technology Stack
 - **Ruby 3.3.5** (strict requirement - check with `ruby --version`)
 - **Rails 8.0.2** with modern conventions
-- **PostgreSQL** database (via Docker)
+- **SQLite3** embedded database
 - **Tailwind CSS** for styling
 - **Authentication-zero** gem for user auth
 - **Solid Queue** for background jobs
@@ -109,7 +106,7 @@ Contest → Performance Phases → Schedules → Schedule Blocks
 - Test helpers: `sign_in_as(user)` for integration, `set_current_user(user)` for unit tests
 
 ### Key Configuration Files
-- **Database**: `config/database.yml` - PostgreSQL with environment variables
+- **Database**: `config/database.yml` - SQLite3 with multi-database configuration
 - **Routes**: Nested resources for contests → entries → selections
 - **Deployment**: `config/deploy.yml` - Kamal configuration for DigitalOcean
 - **Background Jobs**: `config/queue.yml` - Solid Queue configuration
@@ -143,22 +140,21 @@ app/models/
 - Or use rbenv/rvm/asdf to install Ruby 3.3.5
 
 ### Database Requirements
-- PostgreSQL must be running before any database operations
-- Use Docker: `docker compose up -d db --wait`
-- Database connection uses environment variables
+- SQLite3 databases are stored in the `storage/` directory
+- No external database server required
+- Multi-database setup for primary, cache, queue, and cable databases
 
 ### Testing Environment
 - **41 test files** covering models, controllers, system tests
 - System tests use headless Chrome (1400x1400 screen)
 - Test password for fixtures: "Secret1*3*5*"
 - Failed screenshots saved to `tmp/screenshots`
-- Requires PostgreSQL running
+- SQLite test database automatically created
 
 ### Time Estimates
-- Initial setup: 5-10 minutes
+- Initial setup: 2-5 minutes (no Docker required)
 - Bundle install: ~40 seconds
 - Full test suite: ~7 minutes (36s unit + 6.5min system)
-- Docker database startup: ~6 seconds with --wait
 - Development server start: ~2 seconds
 
 ## Development Workflow
@@ -166,8 +162,7 @@ app/models/
 ### Before Making Changes
 1. Ensure Ruby 3.3.5: `ruby --version`
 2. Install dependencies: `bundle install`
-3. Start database: `docker compose up -d db --wait`
-4. Run baseline tests: `bin/rails test`
+3. Run baseline tests: `bin/rails test`
 
 ### After Making Changes
 1. **Always run linting**: `bin/rubocop`
@@ -196,10 +191,11 @@ GitHub Actions runs 4 jobs:
 1. **scan_ruby**: `bin/brakeman --no-pager`
 2. **scan_js**: `bin/importmap audit`
 3. **lint**: `bin/rubocop -f github`
-4. **test**: Full test suite with PostgreSQL service
+4. **test**: Full test suite with SQLite (no external services required)
 
 ## Deployment
 - Uses Kamal for containerized deployment to DigitalOcean
+- SQLite databases stored in persistent Docker volumes
 - AWS S3 for file storage (production)
 - AWS SES for email (production)
 - Encrypted credentials in `config/credentials/`
