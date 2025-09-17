@@ -9,15 +9,14 @@ Contest HQ is a solution for managing band and orchestra contests.
 ## Dependencies
 
 - Ruby 3.3.5
-- Docker
 
 ## Getting Started
 
 Run `bin/setup` from the project root. The setup script will take care of the following:
 
 - Install application gems
-- Create a development database in a Docker container
-- Prepare the database and run all migrations
+- Create and prepare the SQLite database
+- Run all migrations
 
 Run `bin/dev` to run the app at *<http://localhost:3000>*
 
@@ -28,7 +27,7 @@ Run `bin/rails` to open the Rails console and `setup_session` to start a test se
 ### DigitalOcean
 
 - App droplet (1 GB Memory / 25 GB Disk - Ubuntu 24.04 (LTS) x64)
-- Database droplet (1 GB Memory / 25 GB Disk - Ubuntu 24.04 (LTS) x64)
+- SQLite database files stored in persistent volume
 
 ### AWS
 

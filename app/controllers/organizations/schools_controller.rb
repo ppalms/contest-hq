@@ -5,7 +5,7 @@ class Organizations::SchoolsController < ApplicationController
   before_action :set_breadcrumbs
 
   def index
-    @pagy, @schools = pagy(School.where("name ILIKE ?", "%#{params[:name]}%").order(:name), limit: 6)
+    @pagy, @schools = pagy(School.where("name LIKE ?", "%#{params[:name]}%").order(:name), limit: 6)
   end
 
   def new

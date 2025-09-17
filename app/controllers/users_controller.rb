@@ -10,7 +10,7 @@ class UsersController < ApplicationController
         .includes(:roles)
         .order(:last_name)
 
-      @users = @users.where("email ILIKE ?", "%#{params[:email]}%") if params[:email].present?
+      @users = @users.where("email LIKE ?", "%#{params[:email]}%") if params[:email].present?
   end
 
   def edit
