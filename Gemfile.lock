@@ -397,7 +397,6 @@ DEPENDENCIES
   kamal
   letter_opener
   pagy (~> 9.4)
-  pg (~> 1.6)
   propshaft
   puma (>= 5.0)
   rails (= 8.0.2.1)
