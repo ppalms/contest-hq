@@ -387,7 +387,7 @@ namespace :db do
 
       # Copy schema by getting the CREATE TABLE statements
       source_tables.each do |table_name|
-        schema_sql = source_db.execute("SELECT sql FROM sqlite_master WHERE type='table' AND name=?", [table_name]).first
+        schema_sql = source_db.execute("SELECT sql FROM sqlite_master WHERE type='table' AND name=?", [ table_name ]).first
         if schema_sql
           dest_db.execute(schema_sql[0])
           puts "📋 Created table schema: #{table_name}"
