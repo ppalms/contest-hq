@@ -193,8 +193,7 @@ namespace :db do
 
         pg_tables.each do |table_name|
           pg_count = pg_connection.exec("SELECT COUNT(*) FROM #{table_name}").getvalue(0, 0).to_i
-          sqlite_result = ActiveRecord::Base.connection.execute("SELECT COUNT(*) FROM #{table_name}")
-          sqlite_count = sqlite_result.first.first
+          sqlite_count = ActiveRecord::Base.connection.select_value("SELECT COUNT(*) FROM #{table_name}").to_i
 
           verification_results[table_name] = {
             postgresql: pg_count,
