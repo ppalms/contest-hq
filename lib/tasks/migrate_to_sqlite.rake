@@ -75,15 +75,15 @@ namespace :db do
 
         # Tables depending on accounts/seasons/performance_classes
         "users",
-        "schools",
         "school_classes",
+        "schools",
         "contests",
 
         # Tables depending on schools/users
         "school_directors",
         "large_ensembles",
-        "user_roles",
         "roles",
+        "user_roles",
 
         # Tables depending on contests/users/large_ensembles
         "contest_managers",
@@ -342,15 +342,15 @@ namespace :db do
 
         # Tables depending on accounts/seasons/performance_classes
         "users",
-        "schools",
         "school_classes",
+        "schools",
         "contests",
 
         # Tables depending on schools/users
         "school_directors",
         "large_ensembles",
-        "user_roles",
         "roles",
+        "user_roles",
 
         # Tables depending on contests/users/large_ensembles
         "contest_managers",
