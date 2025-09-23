@@ -48,7 +48,7 @@
   <div>
     <div class="flex justify-between items-center">
       <label class="block">Schools</label>
-      <div class="flex gap-2">
+      <div class="flex items-center gap-2">
         <span class="text-sm text-gray-500">(Optional)</span>
         <% if user.persisted? %>
           <%= link_to "Add Schools", user_schools_path(user), class: "btn-secondary-sm" %>
