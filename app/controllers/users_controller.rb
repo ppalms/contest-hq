@@ -1,16 +1,27 @@
 class UsersController < ApplicationController
+  include Pagy::Backend
+
   before_action -> { require_role "SysAdmin", "AccountAdmin" }
   before_action :set_user, only: %i[edit update]
 
   def index
-      @users = User
-        .where.not(
-          id: User.joins(:roles).where(roles: { name: "SysAdmin" }).select(:id)
-        )
-        .includes(:roles)
-        .order(:last_name)
+    base_query = User
+      .where.not(
+        id: User.joins(:roles).where(roles: { name: "SysAdmin" }).select(:id)
+      )
+      .includes(:roles)
+      .order(:last_name)
 
-      @users = @users.where("email LIKE ?", "%#{params[:email]}%") if params[:email].present?
+    search_query = base_query
+    if params[:search].present?
+      search_term = "%#{params[:search]}%"
+      search_query = search_query.where(
+        "first_name LIKE ? OR last_name LIKE ? OR email LIKE ?",
+        search_term, search_term, search_term
+      )
+    end
+
+    @pagy, @users = pagy(search_query, limit: 6)
   end
 
   def edit
@@ -29,6 +40,14 @@ class UsersController < ApplicationController
       redirect_to root_path, status: :forbidden; return
     end
 
+    # Handle school removal
+    if params[:user][:remove_school_id].present?
+      school = School.find(params[:user][:remove_school_id])
+      @user.schools.delete(school)
+      redirect_to edit_user_path(@user), notice: "#{school.name} removed successfully."
+      return
+    end
+
     if @user.update(user_params)
       redirect_to users_path, notice: "User updated successfully."
     else
@@ -39,7 +58,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.expect(user: [ :email, :first_name, :last_name, :time_zone, role_ids: [], school_ids: [] ])
+    params.expect(user: [ :email, :first_name, :last_name, :time_zone, :remove_school_id, role_ids: [], school_ids: [] ])
   end
 
   def set_user

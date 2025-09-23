@@ -9,7 +9,7 @@ class InvitationsController < ApplicationController
     @user = User.create_with(user_params).find_or_initialize_by(email: user_params[:email])
     if @user.save
       send_invitation_instructions
-      redirect_to new_invitation_path, notice: "An invitation email has been sent to #{@user.email}"
+      redirect_to user_schools_path(@user, from_invitation: true), notice: "User #{@user.email} has been created. Now assign schools to this user."
     else
       set_form_variables
       render :new, status: :unprocessable_content, locals: { roles: @roles, organizations: @organizations }

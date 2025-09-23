@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   resources :accounts
-  resources :users, only: [ :index, :edit, :update ]
+  resources :users, only: [ :index, :edit, :update ] do
+    resources :schools, controller: "users/schools", only: [ :index, :create ]
+  end
   resources :seasons, except: [ :show ]
 
   get "landing", to: "public#landing"
