@@ -17,7 +17,7 @@ module Users
     end
 
     def create
-      school_ids = params[:user][:school_ids].reject(&:blank?)
+      school_ids = params.dig(:user, :school_ids)&.reject(&:blank?) || []
       new_schools = School.where(id: school_ids) - @user.schools
 
       if new_schools.any?

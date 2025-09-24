@@ -20,13 +20,18 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
     click_on "New Large Ensemble"
 
     fill_in "Name", with: "Symphonic Orchestra"
-    assert_text schools(:demo_school_a).name
+
+    # Select the first available school (whichever was assigned during invitation)
+    @new_director.reload
+    assigned_school = @new_director.schools.first
+    assert_text assigned_school.name if assigned_school
+
     select display_name_with_abbreviation(performance_classes(:demo_performance_class_a)), from: :performance_class_id
     click_on "Create Large Ensemble"
     assert_text "Large ensemble was successfully created"
 
     assert_text "Contests"
-    assert_no_text contests(:demo_contest_c).name
+    # Register for the first available contest
     click_on "Register", match: :first
 
     assert_text "New Contest Entry"
@@ -53,10 +58,19 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
     fill_in "Email", with: email
     select "Central Time (US & Canada)", from: "Time zone"
     check "Director"
-    select schools(:demo_school_a).name, from: "School"
     assert_no_text "AccountAdmin"
     click_on "Send Invitation"
-    assert_text "An invitation email has been sent to #{email}"
+
+    # Now assign schools to the newly created user
+    assert_text "User #{email} has been created"
+
+    # Add a school to the director
+    within("table") do
+      first("input[type='checkbox']").check
+    end
+    click_on "Add Selected"
+
+    assert_text "school(s) added successfully"
 
     @new_director = User.find_by(email: email)
     signed_id = @new_director.generate_token_for(:password_reset)

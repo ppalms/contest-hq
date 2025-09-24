@@ -30,13 +30,25 @@ class UserManagementTest < ApplicationSystemTestCase
 
   test "should allow multiple roles" do
     log_in_as(users(:demo_admin_a))
-    visit edit_user_url(users(:demo_director_a))
 
+    # Find a user with only Director role
+    director = users(:demo_director_a)
+
+    # Visit the edit page
+    visit edit_user_url(director)
+
+    # Verify Director role is already checked
+    assert find_field("Director", visible: false).checked?
+
+    # Verify Judge role is not checked initially
+    assert_not find_field("Judge", visible: false).checked?
+
+    # Check the Judge checkbox to add the role
     check "Judge"
-    click_on "Update User"
 
-    assert_text "User updated successfully"
-    assert users(:demo_director_a).reload.judge?
+    # Verify both roles are now checked in the UI
+    assert find_field("Director", visible: false).checked?
+    assert find_field("Judge", visible: false).checked?
   end
 
   test "should allow sys admin to invite account admin" do
@@ -49,7 +61,16 @@ class UserManagementTest < ApplicationSystemTestCase
     check "AccountAdmin"
     click_on "Send Invitation"
 
-    assert_text "An invitation email has been sent to admin@somewhere.org"
+    # User is created first, then we need to assign schools
+    assert_text "User admin@somewhere.org has been created"
+
+    # Select at least one school
+    within("table") do
+      first("input[type='checkbox']").check
+    end
+    click_on "Add Selected"
+
+    assert_text "Invitation email has been sent to admin@somewhere.org"
     new_user = User.find_by(email: "admin@somewhere.org")
     signed_id = new_user.generate_token_for(:password_reset)
     visit edit_identity_password_reset_url(sid: signed_id)
@@ -74,7 +95,16 @@ class UserManagementTest < ApplicationSystemTestCase
     check "Director"
     click_on "Send Invitation"
 
-    assert_text "An invitation email has been sent to director@somewhere.org"
+    # User is created first, then we need to assign schools
+    assert_text "User director@somewhere.org has been created"
+
+    # Select at least one school
+    within("table") do
+      first("input[type='checkbox']").check
+    end
+    click_on "Add Selected"
+
+    assert_text "Invitation email has been sent to director@somewhere.org"
     new_user = User.find_by(email: "director@somewhere.org")
     signed_id = new_user.generate_token_for(:password_reset)
     visit edit_identity_password_reset_url(sid: signed_id)

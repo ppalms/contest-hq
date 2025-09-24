@@ -71,7 +71,7 @@ class UserSchoolAssociationsTest < ApplicationSystemTestCase
     visit new_roster_large_ensemble_path
 
     # Verify the school appears in the dropdown
-    assert_select "select#school_id option", text: @school_c.name
+    assert_selector "select#school_id option", text: @school_c.name
 
     # Verify they can create a large ensemble with that school
     fill_in "Name", with: "Test Ensemble"
@@ -92,8 +92,8 @@ class UserSchoolAssociationsTest < ApplicationSystemTestCase
     # Verify director can see both schools initially
     log_in_as(@director)
     visit new_roster_large_ensemble_path
-    assert_select "select#school_id option", text: @school_b.name
-    assert_select "select#school_id option", text: @school_c.name
+    assert_selector "select#school_id option", text: @school_b.name
+    assert_selector "select#school_id option", text: @school_c.name
 
     # Now as admin, remove one school association
     log_in_as(@admin)
@@ -109,7 +109,7 @@ class UserSchoolAssociationsTest < ApplicationSystemTestCase
     @director.reload
     if @director.schools.any?
       remaining_school = @director.schools.first
-      assert_select "select#school_id option", text: remaining_school.name
+      assert_selector "select#school_id option", text: remaining_school.name
 
       # Verify they can still create ensembles with remaining schools
       fill_in "Name", with: "Remaining School Ensemble"
@@ -131,16 +131,18 @@ class UserSchoolAssociationsTest < ApplicationSystemTestCase
     visit new_roster_large_ensemble_path
 
     # Verify only the "Select a school" placeholder appears
-    assert_select "select#school_id option", count: 1
-    assert_select "select#school_id option", text: "Select a school"
+    assert_selector "select#school_id option", count: 1
+    assert_selector "select#school_id option", text: "Select a school"
 
     # Verify they cannot submit the form without selecting a school
     fill_in "Name", with: "Test Ensemble"
     select display_name_with_abbreviation(@performance_class), from: :performance_class_id
     click_on "Create Large Ensemble"
 
-    # Form should not submit successfully due to validation
-    assert_text "can't be blank"
+    # Form should not submit successfully due to HTML5 validation
+    # Browser will prevent submission with required field empty
+    # Verify we're still on the new large ensemble page
+    assert_current_path new_roster_large_ensemble_path
   end
 
   test "administrator can add multiple schools to director at once" do
@@ -154,14 +156,16 @@ class UserSchoolAssociationsTest < ApplicationSystemTestCase
     visit edit_user_path(director_without_schools)
     click_on "Add Schools"
 
-    # Check multiple schools using JavaScript to ensure they're selected
-    page.execute_script("
-      const checkboxes = document.querySelectorAll('input[name=\"user[school_ids][]\"]');
-      if (checkboxes.length >= 2) {
-        checkboxes[0].checked = true;
-        checkboxes[1].checked = true;
-      }
-    ")
+    # Wait for the page to load and check multiple schools
+    assert_text "Add Schools for"
+
+    # Check the first two checkboxes that are not already selected
+    checkboxes = all('input[type="checkbox"][name="user[school_ids][]"]:not(:checked)')
+    if checkboxes.count >= 2
+      checkboxes[0].check
+      checkboxes[1].check
+    end
+
     click_on "Add Selected"
 
     # Verify success message
