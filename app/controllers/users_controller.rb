@@ -2,7 +2,8 @@ class UsersController < ApplicationController
   include Pagy::Backend
 
   before_action -> { require_role "SysAdmin", "AccountAdmin" }
-  before_action :set_user, only: %i[edit update]
+  before_action :set_user, only: %i[show edit update]
+  before_action :set_breadcrumbs, only: %i[show edit]
 
   def index
     base_query = User
@@ -22,6 +23,17 @@ class UsersController < ApplicationController
     end
 
     @pagy, @users = pagy(search_query, limit: 6)
+  end
+
+  def show
+    if current_user.account != @user.account && !current_user.sysadmin?
+      redirect_to root_path, status: :forbidden; return
+    end
+
+    @roles = Role.where(name: %w[Director Manager Judge AccountAdmin]).order(:name)
+    @organizations = School.all.order(:name)
+
+    render :show, locals: { roles: @roles, organizations: @organizations }
   end
 
   def edit
@@ -44,12 +56,12 @@ class UsersController < ApplicationController
     if params[:user][:remove_school_id].present?
       school = School.find(params[:user][:remove_school_id])
       @user.schools.delete(school)
-      redirect_to edit_user_path(@user), notice: "#{school.name} removed successfully."
+      redirect_to user_path(@user), notice: "#{school.name} removed successfully."
       return
     end
 
     if @user.update(user_params)
-      redirect_to users_path, notice: "User updated successfully."
+      redirect_to user_path(@user), notice: "User updated successfully."
     else
       render :edit, status: :unprocessable_content, error: "Failed to update user."
     end
@@ -63,5 +75,10 @@ class UsersController < ApplicationController
 
   def set_user
     @user = User.find(params[:id])
+  end
+
+  def set_breadcrumbs
+    add_breadcrumb("Users", users_path)
+    add_breadcrumb("#{@user.first_name} #{@user.last_name}", @user) if @user
   end
 end

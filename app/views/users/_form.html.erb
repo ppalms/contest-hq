@@ -103,7 +103,11 @@
 
   <div class="form-button-container">
     <%= form.submit submit_text, class: "btn-primary" %>
-    <%= link_to "Cancel", users_path, class: "btn-secondary", role: "button" %>
+    <% if user.persisted? %>
+      <%= link_to "Cancel", user_path(user), class: "btn-secondary", role: "button" %>
+    <% else %>
+      <%= link_to "Cancel", users_path, class: "btn-secondary", role: "button" %>
+    <% end %>
   </div>
 
   <% if user.errors.any? %>

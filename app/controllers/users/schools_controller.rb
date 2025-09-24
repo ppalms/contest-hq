@@ -24,12 +24,12 @@ module Users
         @user.schools += new_schools
         success_message = "#{new_schools.count} school(s) added successfully."
         if params[:from_invitation]
-          redirect_to edit_user_path(@user), notice: "#{success_message} Invitation email has been sent to #{@user.email}."
+          redirect_to user_path(@user), notice: "#{success_message} Invitation email has been sent to #{@user.email}."
         else
-          redirect_to edit_user_path(@user), notice: success_message
+          redirect_to user_path(@user), notice: success_message
         end
       else
-        redirect_to edit_user_path(@user), alert: "No new schools were selected."
+        redirect_to user_path(@user), alert: "No new schools were selected."
       end
     end
 
@@ -41,7 +41,7 @@ module Users
 
     def set_breadcrumbs
       add_breadcrumb("Users", users_path)
-      add_breadcrumb("Edit #{@user.first_name} #{@user.last_name}", edit_user_path(@user))
+      add_breadcrumb("#{@user.first_name} #{@user.last_name}", user_path(@user))
       add_breadcrumb("Select Schools", user_schools_path(@user))
     end
   end

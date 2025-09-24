@@ -1,24 +1,21 @@
-<div class="py-8" id="show_<%= dom_id @contest %>">
-  <div class="flex flex-col sm:flex-row">
-    <h1><%= @contest.name %></h1>
-
-    <% if current_user.tenant_admin? %>
-      <div class="action-button-container">
-        <%= link_to "Edit", edit_contest_path(@contest), class: "btn-secondary-sm" %>
-        <%= button_to "Delete",
-        @contest,
-        method: :delete,
-        class: "btn-danger-sm",
-        form: {
-          data: {
-            turbo_confirm: "Are you sure?",
-          },
-        } %>
-      </div>
-    <% end %>
-  </div>
-
-  <%= render @contest %>
+<%= render "shared/entity_detail",
+      entity: @contest,
+      title: @contest.name,
+      entity_partial: "contests/contest",
+      actions: (capture do %>
+        <% if current_user.tenant_admin? %>
+          <%= link_to "Edit", edit_contest_path(@contest), class: "btn-secondary-sm" %>
+          <%= button_to "Delete",
+          @contest,
+          method: :delete,
+          class: "btn-danger-sm",
+          form: {
+            data: {
+              turbo_confirm: "Are you sure?",
+            },
+          } %>
+        <% end %>
+      <% end) do %>
 
   <%# TODO: only show if director conducts an eligible large ensemble %>
   <% if current_user.director? %>
@@ -174,7 +171,7 @@
           A schedule has not been posted for this contest.
         </div>
       <% end %>
-    </div>
-
   </div>
+
+<% end %>
 </div>

@@ -1,0 +1,17 @@
+<div class="py-8" id="show_<%= dom_id(entity) %>">
+  <div class="flex flex-col sm:flex-row">
+    <h1><%= title %></h1>
+
+    <% if local_assigns[:actions].present? %>
+      <div class="action-button-container">
+        <%= local_assigns[:actions] %>
+      </div>
+    <% end %>
+  </div>
+
+  <% if local_assigns[:entity_partial].present? %>
+    <%= render local_assigns[:entity_partial], entity.model_name.element.to_sym => entity %>
+  <% end %>
+
+  <%= yield if block_given? %>
+</div>

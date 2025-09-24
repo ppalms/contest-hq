@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :accounts
-  resources :users, only: [ :index, :edit, :update ] do
+  resources :users, only: [ :index, :show, :edit, :update ] do
     resources :schools, controller: "users/schools", only: [ :index, :create ]
   end
   resources :seasons, except: [ :show ]
