@@ -1,0 +1,98 @@
+<%#
+  Shared component for searchable item selection
+
+  Usage:
+  <%= render "shared/searchable_selection",
+        title: "Select Schools",
+        search_url: user_schools_path(@user),
+        form_target: @user,
+        form_url: user_path(@user),
+        items: @schools,
+        pagy: @pagy,
+        search_param: :search,
+        search_placeholder: "Search schools...",
+        item_name_method: :name,
+        item_id_method: :id,
+        selected_items: @user.schools,
+        selection_field_name: "user[school_ids][]",
+        cancel_url: edit_user_path(@user)
+#%>
+
+<div class="py-8">
+  <h1><%= title %></h1>
+
+  <div class="pt-6">
+    <%= form_with url: search_url, method: :get, local: true, class: "pb-6" do |search_form| %>
+      <div class="flex gap-2 py-2">
+        <%= search_form.text_field search_param,
+                               placeholder: search_placeholder,
+                               value: params[search_param],
+                               class: "text-field" %>
+        <div class="flex gap-2">
+          <%= search_form.submit "Search", class: "btn-primary w-2/3 sm:w-auto" %>
+          <%= link_to "Reset", search_url, class: "btn-secondary text-center w-1/3 sm:w-auto" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <%= form_with(model: form_target, url: form_url, method: :post, local: true) do |form| %>
+    <% if items.any? %>
+      <div class="border border-neutral-200 shadow-2xs overflow-hidden rounded-md">
+        <table class="min-w-full divide-y divide-gray-300">
+          <thead class="bg-gray-50">
+            <tr>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >Select</th>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >Name</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <% items.each do |item| %>
+              <% already_selected = selected_items.include?(item) %>
+              <tr class="<%= 'bg-gray-100' if already_selected %>">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <% if already_selected %>
+                    <span class="text-sm text-gray-500">Already selected</span>
+                  <% else %>
+                    <input
+                      type="checkbox"
+                      name="<%= selection_field_name %>"
+                      value="<%= item.send(item_id_method) %>"
+                      class="form-checkbox"
+                    />
+                  <% end %>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  <%= item.send(item_name_method) %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+      <%== pagy_nav(pagy) if pagy.pages > 1 %>
+
+      <div class="form-button-container">
+        <%= form.submit "Add Selected", class: "btn-primary" %>
+        <%= link_to "Cancel", cancel_url, class: "btn-secondary" %>
+      </div>
+    <% else %>
+      <p class="text-gray-500">No items found.
+        <%= if params[search_param].present?
+          "Try a different search term."
+        else
+          "There are no items available."
+        end %></p>
+      <div class="form-button-container">
+        <%= link_to "Cancel", cancel_url, class: "btn-secondary" %>
+      </div>
+    <% end %>
+  <% end %>
+</div>

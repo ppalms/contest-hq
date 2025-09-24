@@ -1,59 +1,24 @@
-<div id="users">
-  <% content_for :title, "Users" %>
-  <div class="flex justify-between items-center">
+<% content_for :title, "Users" %>
+<div class="py-8 space-y-4">
+  <div class="flex justify-between">
     <h1>Users</h1>
     <div class="flex gap-2">
-      <%= link_to "Invite user", new_invitation_path, class: "btn-primary" %>
+      <%= link_to "Invite user", new_invitation_path, class: "btn-primary-sm" %>
     </div>
   </div>
 
-  <div class="pt-4">
-    <%= render partial: "search" %>
-  </div>
+  <%= render partial: "search" %>
 
-  <div id="user_list" class="pt-4">
+  <div
+    id="user_list"
+    class="rounded-md bg-white border border-neutral-200 shadow-2xs"
+  >
     <% if @users.empty? %>
-      <p class="text-center">No users found.</p>
+      <div class="p-6 text-center text-gray-500">
+        <p>No users found.</p>
+      </div>
     <% else %>
-      <% @users.each do |user| %>
-        <%= link_to edit_user_path(user.id) do %>
-          <div
-            class="
-              flex gap-2 p-2 min-h-24 rounded-sm hover:cursor-pointer hover:bg-cyan-50
-              hover:outline hover:outline-1 hover:outline-cyan-100 hover:transition
-              duration-300
-            "
-          >
-            <div class="grow">
-              <p class="text-lg font-bold"><%= user.first_name %>
-                <%= user.last_name %></p>
-              <p class="text-neutral-900">
-                <%= user.email %>
-                <% if user.verified? %>
-                  <span
-                    class="
-                      inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium
-                      text-green-700 ring-1 ring-inset ring-green-600/20
-                    "
-                  >Verified</span>
-                <% else %>
-                  <span
-                    class="
-                      inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium
-                      text-yellow-800 ring-1 ring-inset ring-yellow-600/20
-                    "
-                  >Unverified</span>
-                <% end %>
-              </p>
-            </div>
-
-            <div class="hidden sm:block pr-2 text-right">
-              <strong>Roles</strong>
-              <p><%= user.roles.order(:name).map(&:name).join(", ") %></p>
-            </div>
-          </div>
-        <% end %>
-      <% end %>
+      <%= render partial: "list" %>
     <% end %>
   </div>
 </div>
