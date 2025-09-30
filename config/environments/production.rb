@@ -68,7 +68,7 @@ Rails.application.configure do
       Rails.application.credentials.dig(:smtp, :user_name),
       Rails.application.credentials.dig(:smtp, :password)
     ),
-    region: 'us-east-2'
+    region: "us-east-2"
   }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
