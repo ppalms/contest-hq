@@ -62,15 +62,13 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: "contesthq.app" }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    domain: "contesthq.app",
-    user_name: Rails.application.credentials.dig(:smtp, :user_name),
-    password: Rails.application.credentials.dig(:smtp, :password),
-    address: "email-smtp.us-east-2.amazonaws.com",
-    port: 587,
-    authentication: "plain",
-    enable_starttls_auto: true
+  config.action_mailer.delivery_method = :ses_v2
+  config.action_mailer.ses_v2_settings = {
+    credentials: Aws::Credentials.new(
+      Rails.application.credentials.dig(:smtp, :user_name),
+      Rails.application.credentials.dig(:smtp, :password)
+    ),
+    region: "us-east-2"
   }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
