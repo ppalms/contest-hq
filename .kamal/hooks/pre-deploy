@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -e
+
+echo "Running database migrations on current container..."
+
+if [ "$KAMAL_COMMAND" = "rollback" ]; then
+  echo "Skipping migrations for rollback"
+  exit 0
+fi
+
+kamal app exec --primary --reuse 'bin/rails db:prepare'
+
+echo "✅ Database migrations completed successfully"
