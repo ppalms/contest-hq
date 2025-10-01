@@ -61,12 +61,11 @@ Rails.application.configure do
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: "contesthq.app" }
 
-  # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.
   config.action_mailer.delivery_method = :ses_v2
   config.action_mailer.ses_v2_settings = {
     credentials: Aws::Credentials.new(
-      Rails.application.credentials.dig(:smtp, :user_name),
-      Rails.application.credentials.dig(:smtp, :password)
+      Rails.application.credentials.dig(:aws_ses, :user_name),
+      Rails.application.credentials.dig(:aws_ses, :password)
     ),
     region: "us-east-2"
   }
