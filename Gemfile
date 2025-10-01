@@ -71,4 +71,4 @@ end
 gem "authentication-zero", "~> 4.0"
 gem "pagy", "~> 9.4"
 
-gem "aws-sdk-sesv2", "~> 1.85"
+gem "aws-actionmailer-ses", "~> 1.0"
