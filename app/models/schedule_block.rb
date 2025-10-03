@@ -23,16 +23,17 @@ class ScheduleBlock < ApplicationRecord
   end
 
   def no_overlap
-    return unless schedule_day
+    return unless schedule_day && start_time && end_time && room
 
-    if schedule_day.schedule_blocks.any? do |block|
-      block != self &&
-        block.room == room &&
-        block.start_time < end_time &&
-        block.end_time > start_time
-      end
+    overlapping_blocks = ScheduleBlock
+      .where(schedule_day_id: schedule_day_id)
+      .where(room_id: room_id)
+      .where("start_time < ? AND end_time > ?", end_time, start_time)
 
-      errors.add(:start_time, "overlaps with another block")
+    overlapping_blocks = overlapping_blocks.where.not(id: id) if persisted?
+
+    if overlapping_blocks.exists?
+      errors.add(:start_time, "overlaps with another block in this room")
     end
   end
 end
