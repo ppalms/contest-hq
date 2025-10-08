@@ -38,7 +38,7 @@ class ContestEntriesControllerTest < ActionDispatch::IntegrationTest
   test "should redirect when no ensembles are eligible for restricted contest" do
     # demo_contest_c is restricted to 2A and 3A schools
     restricted_contest = contests(:demo_contest_c)
-    
+
     # demo_director_a conducts ensembles from demo_school_a (1A school)
     sign_in_as(@user_with_ensemble)
 
@@ -52,7 +52,7 @@ class ContestEntriesControllerTest < ActionDispatch::IntegrationTest
   test "should show new contest entry form when user has eligible ensembles for restricted contest" do
     # demo_contest_c is restricted to 2A and 3A schools
     restricted_contest = contests(:demo_contest_c)
-    
+
     # demo_director_b conducts ensembles from demo_school_b (2A school)
     user_with_eligible_ensemble = users(:demo_director_b)
     sign_in_as(user_with_eligible_ensemble)
