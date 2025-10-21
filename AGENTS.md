@@ -10,7 +10,7 @@ bin/brakeman --no-pager                  # Security scan (required)
 bin/dev                                  # Start dev server at localhost:3000
 ```
 
-## Code Style - Rails 8.0.2 with Ruby 3.3.5
+## Code Style - Rails 8.0.3 with Ruby 3.3.5
 - **Linting**: Uses rubocop-rails-omakase configuration (Rails defaults)
 - **Classes**: `CamelCase` for models/controllers, `snake_case` for methods/variables
 - **Indentation**: 2 spaces, no tabs (enforced by rubocop)
