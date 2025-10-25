@@ -5,7 +5,7 @@
     <div>
       <%= form.label :large_ensemble %>
       <%= form.select :large_ensemble_id,
-                  current_user.conducted_ensembles.all.map { |t| [t.name, t.id] },
+                  @eligible_ensembles.map { |t| [t.name, t.id] },
                   { include_blank: "Select a large ensemble" },
                   { required: true, class: "text-field", id: :large_ensemble_id } %>
     </div>

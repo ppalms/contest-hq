@@ -93,23 +93,23 @@
               <h4 class="font-medium text-blue-800 mb-2">Setup Checklist:</h4>
               <ul class="space-y-1 text-blue-800">
                 <li class="flex items-center gap-2">
-                  <span class="<%= @contest.rooms.any? ? 'text-green-600' : 'text-gray-400' %>">
+                  <span class="text-xl <%= @contest.rooms.any? ? 'text-green-600' : 'text-gray-400' %>">
                     <%= @contest.rooms.any? ? "✓" : "☐" %>
                   </span>
                   Add performance rooms
                 </li>
                 <li class="flex items-center gap-2">
                   <span
-                    class="<%= @contest.performance_phases.any? ? 'text-green-600' : 'text-gray-400' %>"
+                    class="text-xl <%= @contest.performance_phases.any? ? 'text-green-600' : 'text-gray-400' %>"
                   >
                     <%= @contest.performance_phases.any? ? "✓" : "☐" %>
                   </span>
-                  Configure performance phases (e.g., warm-up, performance,
-                  sight-reading)
+                  Configure performance phases (e.g., warm up, performance,
+                  sight reading)
                 </li>
                 <li class="flex items-center gap-2">
                   <span
-                    class="<%= @contest.contest_start && @contest.contest_end ? 'text-green-600' : 'text-gray-400' %>"
+                    class="text-xl text-gray-400"
                   >
                     ☐
                   </span>

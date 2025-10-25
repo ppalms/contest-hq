@@ -1,7 +1,5 @@
 # Contest HQ
 
-[![CI Build](https://github.com/ppalms/contest-hq/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ppalms/contest-hq/actions/workflows/ci.yml)
-
 ## About
 
 Contest HQ is a solution for managing band and orchestra contests.

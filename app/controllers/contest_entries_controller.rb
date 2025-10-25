@@ -19,12 +19,20 @@ class ContestEntriesController < ApplicationController
       return
     end
 
-    if current_user.conducted_ensembles.count == 1
-      @contest_entry.large_ensemble = current_user.conducted_ensembles.first
+    # Filter ensembles by contest school class eligibility
+    @eligible_ensembles = eligible_ensembles_for_contest(current_user.conducted_ensembles, @contest)
+
+    if @eligible_ensembles.empty?
+      redirect_to @contest, alert: "None of your ensembles are eligible for this contest. This contest is restricted to #{@contest.school_classes.pluck(:name).join(', ')} schools."
+      return
+    end
+
+    if @eligible_ensembles.count == 1
+      @contest_entry.large_ensemble = @eligible_ensembles.first
     end
 
     if params[:large_ensemble_id].present?
-      ensemble = current_user.conducted_ensembles.find_by(id: params[:large_ensemble_id])
+      ensemble = @eligible_ensembles.find_by(id: params[:large_ensemble_id])
       @contest_entry.large_ensemble = ensemble if ensemble
     end
   end
@@ -43,6 +51,8 @@ class ContestEntriesController < ApplicationController
         format.html { redirect_to contest_entry_path(id: @contest_entry.id), notice: "Contest entry was successfully created." }
         format.json { render :show, status: :created, contest_entry: @contest_entry }
       else
+        # Set eligible ensembles for the form in case of validation errors
+        @eligible_ensembles = eligible_ensembles_for_contest(current_user.conducted_ensembles, @contest)
         format.html { render :new, status: :unprocessable_content }
         format.json { render json: @contest_entry.errors, status: :unprocessable_content }
       end
@@ -93,5 +103,14 @@ class ContestEntriesController < ApplicationController
   def set_breadcrumbs
     add_breadcrumb("Contests", contests_path)
     add_breadcrumb(@contest.name, @contest)
+  end
+
+  def eligible_ensembles_for_contest(ensembles, contest)
+    # If contest has no school class restrictions, all ensembles are eligible
+    return ensembles if contest.school_classes.empty?
+
+    eligible_school_class_ids = contest.school_classes.pluck(:id)
+    ensembles.joins(school: :school_class)
+      .where(schools: { school_class_id: eligible_school_class_ids })
   end
 end

@@ -22,7 +22,7 @@
       </div>
     <% elsif @schedule.days.length == 0 %>
       <div class="flex items-center gap-3 flex-1">
-        <%= link_to "Reconfigure Contest",
+        <%= link_to "Reconfigure",
         contest_setup_path(@schedule.contest.id),
         class: "btn-danger-sm",
         data: {
@@ -34,7 +34,7 @@
   <!-- Action buttons -->
   <div class="flex gap-2">
     <% if schedule.days.length == 0 && schedule.contest.performance_phases.any? %>
-      <%= button_to "Generate Contest Schedule",
+      <%= button_to "Generate Schedule",
       generate_schedule_path(
         schedule,
         start_time: schedule.contest.contest_start.beginning_of_day + (8 * 60 * 60),

@@ -1,5 +1,7 @@
 # AGENTS.md - Quick Reference for Coding Agents
 
+**For: Claude Sonnet 4.5 (execution mode)**
+
 ## Essential Commands
 ```bash
 bin/rails test                           # Run all unit/integration tests (~36s)

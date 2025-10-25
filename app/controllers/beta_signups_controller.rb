@@ -1,4 +1,6 @@
 class BetaSignupsController < ApplicationController
+  skip_before_action :authenticate
+
   def create
     beta_params = params.permit(:organization, :name, :email, :contests)
 

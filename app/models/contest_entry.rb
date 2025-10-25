@@ -14,6 +14,7 @@ class ContestEntry < ApplicationRecord
   }
 
   validate :preferred_time_within_contest_hours, if: :has_time_preference?
+  validate :school_class_eligible_for_contest
 
   def has_time_preference?
     preferred_time_start.present? || preferred_time_end.present?
@@ -44,6 +45,18 @@ class ContestEntry < ApplicationRecord
   end
 
   private
+
+  def school_class_eligible_for_contest
+    return unless large_ensemble && contest
+
+    # If contest has no school class restrictions, all schools are eligible
+    return if contest.school_classes.empty?
+
+    school_class = large_ensemble.school.school_class
+    unless contest.school_classes.include?(school_class)
+      errors.add(:large_ensemble, "is from a #{school_class.name} school, but this contest is restricted to #{contest.school_classes.pluck(:name).join(', ')} schools")
+    end
+  end
 
   def preferred_time_within_contest_hours
     return unless has_time_preference? && contest&.start_time && contest&.end_time
