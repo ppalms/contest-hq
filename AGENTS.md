@@ -12,7 +12,7 @@ bin/brakeman --no-pager                  # Security scan (required)
 bin/dev                                  # Start dev server at localhost:3000
 ```
 
-## System Architecture - Rails 8.0.3 with Ruby 3.3.5
+## System Architecture - Rails 8.1.0 with Ruby 3.3.5
 - **Database**: SQLite3 with multi-database setup (primary, cache, queue, cable)
 - **Storage**: SQLite files in `storage/` directory
 - **Multi-tenancy**: Account-based isolation via `AccountScoped` concern
