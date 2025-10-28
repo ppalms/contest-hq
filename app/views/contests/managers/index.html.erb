@@ -3,7 +3,7 @@
     <h1 class="pr-4"><%= @contest.name %>
       Managers</h1>
 
-    <% if current_user.tenant_admin? %>
+    <% if current_user.account_admin? %>
       <div class="action-button-container flex-shrink-0">
         <%= link_to "Add Manager",
         new_contest_manager_path(@contest),
@@ -44,7 +44,7 @@
                   <%= contest_manager.user.email %>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <% if current_user.tenant_admin? %>
+                  <% if current_user.account_admin? %>
                     <%= button_to "Remove",
                     contest_manager_path(@contest, contest_manager),
                     method: :delete,

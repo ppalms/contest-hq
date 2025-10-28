@@ -23,6 +23,6 @@ class AccountSwitchingController < ApplicationController
   private
 
   def require_sysadmin
-    redirect_to root_path unless current_user&.sysadmin?
+    redirect_to root_path unless current_user&.sys_admin?
   end
 end
