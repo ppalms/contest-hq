@@ -15,7 +15,28 @@ export default class extends Controller {
     if (!clickedTab) return
 
     const targetId = clickedTab.dataset.target
+    const currentActivePane = this.paneTargets.find(pane => pane.classList.contains('active'))
 
+    if (currentActivePane && currentActivePane.id === 'contest_phase_tab') {
+      const phaseContent = document.getElementById('contest_phase_content')
+      const isEditing = phaseContent && phaseContent.querySelector('form')
+      
+      if (isEditing) {
+        const cancelLink = phaseContent.querySelector('a[href*="setup"]')
+        if (cancelLink) {
+          cancelLink.click()
+          setTimeout(() => {
+            this.switchToTab(clickedTab, targetId)
+          }, 100)
+          return
+        }
+      }
+    }
+
+    this.switchToTab(clickedTab, targetId)
+  }
+
+  switchToTab(clickedTab, targetId) {
     this.tabTargets.forEach(tab => {
       tab.classList.toggle('active', tab === clickedTab)
     })
