@@ -13,16 +13,16 @@
 - [ ] No special configuration changes needed
 
 ### Post-deployment
-- [ ] Test account switching functionality with a sysadmin user
+- [ ] Test account switching functionality with a sys_admin user
 - [ ] Verify regular users don't see the account switcher
-- [ ] Test that account scoping works correctly for both sysadmins and regular users
+- [ ] Test that account scoping works correctly for both sys_admins and regular users
 
 ## Session Management
 
 The feature uses session storage for the selected account ID. No special session migration is needed as:
 
 1. Existing sessions will continue to work normally
-2. The `selected_account_id` session key is only set when a sysadmin uses the switcher
+2. The `selected_account_id` session key is only set when a sys_admin uses the switcher
 3. Regular users are unaffected
 
 ## Rollback Plan
@@ -56,7 +56,7 @@ end
 
 Then in the view:
 ```erb
-<% if current_user&.sysadmin? && account_switching_enabled? %>
+<% if current_user&.sys_admin? && account_switching_enabled? %>
   <!-- Account switcher content -->
 <% end %>
 ```
