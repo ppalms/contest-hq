@@ -1,0 +1,11 @@
+/* 
+ * Custom Hamburger Scaling
+ * Reduces hamburger menu size by ~30% for compact navbar
+ * Overrides: app/assets/stylesheets/hamburgers.css
+ */
+
+.hamburger {
+  transform: scale(0.7);
+  transform-origin: left;
+  margin-left: -4px;
+}
