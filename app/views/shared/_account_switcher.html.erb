@@ -1,4 +1,4 @@
-<% if current_user&.sysadmin? %>
+<% if current_user&.sys_admin? %>
   <div class="relative">
     <%= form_with url: switch_account_path, method: :post, local: true, class: "account-switcher" do |f| %>
       <%= f.select :account_id,

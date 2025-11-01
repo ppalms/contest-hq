@@ -3,7 +3,7 @@
       title: @contest.name,
       entity_partial: "contests/contest",
       actions: (capture do %>
-        <% if current_user.tenant_admin? %>
+        <% if current_user.account_admin? %>
           <%= link_to "Edit", edit_contest_path(@contest), class: "btn-secondary-sm" %>
           <%= button_to "Delete",
           @contest,
@@ -40,12 +40,12 @@
     </div>
   <% end %>
 
-  <% if @contest.managers.any? || current_user.tenant_admin? %>
+  <% if @contest.managers.any? || current_user.account_admin? %>
     <div class="pt-8">
       <div class="flex justify-between">
         <h2>Managers</h2>
 
-        <% if current_user.tenant_admin? %>
+        <% if current_user.account_admin? %>
           <%= link_to "Assign Managers",
           contest_managers_path(@contest),
           class: "btn-primary-sm" %>

@@ -20,8 +20,8 @@
         </div>
       </div>
 
-      <%= render "home/dashboards/sysadmin" if current_user.sysadmin? %>
-      <%= render "home/dashboards/tenant_admin" if current_user.tenant_admin? %>
+      <%= render "home/dashboards/sysadmin" if current_user.sys_admin? %>
+      <%= render "home/dashboards/account_admin" if current_user.account_admin? %>
     </div>
   <% end %>
 </div>

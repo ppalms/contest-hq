@@ -59,7 +59,7 @@ class AccountsController < ApplicationController
     end
 
     def authorize_sysadmin!
-      unless current_user.sysadmin?
+      unless current_user.sys_admin?
         flash[:alert] = "You must be a system administrator to access this area"
         redirect_to root_path
       end

@@ -23,9 +23,9 @@ class InvitationsController < ApplicationController
   end
 
   def set_form_variables
-    if current_user.sysadmin?
+    if current_user.sys_admin?
       @roles = Role.where(name: %w[Director Judge Manager AccountAdmin]).order(:name)
-    elsif current_user.tenant_admin?
+    elsif current_user.account_admin?
       @roles = Role.where(name: %w[Director Judge Manager]).order(:name)
     else
       @roles = Role.where(name: %w[Director Judge]).order(:name)
