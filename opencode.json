@@ -5,59 +5,18 @@
   ],
   "agent": {
     "plan": {
-      "model": "anthropic/claude-opus-4-20250514",
+      "model": "anthropic/claude-sonnet-4-5-20250929",
       "temperature": 0.2,
       "instructions": [
         "PLANNING.md"
       ]
     },
     "build": {
+      "model": "anthropic/claude-sonnet-4-5-20250929",
       "temperature": 0.3,
       "instructions": [
         "AGENTS.md"
       ]
-    },
-    "code-search": {
-      "mode": "subagent",
-      "model": "anthropic/claude-3-5-haiku-20241022",
-      "temperature": 0.1,
-      "description": "Search codebase for patterns, files, class definitions, method usage, and examples. Use for open-ended searches requiring multiple rounds of investigation. Finds existing implementations to guide new code.",
-      "instructions": [
-        "AGENTS.md"
-      ],
-      "prompt": ".opencode/prompts/code-search.md",
-      "permission": {
-        "edit": "deny",
-        "bash": "allow"
-      }
-    },
-    "test-runner": {
-      "mode": "subagent",
-      "model": "anthropic/claude-3-5-haiku-20241022",
-      "temperature": 0.1,
-      "description": "Run Rails tests (bin/rails test, bin/rails test:system) and report results. Use when asked to run tests, validate code changes, or verify functionality. Parses test output and identifies failures.",
-      "instructions": [
-        "AGENTS.md"
-      ],
-      "prompt": ".opencode/prompts/test-runner.md",
-      "permission": {
-        "edit": "deny",
-        "bash": "allow"
-      }
-    },
-    "linter": {
-      "mode": "subagent",
-      "model": "anthropic/claude-3-5-haiku-20241022",
-      "temperature": 0.0,
-      "description": "Run code quality checks (bin/rubocop, bin/brakeman) and report issues. Use before commits, when validating code quality, or checking security. Required before any git commit.",
-      "instructions": [
-        "AGENTS.md"
-      ],
-      "prompt": ".opencode/prompts/linter.md",
-      "permission": {
-        "edit": "deny",
-        "bash": "allow"
-      }
     }
   }
 }
