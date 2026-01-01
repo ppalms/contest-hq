@@ -1,14 +1,19 @@
 sys_admin:
   name: SysAdmin
+  display_name: System Admin
 
 account_admin:
   name: AccountAdmin
+  display_name: Account Admin
 
 director:
   name: Director
+  display_name: Director
 
 manager:
   name: Manager
+  display_name: Manager
 
 judge:
   name: Judge
+  display_name: Judge

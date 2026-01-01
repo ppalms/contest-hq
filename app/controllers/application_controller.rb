@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_selected_account
-    if current_user&.sysadmin? && session[:selected_account_id]
+    if current_user&.sys_admin? && session[:selected_account_id]
       Current.selected_account = Account.find_by(id: session[:selected_account_id])
     end
   end

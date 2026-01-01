@@ -25,8 +25,8 @@ module AccountScoped
       # Don't apply account scope if we're explicitly told not to
       return all if Thread.current[:skip_account_scope]
 
-      # For sysadmins, show cross account data only if no account is selected
-      if Current.user.sysadmin?
+      # For sys_admins, show cross account data only if no account is selected
+      if Current.user.sys_admin?
         return all if Current.selected_account.nil?
         return where(account: Current.selected_account)
       end

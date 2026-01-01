@@ -1,0 +1,22 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "AGENTS.md"
+  ],
+  "agent": {
+    "plan": {
+      "model": "anthropic/claude-sonnet-4-5-20250929",
+      "temperature": 0.2,
+      "instructions": [
+        "PLANNING.md"
+      ]
+    },
+    "build": {
+      "model": "anthropic/claude-sonnet-4-5-20250929",
+      "temperature": 0.3,
+      "instructions": [
+        "AGENTS.md"
+      ]
+    }
+  }
+}

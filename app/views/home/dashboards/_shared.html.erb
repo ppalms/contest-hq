@@ -4,6 +4,9 @@
   </div>
 
   <div class="p-4 sm:p-6">
+    <% if @upcoming_contests.length == 0 %>
+      No upcoming contests
+    <% end %>
     <% @upcoming_contests&.each do |contest| %>
       <div>
         <%= link_to contest do %>

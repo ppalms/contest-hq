@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   def index
-    if current_user.sysadmin?
+    if current_user.sys_admin?
       @new_accounts = Account.order(created_at: :desc).limit(5)
 
       @active_sessions = User
@@ -11,7 +11,7 @@ class HomeController < ApplicationController
         .limit(5)
     end
 
-    if current_user.tenant_admin?
+    if current_user.account_admin?
       @new_users = User
         .select("users.id, users.email, users.created_at")
         .where(account: current_user.account)

@@ -12,7 +12,7 @@ bin/brakeman --no-pager                  # Security scan (required)
 bin/dev                                  # Start dev server at localhost:3000
 ```
 
-## System Architecture - Rails 8.0.2 with Ruby 3.3.5
+## System Architecture - Rails 8.1.0 with Ruby 3.3.5
 - **Database**: SQLite3 with multi-database setup (primary, cache, queue, cable)
 - **Storage**: SQLite files in `storage/` directory
 - **Multi-tenancy**: Account-based isolation via `AccountScoped` concern
@@ -31,7 +31,7 @@ bin/dev                                  # Start dev server at localhost:3000
 - **Models**: Must include `AccountScoped` for multi-tenant models
 - **Controllers**: Use `authenticate` before_action for auth
 - **Current Context**: Access via `Current.user`, `Current.account`, `Current.selected_account`
-- **Roles**: Check with `user.sysadmin?`, `tenant_admin?`, `director?`, `manager?`, `judge?`
+- **Roles**: Check with `user.sys_admin?`, `account_admin?`, `director?`, `manager?`, `judge?`
 - **Manager Auth**: Use `user.manages_contest(contest_id)` for contest-specific permissions
 
 ## Testing Patterns

@@ -6,7 +6,7 @@
 Make architectural decisions and create execution plans. Don't write implementation code.
 
 ## System Context
-- **Rails 8.0.2** with Ruby 3.3.5 (strict requirement)
+- **Rails 8.1.0** with Ruby 3.3.5 (strict requirement)
 - **SQLite3** with multi-database setup (primary, cache, queue, cable)
 - **Storage**: All database files in `storage/` directory
 - **Multi-tenant** via `AccountScoped` concern - critical for data isolation

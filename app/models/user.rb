@@ -46,11 +46,15 @@ class User < ApplicationRecord
     @role_names ||= roles.pluck(:name)
   end
 
-  def sysadmin?
+  def role_display_names
+    @role_display_names ||= roles.pluck(:display_name)
+  end
+
+  def sys_admin?
     role_names.include?("SysAdmin")
   end
 
-  def tenant_admin?
+  def account_admin?
     role_names.include?("AccountAdmin")
   end
 
@@ -67,7 +71,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    sysadmin? || tenant_admin?
+    sys_admin? || account_admin?
   end
 
   def manages_contest(contest_id)
