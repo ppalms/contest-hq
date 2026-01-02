@@ -69,6 +69,6 @@ group :test do
 end
 
 gem "authentication-zero", "~> 4.0"
-gem "pagy", "~> 9.4"
+gem "pagy", "~> 43.2"
 
 gem "aws-actionmailer-ses", "~> 1.0"
