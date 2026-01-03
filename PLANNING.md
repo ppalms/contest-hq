@@ -1,6 +1,6 @@
 # PLANNING.md - Strategic Planning Guide
 
-**For: Claude Opus 4.1 (planning mode)**
+**For: Claude Sonnet 4.5 (planning mode)**
 
 ## Your Role
 Make architectural decisions and create execution plans. Don't write implementation code.
@@ -44,78 +44,6 @@ Make architectural decisions and create execution plans. Don't write implementat
 - [ ] **Tests**: Unit validations, integration auth, system flows?
 - [ ] **Edge Cases**: Cross-account access, role escalation?
 
-## Handoff Template
-
-```markdown
-## PLAN: [Feature Name]
-
-**Goal**: [1 sentence what and why]
-
-**Multi-Tenant Considerations**:
-- Models requiring AccountScoped: [list]
-- Cross-account security: [how prevented]
-
-**Authorization Requirements**:
-- SysAdmin: [what they can do]
-- AccountAdmin: [what they can do]
-- Manager: [contest-specific permissions]
-- Director/Judge: [limited permissions]
-
-**Data Model**:
-```ruby
-class NewModel < ApplicationRecord
-  include AccountScoped  # if user-facing
-  
-  # Associations
-  belongs_to :contest
-  
-  # Validations
-  validates :name, presence: true
-  
-  # Indexes needed
-  # add_index :table, [:account_id, :other_column]
-end
-```
-
-**Routes**:
-```ruby
-resources :contests do
-  resources :new_feature, only: [:index, :show, :create]
-end
-```
-
-**Controller Actions**:
-- `before_action :authenticate` - all actions
-- `before_action :ensure_admin` - admin only
-- `before_action :ensure_manager` - with contest check
-
-**Tests Required**:
-1. **Unit Tests** (models/):
-   - Validations work
-   - AccountScoped applies
-   - Associations correct
-
-2. **Integration Tests** (controllers/):
-   - Authentication required
-   - Authorization by role
-   - Cross-account blocking
-
-3. **System Tests** (if UI flow):
-   - Complete user journey
-   - Error handling
-
-**Manual Validation Steps**:
-1. As Director: [expected behavior]
-2. As Manager: [can only manage assigned contests]
-3. As SysAdmin: [can switch accounts and see everything]
-4. Cross-account: [verify data isolation]
-
-**Edge Cases & Risks**:
-- Manager without contest assignment: [graceful error]
-- Deleted account: [cascade behavior]
-- Concurrent access: [optimistic locking?]
-```
-
 ## Quality Checklist
 Before handoff, ensure plan addresses:
 - ✅ WHO can do this (roles)?
@@ -132,19 +60,3 @@ Before handoff, ensure plan addresses:
 - ❌ No cross-account isolation tests
 - ❌ Assuming Current.account is always set
 - ❌ Not handling nil Current.selected_account for SysAdmins
-
-## Example: Good vs Bad Planning
-
-### ❌ Bad Plan
-"Add judge scoring - create Rating model with scores"
-
-### ✅ Good Plan
-"Add judge scoring for contest entries:
-
-**Multi-tenant**: Rating includes AccountScoped, scoped to contest's account
-**Authorization**: Only users with Judge role + assignment to contest
-**Model**: Rating belongs_to :contest_entry, :judge (User); validates uniqueness of [judge, entry] pair; scores 1-10 integer
-**Security**: Judge can only rate entries in assigned contests (check via contest_judges join)
-**Tests**: Verify judge can't rate across accounts, can't rate unassigned contests, can't duplicate ratings
-**Edge cases**: Handle deleted judge (soft delete ratings?), contest cancellation (preserve ratings for audit)"
-```

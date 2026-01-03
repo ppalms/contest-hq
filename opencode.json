@@ -5,18 +5,24 @@
   ],
   "agent": {
     "plan": {
-      "model": "anthropic/claude-sonnet-4-5-20250929",
+      "description": "Strategic planning and architecture analysis without code changes",
+      "mode": "primary",
+      "model": "anthropic/claude-sonnet-4-5",
       "temperature": 0.2,
-      "instructions": [
-        "PLANNING.md"
-      ]
+      "prompt": "{file:./PLANNING.md}",
+      "tools": {
+        "write": false,
+        "edit": false
+      },
+      "permission": {
+        "bash": "deny"
+      }
     },
     "build": {
-      "model": "anthropic/claude-sonnet-4-5-20250929",
-      "temperature": 0.3,
-      "instructions": [
-        "AGENTS.md"
-      ]
+      "description": "Full development with all tools enabled for code implementation",
+      "mode": "primary",
+      "model": "anthropic/claude-sonnet-4-5",
+      "temperature": 0.3
     }
   }
 }

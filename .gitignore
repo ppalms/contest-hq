@@ -40,3 +40,8 @@
 /config/credentials/development.key
 
 /config/credentials/production.key
+
+# Agent memory files (session-specific)
+TODO.md
+NOTES.md
+PROGRESS.md
