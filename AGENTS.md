@@ -27,6 +27,28 @@ bin/dev                                  # Start dev server at localhost:3000
 - **Imports**: Use Rails autoloading - avoid explicit requires
 - **NO COMMENTS**: Do not add code comments unless explicitly requested
 
+## Context Engineering
+
+Load context files based on your role and task:
+
+| Agent | Task Type | Load File |
+|-------|-----------|-----------|
+| **build** | Codebase navigation, pattern discovery | `.opencode/context/retrieval-strategy.md` |
+| **build** | Tool selection, file operations | `.opencode/context/tool-efficiency.md` |
+| **build** | Tasks >30 min, multi-session work | `.opencode/context/long-horizon-tasks.md` |
+| **build** | Context >100K tokens, compaction | `.opencode/context/context-monitoring.md` |
+| **build** | Delegating to subagents | `.opencode/context/subagent-coordination.md` |
+| **build** | Rails fixtures, debug commands | `.opencode/context/rails-reference.md` |
+| **code-search** | Before starting search | `.opencode/context/retrieval-strategy.md` |
+| **test-runner** | Rails testing reference | `.opencode/context/rails-reference.md` |
+| **linter** | Rails code style reference | `.opencode/context/rails-reference.md` |
+| **all subagents** | Output formatting | `.opencode/context/subagent-coordination.md` |
+
+**When to load**:
+- Load relevant files at task start based on table above
+- Build agent: Load multiple files for complex tasks
+- Subagents: Automatically loaded via frontmatter `instructions`
+
 ## Critical Patterns
 - **Models**: Must include `AccountScoped` for multi-tenant models
 - **Controllers**: Use `authenticate` before_action for auth
@@ -44,12 +66,6 @@ set_current_user(users(:demo_admin_a))  # Sets Current context directly
 
 # All tests auto-cleanup Current context in teardown
 ```
-
-## Fixtures Reference
-- **Accounts**: `:demo`, `:customer`, `:ossaa`, `:contesthq`
-- **Users**: `:sys_admin_a`, `:demo_admin_a`, `:demo_director_a`, `:demo_manager_a`
-- **Roles**: `SysAdmin`, `AccountAdmin`, `Director`, `Manager`, `Judge`
-- **Password**: All fixtures use `"Secret1*3*5*"`
 
 ## Execution Mode
 - **Execute the plan** provided - don't re-strategize
@@ -72,12 +88,4 @@ git push -u origin feature/brief-description
 # - Files modified
 # - Validation results (rubocop, brakeman, tests)
 # - Manual testing performed
-```
-
-## Quick Debug Commands
-```bash
-bin/rails console                        # Interactive Ruby console
-bin/rails db:migrate:status              # Check migration status
-bin/rails routes | grep contest          # Find contest routes
-tail -f log/development.log              # Watch dev logs
 ```
