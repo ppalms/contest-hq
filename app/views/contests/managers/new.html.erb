@@ -83,7 +83,7 @@
         </table>
       </div>
 
-      <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
+      <%== @pagy.series_nav if @pagy.pages > 1 %>
 
       <div class="form-button-container">
         <%= form.submit "Add Manager", class: "btn-primary" %>

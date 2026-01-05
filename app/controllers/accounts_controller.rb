@@ -1,5 +1,5 @@
 class AccountsController < ApplicationController
-  include Pagy::Backend
+  include Pagy::Method
 
   before_action :authorize_sysadmin!
   before_action :set_account, only: %i[ show edit update ]
