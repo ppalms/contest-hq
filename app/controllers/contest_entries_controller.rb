@@ -86,6 +86,49 @@ class ContestEntriesController < ApplicationController
     end
   end
 
+  def select_prescribed_music
+    @contest_entry = ContestEntry.find(params[:entry_id])
+    @school_class = @contest_entry.large_ensemble.school.school_class
+    @season = @contest_entry.contest.season
+
+    scope = PrescribedMusic.for_season(@season.id).for_school_class(@school_class.id).by_title
+
+    if params[:search].present?
+      search_term = "%#{params[:search]}%"
+      scope = scope.where("title LIKE ? OR composer LIKE ?", search_term, search_term)
+    end
+
+    @prescribed_music = scope
+    @current_selection = @contest_entry.music_selections.where.not(prescribed_music_id: nil).first
+    add_breadcrumb(@contest_entry.large_ensemble.name, contest_entry_path(contest_id: @contest_entry.contest.id, id: @contest_entry.id))
+    add_breadcrumb("Select Prescribed Music", "#")
+  end
+
+  def add_prescribed_music
+    @contest_entry = ContestEntry.find(params[:entry_id])
+    prescribed_music = PrescribedMusic.find(params[:prescribed_music_id])
+
+    existing_prescribed = @contest_entry.music_selections.where.not(prescribed_music_id: nil).first
+
+    if existing_prescribed
+      existing_prescribed.update(
+        prescribed_music: prescribed_music,
+        title: prescribed_music.title,
+        composer: prescribed_music.composer
+      )
+      flash[:notice] = "Prescribed music selection was updated."
+    else
+      @contest_entry.music_selections.create!(
+        prescribed_music: prescribed_music,
+        title: prescribed_music.title,
+        composer: prescribed_music.composer
+      )
+      flash[:notice] = "Prescribed music was added to your contest entry."
+    end
+
+    redirect_to contest_entry_path(contest_id: @contest_entry.contest.id, id: @contest_entry.id)
+  end
+
   private
 
   def set_contest

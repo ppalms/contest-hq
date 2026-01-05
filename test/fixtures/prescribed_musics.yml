@@ -1,0 +1,34 @@
+demo_class_a_music_one:
+  title: "Symphony No. 5"
+  composer: "Ludwig van Beethoven"
+  season: demo_2025
+  school_class: demo_school_class_a
+  account: demo
+
+demo_class_a_music_two:
+  title: "The Planets"
+  composer: "Gustav Holst"
+  season: demo_2025
+  school_class: demo_school_class_a
+  account: demo
+
+demo_class_b_music_one:
+  title: "Rhapsody in Blue"
+  composer: "George Gershwin"
+  season: demo_2025
+  school_class: demo_school_class_b
+  account: demo
+
+demo_archived_music:
+  title: "Old Music"
+  composer: "Old Composer"
+  season: demo_2023
+  school_class: demo_school_class_a
+  account: demo
+
+customer_class_a_music:
+  title: "Customer Music"
+  composer: "Customer Composer"
+  season: customer_2024
+  school_class: customer_school_class_a
+  account: customer

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_10_28_103730) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_03_180042) do
   create_table "accounts", force: :cascade do |t|
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.string "name", null: false
@@ -97,11 +97,13 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_28_103730) do
     t.string "composer"
     t.bigint "contest_entry_id", null: false
     t.datetime "created_at", null: false
+    t.integer "prescribed_music_id"
     t.string "title"
     t.datetime "updated_at", null: false
     t.index ["account_id", "contest_entry_id"], name: "index_music_selections_on_account_id_and_contest_entry_id"
     t.index ["account_id"], name: "index_music_selections_on_account_id"
     t.index ["contest_entry_id"], name: "index_music_selections_on_contest_entry_id"
+    t.index ["prescribed_music_id"], name: "index_music_selections_on_prescribed_music_id"
   end
 
   create_table "performance_classes", force: :cascade do |t|
@@ -126,6 +128,20 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_28_103730) do
     t.index ["contest_id"], name: "index_performance_phases_on_contest_id"
     t.index ["ordinal", "contest_id"], name: "index_performance_phases_on_ordinal_and_contest_id", unique: true
     t.index ["room_id"], name: "index_performance_phases_on_room_id"
+  end
+
+  create_table "prescribed_musics", force: :cascade do |t|
+    t.integer "account_id", null: false
+    t.string "composer", null: false
+    t.datetime "created_at", null: false
+    t.integer "school_class_id", null: false
+    t.integer "season_id", null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "season_id", "school_class_id"], name: "idx_on_account_id_season_id_school_class_id_c656afcc81"
+    t.index ["account_id"], name: "index_prescribed_musics_on_account_id"
+    t.index ["school_class_id"], name: "index_prescribed_musics_on_school_class_id"
+    t.index ["season_id"], name: "index_prescribed_musics_on_season_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -274,10 +290,14 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_28_103730) do
   add_foreign_key "large_ensembles", "schools"
   add_foreign_key "music_selections", "accounts"
   add_foreign_key "music_selections", "contest_entries"
+  add_foreign_key "music_selections", "prescribed_musics"
   add_foreign_key "performance_classes", "accounts"
   add_foreign_key "performance_phases", "accounts"
   add_foreign_key "performance_phases", "contests"
   add_foreign_key "performance_phases", "rooms"
+  add_foreign_key "prescribed_musics", "accounts"
+  add_foreign_key "prescribed_musics", "school_classes"
+  add_foreign_key "prescribed_musics", "seasons"
   add_foreign_key "rooms", "accounts"
   add_foreign_key "rooms", "contests"
   add_foreign_key "schedule_blocks", "accounts"

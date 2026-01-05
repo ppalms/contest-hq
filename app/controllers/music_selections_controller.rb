@@ -48,7 +48,7 @@ class MusicSelectionsController < ApplicationController
   end
 
   def music_selection_params
-    params.expect(music_selection: [ :contest_entry_id, :title, :composer ])
+    params.expect(music_selection: [ :contest_entry_id, :title, :composer, :prescribed_music_id ])
   end
 
   def set_breadcrumbs

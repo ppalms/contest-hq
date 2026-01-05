@@ -140,6 +140,10 @@
           </div>
         <% end %>
 
+        <div>
+          <%= link_to "Prescribed Music", prescribed_music_index_path %>
+        </div>
+
         <% if current_user.admin? %>
           <div>
             <%= link_to "Organizations", organizations_path %>

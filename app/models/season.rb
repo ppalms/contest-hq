@@ -2,6 +2,7 @@ class Season < ApplicationRecord
   include AccountScoped
 
   has_many :contests, dependent: :restrict_with_error
+  has_many :prescribed_musics, dependent: :restrict_with_error
 
   validates :name, presence: true, uniqueness: { scope: :account_id }
   validates :archived, inclusion: { in: [ true, false ] }

@@ -1,0 +1,37 @@
+<div class="divide-y divide-neutral-200">
+  <% prescribed_music.group_by(&:school_class).sort_by { |sc, _| sc.ordinal }.each do |school_class, items| %>
+    <div class="p-4">
+      <h3 class="text-lg font-semibold text-gray-900 mb-3">
+        <%= school_class.name %>
+      </h3>
+
+      <div class="space-y-2">
+        <% items.each do |music| %>
+          <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+            <div>
+              <div class="font-medium"><%= music.title %></div>
+              <div class="text-sm text-gray-600"><%= music.composer %></div>
+            </div>
+
+            <% if current_user.account_admin? %>
+              <div class="flex gap-2">
+                <%= link_to "Edit", edit_prescribed_music_path(music), class: "btn-secondary-sm" %>
+                <%= button_to "Delete",
+                    prescribed_music_path(music),
+                    method: :delete,
+                    class: "btn-danger-sm",
+                    form: {
+                      data: {
+                        turbo_confirm: music.music_selections.any? ?
+                          "This will delete #{music.music_selections.count} music selection(s) from contest entries. Are you sure?" :
+                          "Are you sure?"
+                      }
+                    } %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

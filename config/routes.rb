@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     resources :schools, controller: "users/schools", only: [ :index, :create ]
   end
   resources :seasons, except: [ :show ]
+  resources :prescribed_music, except: [ :show ]
 
   get "landing", to: "public#landing"
   post "beta_signup", to: "beta_signups#create"
@@ -21,6 +22,8 @@ Rails.application.routes.draw do
   resources :contests do
     resources :contest_entries, as: "entries", path: "entries" do
       resources :music_selections, as: "selections", path: "selections"
+      get "select_prescribed_music", to: "contest_entries#select_prescribed_music"
+      post "add_prescribed_music/:prescribed_music_id", to: "contest_entries#add_prescribed_music", as: "add_prescribed_music"
     end
 
     patch "times", to: "contests#set_times"
