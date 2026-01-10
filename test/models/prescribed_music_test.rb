@@ -96,7 +96,7 @@ class PrescribedMusicTest < ActiveSupport::TestCase
   end
 
   test "should be account scoped" do
-    set_current_user(users(:customer_admin))
+    set_current_user(users(:customer_admin_a))
     demo_music = PrescribedMusic.where(id: prescribed_musics(:demo_class_a_music_one).id)
     assert_empty demo_music
   end
@@ -105,7 +105,7 @@ class PrescribedMusicTest < ActiveSupport::TestCase
     prescribed_music = prescribed_musics(:demo_class_a_music_one)
 
     music_selection = MusicSelection.create!(
-      contest_entry: contest_entries(:demo_entry_a),
+      contest_entry: contest_entries(:contest_a_school_a_ensemble_a),
       prescribed_music: prescribed_music,
       title: prescribed_music.title,
       composer: prescribed_music.composer

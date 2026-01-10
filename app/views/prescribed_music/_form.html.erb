@@ -15,7 +15,7 @@
   </div>
 
   <div>
-    <%= form.label :season %>
+    <%= form.label :season_id, "Season" %>
     <%= form.collection_select :season_id,
                                Season.by_name,
                                :id,
@@ -25,7 +25,7 @@
   </div>
 
   <div>
-    <%= form.label :school_class %>
+    <%= form.label :school_class_id, "School class" %>
     <%= form.collection_select :school_class_id,
                                SchoolClass.order(:ordinal),
                                :id,

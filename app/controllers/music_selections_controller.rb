@@ -11,15 +11,61 @@ class MusicSelectionsController < ApplicationController
     @music_selection = @contest_entry.music_selections.new
   end
 
+  def select_prescribed
+    @prescribed_music = []
+    @current_prescribed_selection = @contest_entry.prescribed_selection
+
+    if params.key?(:search)
+      base_query = PrescribedMusic
+        .for_season(@contest_entry.contest.season.id)
+        .for_school_class(@contest_entry.large_ensemble.school.school_class.id)
+
+      if params[:search].present?
+        search_term = "%#{params[:search]}%"
+        @prescribed_music = base_query
+          .where("LOWER(title) LIKE LOWER(?) OR LOWER(composer) LIKE LOWER(?)", search_term, search_term)
+          .by_title
+      else
+        @prescribed_music = base_query.by_title
+      end
+    end
+
+    render layout: false
+  end
+
+  def select_custom
+    @music_selection = @contest_entry.music_selections.new
+    @slot_number = params[:slot]&.to_i || 1
+    render layout: false
+  end
+
+  def add_prescribed
+    prescribed_music = PrescribedMusic.find(params[:prescribed_music_id])
+
+    existing_prescribed = @contest_entry.prescribed_selection
+    if existing_prescribed
+      existing_prescribed.update!(prescribed_music: prescribed_music)
+      @music_selection = existing_prescribed
+    else
+      @music_selection = @contest_entry.music_selections.create!(prescribed_music: prescribed_music)
+    end
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to contest_entry_path(@contest_entry.contest, @contest_entry), notice: "Prescribed music selected." }
+    end
+  end
+
   def create
-    @music_selection = MusicSelection.new(music_selection_params)
+    @music_selection = @contest_entry.music_selections.new(music_selection_params)
 
     respond_to do |format|
       if @music_selection.save
-        format.html { redirect_to contest_entry_path(id: @contest_entry.id), notice: "Music selection added to contest entry." }
+        format.turbo_stream
+        format.html { redirect_to contest_entry_path(@contest_entry.contest, @contest_entry), notice: "Music selection added." }
         format.json { render :show, status: :created, music_selection: @music_selection }
       else
-        format.html { render :new, status: :unprocessable_content }
+        format.html { render :select_custom, status: :unprocessable_content, layout: false }
         format.json { render json: @music_selection.errors, status: :unprocessable_content }
       end
     end
@@ -32,8 +78,32 @@ class MusicSelectionsController < ApplicationController
     @music_selection.destroy!
 
     respond_to do |format|
-      format.html { redirect_to @contest_entry, notice: "Music selection removed from contest entry." }
+      format.turbo_stream
+      format.html { redirect_to contest_entry_path(@contest_entry.contest, @contest_entry), notice: "Music selection removed." }
       format.json { head :no_content }
+    end
+  end
+
+  def bulk_edit
+    @music_selections = @contest_entry.music_selections.order(:position)
+    render layout: false
+  end
+
+  def bulk_update
+    ActiveRecord::Base.transaction do
+      params[:music_selections].each do |ms_params|
+        music_selection = @contest_entry.music_selections.unscoped.find(ms_params[:id])
+        music_selection.update!(
+          position: ms_params[:position],
+          title: ms_params[:title],
+          composer: ms_params[:composer]
+        )
+      end
+    end
+
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: turbo_stream.replace("music_selections", partial: "contest_entries/music_selections") }
+      format.html { redirect_to contest_entry_path(@contest_entry.contest, @contest_entry), notice: "Music selections updated." }
     end
   end
 

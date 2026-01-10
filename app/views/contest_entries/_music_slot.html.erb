@@ -1,0 +1,78 @@
+<%
+  is_prescribed = slot_type == :prescribed
+  frame_id = is_prescribed ? "music_slot_prescribed" : "music_slot_custom_#{slot_number}"
+  
+  if is_prescribed
+    music_selection = @contest_entry.prescribed_selection
+    slot_label = "Prescribed Music"
+    slot_description = "Must be from the #{@contest_entry.large_ensemble.school.school_class.name} prescribed list"
+  else
+    custom_selections = @contest_entry.custom_selections
+    music_selection = custom_selections[slot_number - 1]
+    slot_label = "Director's Choice"
+    slot_description = "Any piece not on the prescribed list"
+  end
+%>
+
+<%= turbo_frame_tag frame_id do %>
+  <div class="p-6 bg-white rounded-lg border-2 mb-6 <%= music_selection ? 'border-green-500' : 'border-gray-300' %>">
+    <div class="flex justify-between items-start mb-2">
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900"><%= slot_label %></h3>
+        <p class="text-sm text-gray-600"><%= slot_description %></p>
+      </div>
+      <% if music_selection %>
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+          ✓ Selected
+        </span>
+      <% end %>
+    </div>
+
+    <% if music_selection %>
+      <div class="mt-4 p-4 bg-gray-50 rounded-md">
+        <div class="flex justify-between items-start">
+          <div class="flex-1">
+            <p class="font-semibold text-gray-900"><%= music_selection.title %></p>
+            <p class="text-sm text-gray-600 mt-1"><%= music_selection.composer %></p>
+            <% if music_selection.prescribed? %>
+              <span class="inline-block mt-2 px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded">
+                Prescribed Music
+              </span>
+            <% end %>
+          </div>
+          <% if current_user.contest_entries.include?(@contest_entry) %>
+            <div class="flex gap-2 ml-4">
+              <%= button_to "Remove",
+                contest_entry_selection_path(entry_id: @contest_entry.id, id: music_selection.id),
+                method: :delete,
+                class: "btn-danger-sm",
+                form: {
+                  data: {
+                    turbo_confirm: "Remove this music selection?"
+                  }
+                } %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% else %>
+      <div class="mt-4">
+        <% if current_user.contest_entries.include?(@contest_entry) %>
+          <% if is_prescribed %>
+            <%= link_to "Select Prescribed Music",
+              select_prescribed_contest_entry_selections_path(entry_id: @contest_entry.id),
+              class: "btn-primary",
+              data: { turbo_frame: frame_id } %>
+          <% else %>
+            <%= link_to "Add Custom Music",
+              select_custom_contest_entry_selections_path(entry_id: @contest_entry.id, slot: slot_number),
+              class: "btn-primary",
+              data: { turbo_frame: frame_id } %>
+          <% end %>
+        <% else %>
+          <p class="text-sm text-gray-500 italic">Empty slot</p>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

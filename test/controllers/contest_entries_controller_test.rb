@@ -62,4 +62,50 @@ class ContestEntriesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "h1", text: "New Contest Entry"
   end
+
+  test "should show previous music prompt when previous entry exists with music" do
+    sign_in_as(@user_with_ensemble)
+    set_current_user(@user_with_ensemble)
+
+    ensemble = @user_with_ensemble.conducted_ensembles.first
+    contest1 = @contest
+    contest2 = contests(:demo_contest_b)
+
+    entry1 = ContestEntry.create!(contest: contest1, user: @user_with_ensemble, large_ensemble: ensemble)
+    entry1.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_class_a_music_one))
+    entry1.music_selections.create!(title: "Symphony", composer: "Jones")
+    entry1.music_selections.create!(title: "Overture", composer: "Brown")
+
+    entry2 = ContestEntry.create!(contest: contest2, user: @user_with_ensemble, large_ensemble: ensemble)
+
+    get contest_entry_path(contest_id: contest2.id, id: entry2.id)
+
+    assert_response :success
+    assert_select "#previous_music_prompt"
+  end
+
+  test "copy_music should copy music selections from previous entry" do
+    sign_in_as(@user_with_ensemble)
+    set_current_user(@user_with_ensemble)
+
+    ensemble = @user_with_ensemble.conducted_ensembles.first
+    contest1 = @contest
+    contest2 = contests(:demo_contest_b)
+
+    entry1 = ContestEntry.create!(contest: contest1, user: @user_with_ensemble, large_ensemble: ensemble)
+    entry1.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_class_a_music_one))
+    entry1.music_selections.create!(title: "Symphony", composer: "Jones")
+    entry1.music_selections.create!(title: "Overture", composer: "Brown")
+
+    entry2 = ContestEntry.create!(contest: contest2, user: @user_with_ensemble, large_ensemble: ensemble)
+
+    assert_equal 0, entry2.music_selections.count
+
+    post contest_entry_copy_music_path(contest_id: contest2.id, entry_id: entry2.id)
+
+    entry2.reload
+    assert_equal 3, entry2.music_selections.count
+    assert_equal 1, entry2.music_selections.where.not(prescribed_music_id: nil).count
+    assert_equal 2, entry2.music_selections.where(prescribed_music_id: nil).count
+  end
 end

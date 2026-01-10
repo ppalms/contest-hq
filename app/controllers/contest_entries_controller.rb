@@ -60,6 +60,31 @@ class ContestEntriesController < ApplicationController
   end
 
   def show
+    @previous_entry = @contest_entry.previous_entry_in_season
+    @show_copy_prompt = @previous_entry&.music_complete? && @contest_entry.music_selections.empty?
+  end
+
+  def copy_music
+    @contest_entry = ContestEntry.find(params[:entry_id])
+    previous_entry = @contest_entry.previous_entry_in_season
+
+    if previous_entry.nil?
+      redirect_to contest_entry_path(@contest, @contest_entry), alert: "No previous entry found to copy music from."
+      return
+    end
+
+    previous_entry.music_selections.each do |music_selection|
+      @contest_entry.music_selections.create!(
+        title: music_selection.title,
+        composer: music_selection.composer,
+        prescribed_music_id: music_selection.prescribed_music_id
+      )
+    end
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to contest_entry_path(@contest, @contest_entry), notice: "Music copied from previous entry." }
+    end
   end
 
   def edit

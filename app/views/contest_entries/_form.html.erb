@@ -3,11 +3,11 @@
 
   <% unless @contest_entry.id %>
     <div>
-      <%= form.label :large_ensemble %>
+      <%= form.label :large_ensemble_id, "Large ensemble" %>
       <%= form.select :large_ensemble_id,
                   @eligible_ensembles.map { |t| [t.name, t.id] },
                   { include_blank: "Select a large ensemble" },
-                  { required: true, class: "text-field", id: :large_ensemble_id } %>
+                  { required: true, class: "text-field", id: "large_ensemble_id" } %>
     </div>
   <% end %>
 

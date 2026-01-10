@@ -10,7 +10,7 @@ class PrescribedMusicMultiAccountTest < ApplicationSystemTestCase
     @customer_season = seasons(:customer_2024)
 
     @demo_school_class = school_classes(:demo_school_class_a)
-    @customer_school_class = school_classes(:customer_school_class_a)
+    @customer_school_class = school_classes(:customer_school_class_f)
 
     @customer_contest = contests(:customer_contest_a)
     @customer_ensemble = large_ensembles(:customer_school_a_ensemble_a)
@@ -146,25 +146,38 @@ class PrescribedMusicMultiAccountTest < ApplicationSystemTestCase
     visit contest_url(@customer_contest)
     click_on "Register"
 
-    # Select ensemble
-    select @customer_ensemble.name, from: "Large ensemble"
+    # Select ensemble if the select box is present
+    # (it might be auto-selected if there's only one eligible ensemble)
+    if page.has_select?("Large ensemble")
+      select @customer_ensemble.name, from: "Large ensemble"
+    end
+
     click_on "Continue"
 
     assert_text "Contest entry was successfully created"
     assert_text @customer_ensemble.name
 
     # Step 5: Add one prescribed music selection
-    click_on "Select Prescribed Music"
+    click_on "Add Music Selection"
 
-    # Verify we're on the selection page
-    assert_text "Select Prescribed Music"
+    # Verify we're on the add music page with both sections
+    assert_text "Add Music Selection"
+    assert_text "Prescribed Music"
+    assert_text "Custom Music"
+
+    # Search for prescribed music
+    fill_in "search", with: "Concerto"
+    click_on "Search"
+
+    # Verify search results appear
     assert_text "Customer Concerto No. 1"
     assert_text "Customer Concerto No. 2"
     assert_text "Customer Concerto No. 3"
 
     # Select Customer Concerto No. 2
-    within "form[action*='prescribed_music_id=']", text: "Customer Concerto No. 2" do
-      click_on "button"
+    within ".prescribed-music-list" do
+      # Find the button that contains "Customer Concerto No. 2" and click it
+      click_on class: "prescribed-music-item", text: "Customer Concerto No. 2", match: :first
     end
 
     assert_text "Prescribed music was added to your contest entry"
@@ -172,23 +185,27 @@ class PrescribedMusicMultiAccountTest < ApplicationSystemTestCase
     assert_text "Prescribed Music"
 
     # Step 6: Add first custom music selection
-    click_on "Add Custom Music"
+    click_on "Add Music Selection"
 
-    # Enter custom music
-    fill_in "Title", with: "Custom Piece No. 1"
-    fill_in "Composer", with: "Custom Composer A"
-    click_on "Save"
+    # Enter custom music (skip prescribed music section)
+    within ".custom-music-section" do
+      fill_in "Title", with: "Custom Piece No. 1"
+      fill_in "Composer", with: "Custom Composer A"
+      click_on "Save"
+    end
 
     assert_text "Music selection added to contest entry"
     assert_text "Custom Piece No. 1"
     assert_text "Custom Composer A"
 
     # Step 7: Add second custom music selection
-    click_on "Add Custom Music"
+    click_on "Add Music Selection"
 
-    fill_in "Title", with: "Custom Piece No. 2"
-    fill_in "Composer", with: "Custom Composer B"
-    click_on "Save"
+    within ".custom-music-section" do
+      fill_in "Title", with: "Custom Piece No. 2"
+      fill_in "Composer", with: "Custom Composer B"
+      click_on "Save"
+    end
 
     assert_text "Music selection added to contest entry"
     assert_text "Custom Piece No. 2"

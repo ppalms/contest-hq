@@ -132,4 +132,64 @@ class ContestEntryTest < ActiveSupport::TestCase
     entry.valid?
     assert_not entry.errors[:large_ensemble].any?, "Expected no errors for unrestricted contest, but got: #{entry.errors[:large_ensemble].join(', ')}"
   end
+
+  test "music_complete? returns true when entry has 1 prescribed and 2 custom pieces" do
+    set_current_user(users(:demo_director_a))
+    entry = contest_entries(:contest_a_school_a_ensemble_b)
+    entry.music_selections.destroy_all
+
+    assert_not entry.music_complete?
+
+    entry.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_class_a_music_one))
+    entry.music_selections.create!(title: "Symphony", composer: "Jones")
+
+    assert_not entry.music_complete?
+
+    entry.music_selections.create!(title: "Overture", composer: "Brown")
+
+    assert entry.music_complete?
+  end
+
+  test "prescribed_selection returns the prescribed music selection" do
+    set_current_user(users(:demo_director_a))
+    entry = contest_entries(:contest_a_school_a_ensemble_b)
+
+    assert_nil entry.prescribed_selection
+
+    prescribed = entry.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_class_a_music_one))
+    entry.music_selections.create!(title: "Symphony", composer: "Jones")
+
+    assert_equal prescribed, entry.prescribed_selection
+  end
+
+  test "custom_selections returns only custom music selections" do
+    set_current_user(users(:demo_director_a))
+    entry = contest_entries(:contest_a_school_a_ensemble_b)
+
+    entry.music_selections.destroy_all
+    assert_equal 0, entry.custom_selections.count
+
+    entry.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_class_a_music_one))
+    custom1 = entry.music_selections.create!(title: "Symphony", composer: "Jones")
+    custom2 = entry.music_selections.create!(title: "Overture", composer: "Brown")
+
+    assert_equal 2, entry.custom_selections.count
+    assert_includes entry.custom_selections, custom1
+    assert_includes entry.custom_selections, custom2
+  end
+
+  test "previous_entry_in_season returns most recent entry for same ensemble in same season" do
+    set_current_user(users(:demo_director_a))
+
+    ensemble = large_ensembles(:demo_school_a_ensemble_c)
+
+    contest_2024_a = contests(:demo_contest_a)
+    contest_2024_b = contests(:demo_contest_b)
+
+    entry_2024_a = ContestEntry.create!(contest: contest_2024_a, user: users(:demo_director_a), large_ensemble: ensemble)
+    sleep 0.01
+    entry_2024_b = ContestEntry.create!(contest: contest_2024_b, user: users(:demo_director_a), large_ensemble: ensemble)
+
+    assert_equal entry_2024_a, entry_2024_b.previous_entry_in_season
+  end
 end

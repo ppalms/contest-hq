@@ -9,7 +9,7 @@ class PrescribedMusicTest < ApplicationSystemTestCase
   end
 
   test "admin can create prescribed music" do
-    sign_in_as(@admin)
+    log_in_as(@admin)
     visit prescribed_music_index_url
 
     click_on "Add Prescribed Music"
@@ -27,7 +27,7 @@ class PrescribedMusicTest < ApplicationSystemTestCase
   end
 
   test "admin can edit prescribed music" do
-    sign_in_as(@admin)
+    log_in_as(@admin)
     prescribed_music = prescribed_musics(:demo_class_a_music_one)
 
     visit prescribed_music_index_url(season_id: @season.id)
@@ -44,7 +44,7 @@ class PrescribedMusicTest < ApplicationSystemTestCase
   end
 
   test "admin can delete prescribed music" do
-    sign_in_as(@admin)
+    log_in_as(@admin)
     prescribed_music = prescribed_musics(:demo_class_a_music_one)
 
     visit prescribed_music_index_url(season_id: @season.id)
@@ -60,7 +60,7 @@ class PrescribedMusicTest < ApplicationSystemTestCase
   end
 
   test "director can view but not create prescribed music" do
-    sign_in_as(@director)
+    log_in_as(@director)
     visit prescribed_music_index_url
 
     assert_text "Prescribed Music"
@@ -68,24 +68,52 @@ class PrescribedMusicTest < ApplicationSystemTestCase
   end
 
   test "director can select prescribed music when creating contest entry" do
-    sign_in_as(@director)
-    contest = contests(:demo_contest_a)
-    prescribed_music = prescribed_musics(:demo_class_a_music_one)
+    # Use demo_director_b who conducts demo_school_b_ensemble_a (school_class_b)
+    # This ensemble is eligible for demo_contest_c which is in demo_2025 season
+    director = users(:demo_director_b)
+    log_in_as(director)
+
+    contest = contests(:demo_contest_c)
+    prescribed_music = prescribed_musics(:demo_class_b_music_one)
+    ensemble = large_ensembles(:demo_school_b_ensemble_a)
 
     visit contest_url(contest)
+
+    # Verify we can see the Register button
+    assert_text "Register"
     click_on "Register"
 
-    select users(:demo_director_a).conducted_ensembles.first.name, from: "Large ensemble"
+    # Wait for the form to load and verify we're on the registration page
+    assert_text "Preferred Performance Time"
+
+    # Select the ensemble if the select box is present
+    # (it might be auto-selected if there's only one eligible ensemble)
+    if page.has_select?("Large ensemble")
+      select ensemble.name, from: "Large ensemble"
+    end
+
     click_on "Continue"
 
-    click_on "Select Prescribed Music"
+    # Verify we're on the contest entry page
+    assert_text ensemble.name
 
-    assert_text "Select Prescribed Music"
+    click_on "Add Music Selection"
+
+    assert_text "Add Music Selection"
+    assert_text "Prescribed Music"
+    assert_text "Custom Music"
+
+    # Search for prescribed music
+    fill_in "search", with: "Rhapsody"
+    click_on "Search"
+
+    # Verify search results appear
     assert_text prescribed_music.title
     assert_text prescribed_music.composer
 
-    within "form[action*='#{prescribed_music.id}']" do
-      click_on "button"
+    # Click the prescribed music button to select it
+    within ".prescribed-music-list" do
+      click_on class: "prescribed-music-item", match: :first
     end
 
     assert_text "Prescribed music was added to your contest entry"
@@ -94,7 +122,7 @@ class PrescribedMusicTest < ApplicationSystemTestCase
   end
 
   test "season filter works on prescribed music index" do
-    sign_in_as(@admin)
+    log_in_as(@admin)
     visit prescribed_music_index_url
 
     select @season.name, from: "Season"
@@ -104,12 +132,66 @@ class PrescribedMusicTest < ApplicationSystemTestCase
   end
 
   test "school class filter works on prescribed music index" do
-    sign_in_as(@admin)
+    log_in_as(@admin)
     visit prescribed_music_index_url(season_id: @season.id)
 
     select @school_class.name, from: "School Class"
 
     assert_text prescribed_musics(:demo_class_a_music_one).title
     assert_no_text prescribed_musics(:demo_class_b_music_one).title
+  end
+
+  test "prescribed music search is case-insensitive" do
+    director = users(:demo_director_b)
+    log_in_as(director)
+
+    contest = contests(:demo_contest_c)
+    ensemble = large_ensembles(:demo_school_b_ensemble_a)
+
+    visit contest_url(contest)
+    click_on "Register"
+
+    if page.has_select?("Large ensemble")
+      select ensemble.name, from: "Large ensemble"
+    end
+
+    click_on "Continue"
+    click_on "Add Music Selection"
+
+    # Search with lowercase "rhapsody" should find "Rhapsody in Blue"
+    fill_in "search", with: "rhapsody"
+    click_on "Search"
+
+    assert_text "Rhapsody in Blue"
+    assert_text "George Gershwin"
+  end
+
+  test "empty search returns all prescribed music for school class" do
+    director = users(:demo_director_b)
+    log_in_as(director)
+
+    contest = contests(:demo_contest_c)
+    ensemble = large_ensembles(:demo_school_b_ensemble_a)
+
+    visit contest_url(contest)
+    click_on "Register"
+
+    if page.has_select?("Large ensemble")
+      select ensemble.name, from: "Large ensemble"
+    end
+
+    click_on "Continue"
+    click_on "Add Music Selection"
+
+    # Empty search should return all prescribed music for school_class_b
+    fill_in "search", with: ""
+    click_on "Search"
+
+    # Should see all 5 prescribed music pieces for demo_school_class_b
+    assert_text "Rhapsody in Blue"
+    assert_text "American in Paris"
+    assert_text "Appalachian Spring"
+    assert_text "West Side Story Suite"
+    assert_text "Candide Overture"
   end
 end

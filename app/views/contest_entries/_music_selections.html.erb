@@ -1,33 +1,33 @@
 <% content_for :title, "Music Selections" %>
-<div class="py-8 space-y-4" id="music_selections">
-  <div class="flex justify-between">
-    <h2>Music Selections</h2>
-    <% if current_user.contest_entries.include?(@contest_entry) %>
-      <div class="flex gap-2">
-        <% prescribed_count = PrescribedMusic.for_season(@contest_entry.contest.season.id).for_school_class(@contest_entry.large_ensemble.school.school_class.id).count %>
-        <% if prescribed_count > 0 %>
-          <%= link_to "Select Prescribed Music",
-          contest_entry_select_prescribed_music_path(contest_id: @contest_entry.contest.id, entry_id: @contest_entry.id),
-          class: "btn-primary-sm" %>
+<%= turbo_frame_tag "music_selections" do %>
+  <div class="pt-8 gap-4">
+    <div class="flex justify-between items-center">
+      <div>
+        <h2>Music Selections</h2>
+        <% if @contest_entry.music_complete? %>
+          <p class="text-sm text-green-600 font-medium mt-1">✓ Complete (3/3 pieces selected)</p>
+        <% else %>
+          <p class="text-sm text-gray-600 mt-1">
+            <%= @contest_entry.music_selections.count %>/3 pieces selected
+          </p>
         <% end %>
-        <%= link_to "Add Custom Music",
-        new_contest_entry_selection_path(entry_id: @contest_entry.id),
-        class: "btn-secondary-sm" %>
       </div>
-    <% end %>
-  </div>
+      <% if current_user.contest_entries.include?(@contest_entry) && @contest_entry.music_selections.any? %>
+        <div>
+          <%= link_to "Change Performance Order",
+                      bulk_edit_contest_entry_selections_path(entry_id: @contest_entry.id),
+                      class: "btn-secondary",
+                      data: { turbo_frame: "music_selections" } %>
+        </div>
+      <% end %>
+    </div>
 
-  <div
-    id="music_list"
-    class="px-4 rounded-md bg-white border border-neutral-200 shadow-2xs"
-  >
-    <% if @contest_entry.music_selections.empty? %>
-      <p class="text-center">Add music selections to complete your entry.</p>
-    <% else %>
-      <%= render "music_list",
-      locals: {
-        music_selections: @contest_entry.music_selections,
-      } %>
-    <% end %>
+    <%= render "contest_entries/previous_music_prompt" if @show_copy_prompt %>
+
+    <div class="space-y-6">
+      <%= render "contest_entries/music_slot", slot_type: :prescribed, slot_number: 1 %>
+      <%= render "contest_entries/music_slot", slot_type: :custom, slot_number: 1 %>
+      <%= render "contest_entries/music_slot", slot_type: :custom, slot_number: 2 %>
+    </div>
   </div>
-</div>
+<% end %>

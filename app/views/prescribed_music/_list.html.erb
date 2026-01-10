@@ -7,7 +7,7 @@
 
       <div class="space-y-2">
         <% items.each do |music| %>
-          <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+          <div id="prescribed_music_<%= music.id %>" class="flex justify-between items-center p-3 bg-gray-50 rounded">
             <div>
               <div class="font-medium"><%= music.title %></div>
               <div class="text-sm text-gray-600"><%= music.composer %></div>

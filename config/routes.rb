@@ -21,7 +21,16 @@ Rails.application.routes.draw do
 
   resources :contests do
     resources :contest_entries, as: "entries", path: "entries" do
-      resources :music_selections, as: "selections", path: "selections"
+      resources :music_selections, as: "selections", path: "selections" do
+        collection do
+          get :select_prescribed
+          get :select_custom
+          post :add_prescribed
+          get :bulk_edit
+          patch :bulk_update
+        end
+      end
+      post :copy_music
       get "select_prescribed_music", to: "contest_entries#select_prescribed_music"
       post "add_prescribed_music/:prescribed_music_id", to: "contest_entries#add_prescribed_music", as: "add_prescribed_music"
     end

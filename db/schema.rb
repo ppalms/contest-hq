@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_03_180042) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_10_173008) do
   create_table "accounts", force: :cascade do |t|
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.string "name", null: false
@@ -97,6 +97,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_03_180042) do
     t.string "composer"
     t.bigint "contest_entry_id", null: false
     t.datetime "created_at", null: false
+    t.integer "position"
     t.integer "prescribed_music_id"
     t.string "title"
     t.datetime "updated_at", null: false

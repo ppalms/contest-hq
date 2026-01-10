@@ -1,3 +1,4 @@
+# Demo Account - School Class A (2025 Season)
 demo_class_a_music_one:
   title: "Symphony No. 5"
   composer: "Ludwig van Beethoven"
@@ -12,6 +13,28 @@ demo_class_a_music_two:
   school_class: demo_school_class_a
   account: demo
 
+demo_class_a_music_three:
+  title: "Carmina Burana"
+  composer: "Carl Orff"
+  season: demo_2025
+  school_class: demo_school_class_a
+  account: demo
+
+demo_class_a_music_four:
+  title: "Pictures at an Exhibition"
+  composer: "Modest Mussorgsky"
+  season: demo_2025
+  school_class: demo_school_class_a
+  account: demo
+
+demo_class_a_music_five:
+  title: "Firebird Suite"
+  composer: "Igor Stravinsky"
+  season: demo_2025
+  school_class: demo_school_class_a
+  account: demo
+
+# Demo Account - School Class B (2025 Season)
 demo_class_b_music_one:
   title: "Rhapsody in Blue"
   composer: "George Gershwin"
@@ -19,6 +42,71 @@ demo_class_b_music_one:
   school_class: demo_school_class_b
   account: demo
 
+demo_class_b_music_two:
+  title: "American in Paris"
+  composer: "George Gershwin"
+  season: demo_2025
+  school_class: demo_school_class_b
+  account: demo
+
+demo_class_b_music_three:
+  title: "Appalachian Spring"
+  composer: "Aaron Copland"
+  season: demo_2025
+  school_class: demo_school_class_b
+  account: demo
+
+demo_class_b_music_four:
+  title: "West Side Story Suite"
+  composer: "Leonard Bernstein"
+  season: demo_2025
+  school_class: demo_school_class_b
+  account: demo
+
+demo_class_b_music_five:
+  title: "Candide Overture"
+  composer: "Leonard Bernstein"
+  season: demo_2025
+  school_class: demo_school_class_b
+  account: demo
+
+# Demo Account - School Class C (2025 Season)
+demo_class_c_music_one:
+  title: "First Suite in E-flat"
+  composer: "Gustav Holst"
+  season: demo_2025
+  school_class: demo_school_class_c
+  account: demo
+
+demo_class_c_music_two:
+  title: "Second Suite in F"
+  composer: "Gustav Holst"
+  season: demo_2025
+  school_class: demo_school_class_c
+  account: demo
+
+demo_class_c_music_three:
+  title: "Lincolnshire Posy"
+  composer: "Percy Grainger"
+  season: demo_2025
+  school_class: demo_school_class_c
+  account: demo
+
+demo_class_c_music_four:
+  title: "English Folk Song Suite"
+  composer: "Ralph Vaughan Williams"
+  season: demo_2025
+  school_class: demo_school_class_c
+  account: demo
+
+demo_class_c_music_five:
+  title: "Molly on the Shore"
+  composer: "Percy Grainger"
+  season: demo_2025
+  school_class: demo_school_class_c
+  account: demo
+
+# Demo Account - Archived Season (2023)
 demo_archived_music:
   title: "Old Music"
   composer: "Old Composer"
@@ -26,9 +114,110 @@ demo_archived_music:
   school_class: demo_school_class_a
   account: demo
 
-customer_class_a_music:
+# Demo Account - School Class A (2024 Season)
+demo_2024_class_a_music_one:
+  title: "Symphony No. 5"
+  composer: "Ludwig van Beethoven"
+  season: demo_2024
+  school_class: demo_school_class_a
+  account: demo
+
+demo_2024_class_a_music_two:
+  title: "The Planets"
+  composer: "Gustav Holst"
+  season: demo_2024
+  school_class: demo_school_class_a
+  account: demo
+
+demo_2024_class_a_music_three:
+  title: "Carmina Burana"
+  composer: "Carl Orff"
+  season: demo_2024
+  school_class: demo_school_class_a
+  account: demo
+
+demo_2024_class_a_music_four:
+  title: "Pictures at an Exhibition"
+  composer: "Modest Mussorgsky"
+  season: demo_2024
+  school_class: demo_school_class_a
+  account: demo
+
+demo_2024_class_a_music_five:
+  title: "Firebird Suite"
+  composer: "Igor Stravinsky"
+  season: demo_2024
+  school_class: demo_school_class_a
+  account: demo
+
+# Customer Account - School Class A (2024 Season)
+customer_class_a_music_one:
   title: "Customer Music"
   composer: "Customer Composer"
   season: customer_2024
   school_class: customer_school_class_a
+  account: customer
+
+customer_class_a_music_two:
+  title: "Blue Shades"
+  composer: "Frank Ticheli"
+  season: customer_2024
+  school_class: customer_school_class_a
+  account: customer
+
+customer_class_a_music_three:
+  title: "Armenian Dances Part I"
+  composer: "Alfred Reed"
+  season: customer_2024
+  school_class: customer_school_class_a
+  account: customer
+
+customer_class_a_music_four:
+  title: "Festive Overture"
+  composer: "Dmitri Shostakovich"
+  season: customer_2024
+  school_class: customer_school_class_a
+  account: customer
+
+customer_class_a_music_five:
+  title: "Variations on a Korean Folk Song"
+  composer: "John Barnes Chance"
+  season: customer_2024
+  school_class: customer_school_class_a
+  account: customer
+
+# Customer Account - School Class B (2024 Season)
+customer_class_b_music_one:
+  title: "Incantation and Dance"
+  composer: "John Barnes Chance"
+  season: customer_2024
+  school_class: customer_school_class_b
+  account: customer
+
+customer_class_b_music_two:
+  title: "Chorale and Shaker Dance"
+  composer: "John Zdechlik"
+  season: customer_2024
+  school_class: customer_school_class_b
+  account: customer
+
+customer_class_b_music_three:
+  title: "Emperata Overture"
+  composer: "Claude T. Smith"
+  season: customer_2024
+  school_class: customer_school_class_b
+  account: customer
+
+customer_class_b_music_four:
+  title: "Salvation is Created"
+  composer: "Pavel Chesnokov"
+  season: customer_2024
+  school_class: customer_school_class_b
+  account: customer
+
+customer_class_b_music_five:
+  title: "October"
+  composer: "Eric Whitacre"
+  season: customer_2024
+  school_class: customer_school_class_b
   account: customer

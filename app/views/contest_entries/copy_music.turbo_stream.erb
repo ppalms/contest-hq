@@ -1,0 +1,5 @@
+<%= turbo_stream.remove "previous_music_prompt" %>
+
+<%= turbo_stream.replace "music_selections" do %>
+  <%= render "music_selections" %>
+<% end %>

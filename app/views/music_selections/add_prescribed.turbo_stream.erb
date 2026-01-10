@@ -1,0 +1,10 @@
+<%
+  @show_copy_prompt = false
+%>
+<%= turbo_stream.replace "music_slot_prescribed" do %>
+  <%= render "contest_entries/music_slot", slot_type: :prescribed, slot_number: 1 %>
+<% end %>
+
+<%= turbo_stream.replace "music_selections" do %>
+  <%= render "contest_entries/music_selections" %>
+<% end %>

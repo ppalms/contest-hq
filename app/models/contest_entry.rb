@@ -13,6 +13,12 @@ class ContestEntry < ApplicationRecord
     .order("performance_classes.ordinal DESC")
   }
 
+  scope :for_ensemble_in_season, ->(large_ensemble_id, season_id) {
+    joins(:contest)
+    .where(large_ensemble_id: large_ensemble_id, contests: { season_id: season_id })
+    .order(created_at: :desc)
+  }
+
   validate :preferred_time_within_contest_hours, if: :has_time_preference?
   validate :school_class_eligible_for_contest
 
@@ -42,6 +48,27 @@ class ContestEntry < ApplicationRecord
     else
       true
     end
+  end
+
+  def music_complete?
+    prescribed_selection.present? && custom_selections.count == 2
+  end
+
+  def prescribed_selection
+    music_selections.find { |ms| ms.prescribed? }
+  end
+
+  def custom_selections
+    music_selections.select { |ms| ms.custom? }
+  end
+
+  def previous_entry_in_season
+    return nil unless contest&.season_id && large_ensemble_id
+
+    self.class
+      .for_ensemble_in_season(large_ensemble_id, contest.season_id)
+      .where.not(id: id)
+      .first
   end
 
   private
