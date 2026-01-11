@@ -1,0 +1,94 @@
+<%= turbo_frame_tag "music_slot_prescribed" do %>
+  <% if slot[:music_selection].present? %>
+    <%# Filled Prescribed Slot %>
+    <div class="p-4 bg-white rounded-lg border border-gray-300 <%= 'opacity-60 bg-gray-100' if slot[:is_deleted] %> <%= 'bg-green-50 border-green-300' if slot[:is_new] %>"
+         data-music-bulk-edit-target="item"
+         data-slot-position="1"
+         data-prescribed="true">
+
+      <div class="flex items-center gap-4">
+        <%# Up/Down Arrows %>
+        <div class="flex flex-col gap-1">
+          <button type="button"
+                  class="p-1 text-gray-500 hover:text-gray-700 disabled:opacity-30"
+                  data-action="music-bulk-edit#moveUp"
+                  disabled>
+            ▲
+          </button>
+          <button type="button"
+                  class="p-1 text-gray-500 hover:text-gray-700 disabled:opacity-30"
+                  data-action="music-bulk-edit#moveDown">
+            ▼
+          </button>
+        </div>
+
+        <%# Hidden Fields %>
+        <%= hidden_field_tag "music_selections[][id]", slot[:music_selection].id %>
+        <%= hidden_field_tag "music_selections[][position]", 1,
+                             data: { music_bulk_edit_target: "position" } %>
+        <%= hidden_field_tag "music_selections[][_destroy]", "0",
+                             data: { music_bulk_edit_target: "deleteField" } %>
+        <%= hidden_field_tag "music_selections[][title]", slot[:music_selection].title %>
+        <%= hidden_field_tag "music_selections[][composer]", slot[:music_selection].composer %>
+
+        <%# Title/Composer Display (Read-only) %>
+        <div class="flex-1 grid grid-cols-2 gap-4">
+          <div>
+            <%= label_tag nil, "Title", class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <div class="text-field w-full bg-gray-100 cursor-not-allowed"><%= slot[:music_selection].title %></div>
+          </div>
+          <div>
+            <%= label_tag nil, "Composer", class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <div class="text-field w-full bg-gray-100 cursor-not-allowed"><%= slot[:music_selection].composer %></div>
+          </div>
+        </div>
+
+        <%# Badges and Actions %>
+        <div class="flex items-center gap-2">
+          <% if slot[:is_new] %>
+            <span class="px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded status-badge">
+              New
+            </span>
+          <% end %>
+          <span class="px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded status-badge">
+            Prescribed
+          </span>
+          <%= link_to "Change",
+                      select_prescribed_contest_entry_selections_path(entry_id: contest_entry.id),
+                      class: "btn-secondary-sm",
+                      data: { turbo_frame: "music_slot_prescribed" } %>
+          <button type="button"
+                  data-action="music-bulk-edit#markDeleted"
+                  class="btn-danger-sm delete-btn">
+            Delete
+          </button>
+          <button type="button"
+                  data-action="music-bulk-edit#undoDelete"
+                  class="btn-secondary-sm undo-btn hidden">
+            Undo
+          </button>
+        </div>
+      </div>
+    </div>
+
+  <% else %>
+    <%# Empty Prescribed Slot %>
+    <div class="rounded-lg border-2 border-dashed border-gray-300"
+         data-slot
+         data-slot-type="prescribed"
+         data-slot-position="1">
+
+      <%# Placeholder (shown by default) %>
+      <div class="placeholder p-6 text-center">
+        <span class="inline-block mb-2 px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded">
+          Prescribed
+        </span>
+        <p class="text-gray-500 mb-3">Empty slot</p>
+        <%= link_to "Select Prescribed Music",
+                    select_prescribed_contest_entry_selections_path(entry_id: contest_entry.id),
+                    class: "btn-primary-sm",
+                    data: { turbo_frame: "music_slot_prescribed" } %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

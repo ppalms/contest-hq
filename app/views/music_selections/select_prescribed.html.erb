@@ -41,9 +41,9 @@
 
     <div class="flex justify-end">
       <%= link_to "Cancel",
-        contest_entry_path(@contest_entry.contest, @contest_entry),
+        bulk_edit_prescribed_slot_contest_entry_selections_path(entry_id: @contest_entry.id),
         class: "btn-secondary",
-        data: { turbo_frame: "_top" } %>
+        data: { turbo_frame: "music_slot_prescribed" } %>
     </div>
   </div>
 <% end %>

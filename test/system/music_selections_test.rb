@@ -5,6 +5,7 @@ class MusicSelectionsTest < ApplicationSystemTestCase
     @user = users(:demo_director_a)
     @contest = contests(:demo_contest_a)
     @ensemble = large_ensembles(:demo_school_a_ensemble_a)
+    @ensemble_c = large_ensembles(:demo_school_a_ensemble_c)
     log_in_as(@user)
   end
 
@@ -53,13 +54,13 @@ class MusicSelectionsTest < ApplicationSystemTestCase
   end
 
   test "copying music from previous entry" do
-    entry1 = ContestEntry.create!(contest: @contest, user: @user, large_ensemble: @ensemble)
+    entry1 = ContestEntry.create!(contest: @contest, user: @user, large_ensemble: @ensemble_c, account: @user.account)
     entry1.music_selections.create!(title: "March Grandioso", composer: "Seitz", prescribed_music: prescribed_musics(:demo_class_a_music_one), account: @user.account)
     entry1.music_selections.create!(title: "Symphonic Dance No. 3", composer: "Williams", account: @user.account)
     entry1.music_selections.create!(title: "Festive Overture", composer: "Shostakovich", account: @user.account)
 
     contest2 = contests(:demo_contest_b)
-    entry2 = ContestEntry.create!(contest: contest2, user: @user, large_ensemble: @ensemble)
+    entry2 = ContestEntry.create!(contest: contest2, user: @user, large_ensemble: @ensemble_c, account: @user.account)
 
     visit contest_entry_path(contest_id: contest2.id, id: entry2.id)
 
@@ -77,7 +78,7 @@ class MusicSelectionsTest < ApplicationSystemTestCase
   end
 
   test "removing a music selection" do
-    entry = ContestEntry.create!(contest: @contest, user: @user, large_ensemble: @ensemble)
+    entry = ContestEntry.create!(contest: @contest, user: @user, large_ensemble: @ensemble_c, account: @user.account)
     entry.music_selections.create!(title: "Test Piece", composer: "Test Composer", account: @user.account)
 
     visit contest_entry_path(contest_id: @contest.id, id: entry.id)

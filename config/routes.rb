@@ -27,7 +27,9 @@ Rails.application.routes.draw do
           get :select_custom
           post :add_prescribed
           get :bulk_edit
+          get :bulk_edit_prescribed_slot
           patch :bulk_update
+          post :save_edit_state
         end
       end
       post :copy_music
