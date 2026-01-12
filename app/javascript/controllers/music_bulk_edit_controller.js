@@ -6,7 +6,7 @@ export default class extends Controller {
   moveUp(event) {
     event.preventDefault()
     const item = event.target.closest('[data-music-bulk-edit-target="item"]')
-    const prev = item.previousElementSibling
+    let prev = item.previousElementSibling
     
     while (prev && prev.hasAttribute('data-slot')) {
       const prevPrev = prev.previousElementSibling
