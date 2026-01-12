@@ -119,8 +119,8 @@ class ContestEntriesController < ApplicationController
     scope = PrescribedMusic.for_season(@season.id).for_school_class(@school_class.id).by_title
 
     if params[:search].present?
-      search_term = "%#{params[:search]}%"
-      scope = scope.where("title LIKE ? OR composer LIKE ?", search_term, search_term)
+      search_term = "%#{params[:search].downcase}%"
+      scope = scope.where("LOWER(title) LIKE ? OR LOWER(composer) LIKE ?", search_term, search_term)
     end
 
     @prescribed_music = scope
