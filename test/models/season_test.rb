@@ -36,6 +36,7 @@ class SeasonTest < ActiveSupport::TestCase
   test "current scope returns non-archived seasons ordered by creation" do
     account = accounts(:demo)
     Contest.where(account: account).destroy_all
+    PrescribedMusic.where(account: account).destroy_all
     account.seasons.destroy_all
 
     Season.create!(name: "2026", account: account, archived: true)
@@ -47,6 +48,7 @@ class SeasonTest < ActiveSupport::TestCase
   test "current_season returns most recent non-archived season" do
     account = accounts(:demo)
     Contest.where(account: account).destroy_all
+    PrescribedMusic.where(account: account).destroy_all
     account.seasons.destroy_all
 
     Season.create!(name: "2026", account: account, archived: true)

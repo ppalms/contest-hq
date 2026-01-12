@@ -45,7 +45,7 @@ class MusicSelectionTest < ActiveSupport::TestCase
   end
 
   test "populates title and composer from prescribed music" do
-    prescribed = prescribed_musics(:demo_class_a_music_one)
+    prescribed = prescribed_musics(:demo_2024_class_a_music_one)
     music = @contest_entry.music_selections.create!(prescribed_music: prescribed)
 
     assert_equal prescribed.title, music.title
@@ -71,11 +71,10 @@ class MusicSelectionTest < ActiveSupport::TestCase
       school_class: school_classes(:demo_school_class_b),
       account: accounts(:demo)
     )
-    
     music = @contest_entry.music_selections.new(prescribed_music: prescribed)
 
     assert_not music.valid?
-    assert_includes music.errors[:prescribed_music], "must be for 2-A schools"
+    assert_includes music.errors[:prescribed_music], "must be for 1-A schools"
   end
 
   test "accepts prescribed music with correct season and school class" do

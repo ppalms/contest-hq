@@ -41,10 +41,11 @@ class MusicSelectionsControllerTest < ActionDispatch::IntegrationTest
     prescribed = prescribed_musics(:demo_class_a_music_one)
 
     assert_no_difference("MusicSelection.count") do
-      assert_raises(ActiveRecord::RecordInvalid) do
-        post add_prescribed_contest_entry_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id, prescribed_music_id: prescribed.id)
-      end
+      post add_prescribed_contest_entry_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id, prescribed_music_id: prescribed.id)
     end
+
+    assert_redirected_to bulk_edit_contest_entry_selections_path(entry_id: @contest_entry.id)
+    assert_match(/must be from the 2024 season/, flash[:alert])
   end
 
   test "should reject prescribed music from wrong school class" do
@@ -59,10 +60,11 @@ class MusicSelectionsControllerTest < ActionDispatch::IntegrationTest
     )
 
     assert_no_difference("MusicSelection.count") do
-      assert_raises(ActiveRecord::RecordInvalid) do
-        post add_prescribed_contest_entry_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id, prescribed_music_id: prescribed.id)
-      end
+      post add_prescribed_contest_entry_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id, prescribed_music_id: prescribed.id)
     end
+
+    assert_redirected_to bulk_edit_contest_entry_selections_path(entry_id: @contest_entry.id)
+    assert_match(/must be for 1-A schools/, flash[:alert])
   end
 
   test "should replace existing prescribed music selection" do

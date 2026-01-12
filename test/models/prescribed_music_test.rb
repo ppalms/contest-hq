@@ -102,7 +102,7 @@ class PrescribedMusicTest < ActiveSupport::TestCase
   end
 
   test "destroying prescribed music should destroy associated music selections" do
-    prescribed_music = prescribed_musics(:demo_class_a_music_one)
+    prescribed_music = prescribed_musics(:demo_2024_class_a_music_one)
 
     MusicSelection.create!(
       contest_entry: contest_entries(:contest_a_school_a_ensemble_a),

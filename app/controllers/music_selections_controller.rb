@@ -55,6 +55,11 @@ class MusicSelectionsController < ApplicationController
       format.turbo_stream
       format.html { redirect_to bulk_edit_contest_entry_selections_path(entry_id: @contest_entry.id) }
     end
+  rescue ActiveRecord::RecordInvalid => e
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: turbo_stream.replace("flash", partial: "shared/flash", locals: { flash: { alert: e.message } }), status: :unprocessable_entity }
+      format.html { redirect_to bulk_edit_contest_entry_selections_path(entry_id: @contest_entry.id), alert: e.message }
+    end
   end
 
   def create
@@ -190,23 +195,22 @@ class MusicSelectionsController < ApplicationController
     custom_selections = @contest_entry.custom_selections
 
     slots = []
-    
+
     # Add prescribed slot (always position 1)
-    slots << { 
-      type: :prescribed, 
-      music_selection: prescribed, 
-      position: MusicSelectionRequirements::PRESCRIBED_POSITION 
+    slots << {
+      type: :prescribed,
+      music_selection: prescribed,
+      position: MusicSelectionRequirements::PRESCRIBED_POSITION
     }
-    
+
     # Add custom slots (positions starting from FIRST_CUSTOM_POSITION)
     MusicSelectionRequirements::REQUIRED_CUSTOM_COUNT.times do |i|
-      slots << { 
-        type: :custom, 
-        music_selection: custom_selections[i], 
-        position: MusicSelectionRequirements::FIRST_CUSTOM_POSITION + i 
+      slots << {
+        type: :custom,
+        music_selection: custom_selections[i],
+        position: MusicSelectionRequirements::FIRST_CUSTOM_POSITION + i
       }
     end
-    
     slots
   end
 

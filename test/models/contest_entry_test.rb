@@ -140,7 +140,7 @@ class ContestEntryTest < ActiveSupport::TestCase
 
     assert_not entry.music_complete?
 
-    entry.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_class_a_music_one))
+    entry.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one))
     entry.music_selections.create!(title: "Symphony", composer: "Jones")
 
     assert_not entry.music_complete?
@@ -156,7 +156,7 @@ class ContestEntryTest < ActiveSupport::TestCase
 
     assert_nil entry.prescribed_selection
 
-    prescribed = entry.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_class_a_music_one))
+    prescribed = entry.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one))
     entry.music_selections.create!(title: "Symphony", composer: "Jones")
 
     assert_equal prescribed, entry.prescribed_selection
@@ -169,7 +169,7 @@ class ContestEntryTest < ActiveSupport::TestCase
     entry.music_selections.destroy_all
     assert_equal 0, entry.custom_selections.count
 
-    entry.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_class_a_music_one))
+    entry.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one))
     custom1 = entry.music_selections.create!(title: "Symphony", composer: "Jones")
     custom2 = entry.music_selections.create!(title: "Overture", composer: "Brown")
 

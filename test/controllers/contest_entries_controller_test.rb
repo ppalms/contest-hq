@@ -72,7 +72,7 @@ class ContestEntriesControllerTest < ActionDispatch::IntegrationTest
     contest2 = contests(:demo_contest_b)
 
     entry1 = ContestEntry.create!(contest: contest1, user: @user_with_ensemble, large_ensemble: ensemble)
-    entry1.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_class_a_music_one))
+    entry1.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one))
     entry1.music_selections.create!(title: "Symphony", composer: "Jones")
     entry1.music_selections.create!(title: "Overture", composer: "Brown")
 
@@ -93,7 +93,7 @@ class ContestEntriesControllerTest < ActionDispatch::IntegrationTest
     contest2 = contests(:demo_contest_b)
 
     entry1 = ContestEntry.create!(contest: contest1, user: @user_with_ensemble, large_ensemble: ensemble)
-    entry1.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_class_a_music_one))
+    entry1.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one))
     entry1.music_selections.create!(title: "Symphony", composer: "Jones")
     entry1.music_selections.create!(title: "Overture", composer: "Brown")
 
