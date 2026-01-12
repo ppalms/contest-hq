@@ -55,7 +55,7 @@ export default class extends Controller {
       return
     }
     
-    if (!confirm('You have unsaved changes. Are you sure you want to leave?')) {
+    if (!Turbo.navigator.confirm('You have unsaved changes. Are you sure you want to leave?')) {
       event.preventDefault()
     }
   }
