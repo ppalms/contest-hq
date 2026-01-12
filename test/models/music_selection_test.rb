@@ -58,7 +58,7 @@ class MusicSelectionTest < ActiveSupport::TestCase
     music = @contest_entry.music_selections.new(prescribed_music: prescribed)
 
     assert_not music.valid?
-    assert_includes music.errors[:prescribed_music], "must be from the 2024 Season season"
+    assert_includes music.errors[:prescribed_music], "must be from the 2024 season"
   end
 
   test "rejects prescribed music from wrong school class" do

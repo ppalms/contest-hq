@@ -44,7 +44,7 @@ class MusicSelection < ApplicationRecord
     school_class = contest_entry.large_ensemble&.school&.school_class
 
     if contest && prescribed_music.season_id != contest.season_id
-      errors.add(:prescribed_music, "must be from the #{contest.season.name} Season season")
+      errors.add(:prescribed_music, "must be from the #{contest.season.name} season")
     end
 
     if school_class && prescribed_music.school_class_id != school_class.id
