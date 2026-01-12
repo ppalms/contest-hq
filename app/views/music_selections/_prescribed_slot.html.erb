@@ -3,12 +3,12 @@
     <%# Filled Prescribed Slot %>
     <div class="p-4 mb-4 bg-white rounded-lg border border-gray-300 <%= 'opacity-60 bg-gray-100' if slot[:is_deleted] %> <%= 'bg-green-50 border-green-300' if slot[:is_new] %>"
          data-music-bulk-edit-target="item"
-         data-slot-position="1"
+         data-slot-position="<%= slot[:position] %>"
          data-prescribed="true">
 
       <%# Hidden Fields %>
       <%= hidden_field_tag "music_selections[][id]", slot[:music_selection].id %>
-      <%= hidden_field_tag "music_selections[][position]", 1,
+      <%= hidden_field_tag "music_selections[][position]", slot[:position],
                            data: { music_bulk_edit_target: "position" } %>
       <%= hidden_field_tag "music_selections[][_destroy]", "0",
                            data: { music_bulk_edit_target: "deleteField" } %>
@@ -83,7 +83,7 @@
     <div class="mb-4 rounded-lg border-2 border-dashed border-gray-300"
          data-slot
          data-slot-type="prescribed"
-         data-slot-position="1">
+         data-slot-position="<%= MusicSelectionRequirements::PRESCRIBED_POSITION %>">
 
       <%# Placeholder (shown by default) %>
       <div class="placeholder p-6 text-center">

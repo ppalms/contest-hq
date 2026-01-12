@@ -3,6 +3,6 @@
 %>
 <%= turbo_stream.replace "music_slot_prescribed" do %>
   <% prescribed = @contest_entry.prescribed_selection %>
-  <% slot = { type: :prescribed, music_selection: prescribed, position: 1 } %>
+  <% slot = { type: :prescribed, music_selection: prescribed, position: MusicSelectionRequirements::PRESCRIBED_POSITION } %>
   <%= render "music_selections/prescribed_slot", slot: slot, contest_entry: @contest_entry %>
 <% end %>
