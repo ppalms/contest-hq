@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["list", "item", "position", "deleteField", "titleField", "composerField", "deletions"]
+  static values = { prescribedPosition: Number }
 
   moveUp(event) {
     event.preventDefault()
@@ -237,7 +238,7 @@ export default class extends Controller {
     event.preventDefault()
     const item = event.target.closest('[data-music-bulk-edit-target="item"]')
     const position = item.dataset.slotPosition
-    const slotType = position === '1' ? 'prescribed' : 'custom'
+    const slotType = position === String(this.prescribedPositionValue) ? 'prescribed' : 'custom'
     
     const placeholder = document.createElement('div')
     placeholder.className = 'rounded-lg border-2 border-dashed border-gray-300'

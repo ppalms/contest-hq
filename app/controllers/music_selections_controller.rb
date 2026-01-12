@@ -115,7 +115,7 @@ class MusicSelectionsController < ApplicationController
 
   def bulk_edit_prescribed_slot
     prescribed = @contest_entry.prescribed_selection
-    @slot = { type: :prescribed, music_selection: prescribed, position: 1 }
+    @slot = { type: :prescribed, music_selection: prescribed, position: MusicSelectionRequirements::PRESCRIBED_POSITION }
 
     render partial: "music_selections/prescribed_slot",
            layout: false,
@@ -189,11 +189,25 @@ class MusicSelectionsController < ApplicationController
     prescribed = @contest_entry.prescribed_selection
     custom_selections = @contest_entry.custom_selections
 
-    [
-      { type: :prescribed, music_selection: prescribed, position: 1 },
-      { type: :custom, music_selection: custom_selections[0], position: 2 },
-      { type: :custom, music_selection: custom_selections[1], position: 3 }
-    ]
+    slots = []
+    
+    # Add prescribed slot (always position 1)
+    slots << { 
+      type: :prescribed, 
+      music_selection: prescribed, 
+      position: MusicSelectionRequirements::PRESCRIBED_POSITION 
+    }
+    
+    # Add custom slots (positions starting from FIRST_CUSTOM_POSITION)
+    MusicSelectionRequirements::REQUIRED_CUSTOM_COUNT.times do |i|
+      slots << { 
+        type: :custom, 
+        music_selection: custom_selections[i], 
+        position: MusicSelectionRequirements::FIRST_CUSTOM_POSITION + i 
+      }
+    end
+    
+    slots
   end
 
   def save_edit_state_to_session
@@ -261,12 +275,12 @@ class MusicSelectionsController < ApplicationController
       restored_by_position[position] = ms_data
     end
 
-    [ 1, 2, 3 ].each do |position|
+    (1..MusicSelectionRequirements::TOTAL_REQUIRED_COUNT).each do |position|
       restored_data = restored_by_position[position]
 
       if restored_data
         is_deleted = @restored_deletions&.include?(restored_data[:id])
-        type = position == 1 ? :prescribed : :custom
+        type = MusicSelectionRequirements.prescribed_position?(position) ? :prescribed : :custom
 
         slots << {
           type: type,
@@ -276,7 +290,7 @@ class MusicSelectionsController < ApplicationController
           is_new: restored_data[:id].blank?
         }
       else
-        type = position == 1 ? :prescribed : :custom
+        type = MusicSelectionRequirements.prescribed_position?(position) ? :prescribed : :custom
         slots << {
           type: type,
           position: position,

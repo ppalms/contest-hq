@@ -4,11 +4,12 @@
     <div class="flex justify-between items-center mb-4">
       <div>
         <h2>Music Selections</h2>
+        <% total_required = MusicSelectionRequirements::TOTAL_REQUIRED_COUNT %>
         <% if @contest_entry.music_complete? %>
-          <p class="text-sm text-green-600 font-medium mt-1">✓ Complete (3/3 pieces selected)</p>
+          <p class="text-sm text-green-600 font-medium mt-1">✓ Complete (<%= total_required %>/<%= total_required %> pieces selected)</p>
         <% else %>
           <p class="text-sm text-gray-600 mt-1">
-            <%= @contest_entry.music_selections.count %>/3 pieces selected
+            <%= @contest_entry.music_selections.count %>/<%= total_required %> pieces selected
           </p>
         <% end %>
       </div>
