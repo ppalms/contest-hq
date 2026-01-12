@@ -23,7 +23,8 @@ class MusicSelectionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should add prescribed music selection" do
-    prescribed = prescribed_musics(:demo_class_a_music_one)
+    # Use prescribed music with correct season (demo_2024) and school class (A)
+    prescribed = prescribed_musics(:demo_2024_class_a_music_one)
 
     assert_difference("MusicSelection.count") do
       post add_prescribed_contest_entry_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id, prescribed_music_id: prescribed.id)
@@ -35,10 +36,40 @@ class MusicSelectionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal prescribed.composer, music.composer
   end
 
+  test "should reject prescribed music from wrong season" do
+    # demo_class_a_music_one is from demo_2025 season, but contest is demo_2024
+    prescribed = prescribed_musics(:demo_class_a_music_one)
+
+    assert_no_difference("MusicSelection.count") do
+      assert_raises(ActiveRecord::RecordInvalid) do
+        post add_prescribed_contest_entry_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id, prescribed_music_id: prescribed.id)
+      end
+    end
+  end
+
+  test "should reject prescribed music from wrong school class" do
+    # Create a Class B prescribed music for 2024 season (contest requires Class A)
+    set_current_user(@user)
+    prescribed = PrescribedMusic.create!(
+      title: "Test Class B Music",
+      composer: "Test Composer",
+      season: seasons(:demo_2024),
+      school_class: school_classes(:demo_school_class_b),
+      account: accounts(:demo)
+    )
+
+    assert_no_difference("MusicSelection.count") do
+      assert_raises(ActiveRecord::RecordInvalid) do
+        post add_prescribed_contest_entry_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id, prescribed_music_id: prescribed.id)
+      end
+    end
+  end
+
   test "should replace existing prescribed music selection" do
     set_current_user(@user)
-    prescribed1 = prescribed_musics(:demo_class_a_music_one)
-    prescribed2 = prescribed_musics(:demo_class_a_music_two)
+    # Use prescribed music with correct season and school class
+    prescribed1 = prescribed_musics(:demo_2024_class_a_music_one)
+    prescribed2 = prescribed_musics(:demo_2024_class_a_music_two)
 
     @contest_entry.music_selections.destroy_all
     @contest_entry.music_selections.create!(prescribed_music: prescribed1)
