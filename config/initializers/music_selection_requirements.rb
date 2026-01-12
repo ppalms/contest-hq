@@ -1,8 +1,21 @@
 # frozen_string_literal: true
 
-# Music selection requirements for contest entries
-# These constants define the required number of prescribed and custom music pieces
-# that must be submitted with each contest entry.
+# Music selection requirements for contest entries.
+#
+# This module centralizes all business rules for music selection requirements,
+# making it easy to modify the required number of prescribed and custom pieces
+# from a single location.
+#
+# @example Checking if music is complete
+#   entry.music_complete? # Uses REQUIRED_CUSTOM_COUNT internally
+#
+# @example Building slots for UI
+#   (1..MusicSelectionRequirements::TOTAL_REQUIRED_COUNT).each do |position|
+#     # Create slot
+#   end
+#
+# @see ContestEntry#music_complete?
+# @see MusicSelectionsController#build_slots
 module MusicSelectionRequirements
   # Number of prescribed music pieces required per contest entry
   REQUIRED_PRESCRIBED_COUNT = 1
