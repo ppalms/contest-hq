@@ -27,6 +27,9 @@ if school_classes.empty?
   exit
 end
 
+# Index school classes by name for efficient lookup
+school_classes_by_name = school_classes.index_by(&:name)
+
 prescribed_music_data = {
   "6A" => [
     { title: "Symphony No. 5 in C Minor", composer: "Ludwig van Beethoven" },
@@ -68,7 +71,7 @@ prescribed_music_data = {
 created_count = 0
 
 prescribed_music_data.each do |class_name, music_list|
-  school_class = school_classes.find_by(name: class_name)
+  school_class = school_classes_by_name[class_name]
 
   next unless school_class
 
