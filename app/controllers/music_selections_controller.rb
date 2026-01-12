@@ -266,7 +266,7 @@ class MusicSelectionsController < ApplicationController
 
       if restored_data
         is_deleted = @restored_deletions&.include?(restored_data[:id])
-        type = position == 1 ? :prescribed : :custom
+        type = MusicSelectionRequirements.prescribed_position?(position) ? :prescribed : :custom
 
         slots << {
           type: type,
@@ -276,7 +276,7 @@ class MusicSelectionsController < ApplicationController
           is_new: restored_data[:id].blank?
         }
       else
-        type = position == 1 ? :prescribed : :custom
+        type = MusicSelectionRequirements.prescribed_position?(position) ? :prescribed : :custom
         slots << {
           type: type,
           position: position,

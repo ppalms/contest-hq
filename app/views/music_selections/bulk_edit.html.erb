@@ -23,7 +23,8 @@
                   method: :patch,
                   data: { 
                     controller: "music-bulk-edit unsaved-changes",
-                    unsaved_changes_target: "form"
+                    unsaved_changes_target: "form",
+                    music_bulk_edit_prescribed_position_value: MusicSelectionRequirements::PRESCRIBED_POSITION
                   } do |f| %>
 
       <div class="space-y-4" data-music-bulk-edit-target="list">

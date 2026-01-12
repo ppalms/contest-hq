@@ -51,7 +51,7 @@ class ContestEntry < ApplicationRecord
   end
 
   def music_complete?
-    prescribed_selection.present? && custom_selections.count == 2
+    prescribed_selection.present? && custom_selections.count == MusicSelectionRequirements::REQUIRED_CUSTOM_COUNT
   end
 
   def prescribed_selection
