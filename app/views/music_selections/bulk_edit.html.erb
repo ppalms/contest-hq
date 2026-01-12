@@ -38,62 +38,69 @@
                  data-slot-position="<%= slot[:position] %>"
                  data-prescribed="false">
 
-              <div class="flex items-center gap-4">
-                <%# Up/Down Arrows %>
-                <div class="flex flex-col gap-1">
-                  <button type="button"
-                          class="p-1 text-gray-500 hover:text-gray-700 disabled:opacity-30"
-                          data-action="music-bulk-edit#moveUp">
-                    ▲
-                  </button>
-                  <button type="button"
-                          class="p-1 text-gray-500 hover:text-gray-700 disabled:opacity-30"
-                          data-action="music-bulk-edit#moveDown"
-                          <%= 'disabled' if slot[:position] == 3 %>>
-                    ▼
-                  </button>
-                </div>
+              <%# Hidden Fields %>
+              <%= hidden_field_tag "music_selections[][id]", slot[:music_selection].id %>
+              <%= hidden_field_tag "music_selections[][position]", slot[:position],
+                                   data: { music_bulk_edit_target: "position" } %>
+              <%= hidden_field_tag "music_selections[][_destroy]", "0",
+                                   data: { music_bulk_edit_target: "deleteField" } %>
 
-                <%# Hidden Fields %>
-                <%= hidden_field_tag "music_selections[][id]", slot[:music_selection].id %>
-                <%= hidden_field_tag "music_selections[][position]", slot[:position],
-                                     data: { music_bulk_edit_target: "position" } %>
-                <%= hidden_field_tag "music_selections[][_destroy]", "0",
-                                     data: { music_bulk_edit_target: "deleteField" } %>
-
-                <%# Title/Composer Fields %>
-                <div class="flex-1 grid grid-cols-2 gap-4">
-                  <div>
-                    <%= label_tag "music_selections[][title]", "Title", class: "block text-sm font-medium text-gray-700 mb-1" %>
-                    <%= text_field_tag "music_selections[][title]", slot[:music_selection].title,
-                                       class: "text-field w-full",
-                                       data: { music_bulk_edit_target: "titleField" } %>
-                  </div>
-                  <div>
-                    <%= label_tag "music_selections[][composer]", "Composer", class: "block text-sm font-medium text-gray-700 mb-1" %>
-                    <%= text_field_tag "music_selections[][composer]", slot[:music_selection].composer,
-                                       class: "text-field w-full",
-                                       data: { music_bulk_edit_target: "composerField" } %>
-                  </div>
-                </div>
-
-                <%# Badges and Actions %>
-                <div class="flex items-center gap-2">
-                  <% if slot[:is_new] %>
+              <div class="space-y-3">
+                <%# Badge Row (only if new) %>
+                <% if slot[:is_new] %>
+                  <div class="flex items-center gap-2">
                     <span class="px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded status-badge">
                       New
                     </span>
-                  <% end %>
-                  <button type="button"
-                          data-action="music-bulk-edit#markDeleted"
-                          class="btn-danger-sm delete-btn">
-                    Delete
-                  </button>
-                  <button type="button"
-                          data-action="music-bulk-edit#undoDelete"
-                          class="btn-secondary-sm undo-btn hidden">
-                    Undo
-                  </button>
+                  </div>
+                <% end %>
+
+                <%# Main Content Row %>
+                <div class="flex items-start gap-4">
+                  <%# Up/Down Arrows %>
+                  <div class="flex flex-col gap-1">
+                    <button type="button"
+                            class="p-1 text-gray-500 hover:text-gray-700 disabled:opacity-30"
+                            data-action="music-bulk-edit#moveUp">
+                      ▲
+                    </button>
+                    <button type="button"
+                            class="p-1 text-gray-500 hover:text-gray-700 disabled:opacity-30"
+                            data-action="music-bulk-edit#moveDown"
+                            <%= 'disabled' if slot[:position] == 3 %>>
+                      ▼
+                    </button>
+                  </div>
+
+                  <%# Title/Composer Column (Stacked, Full Width) %>
+                  <div class="flex-1 space-y-3">
+                    <div>
+                      <%= label_tag "music_selections[][title]", "Title", class: "block text-sm font-medium text-gray-700 mb-1" %>
+                      <%= text_field_tag "music_selections[][title]", slot[:music_selection].title,
+                                         class: "text-field w-full",
+                                         data: { music_bulk_edit_target: "titleField" } %>
+                    </div>
+                    <div>
+                      <%= label_tag "music_selections[][composer]", "Composer", class: "block text-sm font-medium text-gray-700 mb-1" %>
+                      <%= text_field_tag "music_selections[][composer]", slot[:music_selection].composer,
+                                         class: "text-field w-full",
+                                         data: { music_bulk_edit_target: "composerField" } %>
+                    </div>
+                  </div>
+
+                  <%# Action Buttons Column %>
+                  <div class="flex items-center gap-2">
+                    <button type="button"
+                            data-action="music-bulk-edit#markDeleted"
+                            class="btn-danger-sm delete-btn">
+                      Delete
+                    </button>
+                    <button type="button"
+                            data-action="music-bulk-edit#undoDelete"
+                            class="btn-secondary-sm undo-btn hidden">
+                      Undo
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
