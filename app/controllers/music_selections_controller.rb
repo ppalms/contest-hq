@@ -198,12 +198,12 @@ class MusicSelectionsController < ApplicationController
       position: MusicSelectionRequirements::PRESCRIBED_POSITION 
     }
     
-    # Add custom slots (positions 2 through TOTAL_REQUIRED_COUNT)
+    # Add custom slots (positions starting from FIRST_CUSTOM_POSITION)
     MusicSelectionRequirements::REQUIRED_CUSTOM_COUNT.times do |i|
       slots << { 
         type: :custom, 
         music_selection: custom_selections[i], 
-        position: MusicSelectionRequirements::PRESCRIBED_POSITION + i + 1 
+        position: MusicSelectionRequirements::FIRST_CUSTOM_POSITION + i 
       }
     end
     

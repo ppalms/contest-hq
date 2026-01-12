@@ -16,7 +16,12 @@ module MusicSelectionRequirements
   # Position index for the prescribed music selection (1-based)
   PRESCRIBED_POSITION = 1
 
-  # Helper method to determine if a position is for prescribed music
+  # Position index for the first custom music selection (1-based)
+  FIRST_CUSTOM_POSITION = PRESCRIBED_POSITION + 1
+
+  # Determines if a given position is for prescribed music
+  # @param position [Integer] 1-based position to check
+  # @return [Boolean] true if position is for prescribed music
   def self.prescribed_position?(position)
     position == PRESCRIBED_POSITION
   end
