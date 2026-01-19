@@ -26,14 +26,13 @@ class MusicSelectionsControllerTest < ActionDispatch::IntegrationTest
     # Use prescribed music with correct season (demo_2024) and school class (A)
     prescribed = prescribed_musics(:demo_2024_class_a_music_one)
 
-    assert_difference("MusicSelection.count") do
-      post add_prescribed_contest_entry_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id, prescribed_music_id: prescribed.id)
+    # add_prescribed no longer saves immediately - it returns turbo stream with unsaved data
+    assert_no_difference("MusicSelection.count") do
+      post add_prescribed_contest_entry_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id, prescribed_music_id: prescribed.id), as: :turbo_stream
     end
 
-    music = MusicSelection.last
-    assert_equal prescribed.id, music.prescribed_music_id
-    assert_equal prescribed.title, music.title
-    assert_equal prescribed.composer, music.composer
+    assert_response :success
+    assert_match /music_slot_prescribed/, @response.body
   end
 
   test "should reject prescribed music from wrong season" do
@@ -41,11 +40,11 @@ class MusicSelectionsControllerTest < ActionDispatch::IntegrationTest
     prescribed = prescribed_musics(:demo_class_a_music_one)
 
     assert_no_difference("MusicSelection.count") do
-      post add_prescribed_contest_entry_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id, prescribed_music_id: prescribed.id)
+      post add_prescribed_contest_entry_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id, prescribed_music_id: prescribed.id), as: :turbo_stream
     end
 
-    assert_redirected_to bulk_edit_contest_entry_selections_path(entry_id: @contest_entry.id)
-    assert_match(/must be from the 2024 season/, flash[:alert])
+    assert_response :success
+    assert_match(/must be from the 2024 season/, @response.body)
   end
 
   test "should reject prescribed music from wrong school class" do
@@ -60,29 +59,38 @@ class MusicSelectionsControllerTest < ActionDispatch::IntegrationTest
     )
 
     assert_no_difference("MusicSelection.count") do
-      post add_prescribed_contest_entry_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id, prescribed_music_id: prescribed.id)
+      post add_prescribed_contest_entry_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id, prescribed_music_id: prescribed.id), as: :turbo_stream
     end
 
-    assert_redirected_to bulk_edit_contest_entry_selections_path(entry_id: @contest_entry.id)
-    assert_match(/must be for 1-A schools/, flash[:alert])
+    assert_response :success
+    assert_match(/must be for 1-A schools/, @response.body)
   end
 
-  test "should replace existing prescribed music selection" do
+  test "should save prescribed music via bulk_update" do
     set_current_user(@user)
     # Use prescribed music with correct season and school class
-    prescribed1 = prescribed_musics(:demo_2024_class_a_music_one)
-    prescribed2 = prescribed_musics(:demo_2024_class_a_music_two)
+    prescribed = prescribed_musics(:demo_2024_class_a_music_one)
 
     @contest_entry.music_selections.destroy_all
-    @contest_entry.music_selections.create!(prescribed_music: prescribed1)
 
-    assert_no_difference("MusicSelection.count") do
-      post add_prescribed_contest_entry_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id, prescribed_music_id: prescribed2.id)
+    # Simulate the bulk_update with prescribed music
+    assert_difference("MusicSelection.count") do
+      patch bulk_update_contest_entry_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id), params: {
+        music_selections: [
+          {
+            prescribed_music_id: prescribed.id,
+            position: 1,
+            title: prescribed.title,
+            composer: prescribed.composer,
+            _destroy: "0"
+          }
+        ]
+      }
     end
 
     @contest_entry.reload
     assert_equal 1, @contest_entry.music_selections.count
-    assert_equal prescribed2.id, @contest_entry.prescribed_selection.prescribed_music_id
+    assert_equal prescribed.id, @contest_entry.prescribed_selection.prescribed_music_id
   end
 
   test "should destroy music selection" do

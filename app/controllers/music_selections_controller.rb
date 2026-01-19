@@ -40,25 +40,23 @@ class MusicSelectionsController < ApplicationController
   end
 
   def add_prescribed
-    prescribed_music = PrescribedMusic.find(params[:prescribed_music_id])
+    @prescribed_music = PrescribedMusic.find(params[:prescribed_music_id])
 
-    existing_prescribed = @contest_entry.prescribed_selection
-    if existing_prescribed
-      existing_prescribed.update!(prescribed_music: prescribed_music)
-      @music_selection = existing_prescribed
-      mark_prescribed_as_changed(existing_prescribed.id)
-    else
-      @music_selection = @contest_entry.music_selections.create!(prescribed_music: prescribed_music)
+    # Validate that prescribed music matches contest requirements
+    unless prescribed_music_matches_contest?(@prescribed_music)
+      @error_message = build_prescribed_error_message(@prescribed_music)
+      respond_to do |format|
+        format.turbo_stream { render :add_prescribed_error }
+        format.html { redirect_to bulk_edit_contest_entry_selections_path(entry_id: @contest_entry.id), alert: @error_message }
+      end
+      return
     end
 
+    # Don't save to database - just return the prescribed music data
+    # It will be saved when the user clicks "Save" in bulk_update
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_to bulk_edit_contest_entry_selections_path(entry_id: @contest_entry.id) }
-    end
-  rescue ActiveRecord::RecordInvalid => e
-    respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.replace("flash", partial: "shared/flash", locals: { flash: { alert: e.message } }), status: :unprocessable_entity }
-      format.html { redirect_to bulk_edit_contest_entry_selections_path(entry_id: @contest_entry.id), alert: e.message }
     end
   end
 
@@ -114,7 +112,6 @@ class MusicSelectionsController < ApplicationController
       @slots = build_slots
     end
 
-    @changed_prescribed_id = get_changed_prescribed_id
     render layout: false
   end
 
@@ -134,25 +131,63 @@ class MusicSelectionsController < ApplicationController
 
   def bulk_update
     ActiveRecord::Base.transaction do
+      # Collect IDs of selections being kept/updated
+      selection_ids_in_form = []
+      prescribed_selection_id = nil
+
       if params[:music_selections].present?
         params[:music_selections].each do |ms_params|
           next if ms_params[:_destroy] == "1"
 
-          if ms_params[:id].present?
-            music_selection = @contest_entry.music_selections.unscoped.find(ms_params[:id])
-            music_selection.update!(
-              position: ms_params[:position],
-              title: ms_params[:title],
-              composer: ms_params[:composer]
-            )
+          if ms_params[:prescribed_music_id].present?
+            # This is a prescribed selection
+            if ms_params[:id].present?
+              # Update existing prescribed selection
+              music_selection = @contest_entry.music_selections.unscoped.find(ms_params[:id])
+              music_selection.update!(
+                prescribed_music_id: ms_params[:prescribed_music_id],
+                position: ms_params[:position]
+              )
+              prescribed_selection_id = music_selection.id
+              selection_ids_in_form << music_selection.id
+            else
+              # Create new prescribed selection
+              new_selection = @contest_entry.music_selections.create!(
+                prescribed_music_id: ms_params[:prescribed_music_id],
+                position: ms_params[:position]
+              )
+              prescribed_selection_id = new_selection.id
+              selection_ids_in_form << new_selection.id
+            end
           else
-            @contest_entry.music_selections.create!(
-              position: ms_params[:position],
-              title: ms_params[:title],
-              composer: ms_params[:composer]
-            )
+            # This is a custom selection
+            if ms_params[:id].present?
+              music_selection = @contest_entry.music_selections.unscoped.find(ms_params[:id])
+              music_selection.update!(
+                position: ms_params[:position],
+                title: ms_params[:title],
+                composer: ms_params[:composer]
+              )
+              selection_ids_in_form << music_selection.id
+            else
+              new_selection = @contest_entry.music_selections.create!(
+                position: ms_params[:position],
+                title: ms_params[:title],
+                composer: ms_params[:composer]
+              )
+              selection_ids_in_form << new_selection.id
+            end
           end
         end
+      end
+
+      # Delete any prescribed selections that are NOT in the form
+      # (this handles the case where user changed prescribed music)
+      if prescribed_selection_id
+        @contest_entry.music_selections
+          .where.not(prescribed_music_id: nil)
+          .where.not(id: prescribed_selection_id)
+          .destroy_all
       end
 
       if params[:music_selections_to_delete].present?
@@ -248,7 +283,6 @@ class MusicSelectionsController < ApplicationController
 
   def clear_edit_state_from_session
     session.delete(:music_edit_state)
-    session.delete(:changed_prescribed_id)
   end
 
   def detect_conflicts(stored_timestamps)
@@ -260,14 +294,6 @@ class MusicSelectionsController < ApplicationController
       current_time = current_timestamps[id]
       current_time && current_time.to_i > stored_time.to_i
     end
-  end
-
-  def mark_prescribed_as_changed(music_selection_id)
-    session[:changed_prescribed_id] = music_selection_id
-  end
-
-  def get_changed_prescribed_id
-    session[:changed_prescribed_id]
   end
 
   def build_slots_from_restored_state
@@ -286,13 +312,25 @@ class MusicSelectionsController < ApplicationController
         is_deleted = @restored_deletions&.include?(restored_data[:id])
         type = MusicSelectionRequirements.prescribed_position?(position) ? :prescribed : :custom
 
-        slots << {
-          type: type,
-          position: position,
-          music_selection: build_music_selection_from_data(restored_data),
-          is_deleted: is_deleted,
-          is_new: restored_data[:id].blank?
-        }
+        # For unsaved prescribed selections, we need to pass the PrescribedMusic object
+        if type == :prescribed && restored_data[:id].blank? && restored_data[:prescribed_music_id].present?
+          prescribed_music = PrescribedMusic.find(restored_data[:prescribed_music_id])
+          slots << {
+            type: type,
+            position: position,
+            prescribed_music: prescribed_music,
+            is_deleted: is_deleted,
+            is_new: true
+          }
+        else
+          slots << {
+            type: type,
+            position: position,
+            music_selection: build_music_selection_from_data(restored_data),
+            is_deleted: is_deleted,
+            is_new: restored_data[:id].blank?
+          }
+        end
       else
         type = MusicSelectionRequirements.prescribed_position?(position) ? :prescribed : :custom
         slots << {
@@ -309,18 +347,63 @@ class MusicSelectionsController < ApplicationController
   def build_music_selection_from_data(data)
     if data[:id].present?
       ms = @contest_entry.music_selections.unscoped.find(data[:id])
-      ms.assign_attributes(
-        position: data[:position],
-        title: data[:title],
-        composer: data[:composer]
-      )
+      if data[:prescribed_music_id].present?
+        # Prescribed selection - update prescribed_music_id
+        ms.assign_attributes(
+          position: data[:position],
+          prescribed_music_id: data[:prescribed_music_id]
+        )
+      else
+        # Custom selection - update title/composer
+        ms.assign_attributes(
+          position: data[:position],
+          title: data[:title],
+          composer: data[:composer]
+        )
+      end
       ms
     else
-      @contest_entry.music_selections.new(
-        position: data[:position],
-        title: data[:title],
-        composer: data[:composer]
-      )
+      # New record
+      if data[:prescribed_music_id].present?
+        # New prescribed selection
+        @contest_entry.music_selections.new(
+          position: data[:position],
+          prescribed_music_id: data[:prescribed_music_id]
+        )
+      else
+        # New custom selection
+        @contest_entry.music_selections.new(
+          position: data[:position],
+          title: data[:title],
+          composer: data[:composer]
+        )
+      end
     end
+  end
+
+  def prescribed_music_matches_contest?(prescribed_music)
+    contest = @contest_entry.contest
+    school_class = @contest_entry.large_ensemble&.school&.school_class
+
+    return false if contest && prescribed_music.season_id != contest.season_id
+    return false if school_class && prescribed_music.school_class_id != school_class.id
+
+    true
+  end
+
+  def build_prescribed_error_message(prescribed_music)
+    contest = @contest_entry.contest
+    school_class = @contest_entry.large_ensemble&.school&.school_class
+    errors = []
+
+    if contest && prescribed_music.season_id != contest.season_id
+      errors << "must be from the #{contest.season.name} season"
+    end
+
+    if school_class && prescribed_music.school_class_id != school_class.id
+      errors << "must be for #{school_class.name} schools"
+    end
+
+    "This prescribed music #{errors.join(' and ')}"
   end
 end

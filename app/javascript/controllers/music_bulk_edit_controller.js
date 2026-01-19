@@ -53,6 +53,43 @@ export default class extends Controller {
   markDeleted(event) {
     event.preventDefault()
     const item = event.target.closest('[data-music-bulk-edit-target="item"]')
+    const idField = item.querySelector('input[name="music_selections[][id]"]')
+    
+    // If item has no ID, it's unsaved - just remove it from DOM
+    if (!idField || !idField.value) {
+      const position = item.dataset.slotPosition
+      const slotType = item.dataset.prescribed === 'true' ? 'prescribed' : 'custom'
+      
+      const placeholder = document.createElement('div')
+      placeholder.className = 'mb-4 rounded-lg border-2 border-dashed border-gray-300'
+      placeholder.setAttribute('data-slot', '')
+      placeholder.setAttribute('data-slot-type', slotType)
+      placeholder.setAttribute('data-slot-position', position)
+      
+      if (slotType === 'prescribed') {
+        placeholder.innerHTML = `
+          <div class="placeholder p-6 text-center">
+            <span class="inline-block mb-2 px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded">Prescribed</span>
+            <p class="text-gray-500 mb-3">Empty slot</p>
+            <a href="${this.getPrescribedSelectUrl()}" class="btn-primary-sm" data-turbo-frame="music_slot_prescribed">Select Prescribed Music</a>
+          </div>
+        `
+      } else {
+        placeholder.innerHTML = `
+          <div class="placeholder p-6 text-center">
+            <p class="text-gray-500 mb-3">Empty slot</p>
+            <button type="button" data-action="music-bulk-edit#showAddForm" class="btn-primary-sm">Add</button>
+          </div>
+          <div class="add-form hidden"></div>
+        `
+      }
+      
+      item.replaceWith(placeholder)
+      this.updatePositions()
+      return
+    }
+    
+    // Item has ID - mark for deletion (existing behavior)
     const deleteField = item.querySelector('[data-music-bulk-edit-target="deleteField"]')
     const titleField = item.querySelector('[data-music-bulk-edit-target="titleField"]')
     const composerField = item.querySelector('[data-music-bulk-edit-target="composerField"]')
@@ -92,14 +129,25 @@ export default class extends Controller {
       }
     }
     
-    const idField = item.querySelector('input[name="music_selections[][id]"]')
-    if (idField && this.hasDeletionsTarget) {
+    if (this.hasDeletionsTarget) {
       const deleteInput = document.createElement('input')
       deleteInput.type = 'hidden'
       deleteInput.name = 'music_selections_to_delete[]'
       deleteInput.value = idField.value
       this.deletionsTarget.appendChild(deleteInput)
     }
+  }
+  
+  getPrescribedSelectUrl() {
+    // Extract entry_id from the form action URL
+    const form = this.element.querySelector('form')
+    if (form) {
+      const match = form.action.match(/entries\/(\d+)/)
+      if (match) {
+        return `/contests/entries/${match[1]}/selections/select_prescribed`
+      }
+    }
+    return '#'
   }
 
   undoDelete(event) {

@@ -2,7 +2,11 @@
   @show_copy_prompt = false
 %>
 <%= turbo_stream.replace "music_slot_prescribed" do %>
-  <% prescribed = @contest_entry.prescribed_selection %>
-  <% slot = { type: :prescribed, music_selection: prescribed, position: MusicSelectionRequirements::PRESCRIBED_POSITION } %>
+  <% slot = { 
+    type: :prescribed, 
+    prescribed_music: @prescribed_music,
+    position: MusicSelectionRequirements::PRESCRIBED_POSITION,
+    is_new: true
+  } %>
   <%= render "music_selections/prescribed_slot", slot: slot, contest_entry: @contest_entry %>
 <% end %>

@@ -92,4 +92,88 @@ class MusicSelectionsTest < ApplicationSystemTestCase
     assert_no_text "Test Piece"
     assert_text "0/3 pieces selected"
   end
+
+  test "bulk edit enforces music selection constraints" do
+    entry = ContestEntry.create!(contest: @contest, user: @user, large_ensemble: @ensemble_c, account: @user.account)
+
+    visit contest_entry_path(contest_id: @contest.id, id: entry.id)
+
+    within "#music_selections" do
+      click_on "Edit"
+    end
+
+    # Add prescribed music
+    click_on "Select Prescribed Music"
+    fill_in "search", with: "Symphony"
+    click_on "Search"
+
+    # Find and click the button containing "Symphony No. 5"
+    find("button", text: /Symphony No\. 5/).click
+
+    # Verify prescribed music appears with "New" badge
+    assert_text "Prescribed"
+    assert_text "New"
+    assert_text "Symphony No. 5"
+
+    # Add two custom selections
+    within all("[data-slot-type='custom']").first do
+      click_on "Add"
+    end
+    fill_in "Title", with: "Custom Piece 1"
+    fill_in "Composer", with: "Composer 1"
+    click_on "Add to List"
+
+    within all("[data-slot-type='custom']").last do
+      click_on "Add"
+    end
+    fill_in "Title", with: "Custom Piece 2"
+    fill_in "Composer", with: "Composer 2"
+    click_on "Add to List"
+
+    # Save all selections
+    click_on "Save"
+
+    # Wait for save to complete by checking for the completion indicator
+    assert_text "✓ Complete (3/3 pieces selected)"
+
+    # Verify all saved
+    entry.reload
+    assert_equal 3, entry.music_selections.count
+    assert_equal 1, entry.music_selections.where.not(prescribed_music_id: nil).count
+    assert_equal 2, entry.music_selections.where(prescribed_music_id: nil).count
+
+    # Now change the prescribed music
+    within "#music_selections" do
+      click_on "Edit"
+    end
+
+    within "[data-prescribed='true']" do
+      click_on "Change"
+    end
+
+    fill_in "search", with: "Planets"
+    click_on "Search"
+
+    # Find and click the button containing "The Planets"
+    find("button", text: /The Planets/).click
+
+    # Verify new prescribed music appears
+    assert_text "The Planets"
+    assert_text "New"
+
+    # Save the change
+    click_on "Save"
+
+    # Wait for save to complete
+    assert_text "✓ Complete (3/3 pieces selected)"
+
+    # Verify we still have exactly 1 prescribed and 2 custom selections
+    entry.reload
+    assert_equal 3, entry.music_selections.count, "Should have exactly 3 music selections"
+    assert_equal 1, entry.music_selections.where.not(prescribed_music_id: nil).count, "Should have exactly 1 prescribed selection"
+    assert_equal 2, entry.music_selections.where(prescribed_music_id: nil).count, "Should have exactly 2 custom selections"
+
+    # Verify the prescribed music was changed, not added
+    assert_equal "The Planets", entry.prescribed_selection.title
+  end
 end
