@@ -1,0 +1,41 @@
+<%= turbo_frame_tag dom_id(@music_selection) do %>
+  <li class="p-4 bg-blue-50 border-l-4 border-blue-500">
+    <%= form_with model: @music_selection, 
+                  url: contest_entry_selection_path(entry_id: @contest_entry.id, id: @music_selection.id),
+                  method: :patch,
+                  class: "flex items-center gap-4" do |f| %>
+      <div class="text-gray-500 font-medium text-sm w-8 flex-shrink-0">
+        #<%= @music_selection.position %>
+      </div>
+      
+      <div class="flex-1 grid grid-cols-2 gap-4">
+        <div>
+          <%= f.label :title, class: "block text-xs font-medium text-gray-700 mb-1" %>
+          <%= f.text_field :title, class: "text-field w-full text-sm" %>
+        </div>
+        <div>
+          <%= f.label :composer, class: "block text-xs font-medium text-gray-700 mb-1" %>
+          <%= f.text_field :composer, class: "text-field w-full text-sm" %>
+        </div>
+      </div>
+
+      <div class="flex gap-2 flex-shrink-0">
+        <%= f.submit "Save", class: "btn-primary-sm" %>
+        <%= link_to "Cancel",
+                    contest_entry_path(@contest_entry.contest, @contest_entry),
+                    class: "btn-secondary-sm",
+                    data: { turbo_frame: "_top" } %>
+      </div>
+    <% end %>
+
+    <% if @music_selection.errors.any? %>
+      <div class="mt-2 text-sm text-red-600">
+        <ul class="list-disc list-inside">
+          <% @music_selection.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  </li>
+<% end %>

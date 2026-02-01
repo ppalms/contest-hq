@@ -1,5 +1,5 @@
 class ContestsController < ApplicationController
-  include Pagy::Backend
+  include Pagy::Method
 
   before_action :set_contest, only: %i[ show edit update destroy setup schedule ]
   before_action :set_schedule, only: %i[ show setup schedule ]

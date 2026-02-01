@@ -1,0 +1,82 @@
+<% content_for :title, "Select Prescribed Music" %>
+<div class="py-8 space-y-4">
+  <div class="flex justify-between items-center">
+    <div>
+      <h1>Select Prescribed Music</h1>
+      <p class="text-sm text-gray-600 mt-1">
+        <%= @contest_entry.large_ensemble.name %> - <%= @school_class.name %>
+      </p>
+      <% if !params[:search].present? && @prescribed_music.any? %>
+        <p class="text-sm text-gray-500 mt-1">
+          <%= @prescribed_music.count %> composition<%= @prescribed_music.count == 1 ? '' : 's' %> available
+        </p>
+      <% end %>
+    </div>
+    <%= link_to "Back to Entry", contest_entry_path(contest_id: @contest_entry.contest.id, id: @contest_entry.id), class: "btn-secondary" %>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="bg-white border border-neutral-200 rounded-md p-4 shadow-2xs">
+    <%= form_with url: contest_entry_select_prescribed_music_path(contest_id: @contest_entry.contest.id, entry_id: @contest_entry.id), method: :get, class: "flex items-center gap-4", local: true do |form| %>
+      <div class="flex-1">
+        <%= form.label :search, "Search by title or composer:", class: "sr-only" %>
+        <%= form.text_field :search, 
+                           value: params[:search],
+                           placeholder: "Search by title or composer...",
+                           class: "text-field w-full",
+                           autofocus: true %>
+      </div>
+      <%= form.submit "Search", class: "btn-primary" %>
+      <% if params[:search].present? %>
+        <%= link_to "Clear", contest_entry_select_prescribed_music_path(contest_id: @contest_entry.contest.id, entry_id: @contest_entry.id), class: "btn-secondary" %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <!-- Results Info -->
+  <% if params[:search].present? %>
+    <div class="text-sm text-gray-600">
+      Found <%= @prescribed_music.count %> result<%= @prescribed_music.count == 1 ? '' : 's' %> for "<%= params[:search] %>"
+    </div>
+  <% end %>
+
+  <!-- Prescribed Music List -->
+  <div class="rounded-md bg-white border border-neutral-200 shadow-2xs">
+    <% if @prescribed_music.empty? %>
+      <div class="p-8 text-center">
+        <% if params[:search].present? %>
+          <p class="text-gray-600">No prescribed music found matching "<%= params[:search] %>"</p>
+          <p class="text-sm text-gray-500 mt-2">Try a different search term or <%= link_to "view all", contest_entry_select_prescribed_music_path(contest_id: @contest_entry.contest.id, entry_id: @contest_entry.id), class: "text-blue-600 hover:underline" %></p>
+        <% else %>
+          <p class="text-gray-600">No prescribed music available for <%= @school_class.name %> in <%= @season.name %>.</p>
+          <p class="text-sm text-gray-500 mt-2">Please contact your administrator to add prescribed music.</p>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="divide-y divide-neutral-200">
+        <% @prescribed_music.each do |music| %>
+          <% is_selected = @current_selection&.prescribed_music_id == music.id %>
+          <%= button_to contest_entry_add_prescribed_music_path(contest_id: @contest_entry.contest.id, entry_id: @contest_entry.id, prescribed_music_id: music.id),
+                        method: :post,
+                        class: "w-full text-left p-4 transition-colors flex justify-between items-center group #{is_selected ? 'bg-green-50 hover:bg-green-100' : 'hover:bg-gray-50'}" do %>
+            <div class="flex-1">
+              <div class="font-medium #{is_selected ? 'text-green-900' : 'text-gray-900 group-hover:text-blue-600'}">
+                <%= music.title %>
+              </div>
+              <div class="text-sm <%= is_selected ? 'text-green-700' : 'text-gray-600' %>"><%= music.composer %></div>
+            </div>
+            <div class="<%= is_selected ? 'text-green-600' : 'text-blue-600 opacity-0 group-hover:opacity-100' %> transition-opacity">
+              <% if is_selected %>
+                  <span class="ml-2 inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                    Currently Selected
+                  </span>
+              <% else %>
+                'Select'
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

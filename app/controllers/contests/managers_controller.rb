@@ -1,6 +1,6 @@
 module Contests
   class ManagersController < ApplicationController
-    include Pagy::Backend
+    include Pagy::Method
 
     before_action :authenticate
     before_action :set_contest

@@ -1,0 +1,47 @@
+<%= form_with(model: prescribed_music, url: prescribed_music.new_record? ? prescribed_music_index_path : prescribed_music_path(prescribed_music), class: "wide-form") do |form| %>
+  <div class="sm:col-span-2">
+    <%= form.label :title %>
+    <%= form.text_field :title,
+                        class: "text-field",
+                        autofocus: true,
+                        placeholder: "Symphony No. 5" %>
+  </div>
+
+  <div class="sm:col-span-2">
+    <%= form.label :composer %>
+    <%= form.text_field :composer,
+                        class: "text-field",
+                        placeholder: "Ludwig van Beethoven" %>
+  </div>
+
+  <div>
+    <%= form.label :season_id, "Season" %>
+    <%= form.collection_select :season_id,
+                               Season.by_name,
+                               :id,
+                               :display_name,
+                               { include_blank: "Select a season" },
+                               { class: "text-field", required: true } %>
+  </div>
+
+  <div>
+    <%= form.label :school_class_id, "School class" %>
+    <%= form.collection_select :school_class_id,
+                               SchoolClass.order(:ordinal),
+                               :id,
+                               :name,
+                               { include_blank: "Select a school class" },
+                               { class: "text-field", required: true } %>
+  </div>
+
+  <div class="form-button-container">
+    <%= form.submit prescribed_music.new_record? ? "Create" : "Update", class: "btn-primary" %>
+    <%= link_to "Cancel", prescribed_music_index_path, class: "btn-secondary", role: "button" %>
+  </div>
+
+  <% if prescribed_music.errors.any? %>
+    <div class="pt-2 sm:col-span-2">
+      <%= render "layouts/error_messages", errors: prescribed_music.errors %>
+    </div>
+  <% end %>
+<% end %>

@@ -6,5 +6,10 @@ inherit_gem: { rubocop-rails-omakase: rubocop.yml }
 # Layout/SpaceInsideArrayLiteralBrackets:
 #   Enabled: false
 
+AllCops:
+  Exclude:
+    - 'app/views/**/*.erb'
+    - 'app/views/**/*.html.erb'
+
 Layout/IndentationConsistency:
   Enabled: true

@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  include Pagy::Backend
+  include Pagy::Method
 
   before_action -> { require_role "SysAdmin", "AccountAdmin" }
   before_action :set_user, only: %i[show edit update]
