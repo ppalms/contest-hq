@@ -172,7 +172,8 @@ class MusicSelectionsController < ApplicationController
                 composer: ms_params[:composer]
               )
               selection_ids_in_form << music_selection.id
-            else
+            elsif ms_params[:title].present? && ms_params[:composer].present?
+              # Only create new selection if title and composer are provided
               new_selection = @contest_entry.music_selections.create!(
                 position: ms_params[:position],
                 title: ms_params[:title],
@@ -180,6 +181,7 @@ class MusicSelectionsController < ApplicationController
               )
               selection_ids_in_form << new_selection.id
             end
+            # Skip empty slots (no id, no title/composer)
           end
         end
       end

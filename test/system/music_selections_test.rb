@@ -77,7 +77,6 @@ class MusicSelectionsTest < ApplicationSystemTestCase
   end
 
   test "removing a music selection" do
-    skip "Flaky test - needs investigation"
     entry = ContestEntry.create!(contest: @contest, user: @user, large_ensemble: @ensemble_c, account: @user.account)
     # Add prescribed music (required)
     entry.music_selections.create!(title: "Symphony No. 5", composer: "Beethoven", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one), position: 1, account: @user.account)
@@ -92,21 +91,20 @@ class MusicSelectionsTest < ApplicationSystemTestCase
       click_on "Edit"
     end
 
-    # Delete the custom music selection (not the prescribed one)
-    # Find the item that contains "Test Piece" but not "Prescribed"
-    items = all("[data-music-bulk-edit-target='item']")
-    custom_item = items.find { |item| item.text.include?("Test Piece") && !item.text.include?("Prescribed") }
+    # Delete the custom music selection using data-prescribed attribute
+    custom_item = find("[data-music-bulk-edit-target='item'][data-prescribed='false']")
 
-    assert_not_nil custom_item, "Should find the custom music item"
-
+    # Verify it's the right item by checking the input value
     within custom_item do
+      assert_selector "input[value='Test Piece']"
       click_on "Delete"
     end
 
     click_on "Save"
 
-    # Wait for Turbo Stream to update
+    # Wait for Turbo Stream to update - should transition from edit to show view
     within "#music_selections" do
+      assert_selector "ul li", wait: 5, minimum: 1
       assert_selector "a", text: "Edit"
     end
 

@@ -8,7 +8,6 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
   end
 
   test "should walk director through large ensemble registration" do
-    skip "Needs update for new music selection flow"
     visit root_url
 
     assert_text "Set up your roster to register for contests"
@@ -32,29 +31,47 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
     assert_text "Large ensemble was successfully created"
 
     assert_text "Contests"
-    # Register for the first available contest
-    click_on "Register", match: :first
+
+    # Register for Regional Orchestra (demo_contest_b) which has prescribed music for Class A
+    # Find the contest by name and click its Register button
+    # Wait for contests to load
+    assert_selector "li", text: /Regional Orchestra/, wait: 5
+    contest_item = find("li", text: /Regional Orchestra/)
+    within contest_item do
+      click_on "Register"
+    end
 
     assert_text "New Contest Entry"
     assert_text "Symphonic Orchestra"
     click_on "Continue"
     assert_text "Contest entry was successfully created"
 
+    # Get the created entry for later assertions
+    entry = ContestEntry.last
+
     click_on "Add Music"
 
-    # Select prescribed music first
+    # Select prescribed music
     within "[data-slot-type='prescribed']" do
       click_on "Select Prescribed Music"
     end
 
-    # Select the first available prescribed music
-    first_prescribed_button = first("button[type='button']", text: /\w/)
-    prescribed_title = first_prescribed_button.text.split("\n").first
-    first_prescribed_button.click
+    # Search for and select Symphony No. 5
+    fill_in "search", with: "Symphony"
+    click_on "Search"
 
-    # Verify prescribed music appears
+    # Wait for search results to load
+    sleep 2
+
+    # Verify only prescribed music from demo account is shown (tenant isolation)
+    assert_selector "button", text: /Symphony/, wait: 5
+
+    find("button", text: /Symphony/).click
+
+    # Verify prescribed music appears with correct badges
     assert_text "Prescribed"
-    assert_text prescribed_title
+    assert_text "New"
+    assert_text "Symphony No. 5"
 
     # Add a custom piece
     within all("[data-slot-type='custom']").first do
@@ -69,20 +86,31 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
 
     find("input[value='Save']").click
 
-    # Wait for save to complete and page to return to show mode
-    sleep 1
+    # Wait for Turbo Stream to complete
+    assert_no_selector "input[value='Save']", wait: 5
 
     # Verify we're back on the show page
-    assert_text "Music Selections"
-    # Verify both prescribed and custom music were saved
-    assert_text prescribed_title
-    assert_text "Prescribed"
-    assert_text "Custom Piece"
-
-    # Verify Edit button is present (indicates we're in show mode)
     within "#music_selections" do
       assert_selector "a", text: "Edit"
     end
+
+    assert_text "Music Selections"
+    assert_text "Symphony No. 5"
+    assert_text "Prescribed"
+    assert_text "Custom Piece"
+
+    # Verify tenant isolation - prescribed music belongs to correct account
+    entry.reload
+    prescribed = entry.prescribed_selection
+    assert_not_nil prescribed, "Should have prescribed music"
+    assert_equal @new_director.account_id, prescribed.account_id, "Prescribed music should belong to director's account"
+    assert_equal @new_director.account_id, prescribed.prescribed_music.account_id, "Prescribed music reference should belong to director's account"
+    assert_equal "Symphony No. 5", prescribed.title
+
+    # Verify prescribed music matches contest season and school class
+    contest = entry.contest
+    assert_equal contest.season_id, prescribed.prescribed_music.season_id, "Prescribed music should match contest season"
+    assert_equal assigned_school.school_class_id, prescribed.prescribed_music.school_class_id, "Prescribed music should match school class"
   end
 
   private
@@ -102,9 +130,13 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
     # Now assign schools to the newly created user
     assert_text "User #{email} has been created"
 
-    # Add a school to the director
+    # Add Kennedy High School (demo_school_a, Class A) to the director
     within("table") do
-      first("input[type='checkbox']").check
+      # Find the row with Kennedy High School and check its checkbox
+      row = find("tr", text: "Kennedy High School")
+      within(row) do
+        find("input[type='checkbox']").check
+      end
     end
     click_on "Add Selected"
 

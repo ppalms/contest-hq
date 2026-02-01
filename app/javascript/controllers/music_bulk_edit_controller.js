@@ -6,6 +6,13 @@ export default class extends Controller {
   connect() {
     // Initialize button states on page load
     this.updatePositions()
+    
+    // Disable inputs in hidden add forms to prevent validation
+    this.element.querySelectorAll('[data-slot] .add-form.hidden').forEach(addForm => {
+      addForm.querySelectorAll('input[type="text"]').forEach(input => {
+        input.disabled = true
+      })
+    })
   }
 
   moveUp(event) {
@@ -212,6 +219,8 @@ export default class extends Controller {
     if (placeholder) placeholder.classList.add('hidden')
     if (addForm) {
       addForm.classList.remove('hidden')
+      // Enable inputs when showing the form
+      addForm.querySelectorAll('input[type="text"]').forEach(input => input.disabled = false)
       const firstInput = addForm.querySelector('input[type="text"]')
       if (firstInput) firstInput.focus()
     }
@@ -226,7 +235,11 @@ export default class extends Controller {
     if (placeholder) placeholder.classList.remove('hidden')
     if (addForm) {
       addForm.classList.add('hidden')
-      addForm.querySelectorAll('input[type="text"]').forEach(input => input.value = '')
+      // Disable inputs when hiding the form to prevent validation
+      addForm.querySelectorAll('input[type="text"]').forEach(input => {
+        input.value = ''
+        input.disabled = true
+      })
     }
   }
 
