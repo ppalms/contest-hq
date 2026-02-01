@@ -5,7 +5,7 @@
   <% slot = { 
     type: :prescribed, 
     prescribed_music: @prescribed_music,
-    position: MusicSelectionRequirements::PRESCRIBED_POSITION,
+    position: @position,
     is_new: true
   } %>
   <%= render "music_selections/prescribed_slot", slot: slot, contest_entry: @contest_entry %>

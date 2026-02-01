@@ -2,7 +2,11 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["list", "item", "position", "deleteField", "titleField", "composerField", "deletions"]
-  static values = { prescribedPosition: Number }
+
+  connect() {
+    // Initialize button states on page load
+    this.updatePositions()
+  }
 
   moveUp(event) {
     event.preventDefault()
@@ -37,16 +41,21 @@ export default class extends Controller {
   }
 
   updatePositions() {
-    this.itemTargets.forEach((item, index) => {
+    // Query DOM directly to get current order (don't use cached itemTargets)
+    const container = this.hasListTarget ? this.listTarget : this.element
+    const items = container.querySelectorAll('[data-music-bulk-edit-target="item"]')
+    
+    items.forEach((item, index) => {
       const positionInput = item.querySelector('[data-music-bulk-edit-target="position"]')
       if (positionInput) {
         positionInput.value = index + 1
       }
-
+      
+      // Enable/disable arrow buttons based on position
       const upBtn = item.querySelector('[data-action="music-bulk-edit#moveUp"]')
       const downBtn = item.querySelector('[data-action="music-bulk-edit#moveDown"]')
       if (upBtn) upBtn.disabled = index === 0
-      if (downBtn) downBtn.disabled = index === this.itemTargets.length - 1
+      if (downBtn) downBtn.disabled = index === items.length - 1
     })
   }
 
@@ -114,20 +123,20 @@ export default class extends Controller {
     if (deleteBtn) deleteBtn.classList.add('hidden')
     if (undoBtn) undoBtn.classList.remove('hidden')
     
-    const badge = item.querySelector('.status-badge')
-    if (badge) {
-      badge.textContent = 'Deleted'
-      badge.classList.remove('bg-blue-100', 'text-blue-800')
-      badge.classList.add('bg-red-100', 'text-red-800')
-    } else {
-      const badgeContainer = item.querySelector('.flex.items-center.gap-2')
-      if (badgeContainer) {
-        const newBadge = document.createElement('span')
-        newBadge.className = 'px-2 py-1 text-xs font-medium text-red-800 bg-red-100 rounded status-badge'
-        newBadge.textContent = 'Deleted'
-        badgeContainer.insertBefore(newBadge, badgeContainer.firstChild)
-      }
+    // Add "Deleted" badge to top-right badge container
+    let badgeContainer = item.querySelector('.absolute.top-4.right-4')
+    if (!badgeContainer) {
+      // Create badge container if it doesn't exist
+      badgeContainer = document.createElement('div')
+      badgeContainer.className = 'absolute top-4 right-4 flex flex-row-reverse items-center gap-2'
+      item.insertBefore(badgeContainer, item.firstChild)
     }
+    
+    // Add "Deleted" badge (will appear on the right due to flex-row-reverse)
+    const deletedBadge = document.createElement('span')
+    deletedBadge.className = 'px-2 py-1 text-xs font-medium text-red-800 bg-red-100 rounded status-badge deleted-badge'
+    deletedBadge.textContent = 'Deleted'
+    badgeContainer.appendChild(deletedBadge)
     
     if (this.hasDeletionsTarget) {
       const deleteInput = document.createElement('input')
@@ -177,16 +186,10 @@ export default class extends Controller {
     if (deleteBtn) deleteBtn.classList.remove('hidden')
     if (undoBtn) undoBtn.classList.add('hidden')
     
-    const badge = item.querySelector('.status-badge')
-    if (badge) {
-      const isPrescribed = item.dataset.prescribed === 'true'
-      if (isPrescribed) {
-        badge.textContent = 'Prescribed'
-        badge.classList.remove('bg-red-100', 'text-red-800')
-        badge.classList.add('bg-blue-100', 'text-blue-800')
-      } else {
-        badge.remove()
-      }
+    // Remove "Deleted" badge
+    const deletedBadge = item.querySelector('.deleted-badge')
+    if (deletedBadge) {
+      deletedBadge.remove()
     }
     
     const idField = item.querySelector('input[name="music_selections[][id]"]')
@@ -248,33 +251,38 @@ export default class extends Controller {
 
   createNewItemElement(title, composer, position) {
     const div = document.createElement('div')
-    div.className = 'p-4 bg-green-50 rounded-lg border-2 border-green-300'
+    div.className = 'relative p-4 bg-green-50 rounded-lg border-2 border-green-300'
     div.setAttribute('data-music-bulk-edit-target', 'item')
     div.setAttribute('data-slot-position', position)
     
     div.innerHTML = `
-      <div class="flex items-center gap-4">
-        <div class="flex flex-col gap-1">
-          <button type="button" class="p-1 text-gray-500 hover:text-gray-700 disabled:opacity-30" data-action="music-bulk-edit#moveUp">▲</button>
-          <button type="button" class="p-1 text-gray-500 hover:text-gray-700 disabled:opacity-30" data-action="music-bulk-edit#moveDown">▼</button>
-        </div>
-        
-        <input type="hidden" name="music_selections[][position]" value="${position}" data-music-bulk-edit-target="position">
-        
-        <div class="flex-1 grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
-            <input type="text" name="music_selections[][title]" value="${title}" class="text-field w-full" data-music-bulk-edit-target="titleField">
+      <div class="absolute top-4 right-4 flex flex-row-reverse items-center gap-2">
+        <span class="px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded status-badge">New</span>
+      </div>
+      
+      <div class="space-y-3">
+        <div class="flex items-start gap-4">
+          <div class="flex flex-col gap-1">
+            <button type="button" class="p-1 text-gray-500 hover:text-gray-700 disabled:opacity-30" data-action="music-bulk-edit#moveUp">▲</button>
+            <button type="button" class="p-1 text-gray-500 hover:text-gray-700 disabled:opacity-30" data-action="music-bulk-edit#moveDown">▼</button>
           </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Composer</label>
-            <input type="text" name="music_selections[][composer]" value="${composer}" class="text-field w-full" data-music-bulk-edit-target="composerField">
+          
+          <input type="hidden" name="music_selections[][position]" value="${position}" data-music-bulk-edit-target="position">
+          
+          <div class="flex-1 space-y-3 pr-24">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+              <input type="text" name="music_selections[][title]" value="${title}" class="text-field w-full" data-music-bulk-edit-target="titleField">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Composer</label>
+              <input type="text" name="music_selections[][composer]" value="${composer}" class="text-field w-full" data-music-bulk-edit-target="composerField">
+            </div>
           </div>
-        </div>
-        
-        <div class="flex items-center gap-2">
-          <span class="px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded status-badge">New</span>
-          <button type="button" data-action="music-bulk-edit#removeNewItem" class="btn-danger-sm">Remove</button>
+          
+          <div class="flex items-end gap-2 pt-8">
+            <button type="button" data-action="music-bulk-edit#removeNewItem" class="btn-danger-sm">Remove</button>
+          </div>
         </div>
       </div>
     `
@@ -286,7 +294,7 @@ export default class extends Controller {
     event.preventDefault()
     const item = event.target.closest('[data-music-bulk-edit-target="item"]')
     const position = item.dataset.slotPosition
-    const slotType = position === String(this.prescribedPositionValue) ? 'prescribed' : 'custom'
+    const slotType = item.dataset.prescribed === 'true' ? 'prescribed' : 'custom'
     
     const placeholder = document.createElement('div')
     placeholder.className = 'rounded-lg border-2 border-dashed border-gray-300'

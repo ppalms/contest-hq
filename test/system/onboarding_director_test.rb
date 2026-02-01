@@ -39,12 +39,23 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
     click_on "Continue"
     assert_text "Contest entry was successfully created"
 
-    click_on "Add Music Selection"
-    assert_text "Add Music Selection"
+    click_on "Add Music"
+
+    within all("[data-slot-type='custom']").first do
+      click_on "Add"
+    end
+
     fill_in "Title", with: "Symphony No. 5"
     fill_in "Composer", with: "Beethoven"
-    click_on "Save"
-    assert_text "Music selection added to contest entry"
+    click_on "Add to List"
+
+    assert_text "New"
+
+    find("input[value='Save']").click
+
+    assert_text "Music Selections"
+    assert_text "1/3 pieces selected"
+    assert_text "Symphony No. 5"
   end
 
   private

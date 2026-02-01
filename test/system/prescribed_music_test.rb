@@ -97,11 +97,9 @@ class PrescribedMusicTest < ApplicationSystemTestCase
     # Verify we're on the contest entry page
     assert_text ensemble.name
 
-    click_on "Add Music Selection"
+    click_on "Add Music"
 
-    assert_text "Add Music Selection"
-    assert_text "Prescribed Music"
-    assert_text "Custom Music"
+    click_on "Select Prescribed Music"
 
     # Search for prescribed music
     fill_in "search", with: "Rhapsody"
@@ -112,13 +110,15 @@ class PrescribedMusicTest < ApplicationSystemTestCase
     assert_text prescribed_music.composer
 
     # Click the prescribed music button to select it
-    within ".prescribed-music-list" do
-      click_on class: "prescribed-music-item", match: :first
-    end
+    find("button", text: /#{prescribed_music.title}/).click
 
-    assert_text "Prescribed music was added to your contest entry"
+    assert_text "Prescribed"
+    assert_text "New"
     assert_text prescribed_music.title
-    assert_text "Prescribed Music"
+
+    click_on "Save"
+
+    assert_text prescribed_music.title
   end
 
   test "season filter works on prescribed music index" do
@@ -156,7 +156,9 @@ class PrescribedMusicTest < ApplicationSystemTestCase
     end
 
     click_on "Continue"
-    click_on "Add Music Selection"
+    click_on "Add Music"
+
+    click_on "Select Prescribed Music"
 
     # Search with lowercase "rhapsody" should find "Rhapsody in Blue"
     fill_in "search", with: "rhapsody"
@@ -181,7 +183,9 @@ class PrescribedMusicTest < ApplicationSystemTestCase
     end
 
     click_on "Continue"
-    click_on "Add Music Selection"
+    click_on "Add Music"
+
+    click_on "Select Prescribed Music"
 
     # Empty search should return all prescribed music for school_class_b
     fill_in "search", with: ""

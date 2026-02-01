@@ -157,13 +157,11 @@ class PrescribedMusicMultiAccountTest < ApplicationSystemTestCase
     assert_text "Contest entry was successfully created"
     assert_text @customer_ensemble.name
 
-    # Step 5: Add one prescribed music selection
-    click_on "Add Music Selection"
+    # Step 5: Add music selections
+    click_on "Add Music"
 
-    # Verify we're on the add music page with both sections
-    assert_text "Add Music Selection"
-    assert_text "Prescribed Music"
-    assert_text "Custom Music"
+    # Add prescribed music
+    click_on "Select Prescribed Music"
 
     # Search for prescribed music
     fill_in "search", with: "Concerto"
@@ -175,60 +173,35 @@ class PrescribedMusicMultiAccountTest < ApplicationSystemTestCase
     assert_text "Customer Concerto No. 3"
 
     # Select Customer Concerto No. 2
-    within ".prescribed-music-list" do
-      # Find the button that contains "Customer Concerto No. 2" and click it
-      click_on class: "prescribed-music-item", text: "Customer Concerto No. 2", match: :first
-    end
+    find("button", text: /Customer Concerto No\. 2/).click
 
-    assert_text "Prescribed music was added to your contest entry"
+    assert_text "Prescribed"
+    assert_text "New"
     assert_text "Customer Concerto No. 2"
-    assert_text "Prescribed Music"
 
     # Step 6: Add first custom music selection
-    click_on "Add Music Selection"
-
-    # Enter custom music (skip prescribed music section)
-    within ".custom-music-section" do
-      fill_in "Title", with: "Custom Piece No. 1"
-      fill_in "Composer", with: "Custom Composer A"
-      click_on "Save"
+    within all("[data-slot-type='custom']").first do
+      click_on "Add"
     end
-
-    assert_text "Music selection added to contest entry"
-    assert_text "Custom Piece No. 1"
-    assert_text "Custom Composer A"
+    fill_in "Title", with: "Custom Piece No. 1"
+    fill_in "Composer", with: "Custom Composer A"
+    click_on "Add to List"
 
     # Step 7: Add second custom music selection
-    click_on "Add Music Selection"
-
-    within ".custom-music-section" do
-      fill_in "Title", with: "Custom Piece No. 2"
-      fill_in "Composer", with: "Custom Composer B"
-      click_on "Save"
+    within all("[data-slot-type='custom']").last do
+      click_on "Add"
     end
+    fill_in "Title", with: "Custom Piece No. 2"
+    fill_in "Composer", with: "Custom Composer B"
+    click_on "Add to List"
 
-    assert_text "Music selection added to contest entry"
-    assert_text "Custom Piece No. 2"
-    assert_text "Custom Composer B"
+    # Save all selections
+    click_on "Save"
 
     # Step 8: Verify all three selections are displayed
     assert_text "Customer Concerto No. 2"
     assert_text "Custom Piece No. 1"
     assert_text "Custom Piece No. 2"
-
-    # Verify prescribed music badge is only on the prescribed selection
-    within "li", text: "Customer Concerto No. 2" do
-      assert_text "Prescribed Music"
-    end
-
-    # Verify custom selections don't have the prescribed badge
-    within "li", text: "Custom Piece No. 1" do
-      assert_no_text "Prescribed Music"
-    end
-
-    within "li", text: "Custom Piece No. 2" do
-      assert_no_text "Prescribed Music"
-    end
 
     # Step 9: Verify contest entry is successfully registered
     assert_text @customer_ensemble.name

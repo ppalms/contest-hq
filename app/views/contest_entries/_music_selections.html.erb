@@ -1,18 +1,10 @@
 <% content_for :title, "Music Selections" %>
 <%= turbo_frame_tag "music_selections" do %>
   <div class="pt-8 gap-4">
-    <div class="flex justify-between items-center mb-4">
-      <div>
-        <h2>Music Selections</h2>
-        <% total_required = MusicSelectionRequirements::TOTAL_REQUIRED_COUNT %>
-        <% if @contest_entry.music_complete? %>
-          <p class="text-sm text-green-600 font-medium mt-1">✓ Complete (<%= total_required %>/<%= total_required %> pieces selected)</p>
-        <% else %>
-          <p class="text-sm text-gray-600 mt-1">
-            <%= @contest_entry.music_selections.count %>/<%= total_required %> pieces selected
-          </p>
-        <% end %>
-      </div>
+  <div class="flex justify-between items-center mb-4">
+    <div>
+      <h2>Music Selections</h2>
+    </div>
       <% if current_user.contest_entries.include?(@contest_entry) %>
         <div>
           <%= link_to "Edit",
@@ -36,12 +28,10 @@
         <p class="text-gray-600 mb-4">No music selections yet</p>
         <% if current_user.contest_entries.include?(@contest_entry) %>
           <div class="flex gap-2 justify-center">
-            <%= link_to "Select Prescribed Music",
-                        select_prescribed_contest_entry_selections_path(entry_id: @contest_entry.id),
-                        class: "btn-primary-sm" %>
-            <%= link_to "Add Custom Music",
-                        select_custom_contest_entry_selections_path(entry_id: @contest_entry.id, slot: 1),
-                        class: "btn-secondary-sm" %>
+            <%= link_to "Add Music",
+                        bulk_edit_contest_entry_selections_path(entry_id: @contest_entry.id),
+                        class: "btn-primary-sm",
+                        data: { turbo_frame: "music_selections" } %>
           </div>
         <% end %>
       </div>

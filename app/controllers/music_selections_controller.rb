@@ -12,6 +12,7 @@ class MusicSelectionsController < ApplicationController
   end
 
   def select_prescribed
+    @position = params[:position]&.to_i || 1
     @prescribed_music = []
     @current_prescribed_selection = @contest_entry.prescribed_selection
 
@@ -41,6 +42,7 @@ class MusicSelectionsController < ApplicationController
 
   def add_prescribed
     @prescribed_music = PrescribedMusic.find(params[:prescribed_music_id])
+    @position = params[:position]&.to_i || 1
 
     # Validate that prescribed music matches contest requirements
     unless prescribed_music_matches_contest?(@prescribed_music)
@@ -117,7 +119,8 @@ class MusicSelectionsController < ApplicationController
 
   def bulk_edit_prescribed_slot
     prescribed = @contest_entry.prescribed_selection
-    @slot = { type: :prescribed, music_selection: prescribed, position: MusicSelectionRequirements::PRESCRIBED_POSITION }
+    position = prescribed&.position || 1
+    @slot = { type: :prescribed, music_selection: prescribed, position: position }
 
     render partial: "music_selections/prescribed_slot",
            layout: false,
@@ -226,26 +229,20 @@ class MusicSelectionsController < ApplicationController
   end
 
   def build_slots
-    prescribed = @contest_entry.prescribed_selection
-    custom_selections = @contest_entry.custom_selections
-
+    existing_selections = @contest_entry.music_selections.to_a
     slots = []
 
-    # Add prescribed slot (always position 1)
-    slots << {
-      type: :prescribed,
-      music_selection: prescribed,
-      position: MusicSelectionRequirements::PRESCRIBED_POSITION
-    }
+    (1..MusicSelectionRequirements::TOTAL_REQUIRED_COUNT).each do |position|
+      music_selection = existing_selections.find { |ms| ms.position == position }
+      type = MusicSelectionRequirements.slot_type_for(position, existing_selections)
 
-    # Add custom slots (positions starting from FIRST_CUSTOM_POSITION)
-    MusicSelectionRequirements::REQUIRED_CUSTOM_COUNT.times do |i|
       slots << {
-        type: :custom,
-        music_selection: custom_selections[i],
-        position: MusicSelectionRequirements::FIRST_CUSTOM_POSITION + i
+        type: type,
+        music_selection: music_selection,
+        position: position
       }
     end
+
     slots
   end
 
@@ -310,7 +307,7 @@ class MusicSelectionsController < ApplicationController
 
       if restored_data
         is_deleted = @restored_deletions&.include?(restored_data[:id])
-        type = MusicSelectionRequirements.prescribed_position?(position) ? :prescribed : :custom
+        type = restored_data[:prescribed_music_id].present? ? :prescribed : :custom
 
         # For unsaved prescribed selections, we need to pass the PrescribedMusic object
         if type == :prescribed && restored_data[:id].blank? && restored_data[:prescribed_music_id].present?
@@ -332,7 +329,8 @@ class MusicSelectionsController < ApplicationController
           }
         end
       else
-        type = MusicSelectionRequirements.prescribed_position?(position) ? :prescribed : :custom
+        existing_selections = @contest_entry.music_selections.to_a
+        type = MusicSelectionRequirements.slot_type_for(position, existing_selections)
         slots << {
           type: type,
           position: position,

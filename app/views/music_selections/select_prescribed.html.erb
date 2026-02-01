@@ -5,7 +5,8 @@
       <p class="text-sm text-gray-600">Choose from the <%= @contest_entry.large_ensemble.school.school_class.name %> prescribed list</p>
     </div>
 
-    <%= form_with(url: select_prescribed_contest_entry_selections_path(entry_id: @contest_entry.id), method: :get, class: "mb-4", data: { turbo_frame: "music_slot_prescribed" }) do |f| %>
+    <%= form_with(url: select_prescribed_contest_entry_selections_path(entry_id: @contest_entry.id, position: @position), method: :get, class: "mb-4", data: { turbo_frame: "music_slot_prescribed" }) do |f| %>
+      <%= f.hidden_field :position, value: @position %>
       <div class="flex gap-2">
         <%= f.text_field :search, value: params[:search], placeholder: "Search by title or composer...", class: "text-field flex-1", autofocus: true %>
         <%= f.submit "Search", class: "btn-primary" %>
@@ -17,7 +18,7 @@
         <% if @prescribed_music.any? %>
           <% @prescribed_music.each do |music| %>
             <% is_selected = @current_prescribed_selection&.prescribed_music_id == music.id %>
-            <%= button_to add_prescribed_contest_entry_selections_path(entry_id: @contest_entry.id, prescribed_music_id: music.id),
+            <%= button_to add_prescribed_contest_entry_selections_path(entry_id: @contest_entry.id, prescribed_music_id: music.id, position: @position),
                           method: :post,
                           class: "w-full text-left p-3 rounded border #{is_selected ? 'border-green-500 bg-green-50' : 'border-gray-300 bg-white hover:bg-gray-50'}" do %>
               <div class="font-medium text-gray-900"><%= music.title %></div>

@@ -23,6 +23,7 @@ contest_a_school_a_ensemble_a_music_c:
 contest_a_school_a_ensemble_b_music_a:
   title: Symphony No. 25
   composer: Mozart
+  position: 1
   contest_entry: contest_a_school_a_ensemble_b
   account: demo
 
