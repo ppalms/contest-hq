@@ -68,7 +68,7 @@ group :test do
   gem "selenium-webdriver"
 
   # Pin to Minitest 5.x for Rails 8.1 compatibility
-  gem "minitest", "~> 5.25"
+  gem "minitest", "~> 6.0"
 end
 
 gem "authentication-zero", "~> 4.0"
