@@ -21,6 +21,15 @@ proxy:
   ssl: true
   host: contesthq.app
 
+# Configure health check for container readiness
+# Increased timeout to allow for database migrations during deployment
+healthcheck:
+  path: /up
+  port: 80
+  max_attempts: 15
+  interval: 10s
+  timeout: 150s
+
 # Credentials for your image host.
 registry:
   # Specify the registry server, if you're not using Docker Hub
