@@ -1,0 +1,6 @@
+<%
+  @show_copy_prompt = false
+%>
+<%= turbo_stream.replace "music_selections" do %>
+  <%= render "contest_entries/music_selections" %>
+<% end %>

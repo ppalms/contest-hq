@@ -3,7 +3,7 @@ ruby "3.3.5"
 
 # Use main development branch of Rails
 # gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "8.1.1"
+gem "rails", "8.1.2"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use sqlite3 as the database for Active Record
@@ -66,6 +66,9 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+
+  # Pin to Minitest 5.x for Rails 8.1 compatibility
+  gem "minitest", "~> 5.25"
 end
 
 gem "authentication-zero", "~> 4.0"

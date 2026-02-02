@@ -1,0 +1,52 @@
+<% content_for :title, "Prescribed Music" %>
+<div class="py-8 space-y-4">
+  <div class="flex justify-between">
+    <h1>Prescribed Music</h1>
+
+    <% if current_user.account_admin? %>
+      <%= link_to "Add Prescribed Music", new_prescribed_music_path, class: "btn-primary" %>
+    <% end %>
+  </div>
+
+  <!-- Season Filter -->
+  <div class="bg-white border border-neutral-200 rounded-md p-4 shadow-2xs">
+    <%= form_with url: prescribed_music_index_path, method: :get, class: "flex flex-wrap items-center gap-4", local: true do |form| %>
+      <div class="flex items-center gap-2">
+        <%= form.label :season_id, "Season:", class: "font-medium" %>
+        <%= form.collection_select :season_id,
+                               @seasons,
+                               :id,
+                               :display_name,
+                               { selected: @selected_season_id },
+                               {
+                                 class: "text-field border-gray-300 rounded-md w-48",
+                                 onchange: "this.form.submit();",
+                               } %>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <%= form.label :school_class_id, "School Class:", class: "font-medium" %>
+        <%= form.collection_select :school_class_id,
+                               @school_classes,
+                               :id,
+                               :name,
+                               { include_blank: "All Classes", selected: params[:school_class_id] },
+                               {
+                                 class: "text-field border-gray-300 rounded-md w-48",
+                                 onchange: "this.form.submit();",
+                               } %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Prescribed Music List -->
+  <div class="rounded-md bg-white border border-neutral-200 shadow-2xs">
+    <% if @prescribed_music.empty? %>
+      <p class="p-4 text-center">No prescribed music found for this season.</p>
+    <% else %>
+      <%= render "list", prescribed_music: @prescribed_music %>
+    <% end %>
+  </div>
+
+  <%== @pagy.series_nav if @pagy.pages > 1 %>
+</div>

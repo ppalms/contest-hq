@@ -1,0 +1,133 @@
+<%
+  # Handle both saved MusicSelection and unsaved PrescribedMusic
+  music_selection = slot[:music_selection]
+  prescribed_music = slot[:prescribed_music]
+  has_data = music_selection.present? || prescribed_music.present?
+  
+  # Get display data from either source
+  if music_selection
+    title = music_selection.title
+    composer = music_selection.composer
+    record_id = music_selection.id
+    prescribed_music_id = music_selection.prescribed_music_id
+  elsif prescribed_music
+    title = prescribed_music.title
+    composer = prescribed_music.composer
+    record_id = nil  # No saved record yet
+    prescribed_music_id = prescribed_music.id
+  end
+%>
+  
+<% if has_data %>
+  <%# Filled Prescribed Slot %>
+  <div class="relative p-4 mb-4 bg-white rounded-lg border border-gray-300 <%= 'opacity-60 bg-gray-100' if slot[:is_deleted] %> <%= 'bg-green-50 border-green-300' if slot[:is_new] %>"
+       data-music-bulk-edit-target="item"
+       data-slot-position="<%= slot[:position] %>"
+       data-prescribed="true">
+
+    <%# Hidden Fields %>
+    <%= hidden_field_tag "music_selections[][id]", record_id if record_id.present? %>
+    <%= hidden_field_tag "music_selections[][prescribed_music_id]", prescribed_music_id %>
+    <%= hidden_field_tag "music_selections[][position]", slot[:position],
+                         data: { music_bulk_edit_target: "position" } %>
+    <%= hidden_field_tag "music_selections[][_destroy]", "0",
+                         data: { music_bulk_edit_target: "deleteField" } %>
+    <%= hidden_field_tag "music_selections[][title]", title %>
+    <%= hidden_field_tag "music_selections[][composer]", composer %>
+
+    <%# Badges - Top Right (flex-row-reverse for easy management) %>
+    <div class="absolute top-4 right-4 flex flex-row-reverse items-center gap-2">
+      <% if slot[:is_deleted] %>
+        <span class="px-2 py-1 text-xs font-medium text-red-800 bg-red-100 rounded status-badge deleted-badge">
+          Deleted
+        </span>
+      <% end %>
+      <% if slot[:is_new] %>
+        <span class="px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded status-badge">
+          New
+        </span>
+      <% end %>
+      <span class="px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded status-badge">
+        Prescribed
+      </span>
+    </div>
+
+    <div class="space-y-3">
+      <%# Main Content Row %>
+      <div class="flex items-start gap-4">
+        <%# Up/Down Arrows %>
+        <div class="flex flex-col gap-1">
+          <button type="button"
+                  class="p-1 text-gray-500 hover:text-gray-700 disabled:opacity-30"
+                  data-action="music-bulk-edit#moveUp">
+            ▲
+          </button>
+          <button type="button"
+                  class="p-1 text-gray-500 hover:text-gray-700 disabled:opacity-30"
+                  data-action="music-bulk-edit#moveDown">
+            ▼
+          </button>
+        </div>
+
+<%= turbo_frame_tag "music_slot_prescribed", class: "flex-1 flex items-start gap-4" do %>
+          <%# Title/Composer Column (Stacked, Full Width) %>
+          <div class="flex-1 space-y-3 pr-24">
+            <div>
+              <%= label_tag nil, "Title", class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <div class="text-field w-full bg-gray-100 cursor-not-allowed"><%= title %></div>
+            </div>
+            <div>
+              <%= label_tag nil, "Composer", class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <div class="text-field w-full bg-gray-100 cursor-not-allowed"><%= composer %></div>
+            </div>
+          </div>
+
+          <%# Action Buttons Column %>
+          <div class="flex items-end gap-2 pt-8">
+            <%= link_to "Change",
+                        select_prescribed_contest_entry_selections_path(
+                          entry_id: contest_entry.id,
+                          position: slot[:position]
+                        ),
+                        class: "btn-secondary-sm",
+                        data: { turbo_frame: "music_slot_prescribed" } %>
+            <button type="button"
+                    data-action="music-bulk-edit#markDeleted"
+                    class="btn-danger-sm delete-btn">
+              Delete
+            </button>
+            <button type="button"
+                    data-action="music-bulk-edit#undoDelete"
+                    class="btn-secondary-sm undo-btn hidden">
+              Undo
+            </button>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+<% else %>
+  <%# Empty Prescribed Slot %>
+  <div class="mb-4 rounded-lg border-2 border-dashed border-gray-300"
+       data-slot
+       data-slot-type="prescribed"
+       data-slot-position="<%= slot[:position] %>">
+    <%= turbo_frame_tag "music_slot_prescribed" do %>
+      <%# Placeholder (shown by default) %>
+      <div class="placeholder p-6 text-center">
+        <span class="inline-block mb-2 px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded">
+          Prescribed
+        </span>
+        <p class="text-gray-500 mb-3">Empty slot - required for this entry</p>
+        <%= link_to "Select Prescribed Music",
+                    select_prescribed_contest_entry_selections_path(
+                      entry_id: contest_entry.id,
+                      position: slot[:position]
+                    ),
+                    class: "btn-primary-sm",
+                    data: { turbo_frame: "music_slot_prescribed" } %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

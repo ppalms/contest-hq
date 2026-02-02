@@ -32,7 +32,7 @@ class ContestEntryPreferencesTest < ApplicationSystemTestCase
     assert_text "Preferred Performance Time"
     assert_text "10:00 AM - 3:00 PM"
 
-    click_on "Edit"
+    click_on "Edit", match: :first
 
     # Update preferences
     fill_in "Earliest preferred time", with: "11:00"

@@ -1,30 +1,72 @@
-<%= form_with(model: music_selection, url: music_selection.new_record? ? contest_entry_selections_path : contest_entry_selection_path(music_selection), class: "wide-form") do |form| %>
-  <%= form.hidden_field :contest_entry_id, value: @contest_entry.id %>
-
-  <div class="sm:col-span-2">
-    <%= form.label :title %>
-    <%= form.text_field :title, class: "text-field", autofocus: true %>
-  </div>
-
-  <div class="sm:col-span-2">
-    <%= form.label :composer %>
-    <%= form.text_field :composer, class: "text-field", autofocus: true %>
-  </div>
-
-  <div class="form-button-container">
-    <%= form.submit "Save", class: "btn-primary" %>
-    <%= link_to "Cancel",
-    contest_entry_path(
-      contest_id: @contest_entry.contest.id,
-      id: @contest_entry.id,
-    ),
-    class: "btn-secondary",
-    role: "button" %>
-  </div>
-
-  <% if music_selection.errors.any? %>
-    <div class="pt-2 sm:col-span-2">
-      <%= render "layouts/error_messages", errors: music_selection.errors %>
+<div class="prescribed-music-section mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+  <h3 class="text-lg font-semibold mb-2">Prescribed Music</h3>
+  <p class="text-sm text-gray-600 mb-4">Select from the approved music list for <%= @contest_entry.large_ensemble.school.school_class.name %></p>
+  
+  <%= form_with(url: new_contest_entry_selection_path(entry_id: @contest_entry.id), method: :get, class: "mb-4") do |f| %>
+    <div class="flex gap-2">
+      <%= f.text_field :search, value: params[:search], placeholder: "Search by title or composer...", class: "text-field flex-1" %>
+      <%= f.submit "Search", class: "btn-primary" %>
     </div>
   <% end %>
-<% end %>
+  
+  <% if params.key?(:search) %>
+    <% if @prescribed_music.any? %>
+      <div class="prescribed-music-list space-y-2">
+        <% @prescribed_music.each do |music| %>
+          <% is_selected = @current_prescribed_selection&.prescribed_music_id == music.id %>
+          <%= button_to contest_entry_add_prescribed_music_path(@contest_entry.contest.id, @contest_entry.id, prescribed_music_id: music.id),
+                        method: :post,
+                        class: "prescribed-music-item w-full text-left p-3 rounded border #{is_selected ? 'border-green-500 bg-green-50' : 'border-gray-300 bg-white hover:bg-gray-50'}" do %>
+            <div class="font-medium"><%= music.title %></div>
+            <div class="text-sm text-gray-600"><%= music.composer %></div>
+            <% if is_selected %>
+              <span class="inline-block mt-1 px-2 py-1 text-xs font-semibold text-green-800 bg-green-200 rounded">Currently Selected</span>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-sm text-gray-600 italic">No prescribed music found<%= " matching \"#{params[:search]}\"" if params[:search].present? %></p>
+    <% end %>
+  <% else %>
+    <p class="text-sm text-gray-500 italic">Use the search above to find prescribed music</p>
+  <% end %>
+</div>
+
+<div class="text-center text-gray-400 font-semibold my-6">— OR —</div>
+
+<div class="custom-music-section">
+  <h3 class="text-lg font-semibold mb-2">Custom Music</h3>
+  <p class="text-sm text-gray-600 mb-4">Enter a piece not on the prescribed list</p>
+  
+  <%= form_with(model: music_selection, url: music_selection.new_record? ? contest_entry_selections_path : contest_entry_selection_path(music_selection), class: "wide-form") do |form| %>
+    <%= form.hidden_field :contest_entry_id, value: @contest_entry.id %>
+
+    <div class="sm:col-span-2">
+      <%= form.label :title %>
+      <%= form.text_field :title, class: "text-field" %>
+    </div>
+
+    <div class="sm:col-span-2">
+      <%= form.label :composer %>
+      <%= form.text_field :composer, class: "text-field" %>
+    </div>
+
+    <div class="form-button-container">
+      <%= form.submit "Save", class: "btn-primary" %>
+      <%= link_to "Cancel",
+      contest_entry_path(
+        contest_id: @contest_entry.contest.id,
+        id: @contest_entry.id,
+      ),
+      class: "btn-secondary",
+      role: "button" %>
+    </div>
+
+    <% if music_selection.errors.any? %>
+      <div class="pt-2 sm:col-span-2">
+        <%= render "layouts/error_messages", errors: music_selection.errors %>
+      </div>
+    <% end %>
+  <% end %>
+</div>

@@ -1,5 +1,5 @@
 class Organizations::SchoolsController < ApplicationController
-  include Pagy::Backend
+  include Pagy::Method
 
   before_action :set_school, only: [ :show, :edit, :update, :destroy ]
   before_action :set_breadcrumbs

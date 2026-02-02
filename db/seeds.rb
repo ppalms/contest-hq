@@ -11,11 +11,11 @@
 Account.find_or_create_by!(name: "Contest HQ")
 
 roles = [
-  { name: 'SysAdmin' },
-  { name: 'AccountAdmin' },
-  { name: 'Director' },
-  { name: 'Manager' },
-  { name: 'Judge' }
+  { name: 'SysAdmin', display_name: 'System Admin' },
+  { name: 'AccountAdmin', display_name: 'Account Admin' },
+  { name: 'Director', display_name: 'Director' },
+  { name: 'Manager', display_name: 'Manager' },
+  { name: 'Judge', display_name: 'Judge' }
 ]
 
 roles.each do |role|
