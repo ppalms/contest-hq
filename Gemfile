@@ -75,3 +75,4 @@ gem "authentication-zero", "~> 4.0"
 gem "pagy", "~> 43.2"
 
 gem "aws-actionmailer-ses", "~> 1.0"
+gem "aws-sdk-s3", require: false
