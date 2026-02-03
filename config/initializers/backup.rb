@@ -3,7 +3,7 @@ require "aws-sdk-s3"
 Rails.application.configure do
   config.backup = ActiveSupport::OrderedOptions.new
 
-  if Rails.env.production?
+  if Rails.env.production? && Rails.application.credentials.backup.present?
     backup_config = Rails.application.credentials.backup
 
     config.backup.s3_client = Aws::S3::Client.new(
