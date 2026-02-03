@@ -1,0 +1,18 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'contest-hq-production'
+    environment: 'production'
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'contest-hq'
+    static_configs:
+      - targets: ['<HETZNER_IP>:9394']
+        labels:
+          app: 'contest-hq'
+          environment: 'production'

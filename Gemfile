@@ -76,3 +76,9 @@ gem "pagy", "~> 43.2"
 
 gem "aws-actionmailer-ses", "~> 1.0"
 gem "aws-sdk-s3", require: false
+
+# Prometheus metrics
+gem "yabeda"
+gem "yabeda-rails"
+gem "yabeda-puma-plugin"
+gem "yabeda-prometheus-mmap"
