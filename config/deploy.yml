@@ -7,7 +7,7 @@ image: ppalms/contest_hq
 # Deploy to these servers.
 servers:
   web:
-    - 161.35.122.13
+    - 157.180.79.212
   # job:
   #   hosts:
   #     - 192.168.0.1
@@ -108,8 +108,9 @@ builder:
   #   - GITHUB_TOKEN
   #   - RAILS_MASTER_KEY
 # Use a different ssh user than root
-# ssh:
-#   user: app
+ssh:
+  user: deploy
+  keys: ["~/.ssh/contest_hq_do"]
 
 # Accessory services not needed with SQLite
 #   db:
