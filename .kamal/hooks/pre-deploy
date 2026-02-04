@@ -9,6 +9,13 @@ if [ "$KAMAL_COMMAND" = "rollback" ]; then
   exit 0
 fi
 
+# Skip migrations during initial setup - no container exists yet
+# Migrations will run automatically when the container first boots
+if [ "$KAMAL_COMMAND" = "setup" ]; then
+  echo "Skipping migrations during initial setup - will run on first boot"
+  exit 0
+fi
+
 kamal app exec --primary --reuse 'bin/rails db:prepare'
 
 echo "✅ Database migrations completed successfully"
