@@ -7,7 +7,7 @@ image: ppalms/contest_hq
 # Deploy to these servers.
 servers:
   web:
-    - 157.180.79.212
+    - 161.35.122.13
   # job:
   #   hosts:
   #     - 192.168.0.1
