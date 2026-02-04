@@ -38,8 +38,8 @@ plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"]
 
 # Expose Prometheus metrics on port 9394
 activate_control_app
-plugin :yabeda
-plugin :yabeda_prometheus
+# plugin :yabeda
+# plugin :yabeda_prometheus
 
 # Specify the PID file. Defaults to tmp/pids/server.pid in development.
 # In other environments, only set the PID file if requested.
