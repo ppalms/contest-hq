@@ -73,13 +73,22 @@ class ScheduleGenerationService
 
     Rails.logger.info "Cleaning up existing schedule: #{days_count} days, #{blocks_count} blocks"
 
-    @schedule.schedule_days.destroy_all
+    # Delete blocks first to avoid foreign key issues
+    day_ids = @schedule.schedule_days.pluck(:id)
+    ScheduleBlock.where(schedule_day_id: day_ids).delete_all
+
+    # Then delete days
+    @schedule.schedule_days.delete_all
     @schedule.reload
 
     remaining_days = @schedule.schedule_days.count
-    remaining_blocks = ScheduleBlock.joins(:schedule_day).where(schedule_days: { schedule_id: @schedule.id }).count
+    remaining_blocks = ScheduleBlock.where(schedule_day_id: day_ids).count
 
     Rails.logger.info "After cleanup: #{remaining_days} days, #{remaining_blocks} blocks remaining"
+
+    if remaining_days > 0 || remaining_blocks > 0
+      raise GenerationError, "Failed to clean up existing schedule. #{remaining_days} days and #{remaining_blocks} blocks still remain"
+    end
   end
 
   def initialize_schedule_days
