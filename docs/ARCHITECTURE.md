@@ -191,10 +191,10 @@ aws_ses:
 
 **Contains:**
 ```bash
-GRAFANA_ADMIN_PASSWORD=K7mP9xR2vN8qL4wE6tY3sA1zF5hJ0uC9
+GRAFANA_ADMIN_PASSWORD=<stored in 1Password>
 ```
 
-**Master Copy:** 1Password
+**Master Copy:** 1Password (search for "Grafana Admin Password")
 
 **Why separate?**
 - Monitoring stack runs via Docker Compose (not Kamal)
