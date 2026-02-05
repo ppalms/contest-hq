@@ -12,15 +12,15 @@ class BackupService
 
     Rails.logger.info "Starting backup at #{timestamp}"
 
-    backup_database
+    backup_all_databases
     upload_to_s3
-    cleanup_local_backup
+    cleanup_local_backups
 
-    Rails.logger.info "Backup completed successfully: #{backup_key}"
+    Rails.logger.info "Backup completed successfully"
   rescue => e
     Rails.logger.error "Backup failed: #{e.message}"
     Rails.logger.error e.backtrace.join("\n")
-    cleanup_local_backup
+    cleanup_local_backups
     raise
   end
 
@@ -40,47 +40,72 @@ class BackupService
     true
   end
 
-  def backup_database
-    Rails.logger.info "Creating database backup: #{local_backup_path}"
-
-    ActiveRecord::Base.connection.execute(
-      "VACUUM INTO '#{local_backup_path}'"
-    )
-
-    Rails.logger.info "Database backup created: #{File.size(local_backup_path)} bytes"
+  def backup_all_databases
+    databases.each do |db_name, db_config|
+      backup_database(db_name, db_config)
+    end
   end
 
-  def upload_to_s3
-    Rails.logger.info "Uploading to S3: #{backup_key}"
+  def backup_database(db_name, db_config)
+    db_path = Rails.root.join(db_config["database"])
+    backup_path = local_backup_path(db_name)
 
-    File.open(local_backup_path, "rb") do |file|
-      s3_client.put_object(
-        bucket: s3_bucket,
-        key: backup_key,
-        body: file,
-        metadata: {
-          "timestamp" => timestamp,
-          "size" => File.size(local_backup_path).to_s,
-          "rails_env" => Rails.env
-        }
+    Rails.logger.info "Backing up #{db_name} database: #{db_path}"
+
+    # Connect to the specific database and create backup
+    ActiveRecord::Base.connected_to(role: db_name.to_sym) do
+      ActiveRecord::Base.connection.execute(
+        "VACUUM INTO '#{backup_path}'"
       )
     end
 
-    Rails.logger.info "Upload completed: #{backup_key}"
+    Rails.logger.info "#{db_name} backup created: #{File.size(backup_path)} bytes"
   end
 
-  def cleanup_local_backup
-    return unless File.exist?(local_backup_path)
+  def upload_to_s3
+    databases.each do |db_name, _db_config|
+      backup_path = local_backup_path(db_name)
+      s3_key = backup_key(db_name)
 
-    File.delete(local_backup_path)
-    Rails.logger.info "Local backup file deleted: #{local_backup_path}"
+      Rails.logger.info "Uploading #{db_name} to S3: #{s3_key}"
+
+      File.open(backup_path, "rb") do |file|
+        s3_client.put_object(
+          bucket: s3_bucket,
+          key: s3_key,
+          body: file,
+          metadata: {
+            "timestamp" => timestamp,
+            "database" => db_name,
+            "size" => File.size(backup_path).to_s,
+            "rails_env" => Rails.env
+          }
+        )
+      end
+
+      Rails.logger.info "Upload completed: #{s3_key}"
+    end
   end
 
-  def local_backup_path
-    @local_backup_path ||= Rails.root.join("tmp", "backup_#{timestamp}.sqlite3")
+  def cleanup_local_backups
+    databases.each do |db_name, _db_config|
+      backup_path = local_backup_path(db_name)
+      next unless File.exist?(backup_path)
+
+      File.delete(backup_path)
+      Rails.logger.info "Local backup file deleted: #{backup_path}"
+    end
   end
 
-  def backup_key
-    @backup_key ||= "backups/#{timestamp}/production.sqlite3"
+  def databases
+    @databases ||= Rails.configuration.database_configuration[Rails.env]
+  end
+
+  def local_backup_path(db_name)
+    Rails.root.join("tmp", "backup_#{timestamp}_#{db_name}.sqlite3")
+  end
+
+  def backup_key(db_name)
+    "backups/#{timestamp}/#{db_name}.sqlite3"
   end
 end
