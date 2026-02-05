@@ -37,9 +37,7 @@
 /app/assets/builds/*
 !/app/assets/builds/.keep
 
-/config/credentials/development.key
-
-/config/credentials/production.key
+/config/*.key
 
 # Agent memory files (session-specific)
 TODO.md
