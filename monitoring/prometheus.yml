@@ -11,12 +11,40 @@ scrape_configs:
       - targets: ['localhost:9090']
 
   - job_name: 'contest-hq'
-    # Scrape Rails app container directly via Docker network
-    # Note: Prometheus container must be connected to 'kamal' network
-    # IP may change when container is recreated - check with:
-    #   docker inspect $(docker ps --filter 'label=role=web' --format '{{.Names}}') --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'
-    static_configs:
-      - targets: ['172.18.0.6:9394']
-        labels:
-          app: 'contest-hq'
-          environment: 'production'
+    # Use Docker service discovery to automatically find Rails containers
+    # This eliminates the need to update IPs when containers are recreated
+    # Prometheus container must be connected to 'kamal' network and have
+    # access to Docker socket (/var/run/docker.sock)
+    docker_sd_configs:
+      - host: unix:///var/run/docker.sock
+        refresh_interval: 30s
+    
+    relabel_configs:
+      # Only keep containers with role=web label AND service=contest_hq label
+      - source_labels: [__meta_docker_container_label_role]
+        regex: web
+        action: keep
+      
+      - source_labels: [__meta_docker_container_label_service]
+        regex: contest_hq
+        action: keep
+      
+      # Replace the default port with the metrics port (9394)
+      - source_labels: [__address__]
+        regex: '([^:]+)(?::\d+)?'
+        replacement: '$1:9394'
+        target_label: __address__
+      
+      # Add container name as a label
+      - source_labels: [__meta_docker_container_name]
+        target_label: container_name
+      
+      # Add service label
+      - source_labels: [__meta_docker_container_label_service]
+        target_label: service
+      
+      # Add custom labels
+      - target_label: app
+        replacement: contest-hq
+      - target_label: environment
+        replacement: production

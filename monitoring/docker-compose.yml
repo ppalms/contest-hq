@@ -7,6 +7,7 @@ services:
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus-data:/prometheus
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -18,6 +19,7 @@ services:
     restart: unless-stopped
     networks:
       - monitoring
+    user: "0:0"  # Run as root to access Docker socket
 
   grafana:
     image: grafana/grafana:latest
