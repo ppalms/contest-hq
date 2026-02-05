@@ -13,8 +13,10 @@ scrape_configs:
   - job_name: 'contest-hq'
     # Scrape Rails app container directly via Docker network
     # Note: Prometheus container must be connected to 'kamal' network
+    # IP may change when container is recreated - check with:
+    #   docker inspect $(docker ps --filter 'label=role=web' --format '{{.Names}}') --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'
     static_configs:
-      - targets: ['172.18.0.4:9394']
+      - targets: ['172.18.0.6:9394']
         labels:
           app: 'contest-hq'
           environment: 'production'
