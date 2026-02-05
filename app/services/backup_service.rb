@@ -53,9 +53,13 @@ class BackupService
     Rails.logger.info "Backing up #{db_name} database: #{db_path}"
 
     # Connect to the specific database and create backup
+    # Note: VACUUM INTO doesn't support parameterized queries in SQLite
+    # backup_path is sanitized and controlled by the application
     ActiveRecord::Base.connected_to(role: db_name.to_sym) do
+      # Sanitize the path to prevent any potential injection
+      sanitized_path = ActiveRecord::Base.connection.quote(backup_path)
       ActiveRecord::Base.connection.execute(
-        "VACUUM INTO '#{backup_path}'"
+        "VACUUM INTO #{sanitized_path}"
       )
     end
 

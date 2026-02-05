@@ -2,7 +2,7 @@
 
 ## Server Details
 
-- **Provider:** Hetzner Cloud
+- **Provider:** <CLOUD_PROVIDER> Cloud
 - **Type:** CX32 (4 vCPU, 8GB RAM)
 - **Location:** Falkenstein (fsn1)
 - **IP:** Update after provisioning
@@ -144,7 +144,7 @@ kamal app exec -i 'bin/rails runner "puts SolidQueue::FailedExecution.last(10).m
 ## Emergency Contacts
 
 - **Primary:** [Your contact info]
-- **Hetzner Support:** https://console.hetzner.cloud/support
+- **<CLOUD_PROVIDER> Support:** https://console.hetzner.cloud/support
 - **DNS Provider:** [Your DNS provider]
 
 ## Important Files
@@ -163,7 +163,7 @@ kamal app exec -i 'bin/rails runner "puts SolidQueue::FailedExecution.last(10).m
 
 **Rails Application Secrets:**
 - Location: `config/credentials/production.yml.enc`
-- Contains: Database, AWS SES, Hetzner Object Storage credentials
+- Contains: Database, AWS SES, <CLOUD_PROVIDER> Object Storage credentials
 - Access: `bin/rails credentials:show --environment production`
 
 **Monitoring Stack Secrets:**
@@ -186,7 +186,7 @@ To be configured:
 - **Daily:** 3am UTC (automated)
 - **Cleanup:** Sundays 4am UTC (automated)
 - **Retention:** 30 days
-- **Location:** Hetzner Object Storage
+- **Location:** <CLOUD_PROVIDER> Object Storage
 
 ## Maintenance Windows
 
