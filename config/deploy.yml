@@ -7,7 +7,7 @@ image: ppalms/contest_hq
 # Deploy to these servers.
 servers:
   web:
-    - 161.35.122.13
+    - 157.180.79.212
   # job:
   #   hosts:
   #     - 192.168.0.1
@@ -75,6 +75,53 @@ aliases:
 volumes:
   - "contest_hq_storage:/rails/storage"
 
+# Monitoring stack
+# Note: OTel collector removed due to high CPU usage (106% CPU, 2.18GB RAM)
+# Prometheus now scrapes Rails app directly via Docker network
+# See monitoring/prometheus.yml for configuration
+accessories:
+  prometheus:
+    image: prom/prometheus:latest
+    hosts:
+      - 157.180.79.212
+    files:
+      - monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    cmd: >
+      --config.file=/etc/prometheus/prometheus.yml
+      --storage.tsdb.path=/prometheus
+      --storage.tsdb.retention.time=30d
+      --web.console.libraries=/usr/share/prometheus/console_libraries
+      --web.console.templates=/usr/share/prometheus/consoles
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    directories:
+      - prometheus-data:/prometheus
+    options:
+      user: "0:0"
+  
+  grafana:
+    image: grafana/grafana:latest
+    hosts:
+      - 157.180.79.212
+    port: 3000
+    env:
+      clear:
+        GF_SECURITY_ADMIN_USER: admin
+        GF_SERVER_DOMAIN: metrics.contesthq.app
+        GF_SERVER_ROOT_URL: https://metrics.contesthq.app
+        GF_ANALYTICS_REPORTING_ENABLED: "false"
+        GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      secret:
+        - GRAFANA_ADMIN_PASSWORD
+    files:
+      - monitoring/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+    volumes:
+      - grafana-data:/var/lib/grafana
+    proxy:
+      host: metrics.contesthq.app
+      ssl: true
+      app_port: 3000
+
 # Bridge fingerprinted assets, like JS and CSS, between versions to avoid
 # hitting 404 on in-flight requests. Combines all files from new and old
 # version inside the asset_path.
@@ -94,8 +141,9 @@ builder:
   #   - GITHUB_TOKEN
   #   - RAILS_MASTER_KEY
 # Use a different ssh user than root
-# ssh:
-#   user: app
+ssh:
+  user: deploy
+  keys: ["~/.ssh/contest_hq_do"]
 
 # Accessory services not needed with SQLite
 #   db:

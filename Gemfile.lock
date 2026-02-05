@@ -77,6 +77,8 @@ GEM
       uri (>= 0.13.1)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
+    anyway_config (2.8.0)
+      ruby-next-core (~> 1.0)
     ast (2.4.3)
     authentication-zero (4.0.3)
     aws-actionmailer-ses (1.0.0)
@@ -93,6 +95,13 @@ GEM
       bigdecimal
       jmespath (~> 1, >= 1.6.1)
       logger
+    aws-sdk-kms (1.114.0)
+      aws-sdk-core (~> 3, >= 3.231.0)
+      aws-sigv4 (~> 1.5)
+    aws-sdk-s3 (1.200.0)
+      aws-sdk-core (~> 3, >= 3.231.0)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.5)
     aws-sdk-ses (1.90.0)
       aws-sdk-core (~> 3, >= 3.231.0)
       aws-sigv4 (~> 1.5)
@@ -133,6 +142,7 @@ GEM
       reline (>= 0.3.8)
     dotenv (3.2.0)
     drb (2.2.3)
+    dry-initializer (3.2.0)
     ed25519 (1.4.0)
     erb (6.0.1)
     erubi (1.13.1)
@@ -235,6 +245,31 @@ GEM
       prettyprint
     prettyprint (0.2.0)
     prism (1.9.0)
+    prometheus-client-mmap (1.5.0)
+      base64
+      bigdecimal
+      logger
+      rb_sys (~> 0.9.124)
+    prometheus-client-mmap (1.5.0-aarch64-linux-gnu)
+      base64
+      bigdecimal
+      logger
+      rb_sys (~> 0.9.124)
+    prometheus-client-mmap (1.5.0-arm64-darwin)
+      base64
+      bigdecimal
+      logger
+      rb_sys (~> 0.9.124)
+    prometheus-client-mmap (1.5.0-x86_64-darwin)
+      base64
+      bigdecimal
+      logger
+      rb_sys (~> 0.9.124)
+    prometheus-client-mmap (1.5.0-x86_64-linux-gnu)
+      base64
+      bigdecimal
+      logger
+      rb_sys (~> 0.9.124)
     propshaft (1.3.1)
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
@@ -287,6 +322,9 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.3.1)
+    rake-compiler-dock (1.11.0)
+    rb_sys (0.9.124)
+      rake-compiler-dock (= 1.11.0)
     rdoc (7.1.0)
       erb
       psych (>= 4.0.0)
@@ -323,6 +361,7 @@ GEM
       rubocop (>= 1.72)
       rubocop-performance (>= 1.24)
       rubocop-rails (>= 2.30)
+    ruby-next-core (1.2.0)
     ruby-progressbar (1.13.0)
     rubyzip (3.2.2)
     securerandom (0.4.1)
@@ -402,6 +441,22 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
+    yabeda (0.14.0)
+      anyway_config (>= 1.0, < 3)
+      concurrent-ruby
+      dry-initializer
+    yabeda-prometheus-mmap (0.4.0)
+      prometheus-client-mmap
+      yabeda (~> 0.10)
+    yabeda-puma-plugin (0.9.0)
+      json
+      puma
+      yabeda (~> 0.5)
+    yabeda-rails (0.11.0)
+      activesupport
+      anyway_config (>= 1.3, < 3)
+      railties
+      yabeda (~> 0.8)
     yaml (0.4.0)
     zeitwerk (2.7.4)
 
@@ -416,6 +471,7 @@ PLATFORMS
 DEPENDENCIES
   authentication-zero (~> 4.0)
   aws-actionmailer-ses (~> 1.0)
+  aws-sdk-s3
   bcrypt (~> 3.1.21)
   bootsnap
   brakeman
@@ -442,6 +498,10 @@ DEPENDENCIES
   turbo-rails
   tzinfo-data
   web-console
+  yabeda
+  yabeda-prometheus-mmap
+  yabeda-puma-plugin
+  yabeda-rails
 
 RUBY VERSION
    ruby 3.3.5p100
