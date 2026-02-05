@@ -100,7 +100,7 @@ All code changes and documentation have been completed and tested. The system is
 ### Grafana Admin Password
 ```
 Username: admin
-Password: K7mP9xR2vN8qL4wE6tY3sA1zF5hJ0uC9
+Password: <stored in 1Password>
 ```
 
 **Storage:**
@@ -118,8 +118,8 @@ Create new entry:
 - **Title:** Contest HQ Grafana
 - **URL:** https://metrics.contesthq.app
 - **Username:** admin
-- **Password:** K7mP9xR2vN8qL4wE6tY3sA1zF5hJ0uC9
-- **Notes:** Monitoring stack admin access (independent of Rails app)
+- **Password:** Stored in 1Password (search for "Grafana Admin Password")
+- **Notes:** Monitoring stack admin access (managed via Kamal accessories)
 
 ### 2. Commit Changes
 

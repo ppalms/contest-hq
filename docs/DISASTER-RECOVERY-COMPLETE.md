@@ -111,8 +111,8 @@ kamal version
      SSH:    Port 22    Source: 0.0.0.0/0, ::/0
      HTTP:   Port 80    Source: 0.0.0.0/0, ::/0
      HTTPS:  Port 443   Source: 0.0.0.0/0, ::/0
-     Custom: Port 3001  Source: YOUR_IP/32  (Grafana - restrict to your IP)
-     Custom: Port 9090  Source: YOUR_IP/32  (Prometheus - restrict to your IP)
+     Note: Grafana is now accessible via HTTPS on port 443 (metrics.contesthq.app)
+     Note: Prometheus is internal-only (no external port needed)
      ```
    - **Outbound Rules:**
      ```
@@ -550,149 +550,132 @@ Contests: 4
 
 ## Phase 5: Deploy Monitoring Stack
 
-**Estimated Time:** 10 minutes
+**Estimated Time:** 5 minutes
 
-### Step 5.1: Prepare Monitoring Configuration
+**Note:** Monitoring is now managed as Kamal accessories (Prometheus + Grafana), not Docker Compose.
+
+### Step 5.1: Set Grafana Password
 
 ```bash
 # On your LOCAL machine
 cd /path/to/contest-hq
 
-# Verify monitoring files exist
-ls -la monitoring/
-# Should show:
-# - docker-compose.yml
-# - prometheus.yml
-# - grafana-datasources.yml
-```
-
-### Step 5.2: Update Prometheus Configuration
-
-```bash
-# Get the Rails container IP address
-ssh deploy@157.180.79.212 "docker inspect \$(docker ps --filter 'label=role=web' --format '{{.Names}}') --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'"
-
-# Example output: 172.18.0.4
-# Save this IP address
-```
-
-**Update `monitoring/prometheus.yml`:**
-
-```yaml
-# Edit the file
-vim monitoring/prometheus.yml
-
-# Update the contest-hq target with the container IP:
-  - job_name: 'contest-hq'
-    static_configs:
-      - targets: ['172.18.0.4:9394']  # <-- Update this IP
-        labels:
-          app: 'contest-hq'
-          environment: 'production'
-```
-
-### Step 5.3: Generate Grafana Password
-
-```bash
 # Generate a secure password for Grafana
-openssl rand -base64 32
+export GRAFANA_ADMIN_PASSWORD=$(openssl rand -base64 32 | tr -d "=+/" | cut -c1-32)
 
-# Example output: K7mP9xR2vN8qL4wE6tY3sA1zF5hJ0uC9
-# Save this to 1Password or secure storage
+# Display the password (SAVE THIS TO 1PASSWORD!)
+echo "Grafana Admin Password: $GRAFANA_ADMIN_PASSWORD"
+
+# Verify the password is set
+echo $GRAFANA_ADMIN_PASSWORD
 ```
 
-### Step 5.4: Deploy Monitoring Stack
+### Step 5.2: Deploy Monitoring Accessories
 
 ```bash
-# SSH to the server
-ssh deploy@157.180.79.212
+# Ensure required environment variables are set
+export RAILS_MASTER_KEY=$(cat config/master.key)
+export KAMAL_REGISTRY_PASSWORD="<your-docker-hub-token>"
+# GRAFANA_ADMIN_PASSWORD already set above
 
-# Create monitoring directory
-sudo mkdir -p /opt/monitoring
-sudo chown deploy:deploy /opt/monitoring
-cd /opt/monitoring
+# Deploy Prometheus (internal metrics collection)
+kamal accessory boot prometheus
 
-# Exit SSH
-exit
+# Deploy Grafana (public dashboard with SSL)
+kamal accessory boot grafana
 
-# Copy monitoring files from local machine
-scp monitoring/docker-compose.yml deploy@157.180.79.212:/opt/monitoring/
-scp monitoring/prometheus.yml deploy@157.180.79.212:/opt/monitoring/
-scp monitoring/grafana-datasources.yml deploy@157.180.79.212:/opt/monitoring/
+# Verify both containers are running
+ssh deploy@157.180.79.212 "docker ps | grep -E '(prometheus|grafana)'"
 
-# SSH back to server
-ssh deploy@157.180.79.212
-cd /opt/monitoring
-
-# Create .env file with Grafana password
-cat > .env << 'EOF'
-GF_SECURITY_ADMIN_PASSWORD=K7mP9xR2vN8qL4wE6tY3sA1zF5hJ0uC9
-EOF
-
-# Secure the .env file
-chmod 600 .env
-
-# Start monitoring stack
-docker compose up -d
-
-# Verify containers are running
-docker compose ps
-
-# Should show:
-# NAME         IMAGE                    STATUS
-# grafana      grafana/grafana:latest   Up
-# prometheus   prom/prometheus:latest   Up
+# Expected output:
+# contest_hq-prometheus   Up X minutes   9090/tcp
+# contest_hq-grafana      Up X minutes   0.0.0.0:3000->3000/tcp
 ```
 
-### Step 5.5: Connect Prometheus to Kamal Network
+### Step 5.3: Verify Prometheus is Scraping Metrics
 
 ```bash
-# Still SSH'd to server
-# This allows Prometheus to scrape the Rails app container
+# Wait 30 seconds for Prometheus to start scraping
+sleep 30
 
-docker network connect kamal prometheus
+# Check Prometheus targets
+ssh deploy@157.180.79.212 "curl -s 'http://localhost:9090/api/v1/targets' | grep -o '\"health\":\"[^\"]*\"'"
 
-# Verify connection
-docker network inspect kamal | grep prometheus
-# Should show prometheus container in the network
-
-# Restart Prometheus to pick up the network change
-docker compose restart prometheus
-
-# Wait 15 seconds for Prometheus to start scraping
-sleep 15
-
-# Verify Prometheus is scraping metrics
-curl -s 'http://localhost:9090/api/v1/targets' | grep -o '"health":"[^"]*"'
-
-# Should show:
+# Expected output:
 # "health":"up"
 # "health":"up"
+
+# Query for Rails metrics
+ssh deploy@157.180.79.212 "curl -s 'http://localhost:9090/api/v1/query?query=up{job=\"contest-hq\"}' | grep -o '\"value\":\[.*\]'"
+
+# Expected: "value":[<timestamp>,"1"]
 ```
+
+### Step 5.4: Access Grafana
+
+**Grafana is now accessible at:** https://metrics.contesthq.app
+
+```bash
+# Test HTTPS access
+curl -I https://metrics.contesthq.app
+
+# Expected: HTTP/2 200 (with Let's Encrypt SSL certificate)
+
+# Login credentials:
+# Username: admin
+# Password: <the password you generated in Step 5.1>
+```
+
+### Step 5.5: Import Grafana Dashboards
+
+1. **Login to Grafana:**
+   - Navigate to: https://metrics.contesthq.app
+   - Username: `admin`
+   - Password: `<from Step 5.1>`
+
+2. **Verify Prometheus Connection:**
+   - Go to: Connections → Data Sources
+   - Click "Prometheus"
+   - Click "Save & Test"
+   - Should show: ✅ "Data source is working"
+
+3. **Import Yabeda Rails Dashboard:**
+   - Click "+" → "Import"
+   - Enter dashboard ID: `14133`
+   - Click "Load"
+   - Select datasource: "Prometheus"
+   - Click "Import"
+
+4. **Import Yabeda Puma Dashboard:**
+   - Click "+" → "Import"
+   - Enter dashboard ID: `14134`
+   - Click "Load"
+   - Select datasource: "Prometheus"
+   - Click "Import"
+
+5. **Verify Data:**
+   - Open "Yabeda Rails" dashboard
+   - Set time range to "Last 15 minutes"
+   - Should see live metrics (request rate, response time, etc.)
 
 ### Step 5.6: Verify Metrics Collection
 
 ```bash
-# Still SSH'd to server
+# From your LOCAL machine
 
-# Query Prometheus for Puma metrics
-curl -s 'http://localhost:9090/api/v1/query?query=puma_running' | grep -o '"result":\[.*\]' | head -c 200
+# Check available metrics
+ssh deploy@157.180.79.212 "curl -s 'http://localhost:9090/api/v1/label/__name__/values' | grep -E '(yabeda|puma|rails)' | head -10"
 
-# Should show metrics data (not empty)
-
-# List available metrics
-curl -s 'http://localhost:9090/api/v1/label/__name__/values' | grep -E '(puma|rails)' | head -10
-
-# Should show:
-# puma_backlog
-# puma_busy_threads
-# puma_max_threads
-# rails_db_runtime_seconds_bucket
-# rails_request_duration_seconds_bucket
+# Expected output (sample):
+# yabeda_puma_backlog
+# yabeda_puma_running
+# yabeda_puma_pool_capacity
+# yabeda_rails_requests_total
+# yabeda_rails_request_duration_seconds_bucket
 # ...
 
-# Exit SSH
-exit
+# If no metrics appear, check Rails app logs:
+kamal app logs --tail 50 | grep -i yabeda
 ```
 
 ---
@@ -727,8 +710,9 @@ ssh deploy@157.180.79.212 "docker ps --format 'table {{.Names}}\t{{.Status}}\t{{
 
 # Expected:
 # NAME                        STATUS          PORTS
-# contest_hq-web-latest       Up X minutes    80/tcp
-# contest_hq-otel_collector   Up X minutes    0.0.0.0:9394->9394/tcp
+# contest_hq-web-<hash>       Up X minutes    80/tcp
+# contest_hq-prometheus       Up X minutes    9090/tcp
+# contest_hq-grafana          Up X minutes    0.0.0.0:3000->3000/tcp
 # kamal-proxy                 Up X minutes    0.0.0.0:80-443->80-443/tcp
 ```
 
@@ -786,26 +770,24 @@ Failed Jobs: 0
 
 ### Step 6.4: Monitoring Stack Verification
 
-```bash
-# Create SSH tunnel to access Grafana
-ssh -L 3001:localhost:3001 -L 9090:localhost:9090 deploy@157.180.79.212
+**Access Monitoring:**
 
-# Keep this terminal open
-```
+1. **Grafana (Public with SSL):**
+   - URL: https://metrics.contesthq.app
+   - Login: `admin` / `<password from Step 5.1>`
+   - Dashboards should show live metrics
 
-**In your browser:**
-
-1. **Access Prometheus:** http://localhost:9090
-   - Go to Status → Targets
-   - Verify both targets are "UP":
-     - `prometheus` (localhost:9090)
-     - `contest-hq` (172.18.0.x:9394)
-
-2. **Access Grafana:** http://localhost:3001
-   - Login: `admin` / `your_generated_password`
-   - Go to Configuration → Data Sources → Prometheus
-   - Click "Save & Test"
-   - Should show: ✅ "Data source is working"
+2. **Prometheus (Internal - SSH tunnel if needed):**
+   ```bash
+   # Create SSH tunnel to access Prometheus directly
+   ssh -L 9090:localhost:9090 deploy@157.180.79.212
+   
+   # In browser: http://localhost:9090
+   # Go to Status → Targets
+   # Verify targets are "UP":
+   #   - prometheus (localhost:9090)
+   #   - contest-hq (Docker service discovery)
+   ```
 
 3. **Import Dashboards:**
    - Click "+" → Import

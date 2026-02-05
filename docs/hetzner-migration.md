@@ -132,7 +132,7 @@ sed -i "s/<HETZNER_IP>/$(curl -s ifconfig.me)/g" prometheus.yml
 
 # Create .env (get password from 1Password)
 cat > .env <<EOF
-GRAFANA_ADMIN_PASSWORD=K7mP9xR2vN8qL4wE6tY3sA1zF5hJ0uC9
+GRAFANA_ADMIN_PASSWORD=<generate-secure-password>
 EOF
 
 # Deploy

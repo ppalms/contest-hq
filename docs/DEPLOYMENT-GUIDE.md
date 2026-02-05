@@ -28,9 +28,9 @@ The monitoring stack runs independently of Rails via Docker Compose. Store the G
 - **Title:** Contest HQ Grafana
 - **URL:** https://metrics.contesthq.app
 - **Username:** admin
-- **Password:** K7mP9xR2vN8qL4wE6tY3sA1zF5hJ0uC9
+- **Password:** Stored in 1Password (search for "Grafana Admin Password")
 
-**Note:** You'll create a `.env` file on the server during deployment (Part 5). The password is NOT stored in Rails credentials since the monitoring stack is independent of the Rails application.
+**Note:** The password is set via the `GRAFANA_ADMIN_PASSWORD` environment variable in Kamal's `.kamal/secrets` file. Never commit passwords to git.
 
 ---
 
@@ -245,7 +245,7 @@ sed -i "s/<HETZNER_IP>/$(curl -s ifconfig.me)/g" prometheus.yml
 
 # Create .env file
 cat > .env <<EOF
-GRAFANA_ADMIN_PASSWORD=K7mP9xR2vN8qL4wE6tY3sA1zF5hJ0uC9
+GRAFANA_ADMIN_PASSWORD=$(openssl rand -base64 32 | tr -d "=+/" | cut -c1-32)
 EOF
 
 # Make setup script executable
@@ -318,7 +318,7 @@ Temporarily access via IP while SSL is being set up:
 ```
 URL: http://<HETZNER_IP>:3001
 Username: admin
-Password: K7mP9xR2vN8qL4wE6tY3sA1zF5hJ0uC9
+Password: <stored in 1Password>
 ```
 
 Or via subdomain (after DNS propagates):
