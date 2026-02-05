@@ -8,12 +8,19 @@ receivers:
             - host: unix:///var/run/docker.sock
               refresh_interval: 10s
           relabel_configs:
+            # Keep only containers with role=web label
             - source_labels: [__meta_docker_container_label_role]
               regex: web
               action: keep
+            # Drop the OTel collector container itself to avoid scraping loop
+            - source_labels: [__meta_docker_container_label_service]
+              regex: contest_hq-otel_collector
+              action: drop
+            # Replace the port in __address__ with 9394 (metrics port)
             - source_labels: [__address__]
-              regex: (.*):9394
-              action: keep
+              regex: '([^:]+)(?::\d+)?'
+              replacement: '$1:9394'
+              target_label: __address__
             - source_labels: [__meta_docker_container_id]
               target_label: container_id
 
