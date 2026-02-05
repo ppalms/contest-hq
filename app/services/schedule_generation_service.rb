@@ -61,9 +61,14 @@ class ScheduleGenerationService
 
   def generate_schedule!
     ActiveRecord::Base.transaction do
+      cleanup_existing_schedule
       initialize_schedule_days
       generate_schedule_blocks
     end
+  end
+
+  def cleanup_existing_schedule
+    @schedule.schedule_days.destroy_all
   end
 
   def initialize_schedule_days
@@ -122,6 +127,12 @@ class ScheduleGenerationService
       )
 
       unless block.save
+        Rails.logger.error "Failed to save block: entry=#{entry.large_ensemble.name}, phase=#{phase.name}, room=#{phase.room.name}, start=#{phase_start}, end=#{phase_start + phase.duration.minutes}"
+        Rails.logger.error "Existing blocks in room #{phase.room.name} on day #{current_day.schedule_date}:"
+        ScheduleBlock.where(schedule_day: current_day, room: phase.room).each do |existing|
+          Rails.logger.error "  - #{existing.contest_entry.large_ensemble.name}: #{existing.start_time} to #{existing.end_time}"
+        end
+
         error_msg = "Failed to save schedule block for entry '#{entry.large_ensemble.name}', phase '#{phase.name}': #{block.errors.full_messages.join(', ')}"
         Rails.logger.error error_msg
         raise GenerationError, error_msg
