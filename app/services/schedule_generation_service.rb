@@ -68,7 +68,18 @@ class ScheduleGenerationService
   end
 
   def cleanup_existing_schedule
+    days_count = @schedule.schedule_days.count
+    blocks_count = ScheduleBlock.where(schedule_day: @schedule.schedule_days).count
+
+    Rails.logger.info "Cleaning up existing schedule: #{days_count} days, #{blocks_count} blocks"
+
     @schedule.schedule_days.destroy_all
+    @schedule.reload
+
+    remaining_days = @schedule.schedule_days.count
+    remaining_blocks = ScheduleBlock.joins(:schedule_day).where(schedule_days: { schedule_id: @schedule.id }).count
+
+    Rails.logger.info "After cleanup: #{remaining_days} days, #{remaining_blocks} blocks remaining"
   end
 
   def initialize_schedule_days
