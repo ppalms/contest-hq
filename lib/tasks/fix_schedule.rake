@@ -2,6 +2,7 @@ namespace :schedule do
   desc "Manually clean up and regenerate schedule 4"
   task fix: :environment do
     schedule = Schedule.find(4)
+    Current.account = schedule.contest.account
 
     puts "Current state:"
     puts "  Days: #{schedule.schedule_days.count}"

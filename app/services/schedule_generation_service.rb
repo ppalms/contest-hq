@@ -106,14 +106,22 @@ class ScheduleGenerationService
     Rails.logger.info "Generating schedule for #{entries.count} entries with #{@contest.performance_phases.count} phases"
 
     entries.each_with_index do |entry, index|
-      increment_day = index > 0 && index % 20 == 0
+      Rails.logger.info "Processing entry #{index + 1}/#{entries.count}: #{entry.large_ensemble.name}"
 
-      if increment_day
+      should_increment_day = index > 0 && index % 20 == 0
+      day_changed = false
+
+      if should_increment_day
         next_day = @schedule.days.find_by(schedule_date: current_day.schedule_date + 1)
-        current_day = next_day if next_day.present?
+        if next_day.present?
+          current_day = next_day
+          day_changed = true
+        end
       end
 
-      start_time = calculate_entry_start_time(entries, index, increment_day, current_day)
+      start_time = calculate_entry_start_time(entries, index, day_changed, current_day)
+      Rails.logger.info "  Start time: #{start_time}, day_changed: #{day_changed}"
+
       create_blocks_for_entry(entry, current_day, start_time)
     end
   end
