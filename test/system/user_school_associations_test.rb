@@ -20,9 +20,9 @@ class UserSchoolAssociationsTest < ApplicationSystemTestCase
     director_without_schools = users(:demo_director_c)
     director_without_schools.schools.clear
 
-    # Navigate to user edit page
-    visit edit_user_path(director_without_schools)
-    assert_text "Editing user"
+    # Navigate to user show page
+    visit user_path(director_without_schools)
+    assert_text "#{director_without_schools.first_name} #{director_without_schools.last_name}"
     assert_text "No schools assigned"
 
     # Add a school association
@@ -33,7 +33,7 @@ class UserSchoolAssociationsTest < ApplicationSystemTestCase
     page.execute_script("document.querySelector('input[name=\"user[school_ids][]\"]').checked = true;")
     click_on "Add Selected"
 
-    # Verify success message and return to edit page
+    # Verify success message and return to show page
     assert_text "school(s) added successfully"
 
     # Verify database association was created
@@ -47,11 +47,13 @@ class UserSchoolAssociationsTest < ApplicationSystemTestCase
     assert @director.schools.count > 0
     initial_school_count = @director.schools.count
 
-    # Navigate to user edit page
-    visit edit_user_path(@director)
+    # Navigate to user show page
+    visit user_path(@director)
 
-    # Remove a school association - click the first Remove button
-    click_on "Remove", match: :first
+    # Remove a school association - click the first Remove button and accept confirmation
+    accept_confirm do
+      click_on "Remove", match: :first
+    end
 
     # Verify success message
     assert_text "removed successfully"
@@ -97,8 +99,10 @@ class UserSchoolAssociationsTest < ApplicationSystemTestCase
 
     # Now as admin, remove one school association
     log_in_as(@admin)
-    visit edit_user_path(@director)
-    click_on "Remove", match: :first
+    visit user_path(@director)
+    accept_confirm do
+      click_on "Remove", match: :first
+    end
     assert_text "removed successfully"
 
     # Log back in as director and verify one school is no longer available
@@ -152,8 +156,8 @@ class UserSchoolAssociationsTest < ApplicationSystemTestCase
     director_without_schools = users(:demo_director_c)
     director_without_schools.schools.clear
 
-    # Navigate to user edit page and add multiple schools
-    visit edit_user_path(director_without_schools)
+    # Navigate to user show page and add multiple schools
+    visit user_path(director_without_schools)
     click_on "Add Schools"
 
     # Wait for the page to load and check multiple schools
