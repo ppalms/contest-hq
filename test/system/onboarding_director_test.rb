@@ -49,51 +49,35 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
     # Get the created entry for later assertions
     entry = ContestEntry.last
 
-    click_on "Add Music"
-
-    # Select prescribed music
-    within "[data-slot-type='prescribed']" do
-      click_on "Select Prescribed Music"
-    end
+    click_on "Add Prescribed Music"
 
     # Search for and select Symphony No. 5
     fill_in "search", with: "Symphony"
     click_on "Search"
 
-    # Wait for search results to load
-    sleep 2
-
     # Verify only prescribed music from demo account is shown (tenant isolation)
-    assert_selector "button", text: /Symphony/, wait: 5
+    assert_text "Symphony No. 5", wait: 5
 
-    find("button", text: /Symphony/).click
+    # Click the Select button in the row with Symphony No. 5
+    row = find("tr", text: "Symphony No. 5")
+    within row do
+      click_on "Select"
+    end
 
     # Verify prescribed music appears with correct badges
+    assert_text "Music selection added successfully"
     assert_text "Prescribed"
-    assert_text "New"
     assert_text "Symphony No. 5"
 
     # Add a custom piece
-    within all("[data-slot-type='custom']").first do
-      click_on "Add"
-    end
+    click_on "Add Custom Music"
 
     fill_in "Title", with: "Custom Piece"
     fill_in "Composer", with: "Custom Composer"
-    click_on "Add to List"
+    click_on "Add Music Selection"
 
-    assert_text "New"
-
-    find("input[value='Save']").click
-
-    # Wait for Turbo Stream to complete
-    assert_no_selector "input[value='Save']", wait: 5
-
-    # Verify we're back on the show page
-    within "#music_selections" do
-      assert_selector "a", text: "Edit"
-    end
-
+    # Verify we're back on the show page with both pieces
+    assert_text "Music selection added successfully"
     assert_text "Music Selections"
     assert_text "Symphony No. 5"
     assert_text "Prescribed"

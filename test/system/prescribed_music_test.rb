@@ -97,9 +97,7 @@ class PrescribedMusicTest < ApplicationSystemTestCase
     # Verify we're on the contest entry page
     assert_text ensemble.name
 
-    click_on "Add Music"
-
-    click_on "Select Prescribed Music"
+    click_on "Add Prescribed Music"
 
     # Search for prescribed music
     fill_in "search", with: "Rhapsody"
@@ -109,15 +107,15 @@ class PrescribedMusicTest < ApplicationSystemTestCase
     assert_text prescribed_music.title
     assert_text prescribed_music.composer
 
-    # Click the prescribed music button to select it
-    find("button", text: /#{prescribed_music.title}/).click
+    # Click the Select button in the row with the prescribed music
+    row = find("tr", text: prescribed_music.title)
+    within row do
+      click_on "Select"
+    end
 
+    # Verify we're back on the contest entry page with the music added
+    assert_text "Music selection added successfully"
     assert_text "Prescribed"
-    assert_text "New"
-    assert_text prescribed_music.title
-
-    click_on "Save"
-
     assert_text prescribed_music.title
   end
 
@@ -156,9 +154,7 @@ class PrescribedMusicTest < ApplicationSystemTestCase
     end
 
     click_on "Continue"
-    click_on "Add Music"
-
-    click_on "Select Prescribed Music"
+    click_on "Add Prescribed Music"
 
     # Search with lowercase "rhapsody" should find "Rhapsody in Blue"
     fill_in "search", with: "rhapsody"
@@ -183,9 +179,7 @@ class PrescribedMusicTest < ApplicationSystemTestCase
     end
 
     click_on "Continue"
-    click_on "Add Music"
-
-    click_on "Select Prescribed Music"
+    click_on "Add Prescribed Music"
 
     # Empty search should return all prescribed music for school_class_b
     fill_in "search", with: ""
