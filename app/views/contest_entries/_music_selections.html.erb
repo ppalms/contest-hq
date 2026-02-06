@@ -1,40 +1,44 @@
 <% content_for :title, "Music Selections" %>
-<%= turbo_frame_tag "music_selections" do %>
-  <div class="pt-8 gap-4">
+<div class="pt-8 gap-4" id="music_selections">
   <div class="flex justify-between items-center mb-4">
     <div>
       <h2>Music Selections</h2>
-    </div>
-      <% if current_user.contest_entries.include?(@contest_entry) %>
-        <div>
-          <%= link_to "Edit",
-                      bulk_edit_contest_entry_selections_path(entry_id: @contest_entry.id),
-                      class: "btn-secondary-sm",
-                      data: { turbo_frame: "music_selections" } %>
-        </div>
+      <% if @contest_entry.music_complete? %>
+        <span class="inline-block mt-1 px-2 py-1 text-xs bg-green-100 text-green-800 rounded">Complete</span>
+      <% else %>
+        <span class="inline-block mt-1 px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded">
+          <%= @contest_entry.missing_prescribed_count %> prescribed, <%= @contest_entry.missing_custom_count %> custom needed
+        </span>
       <% end %>
     </div>
-
-    <%= render "contest_entries/previous_music_prompt" if @show_copy_prompt %>
-
-    <% if @contest_entry.music_selections.any? %>
-      <ul class="divide-y divide-gray-200 border border-gray-200 rounded-lg">
-        <% @contest_entry.music_selections.order(:position).each_with_index do |music_selection, index| %>
-          <%= render "contest_entries/music_selection_item", music_selection: music_selection, index: index %>
-        <% end %>
-      </ul>
-    <% else %>
-      <div class="text-center py-12 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
-        <p class="text-gray-600 mb-4">No music selections yet</p>
-        <% if current_user.contest_entries.include?(@contest_entry) %>
-          <div class="flex gap-2 justify-center">
-            <%= link_to "Add Music",
-                        bulk_edit_contest_entry_selections_path(entry_id: @contest_entry.id),
-                        class: "btn-primary-sm",
-                        data: { turbo_frame: "music_selections" } %>
-          </div>
-        <% end %>
-      </div>
-    <% end %>
   </div>
-<% end %>
+
+  <%= render "contest_entries/previous_music_prompt" if @show_copy_prompt %>
+
+  <% if @contest_entry.music_selections.any? %>
+    <ul class="divide-y divide-gray-200 border border-gray-200 rounded-lg mb-4">
+      <% @contest_entry.music_selections.order(:position).each_with_index do |music_selection, index| %>
+        <%= render "contest_entries/music_selection_item", music_selection: music_selection, index: index %>
+      <% end %>
+    </ul>
+  <% else %>
+    <div class="text-center py-12 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 mb-4">
+      <p class="text-gray-600 mb-4">No music selections yet</p>
+    </div>
+  <% end %>
+
+  <% if current_user.contest_entries.include?(@contest_entry) && !@contest_entry.music_complete? %>
+    <div class="flex gap-3">
+      <% if @contest_entry.missing_custom_count > 0 %>
+        <%= link_to "Add Custom Music",
+                    new_contest_entry_music_selection_path(contest_id: @contest_entry.contest_id, entry_id: @contest_entry.id, type: "custom"),
+                    class: "btn-primary" %>
+      <% end %>
+      <% if @contest_entry.missing_prescribed_count > 0 %>
+        <%= link_to "Add Prescribed Music",
+                    new_prescribed_contest_entry_music_selections_path(contest_id: @contest_entry.contest_id, entry_id: @contest_entry.id),
+                    class: "btn-secondary" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

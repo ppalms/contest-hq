@@ -51,7 +51,13 @@ class ContestEntry < ApplicationRecord
   end
 
   def music_complete?
-    prescribed_selection.present? && custom_selections.count == MusicSelectionRequirements::REQUIRED_CUSTOM_COUNT
+    return false unless contest
+
+    prescribed_count = music_selections.count(&:prescribed?)
+    custom_count = music_selections.count(&:custom?)
+
+    prescribed_count == contest.required_prescribed_count &&
+      custom_count == contest.required_custom_count
   end
 
   def prescribed_selection
@@ -60,6 +66,55 @@ class ContestEntry < ApplicationRecord
 
   def custom_selections
     music_selections.select { |ms| ms.custom? }
+  end
+
+  def required_music_slots
+    return [] unless contest
+
+    existing_selections = music_selections.order(:position).to_a
+    prescribed_count = existing_selections.count(&:prescribed?)
+    custom_count = existing_selections.count(&:custom?)
+
+    slots = []
+    (1..contest.total_required_music_count).each do |position|
+      music_selection = existing_selections.find { |ms| ms.position == position }
+
+      if music_selection
+        slot_type = music_selection.prescribed? ? :prescribed : :custom
+      else
+        if prescribed_count < contest.required_prescribed_count
+          slot_type = :prescribed
+          prescribed_count += 1
+        else
+          slot_type = :custom
+          custom_count += 1
+        end
+      end
+
+      slots << {
+        position: position,
+        type: slot_type,
+        music_selection: music_selection
+      }
+    end
+
+    slots
+  end
+
+  def missing_prescribed_count
+    return 0 unless contest
+
+    required = contest.required_prescribed_count
+    current = music_selections.count(&:prescribed?)
+    [ required - current, 0 ].max
+  end
+
+  def missing_custom_count
+    return 0 unless contest
+
+    required = contest.required_custom_count
+    current = music_selections.count(&:custom?)
+    [ required - current, 0 ].max
   end
 
   def previous_entry_in_season

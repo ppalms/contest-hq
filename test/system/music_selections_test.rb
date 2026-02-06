@@ -2,277 +2,178 @@ require "application_system_test_case"
 
 class MusicSelectionsTest < ApplicationSystemTestCase
   setup do
-    @user = users(:demo_director_a)
-    @contest = contests(:demo_contest_a)
-    @ensemble = large_ensembles(:demo_school_a_ensemble_a)
-    @ensemble_c = large_ensembles(:demo_school_a_ensemble_c)
+    @user = users(:demo_director_b)
+    @entry = contest_entries(:contest_a_school_a_ensemble_b)
+    @contest = @entry.contest
+
+    # Clean up existing music selections
+    set_current_user(@user)
+    @entry.music_selections.destroy_all
+
     log_in_as(@user)
   end
 
-  test "adding music selections to a new contest entry" do
-    visit contest_path(@contest)
-    click_on "Register"
+  test "director can add custom music" do
+    visit contest_entry_path(@contest, @entry)
 
-    if page.has_select?("Large ensemble")
-      select @ensemble.name, from: "Large ensemble"
+    click_on "Add Custom Music"
+
+    assert_text "Add Custom Music"
+
+    fill_in "Title", with: "Symphony No. 5"
+    fill_in "Composer", with: "Beethoven"
+
+    click_on "Add Music Selection"
+
+    assert_text "Music selection added successfully"
+    assert_text "Symphony No. 5"
+    assert_text "Beethoven"
+  end
+
+  test "director can add prescribed music" do
+    visit contest_entry_path(@contest, @entry)
+
+    click_on "Add Prescribed Music"
+
+    assert_text "Select Prescribed Music"
+
+    # Search for prescribed music
+    fill_in "search", with: ""
+    click_on "Search"
+
+    # Should show prescribed music for the correct season/class
+    assert_selector "table"
+
+    # Select the first prescribed music
+    first("button", text: "Select").click
+
+    assert_text "Music selection added successfully"
+  end
+
+  test "director can edit custom music" do
+    # Create a custom music selection first
+    set_current_user(@user)
+    selection = @entry.music_selections.create!(
+      title: "Original Title",
+      composer: "Original Composer",
+      position: 1,
+      account: @contest.account
+    )
+
+    visit contest_entry_path(@contest, @entry)
+
+    within "#music_selections" do
+      click_on "Edit"
     end
-    click_on "Continue"
 
+    assert_text "Edit Music Selection"
+
+    fill_in "Title", with: "Updated Title"
+    fill_in "Composer", with: "Updated Composer"
+
+    click_on "Update Music Selection"
+
+    assert_text "Music selection updated successfully"
+    assert_text "Updated Title"
+    assert_text "Updated Composer"
+  end
+
+  test "director can delete music selection" do
+    # Create a music selection first
+    set_current_user(@user)
+    selection = @entry.music_selections.create!(
+      title: "To Be Deleted",
+      composer: "Test Composer",
+      position: 1,
+      account: @contest.account
+    )
+
+    visit contest_entry_path(@contest, @entry)
+
+    assert_text "To Be Deleted"
+
+    within "#music_selections" do
+      accept_confirm do
+        click_on "Delete"
+      end
+    end
+
+    assert_text "Music selection removed"
+    assert_no_text "To Be Deleted"
+  end
+
+  test "director sees empty state when no music selections" do
+    visit contest_entry_path(@contest, @entry)
+
+    # Should show music section with empty state or add buttons
     assert_text "Music Selections"
+  end
 
-    click_on "Add Music"
+  test "director can delete and readd music selection filling gaps" do
+    # Create two selections (1 prescribed, 1 custom) - still need 1 more custom
+    set_current_user(@user)
+    prescribed = prescribed_musics(:demo_2024_class_a_music_one)
+    @entry.music_selections.create!(prescribed_music: prescribed, position: 1, account: @contest.account)
+    @entry.music_selections.create!(title: "Custom One", composer: "C1", position: 3, account: @contest.account)
 
-    click_on "Select Prescribed Music"
-    fill_in "search", with: "Symphony"
+    visit contest_entry_path(@contest, @entry)
+
+    # Should show we need 1 more custom
+    assert_text "1 custom needed"
+
+    # Add a new one - should fill the gap at position 2
+    click_on "Add Custom Music"
+
+    fill_in "Title", with: "Custom Two"
+    fill_in "Composer", with: "C2"
+
+    click_on "Add Music Selection"
+
+    assert_text "Music selection added successfully"
+    assert_text "Custom Two"
+
+    # Verify we have 3 selections and it's complete
+    @entry.reload
+    assert_equal 3, @entry.music_selections.count
+    assert @entry.music_complete?
+
+    # Verify the new selection filled position 2 (the gap)
+    assert_equal 2, @entry.music_selections.find_by(title: "Custom Two").position
+  end
+
+  test "director can replace prescribed music with different prescribed music" do
+    # Create a prescribed music selection first
+    set_current_user(@user)
+    old_prescribed = prescribed_musics(:demo_2024_class_a_music_one)
+    selection = @entry.music_selections.create!(
+      prescribed_music: old_prescribed,
+      position: 1,
+      account: @contest.account
+    )
+
+    visit contest_entry_path(@contest, @entry)
+
+    assert_text old_prescribed.title
+
+    within "#music_selections" do
+      click_on "Edit"
+    end
+
+    assert_text "Edit Music Selection"
+    assert_text "This is a prescribed music selection"
+
+    click_on "Change to Different Prescribed Music"
+
+    assert_text "Select Prescribed Music"
+
+    # Search for prescribed music
+    fill_in "search", with: ""
     click_on "Search"
 
-    find("button", text: /Symphony No\. 5/).click
+    # Select a different prescribed music (not the first one)
+    all("button", text: "Select").last.click
 
-    assert_text "Prescribed"
-    assert_text "New"
-    assert_text "Symphony No. 5"
-
-    within all("[data-slot-type='custom']").first do
-      click_on "Add"
-    end
-    fill_in "Title", with: "Symphonic Dance No. 3"
-    fill_in "Composer", with: "Williams"
-    click_on "Add to List"
-
-    within all("[data-slot-type='custom']").last do
-      click_on "Add"
-    end
-    fill_in "Title", with: "Festive Overture"
-    fill_in "Composer", with: "Shostakovich"
-    click_on "Add to List"
-
-    click_on "Save"
-
-    assert_text "Symphony No. 5"
-    assert_text "Symphonic Dance No. 3"
-    assert_text "Festive Overture"
-  end
-
-  test "copying music from previous entry" do
-    entry1 = ContestEntry.create!(contest: @contest, user: @user, large_ensemble: @ensemble_c, account: @user.account)
-    entry1.music_selections.create!(title: "Symphony No. 5", composer: "Beethoven", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one), account: @user.account)
-    entry1.music_selections.create!(title: "Symphonic Dance No. 3", composer: "Williams", account: @user.account)
-    entry1.music_selections.create!(title: "Festive Overture", composer: "Shostakovich", account: @user.account)
-
-    contest2 = contests(:demo_contest_b)
-    entry2 = ContestEntry.create!(contest: contest2, user: @user, large_ensemble: @ensemble_c, account: @user.account)
-
-    visit contest_entry_path(contest_id: contest2.id, id: entry2.id)
-
-    assert_text "Use music from previous entry?"
-    assert_text "Symphony No. 5"
-    assert_text "Symphonic Dance No. 3"
-    assert_text "Festive Overture"
-
-    click_on "Use These Pieces"
-
-    assert_text "Symphony No. 5"
-    assert_text "Symphonic Dance No. 3"
-    assert_text "Festive Overture"
-  end
-
-  test "removing a music selection" do
-    entry = ContestEntry.create!(contest: @contest, user: @user, large_ensemble: @ensemble_c, account: @user.account)
-    # Add prescribed music (required)
-    entry.music_selections.create!(title: "Symphony No. 5", composer: "Beethoven", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one), position: 1, account: @user.account)
-    # Add custom piece to delete
-    entry.music_selections.create!(title: "Test Piece", composer: "Test Composer", position: 2, account: @user.account)
-
-    visit contest_entry_path(contest_id: @contest.id, id: entry.id)
-
-    assert_text "Test Piece"
-
-    within "#music_selections" do
-      click_on "Edit"
-    end
-
-    # Delete the custom music selection using data-prescribed attribute
-    custom_item = find("[data-music-bulk-edit-target='item'][data-prescribed='false']")
-
-    # Verify it's the right item by checking the input value
-    within custom_item do
-      assert_selector "input[value='Test Piece']"
-      click_on "Delete"
-    end
-
-    click_on "Save"
-
-    # Wait for Turbo Stream to update - should transition from edit to show view
-    within "#music_selections" do
-      assert_selector "ul li", wait: 5, minimum: 1
-      assert_selector "a", text: "Edit"
-    end
-
-    assert_no_text "Test Piece"
-    # Prescribed music should still be there
-    assert_text "Symphony No. 5"
-  end
-
-  test "bulk edit enforces music selection constraints" do
-    entry = ContestEntry.create!(contest: @contest, user: @user, large_ensemble: @ensemble_c, account: @user.account)
-
-    visit contest_entry_path(contest_id: @contest.id, id: entry.id)
-
-    within "#music_selections" do
-      click_on "Edit"
-    end
-
-    # Add prescribed music
-    click_on "Select Prescribed Music"
-    fill_in "search", with: "Symphony"
-    click_on "Search"
-
-    # Find and click the button containing "Symphony No. 5"
-    find("button", text: /Symphony No\. 5/).click
-
-    # Verify prescribed music appears with "New" badge
-    assert_text "Prescribed"
-    assert_text "New"
-    assert_text "Symphony No. 5"
-
-    # Add two custom selections
-    within all("[data-slot-type='custom']").first do
-      click_on "Add"
-    end
-    fill_in "Title", with: "Custom Piece 1"
-    fill_in "Composer", with: "Composer 1"
-    click_on "Add to List"
-
-    within all("[data-slot-type='custom']").last do
-      click_on "Add"
-    end
-    fill_in "Title", with: "Custom Piece 2"
-    fill_in "Composer", with: "Composer 2"
-    click_on "Add to List"
-
-    # Save all selections
-    click_on "Save"
-
-    # Wait for Turbo Stream to update
-    within "#music_selections" do
-      assert_selector "a", text: "Edit"
-    end
-
-    # Verify all saved
-    entry.reload
-    assert_equal 3, entry.music_selections.count
-    assert_equal 1, entry.music_selections.where.not(prescribed_music_id: nil).count
-    assert_equal 2, entry.music_selections.where(prescribed_music_id: nil).count
-
-    # Now change the prescribed music
-    within "#music_selections" do
-      click_on "Edit"
-    end
-
-    within "[data-prescribed='true']" do
-      click_on "Change"
-    end
-
-    fill_in "search", with: "Planets"
-    click_on "Search"
-
-    # Find and click the button containing "The Planets"
-    find("button", text: /The Planets/).click
-
-    # Verify new prescribed music appears
-    assert_text "The Planets"
-    assert_text "New"
-
-    # Save the change
-    click_on "Save"
-
-    # Wait for Turbo Stream to update
-    within "#music_selections" do
-      assert_selector "a", text: "Edit"
-    end
-
-    # Verify we still have exactly 1 prescribed and 2 custom selections
-    entry.reload
-    assert_equal 3, entry.music_selections.count, "Should have exactly 3 music selections"
-    assert_equal 1, entry.music_selections.where.not(prescribed_music_id: nil).count, "Should have exactly 1 prescribed selection"
-    assert_equal 2, entry.music_selections.where(prescribed_music_id: nil).count, "Should have exactly 2 custom selections"
-
-    # Verify the prescribed music was changed, not added
-    assert_equal "The Planets", entry.prescribed_selection.title
-  end
-
-  test "deleting prescribed music" do
-    entry = ContestEntry.create!(contest: @contest, user: @user, large_ensemble: @ensemble_c, account: @user.account)
-    entry.music_selections.create!(title: "Symphony No. 5", composer: "Beethoven", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one), position: 1, account: @user.account)
-    entry.music_selections.create!(title: "Custom Piece 1", composer: "Composer 1", position: 2, account: @user.account)
-    entry.music_selections.create!(title: "Custom Piece 2", composer: "Composer 2", position: 3, account: @user.account)
-
-    visit contest_entry_path(contest_id: @contest.id, id: entry.id)
-
-    within "#music_selections" do
-      click_on "Edit"
-    end
-
-    # Delete prescribed music
-    within "[data-prescribed='true']" do
-      click_on "Delete"
-    end
-
-    # Verify "Undo" button appears
-    within "[data-prescribed='true']" do
-      assert_text "Undo"
-    end
-
-    # Save
-    click_on "Save"
-
-    # Wait for Turbo Stream to update
-    within "#music_selections" do
-      assert_selector "a", text: "Edit"
-    end
-
-    # Verify prescribed music is removed
-    entry.reload
-    assert_nil entry.prescribed_selection, "Prescribed music should be deleted"
-    assert_equal 2, entry.music_selections.count, "Should have 2 custom selections remaining"
-  end
-
-  test "undo delete prescribed music" do
-    entry = ContestEntry.create!(contest: @contest, user: @user, large_ensemble: @ensemble_c, account: @user.account)
-    entry.music_selections.create!(title: "Symphony No. 5", composer: "Beethoven", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one), position: 1, account: @user.account)
-    entry.music_selections.create!(title: "Custom Piece 1", composer: "Composer 1", position: 2, account: @user.account)
-    entry.music_selections.create!(title: "Custom Piece 2", composer: "Composer 2", position: 3, account: @user.account)
-
-    visit contest_entry_path(contest_id: @contest.id, id: entry.id)
-
-    within "#music_selections" do
-      click_on "Edit"
-    end
-
-    # Delete prescribed music
-    within "[data-prescribed='true']" do
-      click_on "Delete"
-    end
-
-    # Verify "Undo" button appears
-    within "[data-prescribed='true']" do
-      assert_text "Undo"
-      click_on "Undo"
-    end
-
-    # Verify "Prescribed" badge restored
-    within "[data-prescribed='true']" do
-      assert_text "Prescribed"
-      assert_text "Delete"
-    end
-
-    # Save
-    click_on "Save"
-
-    # Verify prescribed music still exists
-    entry.reload
-    assert_not_nil entry.prescribed_selection, "Prescribed music should still exist"
-    assert_equal "Symphony No. 5", entry.prescribed_selection.title
-    assert_equal 3, entry.music_selections.count, "Should have all 3 selections"
+    assert_text "Music selection updated successfully"
+    assert_no_text old_prescribed.title
   end
 end

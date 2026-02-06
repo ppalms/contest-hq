@@ -1,41 +1,57 @@
-<%= turbo_frame_tag dom_id(@music_selection) do %>
-  <li class="p-4 bg-blue-50 border-l-4 border-blue-500">
-    <%= form_with model: @music_selection, 
-                  url: contest_entry_selection_path(entry_id: @contest_entry.id, id: @music_selection.id),
-                  method: :patch,
-                  class: "flex items-center gap-4" do |f| %>
-      <div class="text-gray-500 font-medium text-sm w-8 flex-shrink-0">
-        #<%= @music_selection.position %>
-      </div>
-      
-      <div class="flex-1 grid grid-cols-2 gap-4">
-        <div>
-          <%= f.label :title, class: "block text-xs font-medium text-gray-700 mb-1" %>
-          <%= f.text_field :title, class: "text-field w-full text-sm" %>
-        </div>
-        <div>
-          <%= f.label :composer, class: "block text-xs font-medium text-gray-700 mb-1" %>
-          <%= f.text_field :composer, class: "text-field w-full text-sm" %>
-        </div>
-      </div>
+<% content_for :title, "Edit Music Selection" %>
 
-      <div class="flex gap-2 flex-shrink-0">
-        <%= f.submit "Save", class: "btn-primary-sm" %>
-        <%= link_to "Cancel",
-                    contest_entry_path(@contest_entry.contest, @contest_entry),
-                    class: "btn-secondary-sm",
-                    data: { turbo_frame: "_top" } %>
-      </div>
-    <% end %>
+<div class="pt-8 max-w-2xl mx-auto">
+  <h1 class="text-2xl font-bold mb-6">Edit Music Selection</h1>
 
+  <%= form_with model: @music_selection, url: contest_entry_music_selection_path(contest_id: @contest_entry.contest_id, entry_id: @contest_entry.id, id: @music_selection.id), method: :patch do |f| %>
     <% if @music_selection.errors.any? %>
-      <div class="mt-2 text-sm text-red-600">
-        <ul class="list-disc list-inside">
+      <div class="bg-red-50 border border-red-200 rounded p-4 mb-6">
+        <h3 class="font-bold text-red-800 mb-2">Errors:</h3>
+        <ul class="list-disc list-inside text-red-700">
           <% @music_selection.errors.full_messages.each do |message| %>
             <li><%= message %></li>
           <% end %>
         </ul>
       </div>
     <% end %>
-  </li>
-<% end %>
+
+    <div class="space-y-4">
+      <% if @music_selection.prescribed? %>
+        <div class="bg-blue-50 border border-blue-200 rounded p-4 mb-4">
+          <p class="text-sm text-blue-800">
+            This is a prescribed music selection. You can change to a different prescribed piece, but cannot edit the title or composer directly.
+          </p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Current Selection</label>
+          <div class="p-3 bg-gray-50 border rounded">
+            <p class="font-bold"><%= @music_selection.title %></p>
+            <p class="text-gray-600"><%= @music_selection.composer %></p>
+          </div>
+        </div>
+
+        <div>
+          <%= link_to "Change to Different Prescribed Music", new_prescribed_contest_entry_music_selections_path(contest_id: @contest_entry.contest_id, entry_id: @contest_entry.id, replace: @music_selection.id), class: "btn-secondary" %>
+        </div>
+      <% else %>
+        <div>
+          <%= f.label :title, class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= f.text_field :title, class: "text-field w-full", required: true %>
+        </div>
+
+        <div>
+          <%= f.label :composer, class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= f.text_field :composer, class: "text-field w-full", required: true %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="flex justify-end gap-3 mt-6">
+      <%= link_to "Cancel", contest_entry_path(@contest_entry.contest, @contest_entry), class: "btn-secondary" %>
+      <% unless @music_selection.prescribed? %>
+        <%= f.submit "Update Music Selection", class: "btn-primary" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

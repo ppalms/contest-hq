@@ -6,15 +6,33 @@ class MusicSelectionsControllerTest < ActionDispatch::IntegrationTest
     @contest_entry = contest_entries(:contest_a_school_a_ensemble_b)
     @contest = @contest_entry.contest
     sign_in_as(@user)
+    set_current_user(@user)
+
+    # Clean up any existing music selections to avoid position conflicts
+    @contest_entry.music_selections.destroy_all
   end
 
-  test "should create custom music selection" do
-    assert_difference("MusicSelection.count") do
-      post contest_entry_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id), params: {
+  test "index shows all music selections for entry" do
+    get contest_entry_music_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id)
+    assert_response :success
+    assert_select "h1", "Music Selections"
+  end
+
+  test "new renders form for custom music" do
+    get new_contest_entry_music_selection_path(contest_id: @contest.id, entry_id: @contest_entry.id, type: "custom")
+    assert_response :success
+    assert_select "h1", "Add Custom Music"
+    assert_select "input[name='music_selection[title]']"
+    assert_select "input[name='music_selection[composer]']"
+  end
+
+  test "create adds custom music selection" do
+    assert_difference "@contest_entry.music_selections.count", 1 do
+      post contest_entry_music_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id), params: {
         music_selection: {
-          contest_entry_id: @contest_entry.id,
           title: "New Symphony",
-          composer: "Test Composer"
+          composer: "New Composer",
+          position: 1
         }
       }
     end
@@ -22,85 +40,67 @@ class MusicSelectionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to contest_entry_path(@contest, @contest_entry)
   end
 
-  test "should add prescribed music selection" do
-    # Use prescribed music with correct season (demo_2024) and school class (A)
+  test "create adds prescribed music selection" do
     prescribed = prescribed_musics(:demo_2024_class_a_music_one)
 
-    # add_prescribed no longer saves immediately - it returns turbo stream with unsaved data
-    assert_no_difference("MusicSelection.count") do
-      post add_prescribed_contest_entry_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id, prescribed_music_id: prescribed.id), as: :turbo_stream
-    end
-
-    assert_response :success
-    assert_match /music_slot_prescribed/, @response.body
-  end
-
-  test "should reject prescribed music from wrong season" do
-    # demo_class_a_music_one is from demo_2025 season, but contest is demo_2024
-    prescribed = prescribed_musics(:demo_class_a_music_one)
-
-    assert_no_difference("MusicSelection.count") do
-      post add_prescribed_contest_entry_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id, prescribed_music_id: prescribed.id), as: :turbo_stream
-    end
-
-    assert_response :success
-    assert_match(/must be from the 2024 season/, @response.body)
-  end
-
-  test "should reject prescribed music from wrong school class" do
-    # Create a Class B prescribed music for 2024 season (contest requires Class A)
-    set_current_user(@user)
-    prescribed = PrescribedMusic.create!(
-      title: "Test Class B Music",
-      composer: "Test Composer",
-      season: seasons(:demo_2024),
-      school_class: school_classes(:demo_school_class_b),
-      account: accounts(:demo)
-    )
-
-    assert_no_difference("MusicSelection.count") do
-      post add_prescribed_contest_entry_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id, prescribed_music_id: prescribed.id), as: :turbo_stream
-    end
-
-    assert_response :success
-    assert_match(/must be for 1-A schools/, @response.body)
-  end
-
-  test "should save prescribed music via bulk_update" do
-    set_current_user(@user)
-    # Use prescribed music with correct season and school class
-    prescribed = prescribed_musics(:demo_2024_class_a_music_one)
-
-    @contest_entry.music_selections.destroy_all
-
-    # Simulate the bulk_update with prescribed music
-    assert_difference("MusicSelection.count") do
-      patch bulk_update_contest_entry_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id), params: {
-        music_selections: [
-          {
-            prescribed_music_id: prescribed.id,
-            position: 1,
-            title: prescribed.title,
-            composer: prescribed.composer,
-            _destroy: "0"
-          }
-        ]
+    assert_difference "@contest_entry.music_selections.count", 1 do
+      post contest_entry_music_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id), params: {
+        music_selection: {
+          prescribed_music_id: prescribed.id,
+          position: 1
+        }
       }
     end
 
-    @contest_entry.reload
-    assert_equal 1, @contest_entry.music_selections.count
-    assert_equal prescribed.id, @contest_entry.prescribed_selection.prescribed_music_id
+    assert_redirected_to contest_entry_path(@contest, @contest_entry)
   end
 
-  test "should destroy music selection" do
-    set_current_user(@user)
-    music = @contest_entry.music_selections.create!(title: "Test", composer: "Composer")
+  test "edit renders form for existing custom selection" do
+    selection = @contest_entry.music_selections.create!(title: "Test", composer: "Composer", position: 1, account: @contest.account)
 
-    assert_difference("MusicSelection.count", -1) do
-      delete contest_entry_selection_path(contest_id: @contest.id, entry_id: @contest_entry.id, id: music.id)
+    get edit_contest_entry_music_selection_path(contest_id: @contest.id, entry_id: @contest_entry.id, id: selection.id)
+    assert_response :success
+    assert_select "h1", "Edit Music Selection"
+  end
+
+  test "update modifies existing custom selection" do
+    selection = @contest_entry.music_selections.create!(title: "Old Title", composer: "Old Composer", position: 1, account: @contest.account)
+
+    patch contest_entry_music_selection_path(contest_id: @contest.id, entry_id: @contest_entry.id, id: selection.id), params: {
+      music_selection: {
+        title: "New Title",
+        composer: "New Composer"
+      }
+    }
+
+    assert_redirected_to contest_entry_path(@contest, @contest_entry)
+    selection.reload
+    assert_equal "New Title", selection.title
+    assert_equal "New Composer", selection.composer
+  end
+
+  test "destroy removes selection" do
+    selection = @contest_entry.music_selections.create!(title: "Test", composer: "Composer", position: 1, account: @contest.account)
+
+    assert_difference "@contest_entry.music_selections.count", -1 do
+      delete contest_entry_music_selection_path(contest_id: @contest.id, entry_id: @contest_entry.id, id: selection.id)
     end
 
     assert_redirected_to contest_entry_path(@contest, @contest_entry)
+  end
+
+  test "new_prescribed renders search page" do
+    get new_prescribed_contest_entry_music_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id)
+    assert_response :success
+    assert_select "h1", "Select Prescribed Music"
+    assert_select "input[name='search']"
+  end
+
+  test "new_prescribed searches and filters prescribed music" do
+    get new_prescribed_contest_entry_music_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id, search: "")
+    assert_response :success
+
+    # Should show music for the correct season and school class
+    assert_select "table"
   end
 end

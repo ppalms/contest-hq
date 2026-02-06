@@ -1,18 +1,32 @@
-<%= turbo_frame_tag dom_id(music_selection) do %>
-  <li class="p-4 hover:bg-gray-50">
-    <div class="flex items-center gap-4">
-      <div class="text-gray-500 font-medium text-sm w-8 flex-shrink-0">
-        #<%= index + 1 %>
-      </div>
-      <div class="flex-1 min-w-0">
-        <p class="font-semibold text-gray-900 truncate"><%= music_selection.title %></p>
-        <p class="text-sm text-gray-600 truncate"><%= music_selection.composer %></p>
-      </div>
-      <% if music_selection.prescribed? %>
-        <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded flex-shrink-0">
-          Prescribed
-        </span>
-      <% end %>
+<li class="p-4 hover:bg-gray-50" id="<%= dom_id(music_selection) %>">
+  <div class="flex items-center gap-4">
+    <div class="text-gray-500 font-medium text-sm w-8 flex-shrink-0">
+      #<%= music_selection.position %>
     </div>
-  </li>
-<% end %>
+    <div class="flex-1 min-w-0">
+      <p class="font-semibold text-gray-900 truncate"><%= music_selection.title %></p>
+      <p class="text-sm text-gray-600 truncate"><%= music_selection.composer %></p>
+    </div>
+    <% if music_selection.prescribed? %>
+      <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded flex-shrink-0">
+        Prescribed
+      </span>
+    <% else %>
+      <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded flex-shrink-0">
+        Custom
+      </span>
+    <% end %>
+    <% if current_user.contest_entries.include?(music_selection.contest_entry) %>
+      <div class="flex gap-2 flex-shrink-0">
+        <%= link_to "Edit",
+                    edit_contest_entry_music_selection_path(contest_id: music_selection.contest_entry.contest_id, entry_id: music_selection.contest_entry.id, id: music_selection.id),
+                    class: "btn-secondary-sm" %>
+        <%= button_to "Delete",
+                      contest_entry_music_selection_path(contest_id: music_selection.contest_entry.contest_id, entry_id: music_selection.contest_entry.id, id: music_selection.id),
+                      method: :delete,
+                      class: "btn-danger-sm",
+                      form: { data: { turbo_confirm: "Are you sure?" } } %>
+      </div>
+    <% end %>
+  </div>
+</li>

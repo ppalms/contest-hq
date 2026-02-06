@@ -1,0 +1,50 @@
+<% content_for :title, "Music Selections" %>
+
+<div class="pt-8 max-w-4xl mx-auto">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">Music Selections</h1>
+  </div>
+
+  <% if @music_selections.empty? %>
+    <div class="empty-state text-center py-12 bg-gray-50 rounded-lg">
+      <p class="text-gray-600 mb-4">No music selections yet</p>
+      <%= link_to "Add Custom Music", new_contest_entry_music_selection_path(contest_id: @contest_entry.contest_id, entry_id: @contest_entry.id, type: "custom"), class: "btn-primary" %>
+      <%= link_to "Add Prescribed Music", new_prescribed_contest_entry_music_selections_path(contest_id: @contest_entry.contest_id, entry_id: @contest_entry.id), class: "btn-secondary" %>
+    </div>
+  <% else %>
+    <div class="space-y-4">
+      <% @music_selections.each do |selection| %>
+        <div class="p-4 bg-white rounded-lg border">
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 class="font-bold"><%= selection.title %></h3>
+              <p class="text-gray-600"><%= selection.composer %></p>
+              <% if selection.prescribed? %>
+                <span class="inline-block mt-2 px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded">Prescribed</span>
+              <% else %>
+                <span class="inline-block mt-2 px-2 py-1 text-xs bg-green-100 text-green-800 rounded">Custom</span>
+              <% end %>
+            </div>
+            <div class="flex gap-2">
+              <%= link_to "Edit", edit_contest_entry_music_selection_path(contest_id: @contest_entry.contest_id, entry_id: @contest_entry.id, id: selection.id), class: "btn-secondary-sm" %>
+              <%= button_to "Delete", contest_entry_music_selection_path(contest_id: @contest_entry.contest_id, entry_id: @contest_entry.id, id: selection.id), method: :delete, class: "btn-danger-sm", data: { confirm: "Are you sure?" } %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="mt-6 flex gap-3">
+      <% if @contest_entry.missing_custom_count > 0 %>
+        <%= link_to "Add Custom Music", new_contest_entry_music_selection_path(contest_id: @contest_entry.contest_id, entry_id: @contest_entry.id, type: "custom"), class: "btn-primary" %>
+      <% end %>
+      <% if @contest_entry.missing_prescribed_count > 0 %>
+        <%= link_to "Add Prescribed Music", new_prescribed_contest_entry_music_selections_path(contest_id: @contest_entry.contest_id, entry_id: @contest_entry.id), class: "btn-secondary" %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="mt-6">
+    <%= link_to "Back to Entry", contest_entry_path(@contest_entry.contest, @contest_entry), class: "btn-secondary" %>
+  </div>
+</div>

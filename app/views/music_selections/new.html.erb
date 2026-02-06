@@ -1,10 +1,37 @@
-<div class="wide-form-container" id="new_music_selection">
-  <h1>Add Music Selection</h1>
+<% content_for :title, "Add Custom Music" %>
 
-  <p>
-    <span class="block text-xl font-bold"><%= @contest_entry.large_ensemble.name %></span>
-    <span class="block"><%= @contest_entry.contest.name %></span>
-  </p>
+<div class="pt-8 max-w-2xl mx-auto">
+  <h1 class="text-2xl font-bold mb-6">Add Custom Music</h1>
 
-  <%= render "form", music_selection: @music_selection %>
+  <%= form_with model: @music_selection, url: contest_entry_music_selections_path(contest_id: @contest_entry.contest_id, entry_id: @contest_entry.id), method: :post do |f| %>
+    <% if @music_selection.errors.any? %>
+      <div class="bg-red-50 border border-red-200 rounded p-4 mb-6">
+        <h3 class="font-bold text-red-800 mb-2">Errors:</h3>
+        <ul class="list-disc list-inside text-red-700">
+          <% @music_selection.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="space-y-4">
+      <div>
+        <%= f.label :title, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :title, class: "text-field w-full", required: true %>
+      </div>
+
+      <div>
+        <%= f.label :composer, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.text_field :composer, class: "text-field w-full", required: true %>
+      </div>
+
+      <%= f.hidden_field :position, value: params[:position] %>
+    </div>
+
+    <div class="flex justify-end gap-3 mt-6">
+      <%= link_to "Cancel", contest_entry_path(@contest_entry.contest, @contest_entry), class: "btn-secondary" %>
+      <%= f.submit "Add Music Selection", class: "btn-primary" %>
+    </div>
+  <% end %>
 </div>

@@ -6,12 +6,13 @@ class MusicSelection < ApplicationRecord
 
   validates :title, presence: true
   validates :composer, presence: true
+  validates :position, uniqueness: { scope: :contest_entry_id }
   validate :prescribed_music_matches_contest, if: :prescribed_music_id?
+  validate :position_within_allowed_range
 
   default_scope { order(position: :asc) }
 
   before_validation :populate_from_prescribed_music, if: :prescribed_music_id_changed?
-  before_create :set_default_position
 
   def prescribed?
     prescribed_music_id.present?
@@ -33,7 +34,7 @@ class MusicSelection < ApplicationRecord
   def set_default_position
     return if position.present?
 
-    max_position = contest_entry.music_selections.unscoped.maximum(:position) || 0
+    max_position = MusicSelection.unscoped.where(contest_entry_id: contest_entry.id).maximum(:position) || 0
     self.position = max_position + 1
   end
 
@@ -49,6 +50,18 @@ class MusicSelection < ApplicationRecord
 
     if school_class && prescribed_music.school_class_id != school_class.id
       errors.add(:prescribed_music, "must be for #{school_class.name} schools")
+    end
+  end
+
+  def position_within_allowed_range
+    return unless contest_entry && position
+
+    contest = contest_entry.contest
+    return unless contest
+
+    max_position = contest.total_required_music_count
+    if position < 1 || position > max_position
+      errors.add(:position, "must be between 1 and #{max_position}")
     end
   end
 end

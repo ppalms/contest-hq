@@ -18,6 +18,8 @@ class Contest < ApplicationRecord
   has_many :contest_entries, dependent: :destroy
 
   validates :name, presence: true
+  validates :required_prescribed_count, numericality: { greater_than_or_equal_to: 0 }
+  validates :required_custom_count, numericality: { greater_than_or_equal_to: 0 }
   validate :start_date_before_end_date
   validate :entry_deadline_before_start_date
   validate :unique_contest_phases
@@ -45,6 +47,10 @@ class Contest < ApplicationRecord
     return "Scheduled" if schedules.any? && schedules.first.days.any?
     return "Ready to Schedule" if setup_complete?
     "Needs Setup"
+  end
+
+  def total_required_music_count
+    required_prescribed_count + required_custom_count
   end
 
   private

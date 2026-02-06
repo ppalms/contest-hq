@@ -77,7 +77,8 @@ class ContestEntriesController < ApplicationController
       @contest_entry.music_selections.create!(
         title: music_selection.title,
         composer: music_selection.composer,
-        prescribed_music_id: music_selection.prescribed_music_id
+        prescribed_music_id: music_selection.prescribed_music_id,
+        position: music_selection.position
       )
     end
 

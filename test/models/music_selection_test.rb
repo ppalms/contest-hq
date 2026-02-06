@@ -93,4 +93,121 @@ class MusicSelectionTest < ActiveSupport::TestCase
 
     assert music.valid?
   end
+
+  test "position must be explicitly set on create" do
+    @contest_entry.music_selections.destroy_all
+
+    selection1 = @contest_entry.music_selections.create!(title: "First", composer: "Composer 1", position: 1)
+    assert_equal 1, selection1.position
+
+    selection2 = @contest_entry.music_selections.create!(title: "Second", composer: "Composer 2", position: 2)
+    assert_equal 2, selection2.position
+
+    selection3 = @contest_entry.music_selections.create!(title: "Third", composer: "Composer 3", position: 3)
+    assert_equal 3, selection3.position
+  end
+
+  test "position can be explicitly set on create" do
+    @contest_entry.music_selections.destroy_all
+    selection = @contest_entry.music_selections.create!(title: "Test", composer: "Composer", position: 2)
+    assert_equal 2, selection.position
+  end
+
+  test "default scope returns selections in position order" do
+    @contest_entry.music_selections.destroy_all
+    selection1 = @contest_entry.music_selections.create!(title: "First", composer: "C1", position: 1)
+    selection2 = @contest_entry.music_selections.create!(title: "Second", composer: "C2", position: 2)
+    selection3 = @contest_entry.music_selections.create!(title: "Third", composer: "C3", position: 3)
+
+    selections = @contest_entry.music_selections.to_a
+    assert_equal [ selection1.id, selection2.id, selection3.id ], selections.map(&:id), "Selections should be ordered by position"
+  end
+
+  test "position updates maintain order" do
+    @contest_entry.music_selections.destroy_all
+    selection1 = @contest_entry.music_selections.create!(title: "First", composer: "C1", position: 1)
+    selection2 = @contest_entry.music_selections.create!(title: "Second", composer: "C2", position: 2)
+    selection3 = @contest_entry.music_selections.create!(title: "Third", composer: "C3", position: 3)
+
+    selection1.position = 3
+    selection1.save(validate: false)
+    selection3.update!(position: 1)
+    selection1.position = 3
+    selection1.save!
+
+    selections = @contest_entry.music_selections.reload.to_a
+    assert_equal [ selection3.id, selection2.id, selection1.id ], selections.map(&:id)
+  end
+
+  test "prescribed music updates title and composer when changed" do
+    @contest_entry.music_selections.destroy_all
+    old_prescribed = prescribed_musics(:demo_2024_class_a_music_one)
+    new_prescribed = prescribed_musics(:demo_2024_class_a_music_two)
+
+    selection = @contest_entry.music_selections.create!(prescribed_music_id: old_prescribed.id, position: 1)
+    assert_equal old_prescribed.title, selection.title
+
+    selection.update!(prescribed_music_id: new_prescribed.id)
+    assert_equal new_prescribed.title, selection.title
+    assert_equal new_prescribed.composer, selection.composer
+  end
+
+  test "position can be reused after deletion" do
+    @contest_entry.music_selections.destroy_all
+
+    selection1 = @contest_entry.music_selections.create!(title: "First", composer: "C1", position: 1)
+    selection2 = @contest_entry.music_selections.create!(title: "Second", composer: "C2", position: 2)
+
+    selection1.destroy
+
+    # Can now create a new selection at position 1
+    selection3 = @contest_entry.music_selections.create!(title: "Third", composer: "C3", position: 1)
+    assert_equal 1, selection3.position
+  end
+
+  test "validates position uniqueness within contest_entry" do
+    @contest_entry.music_selections.destroy_all
+    selection1 = @contest_entry.music_selections.create!(title: "First", composer: "C1", position: 1)
+    selection2 = @contest_entry.music_selections.build(title: "Second", composer: "C2", position: 1)
+
+    assert_not selection2.valid?
+    assert_includes selection2.errors[:position], "has already been taken"
+  end
+
+  test "allows same position across different contest entries" do
+    @contest_entry.music_selections.destroy_all
+    other_entry = contest_entries(:contest_a_school_a_ensemble_a)
+    other_entry.music_selections.destroy_all
+
+    selection1 = @contest_entry.music_selections.create!(title: "First", composer: "C1", position: 1)
+    selection2 = other_entry.music_selections.create!(title: "Second", composer: "C2", position: 1)
+
+    assert selection1.valid?
+    assert selection2.valid?
+  end
+
+  test "validates position is within allowed range based on contest requirements" do
+    @contest_entry.music_selections.destroy_all
+    contest = @contest_entry.contest
+    contest.update!(required_prescribed_count: 1, required_custom_count: 2)
+
+    selection = @contest_entry.music_selections.build(title: "Test", composer: "Composer", position: 4)
+
+    assert_not selection.valid?
+    assert_includes selection.errors[:position], "must be between 1 and 3"
+  end
+
+  test "allows position within valid range" do
+    @contest_entry.music_selections.destroy_all
+    contest = @contest_entry.contest
+    contest.update!(required_prescribed_count: 1, required_custom_count: 2)
+
+    selection1 = @contest_entry.music_selections.create!(title: "First", composer: "C1", position: 1)
+    selection2 = @contest_entry.music_selections.create!(title: "Second", composer: "C2", position: 2)
+    selection3 = @contest_entry.music_selections.create!(title: "Third", composer: "C3", position: 3)
+
+    assert selection1.valid?
+    assert selection2.valid?
+    assert selection3.valid?
+  end
 end
