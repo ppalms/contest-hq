@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_05_055600) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_05_215344) do
   create_table "accounts", force: :cascade do |t|
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.string "name", null: false
@@ -53,6 +53,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_05_055600) do
     t.time "end_time"
     t.datetime "entry_deadline"
     t.string "name"
+    t.integer "required_custom_count", default: 2, null: false
+    t.integer "required_prescribed_count", default: 1, null: false
     t.bigint "season_id", null: false
     t.time "start_time"
     t.datetime "updated_at", null: false

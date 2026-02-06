@@ -12,7 +12,7 @@
         </p>
       <% end %>
     </div>
-    <%= link_to "Back to Entry", contest_entry_path(contest_id: @contest_entry.contest.id, id: @contest_entry.id), class: "btn-secondary" %>
+    <%= link_to "Back to Entry", contest_entry_path(contest_id: @contest_entry.contest.id, id: @contest_entry.id), class: "btn-secondary-sm" %>
   </div>
 
   <!-- Search Bar -->
@@ -26,9 +26,9 @@
                            class: "text-field w-full",
                            autofocus: true %>
       </div>
-      <%= form.submit "Search", class: "btn-primary" %>
+      <%= form.submit "Search", class: "btn-primary-sm" %>
       <% if params[:search].present? %>
-        <%= link_to "Clear", contest_entry_select_prescribed_music_path(contest_id: @contest_entry.contest.id, entry_id: @contest_entry.id), class: "btn-secondary" %>
+        <%= link_to "Clear", contest_entry_select_prescribed_music_path(contest_id: @contest_entry.contest.id, entry_id: @contest_entry.id), class: "btn-secondary-sm" %>
       <% end %>
     <% end %>
   </div>

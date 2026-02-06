@@ -1,0 +1,46 @@
+<%
+# Shared Form Wrapper - Design System Component
+#
+# Wraps form fields with consistent layout, error handling, and button positioning.
+# This partial should be used INSIDE a form_with block.
+#
+# Parameters:
+#   form (required)        - FormBuilder instance from form_with
+#   submit_text (optional) - Text for submit button (default: "Save")
+#   cancel_path (required) - Path for cancel button
+#   show_cancel (optional) - Whether to show cancel button (default: true)
+#   entity (optional)      - Model instance for error display
+#
+# Usage:
+#   form_with model: @school, class: "wide-form" do |form|
+#     render "shared/form_wrapper",
+#         form: form,
+#         submit_text: "Save School",
+#         cancel_path: schools_path,
+#         entity: @school do
+#       <div>
+#         form.label :name, style: "display: block"
+#         form.text_field :name, class: "text-field"
+#       </div>
+#     end
+#   end
+
+submit_text ||= "Save"
+show_cancel = true if !local_assigns.key?(:show_cancel)
+entity ||= nil
+%>
+
+<%= yield %>
+
+<div class="form-button-container">
+  <%= form.submit submit_text, class: "btn-primary-sm" %>
+  <% if show_cancel %>
+    <%= link_to "Cancel", cancel_path, class: "btn-secondary-sm", role: "button" %>
+  <% end %>
+</div>
+
+<% if entity&.errors&.any? %>
+  <div class="pt-2 sm:col-span-2">
+    <%= render "layouts/error_messages", errors: entity.errors %>
+  </div>
+<% end %>

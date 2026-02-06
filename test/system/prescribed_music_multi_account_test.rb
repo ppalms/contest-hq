@@ -158,10 +158,7 @@ class PrescribedMusicMultiAccountTest < ApplicationSystemTestCase
     assert_text @customer_ensemble.name
 
     # Step 5: Add music selections
-    click_on "Add Music"
-
-    # Add prescribed music
-    click_on "Select Prescribed Music"
+    click_on "Add Prescribed Music"
 
     # Search for prescribed music
     fill_in "search", with: "Concerto"
@@ -173,32 +170,34 @@ class PrescribedMusicMultiAccountTest < ApplicationSystemTestCase
     assert_text "Customer Concerto No. 3"
 
     # Select Customer Concerto No. 2
-    find("button", text: /Customer Concerto No\. 2/).click
+    row = find("tr", text: "Customer Concerto No. 2")
+    within row do
+      click_on "Select"
+    end
 
+    # Verify prescribed music was added
+    assert_text "Music selection added successfully"
     assert_text "Prescribed"
-    assert_text "New"
     assert_text "Customer Concerto No. 2"
 
     # Step 6: Add first custom music selection
-    within all("[data-slot-type='custom']").first do
-      click_on "Add"
-    end
+    click_on "Add Custom Music"
     fill_in "Title", with: "Custom Piece No. 1"
     fill_in "Composer", with: "Custom Composer A"
-    click_on "Add to List"
+    click_on "Add Music Selection"
+
+    # Verify first custom piece was added
+    assert_text "Music selection added successfully"
+    assert_text "Custom Piece No. 1"
 
     # Step 7: Add second custom music selection
-    within all("[data-slot-type='custom']").last do
-      click_on "Add"
-    end
+    click_on "Add Custom Music"
     fill_in "Title", with: "Custom Piece No. 2"
     fill_in "Composer", with: "Custom Composer B"
-    click_on "Add to List"
-
-    # Save all selections
-    click_on "Save"
+    click_on "Add Music Selection"
 
     # Step 8: Verify all three selections are displayed
+    assert_text "Music selection added successfully"
     assert_text "Customer Concerto No. 2"
     assert_text "Custom Piece No. 1"
     assert_text "Custom Piece No. 2"

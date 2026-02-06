@@ -4,7 +4,7 @@
       entity_partial: "contests/contest",
       actions: (capture do %>
         <% if current_user.account_admin? %>
-          <%= link_to "Edit", edit_contest_path(@contest), class: "btn-secondary-sm" %>
+          <%= link_to "Edit", edit_contest_path(@contest), class: "btn-primary-sm" %>
           <%= button_to "Delete",
           @contest,
           method: :delete,
@@ -118,7 +118,7 @@
               </ul>
             </div>
 
-            <%= link_to "Begin Setup →", contest_setup_path(@contest), class: "btn-primary" %>
+            <%= link_to "Begin Setup →", contest_setup_path(@contest), class: "btn-primary-sm" %>
           </div>
         </div>
       </div>

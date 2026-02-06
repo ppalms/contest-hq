@@ -1,27 +1,25 @@
-<div class="py-8" id="show_<%= dom_id @large_ensemble %>">
-  <div class="flex flex-col sm:flex-row">
-    <h1><%= @large_ensemble.name %></h1>
+<%= render "shared/entity_detail",
+      entity: @large_ensemble,
+      title: @large_ensemble.name,
+      entity_partial: "roster/large_ensembles/large_ensemble",
+      actions: (capture do %>
+        <% if current_user.conducted_ensembles.exists?(id: @large_ensemble.id) %>
+          <%= link_to "Edit",
+          edit_roster_large_ensemble_path(@large_ensemble),
+          class: "btn-primary-sm" %>
 
-    <% if current_user.conducted_ensembles.exists?(id: @large_ensemble.id) %>
-      <div class="action-button-container">
-        <%= link_to "Edit",
-        edit_roster_large_ensemble_path(@large_ensemble),
-        class: "btn-secondary-sm sm:btn-secondary" %>
-
-        <%= button_to "Delete",
-        roster_large_ensemble_path(@large_ensemble),
-        method: :delete,
-        class: "btn-danger-sm sm:btn-danger",
-        form: {
-          data: {
-            turbo_confirm: "Are you sure?",
-          },
-        } %>
-      </div>
-    <% end %>
-  </div>
-
-  <%= render @large_ensemble %>
+          <%= button_to "Delete",
+          roster_large_ensemble_path(@large_ensemble),
+          method: :delete,
+          class: "btn-danger-sm",
+          form: {
+            data: {
+              turbo_confirm: "Are you sure?",
+            },
+          } %>
+        <% end %>
+      <% end) do %>
+<% end %>
 
   <%= render "contests" %>
 </div>

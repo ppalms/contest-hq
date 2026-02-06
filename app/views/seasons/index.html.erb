@@ -2,7 +2,7 @@
 <div class="py-8 space-y-4" id="seasons">
   <div class="flex justify-between">
     <h1>Contest Seasons</h1>
-    <%= link_to "New Season", new_season_path, class: "btn-primary" %>
+    <%= link_to "New Season", new_season_path, class: "btn-primary-sm" %>
   </div>
 
   <div class="rounded-md bg-white border border-neutral-200 shadow-2xs">
@@ -40,7 +40,7 @@
               </p>
             </div>
             <div class="flex items-center gap-2">
-              <%= link_to "Edit", edit_season_path(season), class: "btn-secondary-sm" %>
+              <%= link_to "Edit", edit_season_path(season), class: "btn-primary-sm" %>
               <% if season.contests.empty? %>
                 <%= button_to "Delete",
                 season,

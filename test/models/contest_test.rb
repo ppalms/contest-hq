@@ -87,4 +87,60 @@ class ContestTest < ActiveSupport::TestCase
 
     assert_equal "Scheduled", @contest.setup_status
   end
+
+  test "has default required_prescribed_count of 1" do
+    contest = Contest.new(
+      name: "Test Contest",
+      contest_start: 1.month.from_now,
+      contest_end: 1.month.from_now + 1.day,
+      account: accounts(:demo),
+      season: seasons(:demo_2024)
+    )
+
+    assert_equal 1, contest.required_prescribed_count
+  end
+
+  test "has default required_custom_count of 2" do
+    contest = Contest.new(
+      name: "Test Contest",
+      contest_start: 1.month.from_now,
+      contest_end: 1.month.from_now + 1.day,
+      account: accounts(:demo),
+      season: seasons(:demo_2024)
+    )
+
+    assert_equal 2, contest.required_custom_count
+  end
+
+  test "validates required_prescribed_count is non-negative" do
+    @contest.required_prescribed_count = -1
+    assert_not @contest.valid?
+    assert_includes @contest.errors[:required_prescribed_count], "must be greater than or equal to 0"
+  end
+
+  test "validates required_custom_count is non-negative" do
+    @contest.required_custom_count = -1
+    assert_not @contest.valid?
+    assert_includes @contest.errors[:required_custom_count], "must be greater than or equal to 0"
+  end
+
+  test "total_required_music_count returns sum of prescribed and custom" do
+    @contest.required_prescribed_count = 2
+    @contest.required_custom_count = 3
+    assert_equal 5, @contest.total_required_music_count
+  end
+
+  test "allows zero prescribed music requirement" do
+    @contest.required_prescribed_count = 0
+    @contest.required_custom_count = 3
+    assert @contest.valid?
+    assert_equal 3, @contest.total_required_music_count
+  end
+
+  test "allows zero custom music requirement" do
+    @contest.required_prescribed_count = 3
+    @contest.required_custom_count = 0
+    assert @contest.valid?
+    assert_equal 3, @contest.total_required_music_count
+  end
 end

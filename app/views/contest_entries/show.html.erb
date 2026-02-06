@@ -1,24 +1,21 @@
-<div class="pt-8" id="show_<%= dom_id @contest_entry %>">
-  <div class="flex flex-col sm:flex-row">
-    <h1><%= @contest_entry.large_ensemble.name %></h1>
-
-    <% if @contest_entry.user == current_user %>
-      <div class="action-button-container">
-        <%= link_to "Edit",
-        edit_contest_entry_path(@contest_entry.contest, @contest_entry),
-        class: "btn-secondary-sm sm:btn-secondary" %>
-        <%= button_to "Delete",
-        contest_entry_path(@contest_entry.contest, @contest_entry),
-        method: :delete,
-        class: "btn-danger-sm sm:btn-danger",
-        form: {
-          data: {
-            turbo_confirm: "Are you sure?",
-          },
-        } %>
-      </div>
-    <% end %>
-  </div>
-
-  <%= render @contest_entry %>
-</div>
+<%= render "shared/entity_detail",
+      entity: @contest_entry,
+      title: @contest_entry.large_ensemble.name,
+      entity_partial: "contest_entries/contest_entry",
+      actions: (capture do %>
+        <% if @contest_entry.user == current_user %>
+          <%= link_to "Edit",
+          edit_contest_entry_path(@contest_entry.contest, @contest_entry),
+          class: "btn-primary-sm" %>
+          <%= button_to "Delete",
+          contest_entry_path(@contest_entry.contest, @contest_entry),
+          method: :delete,
+          class: "btn-danger-sm",
+          form: {
+            data: {
+              turbo_confirm: "Are you sure?",
+            },
+          } %>
+        <% end %>
+      <% end) do %>
+<% end %>

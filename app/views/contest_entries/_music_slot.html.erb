@@ -61,12 +61,12 @@
           <% if is_prescribed %>
             <%= link_to "Select Prescribed Music",
               select_prescribed_contest_entry_selections_path(entry_id: @contest_entry.id),
-              class: "btn-primary",
+              class: "btn-primary-sm",
               data: { turbo_frame: frame_id } %>
           <% else %>
             <%= link_to "Add Custom Music",
               select_custom_contest_entry_selections_path(entry_id: @contest_entry.id, slot: slot_number),
-              class: "btn-primary",
+              class: "btn-primary-sm",
               data: { turbo_frame: frame_id } %>
           <% end %>
         <% else %>

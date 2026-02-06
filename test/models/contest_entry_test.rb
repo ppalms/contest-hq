@@ -140,12 +140,12 @@ class ContestEntryTest < ActiveSupport::TestCase
 
     assert_not entry.music_complete?
 
-    entry.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one))
-    entry.music_selections.create!(title: "Symphony", composer: "Jones")
+    entry.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one), position: 1)
+    entry.music_selections.create!(title: "Symphony", composer: "Jones", position: 2)
 
     assert_not entry.music_complete?
 
-    entry.music_selections.create!(title: "Overture", composer: "Brown")
+    entry.music_selections.create!(title: "Overture", composer: "Brown", position: 3)
 
     assert entry.music_complete?
   end
@@ -153,11 +153,12 @@ class ContestEntryTest < ActiveSupport::TestCase
   test "prescribed_selection returns the prescribed music selection" do
     set_current_user(users(:demo_director_a))
     entry = contest_entries(:contest_a_school_a_ensemble_b)
+    entry.music_selections.destroy_all
 
     assert_nil entry.prescribed_selection
 
-    prescribed = entry.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one))
-    entry.music_selections.create!(title: "Symphony", composer: "Jones")
+    prescribed = entry.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one), position: 1)
+    entry.music_selections.create!(title: "Symphony", composer: "Jones", position: 2)
 
     assert_equal prescribed, entry.prescribed_selection
   end
@@ -169,9 +170,9 @@ class ContestEntryTest < ActiveSupport::TestCase
     entry.music_selections.destroy_all
     assert_equal 0, entry.custom_selections.count
 
-    entry.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one))
-    custom1 = entry.music_selections.create!(title: "Symphony", composer: "Jones")
-    custom2 = entry.music_selections.create!(title: "Overture", composer: "Brown")
+    entry.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one), position: 1)
+    custom1 = entry.music_selections.create!(title: "Symphony", composer: "Jones", position: 2)
+    custom2 = entry.music_selections.create!(title: "Overture", composer: "Brown", position: 3)
 
     assert_equal 2, entry.custom_selections.count
     assert_includes entry.custom_selections, custom1
@@ -191,5 +192,115 @@ class ContestEntryTest < ActiveSupport::TestCase
     entry_2024_b = ContestEntry.create!(contest: contest_2024_b, user: users(:demo_director_a), large_ensemble: ensemble)
 
     assert_equal entry_2024_a, entry_2024_b.previous_entry_in_season
+  end
+
+  test "music_complete? respects contest's required_prescribed_count" do
+    set_current_user(users(:demo_director_a))
+    @contest_entry.music_selections.destroy_all
+    @contest.update!(required_prescribed_count: 2, required_custom_count: 1)
+
+    @contest_entry.music_selections.create!(title: "March 1", composer: "Smith", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one), position: 1)
+    @contest_entry.music_selections.create!(title: "Custom", composer: "Jones", position: 2)
+
+    assert_not @contest_entry.music_complete?, "Should not be complete with only 1 prescribed when 2 required"
+
+    @contest_entry.music_selections.create!(title: "March 2", composer: "Brown", prescribed_music: prescribed_musics(:demo_2024_class_a_music_two), position: 3)
+
+    assert @contest_entry.music_complete?, "Should be complete with 2 prescribed and 1 custom"
+  end
+
+  test "music_complete? respects contest's required_custom_count" do
+    set_current_user(users(:demo_director_a))
+    @contest_entry.music_selections.destroy_all
+    @contest.update!(required_prescribed_count: 1, required_custom_count: 3)
+
+    @contest_entry.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one), position: 1)
+    @contest_entry.music_selections.create!(title: "Custom 1", composer: "Jones", position: 2)
+    @contest_entry.music_selections.create!(title: "Custom 2", composer: "Brown", position: 3)
+
+    assert_not @contest_entry.music_complete?, "Should not be complete with only 2 custom when 3 required"
+
+    @contest_entry.music_selections.create!(title: "Custom 3", composer: "Davis", position: 4)
+
+    assert @contest_entry.music_complete?, "Should be complete with 1 prescribed and 3 custom"
+  end
+
+  test "music_complete? returns false when missing prescribed selections" do
+    set_current_user(users(:demo_director_a))
+    @contest_entry.music_selections.destroy_all
+
+    @contest_entry.music_selections.create!(title: "Custom 1", composer: "Jones", position: 1)
+    @contest_entry.music_selections.create!(title: "Custom 2", composer: "Brown", position: 2)
+    @contest_entry.music_selections.create!(title: "Custom 3", composer: "Davis", position: 3)
+
+    assert_not @contest_entry.music_complete?, "Should not be complete without prescribed music"
+  end
+
+  test "music_complete? returns false when missing custom selections" do
+    set_current_user(users(:demo_director_a))
+    @contest_entry.music_selections.destroy_all
+
+    @contest_entry.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one), position: 1)
+
+    assert_not @contest_entry.music_complete?, "Should not be complete with only prescribed music"
+  end
+
+  test "required_music_slots returns array of slot definitions" do
+    @contest.update!(required_prescribed_count: 2, required_custom_count: 1)
+
+    slots = @contest_entry.required_music_slots
+
+    assert_equal 3, slots.length
+    assert_equal 2, slots.count { |s| s[:type] == :prescribed }
+    assert_equal 1, slots.count { |s| s[:type] == :custom }
+    assert_equal (1..3).to_a, slots.map { |s| s[:position] }
+  end
+
+  test "required_music_slots marks filled slots correctly" do
+    set_current_user(users(:demo_director_a))
+    @contest_entry.music_selections.destroy_all
+    @contest.update!(required_prescribed_count: 1, required_custom_count: 2)
+
+    @contest_entry.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one), position: 1)
+
+    slots = @contest_entry.required_music_slots
+
+    assert_equal 3, slots.length
+    assert slots[0][:music_selection].present?, "First slot should have music selection"
+    assert_nil slots[1][:music_selection], "Second slot should be empty"
+    assert_nil slots[2][:music_selection], "Third slot should be empty"
+  end
+
+  test "missing_prescribed_count returns number of prescribed pieces needed" do
+    set_current_user(users(:demo_director_a))
+    @contest_entry.music_selections.destroy_all
+    @contest.update!(required_prescribed_count: 2, required_custom_count: 1)
+
+    assert_equal 2, @contest_entry.missing_prescribed_count
+
+    @contest_entry.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one), position: 1)
+
+    assert_equal 1, @contest_entry.missing_prescribed_count
+
+    @contest_entry.music_selections.create!(title: "March 2", composer: "Brown", prescribed_music: prescribed_musics(:demo_2024_class_a_music_two), position: 2)
+
+    assert_equal 0, @contest_entry.missing_prescribed_count
+  end
+
+  test "missing_custom_count returns number of custom pieces needed" do
+    set_current_user(users(:demo_director_a))
+    @contest_entry.music_selections.destroy_all
+    @contest.update!(required_prescribed_count: 1, required_custom_count: 3)
+
+    assert_equal 3, @contest_entry.missing_custom_count
+
+    @contest_entry.music_selections.create!(title: "Custom 1", composer: "Jones", position: 1)
+
+    assert_equal 2, @contest_entry.missing_custom_count
+
+    @contest_entry.music_selections.create!(title: "Custom 2", composer: "Brown", position: 2)
+    @contest_entry.music_selections.create!(title: "Custom 3", composer: "Davis", position: 3)
+
+    assert_equal 0, @contest_entry.missing_custom_count
   end
 end

@@ -1,58 +1,50 @@
 <%= form_with(model: contest, class: "wide-form") do |form| %>
-  <div class="sm:col-span-2">
-    <%= form.label :name %>
-    <%= form.text_field :name, class: "text-field", autofocus: true %>
-  </div>
-
-  <div>
-    <%= form.label :season_id, "Season" %>
-    <%= form.collection_select :season_id, Season.by_name, :id, :display_name, 
-        { prompt: "Select a season" }, 
-        { class: "text-field" } %>
-    <small class="help-text">
-      Select the season for this contest. <%= link_to "Manage seasons", seasons_path, class: "text-blue-600" if current_user.admin? %>
-    </small>
-  </div>
-
-  <div>
-    <%= form.label :contest_start, "Start date" %>
-    <%= form.date_field :contest_start, class: "text-field" %>
-  </div>
-
-  <div>
-    <%= form.label :contest_end, "End date" %>
-    <%= form.date_field :contest_end, class: "text-field" %>
-  </div>
-
-  <div>
-    <%= form.label :school_classes, "Eligible school classes", style: "display: block" %>
-    <div
-      class="
-        flex flex-col space-y-2 border border-gray-400 bg-white shadow p-4 rounded-md
-      "
-    >
-      <div class="-mt-2">
-        <small class="help-text">
-          Select all school classes that can participate in this contest.
-        </small>
-      </div>
-
-      <%= form.collection_checkboxes :school_class_ids, SchoolClass.all.order(:ordinal), :id, :name do |helper| %>
-        <%= helper.label do %>
-          <%= helper.check_box %><span class="ml-2"><%= helper.label %></span>
-        <% end %>
-      <% end %>
+  <%= render "shared/form_wrapper",
+      form: form,
+      submit_text: contest.new_record? ? "Create Contest" : "Update Contest",
+      cancel_path: contest.new_record? ? contests_path : contest_path(contest),
+      entity: contest do %>
+    
+    <div class="sm:col-span-2">
+      <%= form.label :name %>
+      <%= form.text_field :name, class: "text-field", autofocus: true %>
     </div>
-  </div>
 
-  <div class="form-button-container">
-    <%= form.submit class: "btn-primary" %>
-    <%= link_to "Cancel", @contest, class: "btn-secondary", role: "button" %>
-  </div>
+    <div>
+      <%= form.label :season_id, "Season" %>
+      <%= form.collection_select :season_id, Season.by_name, :id, :display_name, 
+          { prompt: "Select a season" }, 
+          { class: "text-field" } %>
+      <small class="help-text">
+        Select the season for this contest. <%= link_to "Manage seasons", seasons_path, class: "text-blue-600" if current_user.admin? %>
+      </small>
+    </div>
 
-  <% if contest.errors.any? %>
-    <div class="pt-2 sm:col-span-2">
-      <%= render "layouts/error_messages", errors: contest.errors %>
+    <div>
+      <%= form.label :contest_start, "Start date" %>
+      <%= form.date_field :contest_start, class: "text-field" %>
+    </div>
+
+    <div>
+      <%= form.label :contest_end, "End date" %>
+      <%= form.date_field :contest_end, class: "text-field" %>
+    </div>
+
+    <div>
+      <%= form.label :school_classes, "Eligible school classes", style: "display: block" %>
+      <div class="flex flex-col space-y-2 border border-gray-400 bg-white shadow p-4 rounded-md">
+        <div class="-mt-2">
+          <small class="help-text">
+            Select all school classes that can participate in this contest.
+          </small>
+        </div>
+
+        <%= form.collection_checkboxes :school_class_ids, SchoolClass.all.order(:ordinal), :id, :name do |helper| %>
+          <%= helper.label do %>
+            <%= helper.check_box %><span class="ml-2"><%= helper.label %></span>
+          <% end %>
+        <% end %>
+      </div>
     </div>
   <% end %>
 <% end %>
