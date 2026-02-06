@@ -35,8 +35,8 @@
   </div>
 
   <div class="form-button-container">
-    <%= form.submit prescribed_music.new_record? ? "Create" : "Update", class: "btn-primary" %>
-    <%= link_to "Cancel", prescribed_music_index_path, class: "btn-secondary", role: "button" %>
+    <%= form.submit prescribed_music.new_record? ? "Create" : "Update", class: "btn-primary-sm" %>
+    <%= link_to "Cancel", prescribed_music_index_path, class: "btn-secondary-sm", role: "button" %>
   </div>
 
   <% if prescribed_music.errors.any? %>

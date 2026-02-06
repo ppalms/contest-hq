@@ -1,14 +1,11 @@
 <% content_for :title, "Showing account" %>
-<div class="py-8" id="show_<%= dom_id @account %>">
-  <div class="flex flex-col sm:flex-row">
-    <h1><%= @account.name %></h1>
-
-    <div class="action-button-container">
-      <%= link_to "Edit", edit_account_path(@account), class: "btn-secondary-sm" %>
-    </div>
-  </div>
-
-  <%= render @account %>
+<%= render "shared/entity_detail",
+      entity: @account,
+      title: @account.name,
+      entity_partial: "accounts/account",
+      actions: (capture do %>
+        <%= link_to "Edit", edit_account_path(@account), class: "btn-primary-sm" %>
+      <% end) do %>
 
   <div class="flex flex-col pt-4">
     <strong class="block font-medium mb-1">Users</strong>
@@ -20,4 +17,4 @@
       </div>
     <% end %>
   </div>
-</div>
+<% end %>

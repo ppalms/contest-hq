@@ -28,10 +28,158 @@
   html {
     font-family: var(--font-inter);
   }
+
+  /* 
+   * Design System Color Variables
+   * 
+   * These CSS custom properties define the application's color scheme.
+   * Colors are defined as space-separated RGB values (e.g., "37 99 235")
+   * to work with Tailwind's opacity modifiers.
+   * 
+   * To customize colors, edit the RGB values below and rebuild Tailwind.
+   * See DESIGN_SYSTEM.md for detailed customization guide.
+   */
+  :root {
+    /* Primary Colors - Used for action buttons (Save, Submit, Create, Update) */
+    --color-primary: 37 99 235;              /* blue-600 - Main button background */
+    --color-primary-hover: 59 130 246;       /* blue-500 - Button hover state */
+    --color-primary-border: 30 58 138;       /* blue-900 - Button border (3D effect) */
+    --color-primary-border-hover: 37 99 235; /* blue-600 - Border hover state */
+    
+    /* Secondary Colors - Used for cancel/back buttons (non-state-changing actions) */
+    --color-secondary: 243 244 246;          /* gray-100 - Button background */
+    --color-secondary-hover: 229 231 235;    /* gray-200 - Button hover state */
+    --color-secondary-border: 156 163 175;   /* gray-400 - Button border */
+    --color-secondary-border-hover: 107 114 128; /* gray-500 - Border hover state */
+    
+    /* Danger Colors - Used for destructive actions (Delete, Destroy, Remove) */
+    --color-danger-text: 153 27 27;          /* red-800 - Button text color */
+    --color-danger-bg-hover: 254 226 226;    /* red-100 - Button hover background */
+    --color-danger-border: 254 202 202;      /* red-200 - Button border */
+    --color-danger-border-hover: 252 165 165; /* red-300 - Border hover state */
+    
+    /* Text Colors - Used for headings and body text */
+    --color-heading: 41 37 36;               /* stone-800 - All headings (h1, h2, h3) */
+    --color-body: 0 0 0;                     /* black - Default body text */
+    --color-muted: 107 114 128;              /* gray-500 - Secondary/metadata text */
+    
+    /* Background Colors - Used for page and card backgrounds */
+    --color-page-bg: 245 245 245;            /* neutral-100 - Main page background */
+    --color-card-bg: 255 255 255;            /* white - Card backgrounds */
+    
+    /* Card Header Colors - Used for card header gradient and border */
+    --color-card-header-from: 29 78 216;     /* blue-700 - Gradient start */
+    --color-card-header-to: 37 99 235;       /* blue-600 - Gradient end */
+    --color-card-header-border: 30 58 138;   /* blue-900 - Bottom border (3D effect) */
+    
+    /* Success/Active Colors - Used for active states and success indicators */
+    --color-success: 22 163 74;              /* green-600 - Success/active elements */
+    --color-success-bg: 240 253 244;         /* green-50 - Success background */
+    --color-success-text: 21 128 61;         /* green-700 - Success text */
+  }
+
+  /*
+   * Alternative Color Themes
+   * 
+   * Uncomment one of the theme blocks below to quickly switch color schemes.
+   * Only uncomment ONE theme at a time. After uncommenting, rebuild Tailwind.
+   */
+
+  /* Theme: Forest Green
+   * Professional green theme for environmental or nature-focused organizations
+   *
+   * :root {
+   *   --color-primary: 22 163 74;
+   *   --color-primary-hover: 34 197 94;
+   *   --color-primary-border: 20 83 45;
+   *   --color-primary-border-hover: 22 163 74;
+   *   --color-card-header-from: 21 128 61;
+   *   --color-card-header-to: 22 163 74;
+   *   --color-card-header-border: 20 83 45;
+   * }
+   */
+
+  /* Theme: Royal Purple
+   * Elegant purple theme for arts and creative organizations
+   *
+   * :root {
+   *   --color-primary: 147 51 234;
+   *   --color-primary-hover: 168 85 247;
+   *   --color-primary-border: 88 28 135;
+   *   --color-primary-border-hover: 147 51 234;
+   *   --color-card-header-from: 126 34 206;
+   *   --color-card-header-to: 147 51 234;
+   *   --color-card-header-border: 88 28 135;
+   * }
+   */
+
+  /* Theme: Crimson Red
+   * Bold red theme for high-energy organizations
+   *
+   * :root {
+   *   --color-primary: 220 38 38;
+   *   --color-primary-hover: 239 68 68;
+   *   --color-primary-border: 127 29 29;
+   *   --color-primary-border-hover: 220 38 38;
+   *   --color-card-header-from: 185 28 28;
+   *   --color-card-header-to: 220 38 38;
+   *   --color-card-header-border: 127 29 29;
+   * }
+   */
+
+  /* Theme: Teal
+   * Modern teal theme for tech-forward organizations
+   *
+   * :root {
+   *   --color-primary: 20 184 166;
+   *   --color-primary-hover: 45 212 191;
+   *   --color-primary-border: 19 78 74;
+   *   --color-primary-border-hover: 20 184 166;
+   *   --color-card-header-from: 17 94 89;
+   *   --color-card-header-to: 20 184 166;
+   *   --color-card-header-border: 19 78 74;
+   * }
+   */
+
+  /* Theme: Amber/Gold
+   * Warm amber theme for traditional or prestigious organizations
+   *
+   * :root {
+   *   --color-primary: 217 119 6;
+   *   --color-primary-hover: 245 158 11;
+   *   --color-primary-border: 146 64 14;
+   *   --color-primary-border-hover: 217 119 6;
+   *   --color-card-header-from: 180 83 9;
+   *   --color-card-header-to: 217 119 6;
+   *   --color-card-header-border: 146 64 14;
+   * }
+   */
 }
 
+/* 
+ * Button Utilities - Design System
+ * 
+ * Semantic button styles with consistent 3D effect (4px bottom border).
+ * All colors are defined via CSS custom properties for easy customization.
+ * 
+ * Usage Guidelines:
+ * - btn-primary: Use for actions that change state (Save, Submit, Create, Update, Confirm)
+ * - btn-secondary: Use for non-state-changing actions (Cancel, Back, Close, View)
+ * - btn-danger: Use for destructive actions (Delete, Destroy, Remove, Archive)
+ * 
+ * Each button has a -sm variant for compact layouts (tables, inline actions).
+ */
+
 @utility btn-primary {
-  @apply rounded-lg py-3 px-5 bg-blue-600 hover:bg-blue-500 border border-b-4 border-blue-900 block w-full sm:w-auto sm:inline-block hover:border-blue-600 transition text-white font-medium cursor-pointer;
+  @apply rounded-lg py-3 px-5 block w-full sm:w-auto sm:inline-block transition font-medium cursor-pointer text-white;
+  background-color: rgb(var(--color-primary));
+  border: 1px solid rgb(var(--color-primary-border));
+  border-bottom-width: 4px;
+  
+  &:hover {
+    background-color: rgb(var(--color-primary-hover));
+    border-color: rgb(var(--color-primary-border-hover));
+  }
 }
 
 @utility btn-primary-sm {
@@ -39,7 +187,15 @@
 }
 
 @utility btn-secondary {
-  @apply rounded-lg py-3 px-5 bg-gray-100 hover:bg-gray-200 border border-b-4 border-gray-400 block text-center sm:inline-block hover:border-gray-500 transition font-medium cursor-pointer;
+  @apply rounded-lg py-3 px-5 block text-center sm:inline-block transition font-medium cursor-pointer;
+  background-color: rgb(var(--color-secondary));
+  border: 1px solid rgb(var(--color-secondary-border));
+  border-bottom-width: 4px;
+  
+  &:hover {
+    background-color: rgb(var(--color-secondary-hover));
+    border-color: rgb(var(--color-secondary-border-hover));
+  }
 }
 
 @utility btn-secondary-sm {
@@ -47,7 +203,15 @@
 }
 
 @utility btn-danger {
-  @apply rounded-lg py-3 px-5 text-red-800 hover:bg-red-100 border border-b-4 border-red-200 block w-full sm:w-auto sm:inline-block hover:border-red-300 transition font-semibold cursor-pointer;
+  @apply rounded-lg py-3 px-5 block w-full sm:w-auto sm:inline-block transition font-semibold cursor-pointer;
+  color: rgb(var(--color-danger-text));
+  border: 1px solid rgb(var(--color-danger-border));
+  border-bottom-width: 4px;
+  
+  &:hover {
+    background-color: rgb(var(--color-danger-bg-hover));
+    border-color: rgb(var(--color-danger-border-hover));
+  }
 }
 
 @utility btn-danger-sm {
@@ -131,14 +295,20 @@
 }
 
 @utility tabs {
-  @apply block w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 bg-neutral-100;
+  @apply block w-full rounded-md border-gray-300 bg-neutral-100;
+
+  &:focus {
+    border-color: rgb(var(--color-primary));
+    --tw-ring-color: rgb(var(--color-primary));
+  }
 
   & .inactive {
     @apply border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700;
   }
 
   & .active {
-    @apply border-blue-500 text-blue-600;
+    border-color: rgb(var(--color-primary));
+    color: rgb(var(--color-primary));
   }
 }
 
@@ -150,7 +320,8 @@
 
 @utility active {
   .tabs & {
-    @apply border-blue-500 text-blue-600;
+    border-color: rgb(var(--color-primary));
+    color: rgb(var(--color-primary));
   }
 }
 
@@ -191,24 +362,35 @@
 }
 
 @utility card-header {
-  @apply pt-4 pb-3 px-4 sm:px-6 border-b-4 border-blue-900 bg-linear-to-r from-blue-700 to-blue-600 text-white text-lg font-semibold;
+  @apply pt-4 pb-3 px-4 sm:px-6 text-white text-lg font-semibold;
+  background: linear-gradient(to right, rgb(var(--color-card-header-from)), rgb(var(--color-card-header-to)));
+  border-bottom: 4px solid rgb(var(--color-card-header-border));
 }
 
 @layer components {
+  h1, h2, h3 {
+    color: rgb(var(--color-heading));
+  }
+
   h1 {
-    @apply text-4xl font-bold text-stone-800;
+    @apply text-4xl font-bold;
   }
 
   h2 {
-    @apply text-3xl font-bold text-stone-800;
+    @apply text-3xl font-bold;
   }
 
   h3 {
-    @apply text-base font-semibold text-stone-800;
+    @apply text-base font-semibold;
   }
 
   input[type='checkbox'] {
-    @apply -mt-0.5 size-4 rounded-sm border-gray-400 text-blue-600 focus:ring-blue-600;
+    @apply -mt-0.5 size-4 rounded-sm border-gray-400;
+    color: rgb(var(--color-primary));
+    
+    &:focus {
+      --tw-ring-color: rgb(var(--color-primary));
+    }
   }
 }
 
@@ -221,7 +403,8 @@
 }
 
 .tab-button.active {
-  @apply bg-white text-blue-600 border-b-0 font-semibold;
+  @apply bg-white border-b-0 font-semibold;
+  color: rgb(var(--color-primary));
 }
 
 .tab-content {

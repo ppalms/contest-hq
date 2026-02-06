@@ -1,34 +1,21 @@
 <%= form_with(model: school, url: @school.new_record? ? organizations_schools_path : organizations_school_path(@school), class: "wide-form") do |form| %>
-  <div class="sm:col-span-2">
-    <%= form.label :name %>
-    <%= form.text_field :name, class: "text-field", autofocus: true %>
-  </div>
+  <%= render "shared/form_wrapper",
+      form: form,
+      submit_text: school.new_record? ? "Create School" : "Update School",
+      cancel_path: school.new_record? ? organizations_schools_path : organizations_school_path(school),
+      entity: school do %>
+    
+    <div class="sm:col-span-2">
+      <%= form.label :name %>
+      <%= form.text_field :name, class: "text-field", autofocus: true %>
+    </div>
 
-  <div>
-    <%= form.label :school_class %>
-    <%= form.select :school_class_id,
-                SchoolClass.all.order(:ordinal).map { |t| [t.name, t.id] },
-                { include_blank: "Select a class" },
-                { required: true, class: "text-field", id: :school_class_id } %>
-  </div>
-
-  <div class="form-button-container">
-    <%= form.submit class: "btn-primary" %>
-    <%= link_to "Cancel",
-    (
-      if @school.id == nil
-        organizations_schools_path
-      else
-        organizations_school_path(@school)
-      end
-    ),
-    class: "btn-secondary",
-    role: "button" %>
-  </div>
-
-  <% if school.errors.any? %>
-    <div class="pt-2 sm:col-span-2">
-      <%= render "layouts/error_messages", errors: school.errors %>
+    <div>
+      <%= form.label :school_class %>
+      <%= form.select :school_class_id,
+                  SchoolClass.all.order(:ordinal).map { |t| [t.name, t.id] },
+                  { include_blank: "Select a class" },
+                  { required: true, class: "text-field", id: :school_class_id } %>
     </div>
   <% end %>
 <% end %>

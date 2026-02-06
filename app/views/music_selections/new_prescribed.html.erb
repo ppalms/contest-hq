@@ -14,7 +14,7 @@
     <div class="flex gap-3">
       <%= text_field_tag :search, params[:search], class: "text-field flex-1", placeholder: "Search by title or composer..." %>
       <%= hidden_field_tag :replace, params[:replace] if params[:replace].present? %>
-      <%= f.submit "Search", class: "btn-primary" %>
+      <%= f.submit "Search", class: "btn-primary-sm" %>
     </div>
   <% end %>
 

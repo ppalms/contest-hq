@@ -1,32 +1,28 @@
 <%= form_with(model: season, class: "wide-form pt-4") do |form| %>
-  <div class="sm:col-span-2">
-    <%= form.label :name %>
-    <%= form.text_field :name,
-                    class: "text-field",
-                    autofocus: true,
-                    placeholder: "e.g., 2025" %>
-  </div>
-
-  <div class="sm:col-span-2">
-    <%= form.label :archived, class: "checkbox-label" do %>
-      <%= form.check_box :archived, class: "checkbox" %>
-      Archive this season
-    <% end %>
-    <div>
-      <small class="help-text">
-        Archive past seasons to prevent new contests from being added.
-      </small>
+  <%= render "shared/form_wrapper",
+      form: form,
+      submit_text: season.new_record? ? "Create Season" : "Update Season",
+      cancel_path: seasons_path,
+      entity: season do %>
+    
+    <div class="sm:col-span-2">
+      <%= form.label :name %>
+      <%= form.text_field :name,
+                      class: "text-field",
+                      autofocus: true,
+                      placeholder: "e.g., 2025" %>
     </div>
-  </div>
 
-  <div class="form-button-container">
-    <%= form.submit class: "btn-primary" %>
-    <%= link_to "Cancel", seasons_path, class: "btn-secondary", role: "button" %>
-  </div>
-
-  <% if season.errors.any? %>
-    <div class="pt-2 sm:col-span-2">
-      <%= render "layouts/error_messages", errors: season.errors %>
+    <div class="sm:col-span-2">
+      <%= form.label :archived, class: "checkbox-label" do %>
+        <%= form.check_box :archived, class: "checkbox" %>
+        Archive this season
+      <% end %>
+      <div>
+        <small class="help-text">
+          Archive past seasons to prevent new contests from being added.
+        </small>
+      </div>
     </div>
   <% end %>
 <% end %>

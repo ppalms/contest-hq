@@ -29,8 +29,8 @@
                                value: params[search_param],
                                class: "text-field" %>
         <div class="flex gap-2">
-          <%= search_form.submit "Search", class: "btn-primary w-2/3 sm:w-auto" %>
-          <%= link_to "Reset", search_url, class: "btn-secondary text-center w-1/3 sm:w-auto" %>
+          <%= search_form.submit "Search", class: "btn-primary-sm w-2/3 sm:w-auto" %>
+          <%= link_to "Reset", search_url, class: "btn-secondary-sm text-center w-1/3 sm:w-auto" %>
         </div>
       </div>
     <% end %>
@@ -80,8 +80,8 @@
       <%== pagy.series_nav if pagy.pages > 1 %>
 
       <div class="form-button-container">
-        <%= form.submit "Add Selected", class: "btn-primary" %>
-        <%= link_to "Cancel", cancel_url, class: "btn-secondary" %>
+        <%= form.submit "Add Selected", class: "btn-primary-sm" %>
+        <%= link_to "Cancel", cancel_url, class: "btn-secondary-sm" %>
       </div>
     <% else %>
       <p class="text-gray-500">No items found.
@@ -91,7 +91,7 @@
           "There are no items available."
         end %></p>
       <div class="form-button-container">
-        <%= link_to "Cancel", cancel_url, class: "btn-secondary" %>
+        <%= link_to "Cancel", cancel_url, class: "btn-secondary-sm" %>
       </div>
     <% end %>
   <% end %>

@@ -1,117 +1,70 @@
 <%= form_with(url: url, model: user, class: "wide-form") do |form| %>
-  <div class="sm:col-span-2">
-    <% if user.id? %>
-      <strong>Email address</strong>
-      <p><%= user.email %></p>
-    <% else %>
-      <%= form.label :email, style: "display: block" %>
-      <%= form.email_field :email,
-                       autofocus: true,
-                       required: true,
-                       autocomplete: "email",
-                       class: "text-field" %>
-    <% end %>
-  </div>
-
-  <div>
-    <%= form.label :first_name, "First name" %>
-    <%= form.text_field :first_name,
-                    autofocus: true,
-                    required: true,
-                    class: "text-field" %>
-  </div>
-
-  <div>
-    <%= form.label :last_name, "Last name" %>
-    <%= form.text_field :last_name, required: true, class: "text-field" %>
-  </div>
-
-  <div>
-    <%= form.label :role_ids, "Roles", style: "display: block" %>
-    <div
-      class="
-        flex flex-col space-y-2 border border-gray-400 bg-white shadow p-4 rounded-md
-      "
-    >
-      <div class="-mt-2"></div>
-      <%= form.collection_checkboxes :role_ids,
-                                 roles,
-                                 :id,
-                                 :name do |helper| %>
-        <%= helper.label do %>
-          <%= helper.check_box %><span class="ml-2"><%= helper.label %></span>
-        <% end %>
-      <% end %>
-    </div>
-  </div>
-
-  <div>
-    <div class="flex justify-between items-center">
-      <label class="block">Schools</label>
-      <div class="flex items-center gap-2">
-        <span class="text-sm text-gray-500">(Optional)</span>
-        <% if user.persisted? %>
-          <%= link_to "Add Schools", user_schools_path(user), class: "btn-secondary-sm" %>
-        <% end %>
-      </div>
-    </div>
-
-    <% if user.schools.any? %>
-      <div class="mt-2 space-y-2">
-        <% user.schools.order(:name).each do |school| %>
-          <div class="flex items-center justify-between p-2 bg-gray-50 rounded border">
-            <span class="text-sm"><%= school.name %></span>
-            <% if user.persisted? %>
-              <%= button_to "Remove",
-                    user_path(user),
-                    method: :patch,
-                    params: { user: { remove_school_id: school.id } },
-                    class: "btn-danger-sm text-xs",
-                    form: { data: { turbo_confirm: "Remove #{school.name}?" } } %>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
-    <% else %>
-      <% if user.persisted? %>
-        <p class="text-sm text-gray-500 mt-2">No schools assigned. Click "Add Schools" to assign schools to this user.</p>
+  <%= render "shared/form_wrapper",
+      form: form,
+      submit_text: submit_text,
+      cancel_path: user.persisted? ? user_path(user) : users_path,
+      entity: user do %>
+    
+    <div class="sm:col-span-2">
+      <% if user.id? %>
+        <strong>Email address</strong>
+        <p><%= user.email %></p>
       <% else %>
-        <p class="text-sm text-gray-500 mt-2">Schools can be assigned after the user is created.</p>
+        <%= form.label :email, style: "display: block" %>
+        <%= form.email_field :email,
+                         autofocus: true,
+                         required: true,
+                         autocomplete: "email",
+                         class: "text-field" %>
       <% end %>
-    <% end %>
-  </div>
+    </div>
 
-  <div class="sm:col-span-2">
-    <%= form.label :time_zone, "Time zone" %>
-    <%= form.select :time_zone,
-                [
-                  ["Eastern Time (US & Canada)", "America/New_York"],
-                  ["Central Time (US & Canada)", "America/Chicago"],
-                  ["Mountain Time (US & Canada)", "America/Denver"],
-                  ["Pacific Time (US & Canada)", "America/Los_Angeles"],
-                  ["Alaska Time (US & Canada)", "America/Anchorage"],
-                  ["Hawaii Time (US & Canada)", "Pacific/Honolulu"],
-                  ["Atlantic Time (Canada)", "America/Halifax"],
-                  ["Central Time (Canada)", "America/Winnipeg"],
-                  ["Mountain Time (Canada)", "America/Edmonton"],
-                  ["Pacific Time (Canada)", "America/Vancouver"]
-                ],
-                { include_blank: "Select a time zone", selected: user.time_zone },
-                { required: true, class: "text-field" } %>
+    <div>
+      <%= form.label :first_name, "First name" %>
+      <%= form.text_field :first_name,
+                      autofocus: true,
+                      required: true,
+                      class: "text-field" %>
+    </div>
 
-  </div>
+    <div>
+      <%= form.label :last_name, "Last name" %>
+      <%= form.text_field :last_name, required: true, class: "text-field" %>
+    </div>
 
-  <div class="form-button-container">
-    <%= form.submit submit_text, class: "btn-primary" %>
-    <% if user.persisted? %>
-      <%= link_to "Cancel", user_path(user), class: "btn-secondary", role: "button" %>
-    <% else %>
-      <%= link_to "Cancel", users_path, class: "btn-secondary", role: "button" %>
-    <% end %>
-  </div>
+    <div class="sm:col-span-2">
+      <%= form.label :role_ids, "Roles", style: "display: block" %>
+      <div class="flex flex-col space-y-2 border border-gray-400 bg-white shadow p-4 rounded-md">
+        <div class="-mt-2"></div>
+        <%= form.collection_checkboxes :role_ids,
+                                   roles,
+                                   :id,
+                                   :name do |helper| %>
+          <%= helper.label do %>
+            <%= helper.check_box %><span class="ml-2"><%= helper.label %></span>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
 
-  <% if user.errors.any? %>
-    <%= render "layouts/error_messages", errors: user.errors %>
+    <div class="sm:col-span-2">
+      <%= form.label :time_zone, "Time zone" %>
+      <%= form.select :time_zone,
+                  [
+                    ["Eastern Time (US & Canada)", "America/New_York"],
+                    ["Central Time (US & Canada)", "America/Chicago"],
+                    ["Mountain Time (US & Canada)", "America/Denver"],
+                    ["Pacific Time (US & Canada)", "America/Los_Angeles"],
+                    ["Alaska Time (US & Canada)", "America/Anchorage"],
+                    ["Hawaii Time (US & Canada)", "Pacific/Honolulu"],
+                    ["Atlantic Time (Canada)", "America/Halifax"],
+                    ["Central Time (Canada)", "America/Winnipeg"],
+                    ["Mountain Time (Canada)", "America/Edmonton"],
+                    ["Pacific Time (Canada)", "America/Vancouver"]
+                  ],
+                  { include_blank: "Select a time zone", selected: user.time_zone },
+                  { required: true, class: "text-field" } %>
+    </div>
   <% end %>
 <% end %>
 
