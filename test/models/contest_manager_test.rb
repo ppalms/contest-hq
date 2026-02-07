@@ -13,9 +13,6 @@ class ContestManagerTest < ActiveSupport::TestCase
     # Use a manager not already assigned to this contest
     other_manager = users(:demo_manager_b)
     contest_manager = ContestManager.new(contest: @demo_contest, user: other_manager)
-    unless contest_manager.valid?
-      puts "Validation errors: #{contest_manager.errors.full_messages}"
-    end
     assert contest_manager.valid?
   end
 
@@ -40,9 +37,6 @@ class ContestManagerTest < ActiveSupport::TestCase
     
     # First assignment should work
     contest_manager1 = ContestManager.new(contest: @demo_contest, user: other_manager)
-    unless contest_manager1.save
-      puts "Save errors: #{contest_manager1.errors.full_messages}"
-    end
     assert contest_manager1.save
 
     # Second assignment of same user to same contest should fail
