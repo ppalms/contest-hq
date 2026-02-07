@@ -99,20 +99,27 @@
                   <%= link_to edit_identity_profile_path,
                   class: "group flex items-center justify-between px-3 py-1 text-sm/6 text-gray-900 transition-all duration-150 hover:font-bold" do %>
                     <span>Your profile</span>
-                    <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-150">→</span>
+                    <svg class="size-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-150" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L12.94 10 8.22 5.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                    </svg>
                   <% end %>
 
                   <%= link_to settings_path,
                   class: "group flex items-center justify-between px-3 py-1 text-sm/6 text-gray-900 transition-all duration-150 hover:font-bold" do %>
                     <span>Settings</span>
-                    <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-150">→</span>
+                    <svg class="size-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-150" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L12.94 10 8.22 5.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                    </svg>
                   <% end %>
 
                   <%= button_to Current.session,
                   method: :delete,
-                  class: "w-full group flex items-center justify-between px-3 py-1 text-sm/6 text-gray-900 transition-all duration-150 hover:font-bold cursor-pointer text-left" do %>
+                  form_class: "w-full",
+                  class: "group flex items-center justify-between w-full px-3 py-1 text-sm/6 text-gray-900 transition-all duration-150 hover:font-bold cursor-pointer text-left" do %>
                     <span>Sign out</span>
-                    <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-150">→</span>
+                    <svg class="size-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-150" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L12.94 10 8.22 5.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                    </svg>
                   <% end %>
                 </div>
               </div>
@@ -130,52 +137,82 @@
       absolute hidden w-full pl-2 bg-white border-b border-b-stone-300 shadow z-50
     "
   >
-    <div class="p-2 pb-4 space-y-4">
+    <div class="p-2 pb-4 space-y-1">
       <% if Current.session %>
-        <div class="pt-4">
-          <%= link_to "Home", root_path %>
-        </div>
+        <%= link_to root_path, class: "group flex items-center justify-between px-3 py-2 text-gray-900 transition-all duration-150 hover:font-bold mt-4" do %>
+          <span>Home</span>
+          <svg class="size-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-150" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L12.94 10 8.22 5.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+          </svg>
+        <% end %>
 
-        <div>
-          <%= link_to "Contests", contests_path %>
-        </div>
+        <%= link_to contests_path, class: "group flex items-center justify-between px-3 py-2 text-gray-900 transition-all duration-150 hover:font-bold" do %>
+          <span>Contests</span>
+          <svg class="size-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-150" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L12.94 10 8.22 5.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+          </svg>
+        <% end %>
 
         <% if current_user.director? %>
-          <div>
-            <%= link_to "Roster", roster_path %>
-          </div>
+          <%= link_to roster_path, class: "group flex items-center justify-between px-3 py-2 text-gray-900 transition-all duration-150 hover:font-bold" do %>
+            <span>Roster</span>
+            <svg class="size-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-150" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L12.94 10 8.22 5.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+            </svg>
+          <% end %>
         <% end %>
 
-        <div>
-          <%= link_to "Prescribed Music", prescribed_music_index_path %>
-        </div>
+        <%= link_to prescribed_music_index_path, class: "group flex items-center justify-between px-3 py-2 text-gray-900 transition-all duration-150 hover:font-bold" do %>
+          <span>Prescribed Music</span>
+          <svg class="size-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-150" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L12.94 10 8.22 5.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+          </svg>
+        <% end %>
 
         <% if current_user.admin? %>
-          <div>
-            <%= link_to "Organizations", organizations_path %>
-          </div>
+          <%= link_to organizations_path, class: "group flex items-center justify-between px-3 py-2 text-gray-900 transition-all duration-150 hover:font-bold" do %>
+            <span>Organizations</span>
+            <svg class="size-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-150" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L12.94 10 8.22 5.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+            </svg>
+          <% end %>
 
-          <div>
-            <%= link_to "Seasons", seasons_path %>
-          </div>
+          <%= link_to seasons_path, class: "group flex items-center justify-between px-3 py-2 text-gray-900 transition-all duration-150 hover:font-bold" do %>
+            <span>Seasons</span>
+            <svg class="size-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-150" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L12.94 10 8.22 5.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+            </svg>
+          <% end %>
 
-          <div>
-            <%= link_to "Users", users_path %>
-          </div>
+          <%= link_to users_path, class: "group flex items-center justify-between px-3 py-2 text-gray-900 transition-all duration-150 hover:font-bold" do %>
+            <span>Users</span>
+            <svg class="size-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-150" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L12.94 10 8.22 5.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+            </svg>
+          <% end %>
         <% end %>
 
-        <div class="lg:hidden pb-4 space-y-4">
-          <div>
-            <%= link_to "Your profile", edit_identity_profile_path %>
-          </div>
+        <div class="lg:hidden pt-4 border-t border-gray-200 mt-4 space-y-1">
+          <%= link_to edit_identity_profile_path, class: "group flex items-center justify-between px-3 py-2 text-gray-900 transition-all duration-150 hover:font-bold" do %>
+            <span>Your profile</span>
+            <svg class="size-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-150" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L12.94 10 8.22 5.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+            </svg>
+          <% end %>
 
-          <div>
-            <%= link_to "Settings", settings_path %>
-          </div>
+          <%= link_to settings_path, class: "group flex items-center justify-between px-3 py-2 text-gray-900 transition-all duration-150 hover:font-bold" do %>
+            <span>Settings</span>
+            <svg class="size-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-150" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L12.94 10 8.22 5.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+            </svg>
+          <% end %>
 
-          <div>
-            <%= button_to "Sign out", Current.session, method: :delete %>
-          </div>
+          <%= button_to Current.session, method: :delete, form_class: "w-full", class: "group flex items-center justify-between w-full px-3 py-2 text-gray-900 transition-all duration-150 hover:font-bold cursor-pointer text-left" do %>
+            <span>Sign out</span>
+            <svg class="size-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-150" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L12.94 10 8.22 5.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+            </svg>
+          <% end %>
         </div>
       <% else %>
         <%= button_to "Sign in", sign_in_path, method: :get %>
