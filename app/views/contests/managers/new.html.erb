@@ -3,8 +3,6 @@
     <%= @contest.name %></h1>
 
   <div class="pt-6">
-    <h2>Search Manager Users</h2>
-
     <%= form_with url: new_contest_manager_path(@contest), method: :get, local: true, class: "pb-6" do |search_form| %>
       <div class="flex gap-2 py-2">
         <%= search_form.text_field :search,
