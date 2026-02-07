@@ -96,18 +96,24 @@
                     <div class="border-t border-gray-200 my-1"></div>
                   <% end %>
                   
-                  <%= link_to "Your profile",
-                  edit_identity_profile_path,
-                  class: "block px-3 py-1 text-sm/6 text-gray-900 hover:font-medium" %>
+                  <%= link_to edit_identity_profile_path,
+                  class: "group flex items-center justify-between px-3 py-1 text-sm/6 text-gray-900 transition-all duration-150 hover:font-bold" do %>
+                    <span>Your profile</span>
+                    <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-150">→</span>
+                  <% end %>
 
-                  <%= link_to "Settings",
-                  settings_path,
-                  class: "block px-3 py-1 text-sm/6 text-gray-900" %>
+                  <%= link_to settings_path,
+                  class: "group flex items-center justify-between px-3 py-1 text-sm/6 text-gray-900 transition-all duration-150 hover:font-bold" do %>
+                    <span>Settings</span>
+                    <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-150">→</span>
+                  <% end %>
 
-                  <%= button_to "Sign out",
-                  Current.session,
+                  <%= button_to Current.session,
                   method: :delete,
-                  class: "block px-3 py-1 text-sm/6 text-gray-900 cursor-pointer" %>
+                  class: "w-full group flex items-center justify-between px-3 py-1 text-sm/6 text-gray-900 transition-all duration-150 hover:font-bold cursor-pointer text-left" do %>
+                    <span>Sign out</span>
+                    <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-150">→</span>
+                  <% end %>
                 </div>
               </div>
             </div>
