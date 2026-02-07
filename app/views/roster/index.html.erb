@@ -4,7 +4,10 @@
     <h1>Roster</h1>
   </div>
 
-  <div>
-    <%= link_to sanitize("Large Ensembles &rarr;"), roster_large_ensembles_path %>
-  </div>
+  <%= link_to roster_large_ensembles_path, class: "group inline-flex items-center gap-2 text-gray-900 transition-all duration-150 hover:font-bold" do %>
+    <span>Large Ensembles</span>
+    <svg class="size-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-150" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L12.94 10 8.22 5.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+    </svg>
+  <% end %>
 </div>
