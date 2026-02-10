@@ -1,7 +1,11 @@
 require "test_helper"
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
-  driven_by :selenium, using: :headless_chrome, screen_size: [ 1400, 1400 ]
+  driven_by :selenium, using: :headless_chrome, screen_size: [ 1400, 1400 ] do |options|
+    options.add_argument("--lang=en-US")
+    options.add_preference("intl.accept_languages", "en-US")
+    options.add_emulation(timezone_id: "UTC")
+  end
 
   def log_in_as(user)
     visit sign_in_path
