@@ -345,6 +345,8 @@ class SchedulesController < ApplicationController
     if action_name == "reschedule"
       add_breadcrumb("Schedule", schedule_path(@schedule))
       add_breadcrumb("Reschedule", reschedule_entry_path(@schedule, @contest_entry))
+    elsif action_name == "show"
+      add_breadcrumb("Schedule", schedule_path(@schedule))
     end
   end
 
