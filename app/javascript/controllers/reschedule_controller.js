@@ -8,7 +8,9 @@ export default class extends Controller {
     "existingEntryDetails",
     "rescheduleMethodSection",
     "loadingIndicator",
-    "form"
+    "form",
+    "errorMessage",
+    "errorText"
   ]
   
   static values = {
@@ -43,6 +45,7 @@ export default class extends Controller {
     this.timeSlotSelectTarget.disabled = true
     this.existingEntryInfoTarget.classList.add('hidden')
     this.rescheduleMethodSectionTarget.classList.add('hidden')
+    this.hideError()
     
     this.enableSubmitButton()
     
@@ -88,7 +91,7 @@ export default class extends Controller {
       }
     } catch (error) {
       console.error('Error fetching time slots:', error)
-      alert('Failed to load time slots. Please try again.')
+      this.showError('Failed to load time slots. Please try again.')
     } finally {
       this.hideLoading()
     }
@@ -164,6 +167,19 @@ export default class extends Controller {
   hideLoading() {
     if (this.hasLoadingIndicatorTarget) {
       this.loadingIndicatorTarget.classList.add('hidden')
+    }
+  }
+  
+  showError(message) {
+    if (this.hasErrorMessageTarget && this.hasErrorTextTarget) {
+      this.errorTextTarget.textContent = message
+      this.errorMessageTarget.classList.remove('hidden')
+    }
+  }
+  
+  hideError() {
+    if (this.hasErrorMessageTarget) {
+      this.errorMessageTarget.classList.add('hidden')
     }
   }
   

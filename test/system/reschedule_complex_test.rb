@@ -27,7 +27,8 @@ class RescheduleComplexTest < ApplicationSystemTestCase
     visit reschedule_entry_path(@schedule, @entry1)
 
     select @day1.schedule_date.strftime("%a %-m/%d"), from: "target_day_id"
-    sleep 1
+    # Wait for time slots to load
+    assert_selector 'select[name="target_time_slot"] option', minimum: 2
 
     # Select entry2's slot (4:00 AM CST = 10:00 UTC)
     select "4:00 AM (Occupied)", from: "target_time_slot"
@@ -52,7 +53,8 @@ class RescheduleComplexTest < ApplicationSystemTestCase
     visit reschedule_entry_path(@schedule, @entry1)
 
     select @day1.schedule_date.strftime("%a %-m/%d"), from: "target_day_id"
-    sleep 1
+    # Wait for time slots to load
+    assert_selector 'select[name="target_time_slot"] option', minimum: 2
 
     # Select entry2's slot (10:45 AM CST = 16:45 UTC)
     select "10:45 AM (Occupied)", from: "target_time_slot"

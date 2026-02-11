@@ -27,7 +27,8 @@ class RescheduleMultidayTest < ApplicationSystemTestCase
     visit reschedule_entry_path(@schedule, @entry1)
 
     select @day2.schedule_date.strftime("%a %-m/%d"), from: "target_day_id"
-    sleep 1
+    # Wait for time slots to load
+    assert_selector 'select[name="target_time_slot"] option', minimum: 2
 
     # Select 4:00 AM CST = 10:00 UTC on day 2
     select "4:00 AM (Available)", from: "target_time_slot"
@@ -46,7 +47,8 @@ class RescheduleMultidayTest < ApplicationSystemTestCase
     visit reschedule_entry_path(@schedule, @entry1)
 
     select @day2.schedule_date.strftime("%a %-m/%d"), from: "target_day_id"
-    sleep 1
+    # Wait for time slots to load
+    assert_selector 'select[name="target_time_slot"] option', minimum: 2
 
     # Select entry2's slot (4:00 AM CST = 10:00 UTC)
     select "4:00 AM (Occupied)", from: "target_time_slot"
@@ -71,7 +73,8 @@ class RescheduleMultidayTest < ApplicationSystemTestCase
     visit reschedule_entry_path(@schedule, @entry1)
 
     select @day2.schedule_date.strftime("%a %-m/%d"), from: "target_day_id"
-    sleep 1
+    # Wait for time slots to load
+    assert_selector 'select[name="target_time_slot"] option', minimum: 2
 
     # Select entry2's slot (4:00 AM CST = 10:00 UTC)
     select "4:00 AM (Occupied)", from: "target_time_slot"
@@ -95,7 +98,8 @@ class RescheduleMultidayTest < ApplicationSystemTestCase
     visit reschedule_entry_path(@schedule, @entry1)
 
     select @day3.schedule_date.strftime("%a %-m/%d"), from: "target_day_id"
-    sleep 1
+    # Wait for time slots to load
+    assert_selector 'select[name="target_time_slot"] option', minimum: 2
 
     # Select 8:00 AM CST = 14:00 UTC on day 3
     select "8:00 AM (Available)", from: "target_time_slot"

@@ -12,9 +12,6 @@ class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
-  # Include test helpers
-  include ScheduleTestHelper
-
   # Add more helper methods to be used by all tests here...
 
   # For integration tests - signs in a user via HTTP request

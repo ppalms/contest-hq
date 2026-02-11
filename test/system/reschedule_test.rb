@@ -99,7 +99,8 @@ class RescheduleTest < ApplicationSystemTestCase
 
     select @day.schedule_date.strftime("%a %-m/%d"), from: "target_day_id"
 
-    sleep 0.5
+    # Wait for time slots to load
+    assert_selector 'select[name="target_time_slot"] option', minimum: 2
 
     select "3:20 AM (Available)", from: "target_time_slot"
 

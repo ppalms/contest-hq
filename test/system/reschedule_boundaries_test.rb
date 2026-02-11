@@ -34,7 +34,8 @@ class RescheduleBoundariesTest < ApplicationSystemTestCase
     visit reschedule_entry_path(@schedule, @entry1)
 
     select @day1.schedule_date.strftime("%a %-m/%d"), from: "target_day_id"
-    sleep 1
+    # Wait for time slots to load
+    assert_selector 'select[name="target_time_slot"] option', minimum: 2
 
     # Schedule ends at 17:00 UTC (11:00 AM CST), so 10:30 AM CST (16:30 UTC) would extend past
     select "10:30 AM (Available)", from: "target_time_slot"
@@ -59,7 +60,8 @@ class RescheduleBoundariesTest < ApplicationSystemTestCase
     visit reschedule_entry_path(@schedule, @entry1)
 
     select @day1.schedule_date.strftime("%a %-m/%d"), from: "target_day_id"
-    sleep 1
+    # Wait for time slots to load
+    assert_selector 'select[name="target_time_slot"] option', minimum: 2
 
     # Select entry2's time slot (10:30 AM CST = 16:30 UTC)
     select "10:30 AM (Occupied)", from: "target_time_slot"
@@ -83,7 +85,8 @@ class RescheduleBoundariesTest < ApplicationSystemTestCase
     visit reschedule_entry_path(@schedule, @entry1)
 
     select @day1.schedule_date.strftime("%a %-m/%d"), from: "target_day_id"
-    sleep 1
+    # Wait for time slots to load
+    assert_selector 'select[name="target_time_slot"] option', minimum: 2
 
     # Last slot that fits 30 min before 17:00 UTC (11:00 AM CST) is 16:30 UTC (10:30 AM CST)
     select "10:30 AM (Available)", from: "target_time_slot"
@@ -101,7 +104,8 @@ class RescheduleBoundariesTest < ApplicationSystemTestCase
     visit reschedule_entry_path(@schedule, @entry1)
 
     select @day1.schedule_date.strftime("%a %-m/%d"), from: "target_day_id"
-    sleep 1
+    # Wait for time slots to load
+    assert_selector 'select[name="target_time_slot"] option', minimum: 2
 
     # First slot is 9:00 AM UTC (3:00 AM CST)
     select "3:00 AM (Available)", from: "target_time_slot"

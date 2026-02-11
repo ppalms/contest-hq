@@ -24,7 +24,8 @@ class RescheduleEdgeCasesTest < ApplicationSystemTestCase
     visit reschedule_entry_path(@schedule, @entry1)
 
     select @day1.schedule_date.strftime("%a %-m/%d"), from: "target_day_id"
-    sleep 1
+    # Wait for time slots to load
+    assert_selector 'select[name="target_time_slot"] option', minimum: 2
 
     select "3:00 AM (Current)", from: "target_time_slot"
 
@@ -57,7 +58,8 @@ class RescheduleEdgeCasesTest < ApplicationSystemTestCase
     visit reschedule_entry_path(@schedule, @entry1)
 
     select @day2.schedule_date.strftime("%a %-m/%d"), from: "target_day_id"
-    sleep 1
+    # Wait for time slots to load
+    assert_selector 'select[name="target_time_slot"] option', minimum: 2
 
     # Form has HTML5 required validation - browser prevents submission
     # Verify time slot select has required attribute
