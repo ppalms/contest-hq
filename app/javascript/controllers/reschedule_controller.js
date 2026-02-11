@@ -7,7 +7,8 @@ export default class extends Controller {
     "existingEntryInfo",
     "existingEntryDetails",
     "rescheduleMethodSection",
-    "loadingIndicator"
+    "loadingIndicator",
+    "form"
   ]
   
   static values = {
@@ -22,6 +23,11 @@ export default class extends Controller {
     const submitBtn = this.element.querySelector('input[type="submit"]')
     if (submitBtn) {
       this.submitBtn = submitBtn
+    }
+    
+    // Bind form submit handler for confirmation dialogs
+    if (this.hasFormTarget) {
+      this.formTarget.addEventListener('submit', this.handleSubmit.bind(this))
     }
     
     if (this.daySelectTarget.value) {
@@ -158,6 +164,27 @@ export default class extends Controller {
   hideLoading() {
     if (this.hasLoadingIndicatorTarget) {
       this.loadingIndicatorTarget.classList.add('hidden')
+    }
+  }
+  
+  handleSubmit(event) {
+    const methodRadio = this.element.querySelector('input[name="reschedule_method"]:checked')
+    const selectedOption = this.timeSlotSelectTarget?.selectedOptions[0]
+    
+    if (methodRadio && selectedOption?.dataset.entry) {
+      const method = methodRadio.value
+      const entry = JSON.parse(selectedOption.dataset.entry)
+      
+      let message = ''
+      if (method === 'swap') {
+        message = `Are you sure you want to swap time slots with ${entry.name} from ${entry.school}?`
+      } else if (method === 'shift') {
+        message = `Are you sure you want to shift entries to make room? This may affect multiple entries in the schedule.`
+      }
+      
+      if (message && !confirm(message)) {
+        event.preventDefault()
+      }
     }
   }
 }

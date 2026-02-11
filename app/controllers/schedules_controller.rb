@@ -146,12 +146,7 @@ class SchedulesController < ApplicationController
           params[:target_time_slot] == current_time_slot
       @contest_entry.errors.add(:target_time_slot, "Cannot reschedule to the current time slot")
     else
-      target_day = @schedule.days.find(params[:target_day_id])
-      time_parts = params[:target_time_slot].split(":")
-      target_time = target_day.schedule_date.beginning_of_day +
-                    time_parts[0].to_i.hours +
-                    time_parts[1].to_i.minutes +
-                    (time_parts[2] ? time_parts[2].to_i.seconds : 0)
+      target_day, target_time = parse_target_time_from_params
 
       existing_block = ScheduleBlock.where(
         account_id: @schedule.account.id,
@@ -170,12 +165,7 @@ class SchedulesController < ApplicationController
       return
     end
 
-    target_day = @schedule.days.find(params[:target_day_id])
-    time_parts = params[:target_time_slot].split(":")
-    target_time = target_day.schedule_date.beginning_of_day +
-                  time_parts[0].to_i.hours +
-                  time_parts[1].to_i.minutes +
-                  (time_parts[2] ? time_parts[2].to_i.seconds : 0)
+    target_day, target_time = parse_target_time_from_params
     reschedule_method = params[:reschedule_method]
 
     begin
@@ -471,5 +461,18 @@ class SchedulesController < ApplicationController
     end
 
     true
+  end
+
+  def parse_target_time_from_params
+    return [ nil, nil ] if params[:target_day_id].blank? || params[:target_time_slot].blank?
+
+    target_day = @schedule.days.find(params[:target_day_id])
+    time_parts = params[:target_time_slot].split(":")
+    target_time = target_day.schedule_date.beginning_of_day +
+                  time_parts[0].to_i.hours +
+                  time_parts[1].to_i.minutes +
+                  (time_parts[2] ? time_parts[2].to_i.seconds : 0)
+
+    [ target_day, target_time ]
   end
 end

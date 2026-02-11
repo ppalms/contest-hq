@@ -11,7 +11,8 @@
   
   <%= form_with(url: update_schedule_entry_path(@schedule, @contest_entry),
                 method: :patch,
-                class: "wide-form") do |form| %>
+                class: "wide-form",
+                data: { reschedule_target: "form" }) do |form| %>
     
     <%= render "shared/form_wrapper", 
                form: form,
@@ -131,32 +132,3 @@
     <% end %>
   <% end %>
 </div>
-
-<script data-turbo-temporary="true">
-  document.addEventListener('turbo:load', () => {
-    const form = document.querySelector('form[action*="reschedule"]')
-    if (!form) return
-    
-    form.addEventListener('submit', (event) => {
-      const methodRadio = form.querySelector('input[name="reschedule_method"]:checked')
-      const timeSlotSelect = form.querySelector('select[name="target_time_slot"]')
-      const selectedOption = timeSlotSelect?.selectedOptions[0]
-      
-      if (methodRadio && selectedOption?.dataset.entry) {
-        const method = methodRadio.value
-        const entry = JSON.parse(selectedOption.dataset.entry)
-        
-        let message = ''
-        if (method === 'swap') {
-          message = `Are you sure you want to swap time slots with ${entry.name} from ${entry.school}?`
-        } else if (method === 'shift') {
-          message = `Are you sure you want to shift entries to make room? This may affect multiple entries in the schedule.`
-        }
-        
-        if (message && !confirm(message)) {
-          event.preventDefault()
-        }
-      }
-    })
-  })
-</script>
