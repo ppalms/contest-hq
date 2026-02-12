@@ -141,8 +141,6 @@ builder:
   #   - GITHUB_TOKEN
   #   - RAILS_MASTER_KEY
 # Use a different ssh user than root
-# Note: In GitHub Actions, SSH key is loaded via ssh-agent
-# For local deployment, ensure ~/.ssh/contest_hq_do exists or use ssh-agent
 ssh:
   user: deploy
   keys_only: true
