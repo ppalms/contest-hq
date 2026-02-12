@@ -1,8 +1,9 @@
 class SchedulesController < ApplicationController
   before_action :set_schedule
+  before_action :set_contest_entry, only: [ :reschedule, :update_schedule ]
   before_action :authorize_view_access!, only: [ :show ]
   before_action :authorize_manager!, only: [ :generate, :reset, :reschedule, :update_schedule ]
-  before_action :set_breadcrumbs
+  before_action :set_breadcrumbs, only: [ :show, :reschedule ]
 
   def show
     @selected_day = params[:day_id] ? @schedule.days.find(params[:day_id]) : @schedule.days.first
@@ -95,45 +96,28 @@ class SchedulesController < ApplicationController
   end
 
   def reschedule
-    @contest_entry = ContestEntry.find(params[:contest_entry_id])
     @schedule_days = @schedule.days
     @current_blocks = @contest_entry.schedule_blocks.includes(:schedule_day, :performance_phase)
 
-    # Get current time slot information
-    current_time_slot = nil
-    current_day_id = nil
+    @current_time_slot = nil
+    @current_day_id = nil
     if @current_blocks.any?
       first_block = @current_blocks.first
-      current_time_slot = first_block.start_time.strftime("%H:%M:%S")
-      current_day_id = first_block.schedule_day_id
+      @current_time_slot = first_block.start_time.strftime("%H:%M:%S")
+      @current_day_id = first_block.schedule_day_id
     end
 
-    @errors = {}
     @form_values = {
       target_day_id: @schedule_days.first&.id,
       target_time_slot: nil,
       reschedule_method: "swap"
     }
-
-    respond_to do |format|
-      format.turbo_stream do
-        render turbo_stream: [
-          turbo_stream.update("modal_container", partial: "schedules/reschedule_modal",
-                            locals: { schedule: @schedule, contest_entry: @contest_entry,
-                                    schedule_days: @schedule_days, current_blocks: @current_blocks,
-                                    errors: @errors, form_values: @form_values,
-                                    current_time_slot: current_time_slot, current_day_id: current_day_id })
-        ]
-      end
-    end
   end
 
   def update_schedule
-    @contest_entry = ContestEntry.find(params[:contest_entry_id])
     @schedule_days = @schedule.days
     @current_blocks = @contest_entry.schedule_blocks.includes(:schedule_day, :performance_phase)
 
-    # Get current time slot information
     current_time_slot = nil
     current_day_id = nil
     if @current_blocks.any?
@@ -142,141 +126,85 @@ class SchedulesController < ApplicationController
       current_day_id = first_block.schedule_day_id
     end
 
-    @errors = {}
+    @current_time_slot = current_time_slot
+    @current_day_id = current_day_id
+
     @form_values = {
       target_day_id: params[:target_day_id],
       target_time_slot: params[:target_time_slot],
       reschedule_method: params[:reschedule_method]
     }
 
-    # Validation checks
     if @schedule.contest.contest_start < DateTime.now
-      @errors[:base] = "Contest has already started. Cannot reschedule."
+      @contest_entry.errors.add(:base, "Contest has already started. Cannot reschedule.")
     elsif params[:target_day_id].blank?
-      @errors[:target_day_id] = "Please select a day"
+      @contest_entry.errors.add(:target_day_id, "Please select a day")
     elsif params[:target_time_slot].blank?
-      @errors[:target_time_slot] = "Please select a time slot"
+      @contest_entry.errors.add(:target_time_slot, "Please select a time slot")
     elsif current_day_id && current_time_slot &&
           params[:target_day_id].to_i == current_day_id &&
           params[:target_time_slot] == current_time_slot
-      @errors[:target_time_slot] = "Cannot reschedule to the current time slot"
+      @contest_entry.errors.add(:target_time_slot, "Cannot reschedule to the current time slot")
     else
-      # Check if the selected time slot is occupied before requiring reschedule method
-      target_day = @schedule.days.find(params[:target_day_id])
-      time_parts = params[:target_time_slot].split(":")
-      target_time = target_day.schedule_date.beginning_of_day +
-                    time_parts[0].to_i.hours +
-                    time_parts[1].to_i.minutes +
-                    (time_parts[2] ? time_parts[2].to_i.seconds : 0)
+      target_day, target_time = parse_target_time_from_params
 
-      # Check if there's an existing entry at the target time
       existing_block = ScheduleBlock.where(
-        account_id: Current.account.id,
+        account_id: @schedule.account.id,
         schedule_day_id: target_day.id
       ).where(
         "start_time <= ? AND end_time > ?", target_time, target_time
       ).first
 
-      # Only require reschedule method if the time slot is occupied
       if existing_block && params[:reschedule_method].blank?
-        @errors[:reschedule_method] = "Please select a reschedule method"
+        @contest_entry.errors.add(:reschedule_method, "Please select a reschedule method (swap or shift)")
       end
     end
 
-    if @errors.any?
-      respond_to do |format|
-        format.turbo_stream do
-          render turbo_stream: [
-            turbo_stream.update("modal_container", partial: "schedules/reschedule_modal",
-                              locals: { schedule: @schedule, contest_entry: @contest_entry,
-                                      schedule_days: @schedule_days, current_blocks: @current_blocks,
-                                      errors: @errors, form_values: @form_values,
-                                      current_time_slot: current_time_slot, current_day_id: current_day_id })
-          ]
-        end
-      end
+    if @contest_entry.errors.any?
+      render :reschedule, status: :unprocessable_entity
       return
     end
 
-    target_day = @schedule.days.find(params[:target_day_id])
-    # Parse the time string and combine it with the target day's date
-    time_parts = params[:target_time_slot].split(":")
-    target_time = target_day.schedule_date.beginning_of_day +
-                  time_parts[0].to_i.hours +
-                  time_parts[1].to_i.minutes +
-                  (time_parts[2] ? time_parts[2].to_i.seconds : 0)
-    reschedule_method = params[:reschedule_method] # 'swap' or 'shift'
+    target_day, target_time = parse_target_time_from_params
+    reschedule_method = params[:reschedule_method]
 
     begin
-      # Check if target time slot is available
       existing_block = ScheduleBlock.where(
-        account_id: Current.account.id,
+        account_id: @schedule.account.id,
         schedule_day_id: target_day.id
       ).where(
         "start_time <= ? AND end_time > ?", target_time, target_time
       ).first
 
       if existing_block.nil?
-        # Target slot is available, just move the entry
         result = perform_simple_reschedule(@contest_entry, target_day, target_time)
+        flash[:notice] = "Successfully rescheduled #{@contest_entry.large_ensemble.name} to #{target_time.strftime('%a %-m/%d %l:%M %p')}."
       else
-        # Target slot is occupied, use specified method
         case reschedule_method
         when "swap"
           result = perform_swap_reschedule(@contest_entry, target_day, target_time)
+          other_entry = existing_block.contest_entry
+          flash[:notice] = "Successfully swapped time slots between #{@contest_entry.large_ensemble.name} and #{other_entry.large_ensemble.name}."
         when "shift"
           result = perform_shift_reschedule(@contest_entry, target_day, target_time)
+          flash[:notice] = "Successfully rescheduled #{@contest_entry.large_ensemble.name} and shifted subsequent entries."
         end
       end
 
       if result == false
-        @errors[:base] = "Unable to reschedule to the selected time slot. Please try a different time or method."
-
-        respond_to do |format|
-          format.turbo_stream do
-            render turbo_stream: [
-              turbo_stream.update("modal_container", partial: "schedules/reschedule_modal",
-                                locals: { schedule: @schedule, contest_entry: @contest_entry,
-                                        schedule_days: @schedule_days, current_blocks: @current_blocks,
-                                        errors: @errors, form_values: @form_values,
-                                        current_time_slot: current_time_slot, current_day_id: current_day_id })
-            ]
-          end
-        end
+        @contest_entry.errors.add(:base, "Unable to reschedule to the selected time slot. The time slot may conflict with existing entries or exceed the day's time boundaries. Please try a different time or method.")
+        render :reschedule, status: :unprocessable_entity
         return
       end
 
-      respond_to do |format|
-        format.turbo_stream do
-          flash[:notice] = "Successfully rescheduled #{@contest_entry.large_ensemble.name}."
+      redirect_to schedule_path(@schedule, anchor: "entry_#{@contest_entry.id}")
 
-          # Find the day containing the moved entry for redirection
-          updated_day = @contest_entry.schedule_blocks.first&.schedule_day
-
-          render turbo_stream: [
-            turbo_stream.append("notifications", partial: "shared/notification"),
-            turbo_stream.replace("schedule_day_content", partial: "schedules/days/schedule_blocks",
-                                locals: { schedule: @schedule, selected_day: updated_day }),
-            turbo_stream.update("modal_container", "")
-          ]
-
-          flash.discard(:notice)
-        end
-      end
+    rescue ActiveRecord::RecordInvalid => e
+      @contest_entry.errors.add(:base, "Validation error: #{e.message}")
+      render :reschedule, status: :unprocessable_entity
     rescue => e
-      @errors[:base] = "An error occurred during rescheduling: #{e.message}"
-
-      respond_to do |format|
-        format.turbo_stream do
-          render turbo_stream: [
-            turbo_stream.update("modal_container", partial: "schedules/reschedule_modal",
-                              locals: { schedule: @schedule, contest_entry: @contest_entry,
-                                      schedule_days: @schedule_days, current_blocks: @current_blocks,
-                                      errors: @errors, form_values: @form_values,
-                                      current_time_slot: current_time_slot, current_day_id: current_day_id })
-          ]
-        end
-      end
+      @contest_entry.errors.add(:base, "An unexpected error occurred during rescheduling: #{e.message}. Please try again or contact support if the problem persists.")
+      render :reschedule, status: :unprocessable_entity
     end
   end
 
@@ -373,6 +301,10 @@ class SchedulesController < ApplicationController
     ).find(params[:id])
   end
 
+  def set_contest_entry
+    @contest_entry = ContestEntry.find(params[:contest_entry_id])
+  end
+
   def authorize_manager!
     unless current_user.manages_contest(@schedule.contest.id)
       flash[:alert] = "You must be a manager of this contest to access this area"
@@ -399,6 +331,13 @@ class SchedulesController < ApplicationController
   def set_breadcrumbs
     add_breadcrumb("Contests", contests_path(season_id: @schedule.contest.season_id))
     add_breadcrumb(@schedule.contest.name, @schedule.contest)
+
+    if action_name == "reschedule"
+      add_breadcrumb("Schedule", schedule_path(@schedule))
+      add_breadcrumb("Reschedule", reschedule_entry_path(@schedule, @contest_entry))
+    elsif action_name == "show"
+      add_breadcrumb("Schedule", schedule_path(@schedule))
+    end
   end
 
   def perform_simple_reschedule(contest_entry, target_day, target_time)
@@ -522,5 +461,18 @@ class SchedulesController < ApplicationController
     end
 
     true
+  end
+
+  def parse_target_time_from_params
+    return [ nil, nil ] if params[:target_day_id].blank? || params[:target_time_slot].blank?
+
+    target_day = @schedule.days.find(params[:target_day_id])
+    time_parts = params[:target_time_slot].split(":")
+    target_time = target_day.schedule_date.beginning_of_day +
+                  time_parts[0].to_i.hours +
+                  time_parts[1].to_i.minutes +
+                  (time_parts[2] ? time_parts[2].to_i.seconds : 0)
+
+    [ target_day, target_time ]
   end
 end

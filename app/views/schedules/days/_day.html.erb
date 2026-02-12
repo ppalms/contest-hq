@@ -1,5 +1,6 @@
 <% if day.present? %>
-  <% day.blocks_by_large_ensemble.each do |large_ensemble, blocks| %>
+  <% if day.blocks_by_large_ensemble.any? %>
+    <% day.blocks_by_large_ensemble.each do |large_ensemble, blocks| %>
     <% contest_entry = blocks.first.contest_entry
     first_block_time = blocks.first.start_time
     
@@ -23,6 +24,7 @@
     end %>
 
     <div
+      id="entry_<%= contest_entry.id %>"
       class="
         flex justify-between border-b border-neutral-300 py-2 px-4
         <%= bg_class %>
@@ -65,10 +67,9 @@
             </div>
           <% end %>
         </div>
-        <% if defined?(current_user) && current_user&.manager? %>
+        <% if current_user.manages_contest(day.schedule.contest.id) %>
           <div>
-            <%= link_to reschedule_entry_path(day.schedule, contest_entry, format: :turbo_stream), 
-                        method: :get,
+            <%= link_to reschedule_entry_path(day.schedule, contest_entry),
                         data: { turbo_frame: "_top" },
                         class: "inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 bg-blue-100 border border-blue-200 rounded hover:bg-blue-200" do %>
               <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -76,7 +77,7 @@
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   stroke-width="2"
-                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
                 />
               </svg>
               Reschedule
@@ -84,6 +85,25 @@
           </div>
         <% end %>
       </div>
+    </div>
+    <% end %>
+  <% else %>
+    <div class="text-center py-6">
+      <svg
+        class="mx-auto size-12 text-gray-400"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        aria-hidden="true"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
+        />
+      </svg>
+      <h3 class="mt-2 text-sm font-semibold text-gray-900">No performances scheduled</h3>
+      <p class="mt-1 text-sm text-gray-500">No performances have been scheduled for this day</p>
     </div>
   <% end %>
 <% end %>

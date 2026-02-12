@@ -1,0 +1,140 @@
+<% content_for :title, "Reschedule Entry" %>
+
+<div class="wide-form-container" 
+     data-controller="reschedule" 
+     data-reschedule-schedule-id-value="<%= @schedule.id %>"
+     data-reschedule-contest-entry-id-value="<%= @contest_entry.id %>"
+     data-reschedule-current-time-slot-value="<%= @current_time_slot %>"
+     data-reschedule-current-day-id-value="<%= @current_day_id %>">
+  
+  <h1>Reschedule <%= @contest_entry.large_ensemble.name %></h1>
+  
+  <%= form_with(url: update_schedule_entry_path(@schedule, @contest_entry),
+                method: :patch,
+                class: "wide-form",
+                data: { reschedule_target: "form" }) do |form| %>
+    
+    <%= render "shared/form_wrapper", 
+               form: form,
+               submit_text: "Reschedule",
+               cancel_path: schedule_path(@schedule),
+               entity: @contest_entry do %>
+      
+      <div class="sm:col-span-2 space-y-4">
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+            <div>
+              <span class="font-medium text-gray-700">School:</span>
+              <span class="text-gray-900"><%= @contest_entry.large_ensemble.school.name %></span>
+            </div>
+            <% if @contest_entry.large_ensemble.performance_class.abbreviation.present? %>
+              <div>
+                <span class="font-medium text-gray-700">Class:</span>
+                <span class="text-gray-900"><%= @contest_entry.large_ensemble.performance_class.abbreviation %></span>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <p class="font-medium text-blue-900 mb-2">Current Schedule:</p>
+          <div class="text-sm text-blue-800 space-y-1">
+            <% @current_blocks.each do |block| %>
+              <p><%= block.performance_phase&.name %> - <%= block.start_time.strftime("%a %-m/%d %l:%M %p") %></p>
+            <% end %>
+          </div>
+        </div>
+        
+        <% if @contest_entry.has_time_preference? %>
+          <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+            <p class="font-medium text-green-900 mb-2">Preferred Performance Time:</p>
+            <p class="text-sm text-green-800">
+              <% if @contest_entry.full_time_preference? %>
+                <%= @contest_entry.preferred_time_start.strftime("%l:%M %p") %>
+                -
+                <%= @contest_entry.preferred_time_end.strftime("%l:%M %p") %>
+              <% elsif @contest_entry.preferred_time_start.present? %>
+                After <%= @contest_entry.preferred_time_start.strftime("%l:%M %p") %>
+              <% elsif @contest_entry.preferred_time_end.present? %>
+                Before <%= @contest_entry.preferred_time_end.strftime("%l:%M %p") %>
+              <% end %>
+            </p>
+          </div>
+        <% end %>
+      </div>
+      
+      <div>
+        <%= form.label :target_day_id, "Select Day:", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.select :target_day_id, 
+                        options_from_collection_for_select(@schedule_days, :id, 
+                          ->(day) { day.schedule_date.strftime("%a %-m/%d") }, @form_values[:target_day_id]),
+                        {},
+                        { class: "text-field w-full", 
+                          required: true,
+                          data: { 
+                            reschedule_target: "daySelect",
+                            action: "change->reschedule#dayChanged"
+                          } } %>
+      </div>
+      
+      <div class="relative">
+        <%= form.label :target_time_slot, "Select Time Slot:", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.select :target_time_slot, [], 
+                        { prompt: "Choose a time slot" },
+                        { class: "text-field w-full", 
+                          required: true,
+                          disabled: @form_values[:target_day_id].blank?,
+                          value: @form_values[:target_time_slot],
+                          data: { 
+                            reschedule_target: "timeSlotSelect",
+                            action: "change->reschedule#timeSlotChanged",
+                            selected_time_slot: @form_values[:target_time_slot]
+                          } } %>
+        
+        <div class="hidden absolute right-3 top-9" data-reschedule-target="loadingIndicator">
+          <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
+        
+        <div class="hidden mt-2" data-reschedule-target="errorMessage" role="alert">
+          <div class="rounded-md bg-red-50 p-3">
+            <p class="text-sm text-red-800" data-reschedule-target="errorText"></p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="sm:col-span-2 hidden bg-blue-50 border border-blue-200 rounded-lg p-4" 
+           data-reschedule-target="existingEntryInfo">
+        <p class="font-medium text-blue-900 mb-2">Entry at selected time slot:</p>
+        <div class="text-sm text-blue-800" data-reschedule-target="existingEntryDetails"></div>
+      </div>
+      
+      <div class="sm:col-span-2 hidden" data-reschedule-target="rescheduleMethodSection">
+        <%= form.label :reschedule_method, "Reschedule Method:", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <div class="space-y-3 bg-gray-50 border border-gray-200 rounded-lg p-4">
+          <label class="flex items-start cursor-pointer">
+            <%= form.radio_button :reschedule_method, "swap", 
+                                  { class: "mt-1 mr-3", 
+                                    checked: @form_values[:reschedule_method] == "swap" } %>
+            <div>
+              <span class="text-sm font-medium text-gray-900">Swap time slots with existing entry</span>
+              <p class="text-xs text-gray-600 mt-1">Exchange time slots between the two entries. Both entries will be moved.</p>
+            </div>
+          </label>
+          <label class="flex items-start cursor-pointer">
+            <%= form.radio_button :reschedule_method, "shift", 
+                                  { class: "mt-1 mr-3",
+                                    checked: @form_values[:reschedule_method] == "shift" } %>
+            <div>
+              <span class="text-sm font-medium text-gray-900">Shift other entries to make room</span>
+              <p class="text-xs text-gray-600 mt-1">Move this entry to the selected time and shift subsequent entries forward. May affect multiple entries.</p>
+            </div>
+          </label>
+        </div>
+      </div>
+      
+    <% end %>
+  <% end %>
+</div>
