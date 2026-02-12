@@ -16,6 +16,6 @@ if [ "$KAMAL_COMMAND" = "setup" ]; then
   exit 0
 fi
 
-kamal app exec --primary --reuse 'bin/rails db:prepare'
+kamal app exec --primary --reuse --no-interactive 'bin/rails db:prepare'
 
 echo "✅ Database migrations completed successfully"
