@@ -1,0 +1,7 @@
+Host *
+  IdentityAgent ~/.1password/agent.sock
+  IdentitiesOnly yes
+  PasswordAuthentication no
+  PubkeyAuthentication yes
+  BatchMode yes
+  StrictHostKeyChecking accept-new

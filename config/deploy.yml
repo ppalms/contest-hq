@@ -143,7 +143,6 @@ builder:
 # Use a different ssh user than root
 ssh:
   user: deploy
-  keys: ["~/.ssh/contest_hq_deploy"]
 
 # Accessory services not needed with SQLite
 #   db:
