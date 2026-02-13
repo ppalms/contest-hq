@@ -140,7 +140,10 @@ builder:
   # secrets:
   #   - GITHUB_TOKEN
   #   - RAILS_MASTER_KEY
-# Use a different ssh user than root
+# SSH Configuration
+# Uses SSH agent for authentication (no hardcoded keys)
+# - Locally: Set SSH_AUTH_SOCK=~/.1password/agent.sock (added to ~/.bashrc)
+# - CI: webfactory/ssh-agent action sets SSH_AUTH_SOCK automatically
 ssh:
   user: deploy
 
