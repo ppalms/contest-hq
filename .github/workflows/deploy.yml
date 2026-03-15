@@ -30,7 +30,7 @@ jobs:
           gem install specific_install
           gem install kamal -v 2.10.1
 
-      - uses: webfactory/ssh-agent@v0.9.1
+      - uses: webfactory/ssh-agent@v0.10.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
