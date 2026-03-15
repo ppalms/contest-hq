@@ -162,7 +162,7 @@ GEM
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
     jmespath (1.6.2)
-    json (2.18.1)
+    json (2.19.1)
     kamal (2.10.1)
       activesupport (>= 7.0)
       base64 (~> 0.2)
@@ -229,8 +229,9 @@ GEM
     nokogiri (1.19.1-x86_64-linux-gnu)
       racc (~> 1.4)
     ostruct (0.6.3)
-    pagy (43.2.9)
+    pagy (43.3.3)
       json
+      uri
       yaml
     parallel (1.27.0)
     parser (3.3.8.0)
@@ -475,7 +476,7 @@ DEPENDENCIES
   kamal
   letter_opener
   minitest (~> 6.0)
-  pagy (~> 43.2)
+  pagy (~> 43.3)
   propshaft
   puma (>= 5.0)
   rails (= 8.1.2)
