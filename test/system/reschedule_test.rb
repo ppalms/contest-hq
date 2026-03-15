@@ -14,7 +14,7 @@ class RescheduleTest < ApplicationSystemTestCase
     @entry1 = contest_entries(:contest_a_school_a_ensemble_a)
     @entry2 = contest_entries(:contest_a_school_a_ensemble_b)
 
-    @schedule_date = Date.today + 1.day
+    @schedule_date = Date.new(2026, 1, 15)  # Fixed date for deterministic tests
 
     @day = @schedule.days.create!(
       schedule_date: @schedule_date,
@@ -124,7 +124,9 @@ class RescheduleTest < ApplicationSystemTestCase
 
     select @day.schedule_date.strftime("%a %-m/%d"), from: "target_day_id"
 
-    sleep 0.5
+    # Wait for AJAX to load time slots
+    wait_for_ajax_load("reschedule")
+    assert_selector 'select[name="target_time_slot"] option', minimum: 2, wait: 5
 
     select "2:40 AM (Occupied)", from: "target_time_slot"
 
@@ -161,7 +163,9 @@ class RescheduleTest < ApplicationSystemTestCase
 
     select @day.schedule_date.strftime("%a %-m/%d"), from: "target_day_id"
 
-    sleep 0.5
+    # Wait for AJAX to load time slots
+    wait_for_ajax_load("reschedule")
+    assert_selector 'select[name="target_time_slot"] option', minimum: 2, wait: 5
 
     select "2:40 AM (Occupied)", from: "target_time_slot"
 
@@ -186,7 +190,9 @@ class RescheduleTest < ApplicationSystemTestCase
 
     select @day.schedule_date.strftime("%a %-m/%d"), from: "target_day_id"
 
-    sleep 0.5
+    # Wait for AJAX to load time slots
+    wait_for_ajax_load("reschedule")
+    assert_selector 'select[name="target_time_slot"] option', minimum: 2, wait: 5
 
     select "2:00 AM (Current)", from: "target_time_slot"
 
@@ -207,7 +213,9 @@ class RescheduleTest < ApplicationSystemTestCase
 
     select @day.schedule_date.strftime("%a %-m/%d"), from: "target_day_id"
 
-    sleep 0.5
+    # Wait for AJAX to load time slots
+    wait_for_ajax_load("reschedule")
+    assert_selector 'select[name="target_time_slot"] option', minimum: 2, wait: 5
 
     # Time slot select should be enabled and populated
     time_slot_select = find_field("target_time_slot")
@@ -279,7 +287,9 @@ class RescheduleTest < ApplicationSystemTestCase
     visit reschedule_entry_path(@schedule, @entry1)
 
     select @day.schedule_date.strftime("%a %-m/%d"), from: "target_day_id"
-    sleep 0.5
+    # Wait for AJAX to load time slots
+    wait_for_ajax_load("reschedule")
+    assert_selector 'select[name="target_time_slot"] option', minimum: 2, wait: 5
     select "3:20 AM (Available)", from: "target_time_slot"
 
     click_button "Reschedule"

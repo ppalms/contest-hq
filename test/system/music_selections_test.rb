@@ -159,12 +159,12 @@ class MusicSelectionsTest < ApplicationSystemTestCase
       click_on "Edit"
     end
 
-    assert_text "Edit Music Selection"
-    assert_text "This is a prescribed music selection"
+    assert_text "Edit Music Selection", wait: 5
+    assert_text old_prescribed.title, wait: 5
 
-    click_on "Change to Different Prescribed Music"
+    click_on "Change Selection"
 
-    assert_text "Select Prescribed Music"
+    assert_text "Select Prescribed Music", wait: 5
 
     # Search for prescribed music
     fill_in "search", with: ""
