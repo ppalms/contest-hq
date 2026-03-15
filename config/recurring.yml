@@ -1,9 +1,1 @@
 production:
-  daily_backup:
-    class: BackupJob
-    queue: default
-    schedule: every day at 3am
-  weekly_backup_cleanup:
-    class: BackupCleanupJob
-    queue: default
-    schedule: every sunday at 4am
