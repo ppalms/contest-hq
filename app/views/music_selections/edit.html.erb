@@ -17,22 +17,13 @@
 
     <div class="space-y-4">
       <% if @music_selection.prescribed? %>
-        <div class="bg-blue-50 border border-blue-200 rounded p-4 mb-4">
-          <p class="text-sm text-blue-800">
-            This is a prescribed music selection. You can change to a different prescribed piece, but cannot edit the title or composer directly.
-          </p>
-        </div>
-
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Current Selection</label>
-          <div class="p-3 bg-gray-50 border rounded">
-            <p class="font-bold"><%= @music_selection.title %></p>
-            <p class="text-gray-600"><%= @music_selection.composer %></p>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Prescribed Music</label>
+          <div class="p-4 bg-gray-50 border rounded">
+            <p class="font-bold text-lg"><%= @music_selection.title %></p>
+            <p class="text-gray-600 mb-3"><%= @music_selection.composer %></p>
+            <%= link_to "Change Selection", new_prescribed_contest_entry_music_selections_path(contest_id: @contest_entry.contest_id, entry_id: @contest_entry.id, replace: @music_selection.id), class: "btn-secondary" %>
           </div>
-        </div>
-
-        <div>
-          <%= link_to "Change to Different Prescribed Music", new_prescribed_contest_entry_music_selections_path(contest_id: @contest_entry.contest_id, entry_id: @contest_entry.id, replace: @music_selection.id), class: "btn-secondary" %>
         </div>
       <% else %>
         <div>
