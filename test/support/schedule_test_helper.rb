@@ -1,5 +1,5 @@
 module ScheduleTestHelper
-  def setup_multi_day_schedule(contest:, num_days: 2, start_date: Date.today)
+  def setup_multi_day_schedule(contest:, num_days: 2, start_date: Date.new(2026, 1, 15))
     schedule = contest.schedules.first || Schedule.create!(
       contest: contest,
       account: contest.account
@@ -9,7 +9,7 @@ module ScheduleTestHelper
       account: contest.account,
       contest: contest,
       name: "Test Room",
-      room_number: "TR#{rand(1000)}"
+      room_number: "TEST_ROOM_#{contest.id}_#{Time.now.to_i % 10000}"
     )
 
     days = []
