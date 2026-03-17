@@ -1,9 +1,6 @@
 <% content_for :title, "Add Custom Music" %>
 
 <div class="pt-8 max-w-2xl mx-auto" data-controller="focus-manager">
-  <a href="#custom_music_form" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-3 py-2 rounded">
-    Skip to music form
-  </a>
   <h1 class="text-2xl font-bold mb-6">Add Custom Music</h1>
 
   <%= form_with model: @music_selection, url: contest_entry_music_selections_path(contest_id: @contest_entry.contest_id, entry_id: @contest_entry.id), method: :post, 

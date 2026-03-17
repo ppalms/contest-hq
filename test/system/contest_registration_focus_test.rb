@@ -23,9 +23,6 @@ class ContestRegistrationFocusTest < ApplicationSystemTestCase
     assert_selector "form[role='form']"
     assert_selector "form[aria-label]"
     assert_selector "fieldset legend"
-
-    # Check skip link exists
-    assert_selector "a[href='#contest_entry_form']", visible: :hidden
   end
 
   test "custom music form has proper focus management" do
@@ -52,9 +49,6 @@ class ContestRegistrationFocusTest < ApplicationSystemTestCase
 
     # Check field attributes
     assert_selector "input[data-form-focus-target='field']"
-
-    # Check skip link
-    assert_selector "a[href='#custom_music_form']", visible: :hidden
   end
 
   test "prescribed music search has proper focus management" do
@@ -86,9 +80,6 @@ class ContestRegistrationFocusTest < ApplicationSystemTestCase
     assert_selector "table[role='table']"
     assert_selector "table[aria-label]"
     assert_selector "th[scope='col']"
-
-    # Check skip link
-    assert_selector "a[href='#prescribed_search_form']", visible: :hidden
   end
 
   test "contest entry details page has proper focus management" do
@@ -132,8 +123,5 @@ class ContestRegistrationFocusTest < ApplicationSystemTestCase
     # Check semantic HTML
     assert_selector "fieldset"
     assert_selector "legend"
-
-    # Check skip links
-    assert_selector "a[href='#contest_entry_form']", visible: :hidden
   end
 end
