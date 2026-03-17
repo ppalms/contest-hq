@@ -12,12 +12,12 @@ Before starting any feature implementation:
 - **If NO acceptance criteria**: STOP and prompt user with:
   ```
   ⚠️ No acceptance criteria provided for this feature.
-  
+
   To write effective tests, I need to understand:
   1. What specific behavior should this feature implement?
   2. What are the success conditions?
   3. What edge cases should be handled?
-  
+
   Please provide acceptance criteria or user stories for this feature.
   ```
 

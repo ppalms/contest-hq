@@ -79,7 +79,7 @@ FAILED - Quality checks found issues
 ❌ Rubocop: 3 offenses
    - app/models/user.rb:42 - Style/StringLiterals
    - app/controllers/contests_controller.rb:15 - Layout/LineLength
-   
+
 ❌ Tests: 2 failures
    - UserTest#test_account_scoping (test/models/user_test.rb:27)
    - ContestsControllerTest#test_manager_access (test/controllers/contests_controller_test.rb:45)
