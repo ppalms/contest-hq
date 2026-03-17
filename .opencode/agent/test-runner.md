@@ -1,7 +1,7 @@
 ---
 description: Run Rails tests (bin/rails test, bin/rails test:system) and report results. Use when asked to run tests, validate code changes, or verify functionality. Parses test output and identifies failures. Do NOT use for making code fixes or running linters.
 mode: subagent
-model: anthropic/claude-haiku-4-5
+model: anthropic/claude-haiku-4-20250307
 temperature: 0.1
 tools:
   edit: false

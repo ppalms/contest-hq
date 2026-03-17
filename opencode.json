@@ -37,7 +37,7 @@
     "quality-gate": {
       "description": "Pre-commit quality gate that runs linter, tests, and best practices checks. Blocks commits on failures.",
       "mode": "subagent",
-      "model": "anthropic/claude-haiku-4-5",
+      "model": "anthropic/claude-haiku-4-20250307",
       "temperature": 0.0
     }
   }

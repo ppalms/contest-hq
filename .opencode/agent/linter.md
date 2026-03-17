@@ -1,7 +1,7 @@
 ---
 description: Run code quality checks (bin/rubocop, bin/brakeman) and report issues. Use before commits, when validating code quality, or checking security. Required before any git commit. Do NOT use for making code fixes or running tests.
 mode: subagent
-model: anthropic/claude-haiku-4-5
+model: anthropic/claude-haiku-4-20250307
 temperature: 0.0
 tools:
   edit: false

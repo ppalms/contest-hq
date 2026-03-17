@@ -1,7 +1,7 @@
 ---
 description: Pre-commit quality gate that runs linter, tests, and best practices checks. Blocks commits on failures. Use before any git commit for feature work. Do NOT use for making code fixes.
 mode: subagent
-model: anthropic/claude-haiku-4-5
+model: anthropic/claude-haiku-4-20250307
 temperature: 0.0
 tools:
   edit: false
