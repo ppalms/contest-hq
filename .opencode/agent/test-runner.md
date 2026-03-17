@@ -25,7 +25,6 @@ Execute Rails tests, parse output, and report results with clear summaries. Iden
 - Parse output: counts, failures, errors, stack traces
 - Report pass/fail status clearly
 - Suggest fixes for common issues
-- Return structured exit codes (0=pass, 1=fail)
 
 ## Do NOT
 
@@ -44,13 +43,13 @@ bin/rails test:system                       # System tests (~6.5min)
 
 ## Reporting Format
 
+Start your response with either "PASSED" or "FAILED" as the first word.
+
 ### ✅ Success
 ```
 PASSED: All tests passed
 - X runs, Y assertions, 0 failures, 0 errors
 - Completed in Zs
-
-EXIT CODE: 0
 ```
 
 ### ❌ Failures
@@ -61,7 +60,6 @@ FAILED: N tests failed
    Error: [error message]
 
 SUMMARY: X runs, Y assertions, Z failures
-EXIT CODE: 1
 ```
 
 ## Common Issues
@@ -71,22 +69,8 @@ EXIT CODE: 1
 - **Fixture issues**: Invalid fixture data or missing reference
 - **System test timeouts**: UI element not found or async timing
 
-## Test Fixtures (Reference AGENTS.md)
+## Common Test Patterns
 
-All fixtures use password: `"Secret1*3*5*"`
-Accounts: `:demo`, `:customer`, `:ossaa`, `:contesthq`
-Users: `:sys_admin_a`, `:demo_admin_a`, `:demo_director_a`, `:demo_manager_a`
-
-## Exit Codes
-
-Return structured exit codes for quality-gate integration:
-- **0**: All tests passed (no failures or errors)
-- **1**: One or more tests failed
-
-## Integration with Quality Gate
-
-When invoked by quality-gate agent:
-1. Run all tests (unit + system)
-2. Parse output for failures and errors
-3. Report with test:line references
-4. Return exit code 0 (pass) or 1 (fail)
+- Integration tests: `sign_in_as(users(:demo_admin_a))`
+- Unit tests: `set_current_user(users(:demo_admin_a))`
+- All fixtures use password: `"Secret1*3*5*"`

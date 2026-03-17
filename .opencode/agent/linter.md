@@ -25,7 +25,6 @@ Run code quality and security checks (rubocop, brakeman), parse output, and repo
 - Parse output and categorize by severity
 - Report clear summaries with actionable fixes
 - Identify auto-correctable violations
-- Return structured exit codes (0=pass, 1=fail)
 
 ## Do NOT
 
@@ -42,16 +41,9 @@ rails_best_practices                     # Best practices check
 bin/rubocop -f github && bin/brakeman --no-pager && rails_best_practices  # All checks
 ```
 
-## Code Style Standards
-
-Uses **rubocop-rails-omakase** (Rails defaults):
-- 2 spaces, no tabs
-- `CamelCase` classes, `snake_case` methods
-- 120 char line length
-- No comments unless requested
-- Rails autoloading (avoid explicit requires)
-
 ## Reporting Format
+
+Start your response with either "PASSED" or "FAILED" as the first word.
 
 ### ✅ Success
 ```
@@ -59,42 +51,22 @@ PASSED: All quality checks passed
 - Rubocop: 0 offenses
 - Brakeman: 0 warnings
 - Rails Best Practices: 0 errors
-
-EXIT CODE: 0
 ```
 
-### ⚠️ Style Violations
+### ❌ Failures
 ```
-RUBOCOP: N offenses
+FAILED: Quality issues found
 
-1. ViolationType (path/to/file.rb:line)
-   Description and suggested fix
+Rubocop: N offenses
+- path/to/file.rb:line - ViolationType
 
-SUMMARY: N offenses, M auto-correctable
-EXIT CODE: 1
-```
+Brakeman: M warnings
+- path/to/file.rb:line - IssueType (SEVERITY)
 
-### 🔒 Security Issues
-```
-BRAKEMAN: N warnings
+Rails Best Practices: X errors
+- path/to/file.rb:line - ViolationType
 
-1. IssueType (SEVERITY) - path/to/file.rb:line
-   Description
-   Fix: [specific solution]
-
-SUMMARY: X high, Y medium, Z weak confidence
-EXIT CODE: 1
-```
-
-### 📋 Best Practices Violations
-```
-RAILS BEST PRACTICES: N errors
-
-1. ViolationType (path/to/file.rb:line)
-   Description and recommendation
-
-SUMMARY: N best practice violations
-EXIT CODE: 1
+SUMMARY: N+M+X total issues, Y auto-correctable
 ```
 
 ## Common Issues
@@ -111,17 +83,3 @@ These violations **block commits**:
 2. Syntax errors
 3. Rubocop violations in changed files
 4. Rails best practices errors
-
-## Exit Codes
-
-Return structured exit codes for quality-gate integration:
-- **0**: All checks passed (no violations)
-- **1**: One or more checks failed (violations found)
-
-## Integration with Quality Gate
-
-When invoked by quality-gate agent:
-1. Run all checks (rubocop, brakeman, rails_best_practices)
-2. Aggregate results
-3. Report with file:line references
-4. Return exit code 0 (pass) or 1 (fail)
