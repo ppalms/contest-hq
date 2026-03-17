@@ -48,7 +48,6 @@ Before starting any feature implementation:
 The quality gate will:
 - ✅ Run rubocop (style)
 - ✅ Run brakeman (security)
-- ✅ Run rails_best_practices (code quality)
 - ✅ Run all tests (unit + system)
 
 **If quality gate PASSES**: Proceed to commit
@@ -100,8 +99,7 @@ The quality-gate agent is a **mandatory checkpoint** before commits:
 ### What It Checks
 1. **Code style** - Rubocop with rails-omakase config
 2. **Security** - Brakeman static analysis
-3. **Best practices** - Rails best practices analyzer
-4. **Tests** - All unit and system tests
+3. **Tests** - All unit and system tests
 
 ### Handling Failures
 

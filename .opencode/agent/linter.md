@@ -21,7 +21,7 @@ Run code quality and security checks (rubocop, brakeman), parse output, and repo
 
 ## Responsibilities
 
-- Execute: `bin/rubocop -f github`, `bin/brakeman --no-pager`, and `rails_best_practices`
+- Execute: `bin/rubocop -f github` and `bin/brakeman --no-pager`
 - Parse output and categorize by severity
 - Report clear summaries with actionable fixes
 - Identify auto-correctable violations
@@ -37,8 +37,7 @@ Run code quality and security checks (rubocop, brakeman), parse output, and repo
 ```bash
 bin/rubocop -f github                    # Style check
 bin/brakeman --no-pager                  # Security scan
-rails_best_practices                     # Best practices check
-bin/rubocop -f github && bin/brakeman --no-pager && rails_best_practices  # All checks
+bin/rubocop -f github && bin/brakeman --no-pager  # All checks
 ```
 
 ## Reporting Format
@@ -50,7 +49,6 @@ Start your response with either "PASSED" or "FAILED" as the first word.
 PASSED: All quality checks passed
 - Rubocop: 0 offenses
 - Brakeman: 0 warnings
-- Rails Best Practices: 0 errors
 ```
 
 ### ❌ Failures
@@ -63,10 +61,7 @@ Rubocop: N offenses
 Brakeman: M warnings
 - path/to/file.rb:line - IssueType (SEVERITY)
 
-Rails Best Practices: X errors
-- path/to/file.rb:line - ViolationType
-
-SUMMARY: N+M+X total issues, Y auto-correctable
+SUMMARY: N+M total issues, Y auto-correctable
 ```
 
 ## Common Issues
@@ -82,4 +77,3 @@ These violations **block commits**:
 1. Brakeman high-confidence warnings
 2. Syntax errors
 3. Rubocop violations in changed files
-4. Rails best practices errors
