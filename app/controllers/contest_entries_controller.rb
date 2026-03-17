@@ -89,6 +89,8 @@ class ContestEntriesController < ApplicationController
   end
 
   def edit
+    # Set up eligible ensembles for the form (needed for focus management logic)
+    @eligible_ensembles = eligible_ensembles_for_contest(current_user.conducted_ensembles, @contest)
   end
 
   def update
@@ -97,6 +99,8 @@ class ContestEntriesController < ApplicationController
         format.html { redirect_to contest_entry_path(id: @contest_entry.id), notice: "Contest entry was successfully updated." }
         format.json { render :show, status: :ok, contest_entry: @contest_entry }
       else
+        # Set up eligible ensembles for the form in case of validation errors
+        @eligible_ensembles = eligible_ensembles_for_contest(current_user.conducted_ensembles, @contest)
         format.html { render :edit, status: :unprocessable_content }
         format.json { render json: @contest_entry.errors, status: :unprocessable_content }
       end
