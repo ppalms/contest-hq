@@ -27,34 +27,71 @@ class SeasonTest < ActiveSupport::TestCase
     account_one = accounts(:demo)
     account_two = accounts(:customer)
 
-    Season.create!(name: "2026", account: account_one)
-    season_two = Season.new(name: "2026", account: account_two)
+    Season.create!(name: "2026", account: account_one, ordinal: 10)
+    season_two = Season.new(name: "2026", account: account_two, ordinal: 10)
 
     assert season_two.valid?
   end
 
-  test "current scope returns non-archived seasons ordered by creation" do
+  test "current scope returns non-archived seasons ordered by ordinal" do
     account = accounts(:demo)
     Contest.where(account: account).destroy_all
     PrescribedMusic.where(account: account).destroy_all
     account.seasons.destroy_all
 
-    Season.create!(name: "2026", account: account, archived: true)
-    new_season = Season.create!(name: "2027", account: account, archived: false)
+    Season.create!(name: "2026", account: account, archived: true, ordinal: 2)
+    new_season = Season.create!(name: "2027", account: account, archived: false, ordinal: 3)
 
     assert_equal [ new_season ], Season.current.to_a
   end
 
-  test "current_season returns most recent non-archived season" do
+  test "current_season returns season with highest ordinal" do
     account = accounts(:demo)
     Contest.where(account: account).destroy_all
     PrescribedMusic.where(account: account).destroy_all
     account.seasons.destroy_all
 
-    Season.create!(name: "2026", account: account, archived: true)
-    current_season = Season.create!(name: "2027", account: account, archived: false)
+    Season.create!(name: "2026", account: account, archived: true, ordinal: 2)
+    current_season = Season.create!(name: "2027", account: account, archived: false, ordinal: 3)
 
     assert_equal current_season, Season.current_season
+  end
+
+  test "assigns ordinal automatically on create" do
+    account = accounts(:demo)
+
+    # Create a new season without specifying ordinal
+    new_season = Season.create!(name: "2028", account: account)
+
+    # Should auto-assign ordinal higher than existing seasons
+    assert new_season.ordinal > seasons(:demo_2025).ordinal
+  end
+
+  test "validates uniqueness of ordinal within account" do
+    account = accounts(:demo)
+    existing_season = seasons(:demo_2025)
+
+    duplicate_ordinal_season = Season.new(
+      name: "Different Name",
+      account: account,
+      ordinal: existing_season.ordinal
+    )
+
+    assert_not duplicate_ordinal_season.valid?
+    assert_includes duplicate_ordinal_season.errors[:ordinal], "has already been taken"
+  end
+
+  test "allows same ordinal across different accounts" do
+    demo_season = seasons(:demo_2025)
+    customer_account = accounts(:customer)
+
+    same_ordinal_season = Season.new(
+      name: "2025",
+      account: customer_account,
+      ordinal: demo_season.ordinal
+    )
+
+    assert same_ordinal_season.valid?
   end
 
   test "display_name shows archived status" do

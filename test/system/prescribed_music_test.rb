@@ -192,4 +192,21 @@ class PrescribedMusicTest < ApplicationSystemTestCase
     assert_text "West Side Story Suite"
     assert_text "Candide Overture"
   end
+
+  test "prescribed music index redirects to current season when no season specified" do
+    log_in_as(@admin)
+
+    # Visit index without season_id parameter
+    visit prescribed_music_index_url
+
+    # Should redirect to URL with season_id for the current season (highest ordinal)
+    # In fixtures, demo_2025 should have higher ordinal than demo_2024
+    assert_current_path prescribed_music_index_path(season_id: seasons(:demo_2025).id)
+
+    # Should see 2025 music (highest ordinal)
+    assert_text prescribed_musics(:demo_class_a_music_one).title
+
+    # Should NOT see archived season music (2023 has unique "Old Music" title)
+    assert_no_text prescribed_musics(:demo_archived_music).title
+  end
 end

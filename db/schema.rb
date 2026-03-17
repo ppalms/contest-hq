@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_05_215344) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_17_123643) do
   create_table "accounts", force: :cascade do |t|
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.string "name", null: false
@@ -234,8 +234,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_05_215344) do
     t.boolean "archived", default: false, null: false
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.string "name", null: false
+    t.integer "ordinal", null: false
     t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.index ["account_id", "name"], name: "index_seasons_on_account_id_and_name", unique: true
+    t.index ["account_id", "ordinal"], name: "index_seasons_on_account_id_and_ordinal", unique: true
     t.index ["account_id"], name: "index_seasons_on_account_id"
   end
 

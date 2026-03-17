@@ -10,12 +10,16 @@ class PrescribedMusicControllerTest < ActionDispatch::IntegrationTest
   test "should get index as admin" do
     sign_in_as(@admin)
     get prescribed_music_index_url
+    assert_response :redirect
+    follow_redirect!
     assert_response :success
   end
 
   test "should get index as director" do
     sign_in_as(@director)
     get prescribed_music_index_url
+    assert_response :redirect
+    follow_redirect!
     assert_response :success
   end
 

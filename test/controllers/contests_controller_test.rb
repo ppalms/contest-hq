@@ -10,6 +10,8 @@ class ContestsControllerTest < ActionDispatch::IntegrationTest
 
   test "should get index" do
     get contests_url
+    assert_response :redirect
+    follow_redirect!
     assert_response :success
     assert_select "h1", "Contests"
   end
@@ -39,6 +41,8 @@ class ContestsControllerTest < ActionDispatch::IntegrationTest
     @season.update!(archived: false)
 
     get contests_url
+    assert_response :redirect
+    follow_redirect!
     assert_response :success
     # Should show the current season
     assert_select "select#season_id option[selected][value=?]", @season.id.to_s

@@ -6,15 +6,18 @@ class PrescribedMusicController < ApplicationController
   before_action :set_breadcrumbs
 
   def index
+    # If no season specified, redirect with current season in query string
+    if params[:season_id].blank?
+      current_season = Season.current_season
+      if current_season
+        redirect_to prescribed_music_index_url(params.permit(:school_class_id).merge(season_id: current_season.id))
+        return
+      end
+    end
+
     @selected_season_id = params[:season_id]
     @seasons = Season.by_name
-
-    if @selected_season_id.present?
-      @selected_season = Season.find(@selected_season_id)
-    else
-      @selected_season = Season.current_season
-      @selected_season_id = @selected_season&.id
-    end
+    @selected_season = Season.find(@selected_season_id) if @selected_season_id.present?
 
     scope = PrescribedMusic.includes(:season, :school_class).by_title
     scope = scope.for_season(@selected_season_id) if @selected_season_id.present?
