@@ -4,7 +4,7 @@
     "plan": {
       "description": "Strategic planning and architecture analysis without code changes",
       "mode": "primary",
-      "model": "anthropic/claude-sonnet-4-5",
+      "model": "anthropic/claude-opus-4-20250514",
       "temperature": 0.2,
       "instructions": [
         "PLANNING.md"
@@ -20,7 +20,7 @@
     "build": {
       "description": "Full development with all tools enabled for code implementation",
       "mode": "primary",
-      "model": "anthropic/claude-sonnet-4-5",
+      "model": "anthropic/claude-sonnet-4-20250514",
       "temperature": 0.3,
       "instructions": [
         "AGENTS.md"
