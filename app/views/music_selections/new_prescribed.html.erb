@@ -23,16 +23,12 @@
           class: "text-field flex-1", 
           placeholder: "Search by title or composer...",
           data: { form_focus_target: "field" },
-          "aria-label": "Search prescribed music",
-          "aria-describedby": "search_help" %>
+          "aria-label": "Search prescribed music" %>
       <%= hidden_field_tag :replace, params[:replace] if params[:replace].present? %>
       <%= f.submit "Search", 
           class: "btn-primary-sm",
           data: { form_focus_target: "submit" } %>
     </div>
-    <p id="search_help" class="text-xs text-gray-500 mt-1">
-      Enter part of the title or composer name to find approved pieces for your school class.
-    </p>
   <% end %>
 
   <% if @prescribed_music.any? %>

@@ -52,7 +52,6 @@ class ContestRegistrationFocusTest < ApplicationSystemTestCase
 
     # Check field attributes
     assert_selector "input[data-form-focus-target='field']"
-    assert_selector "input[aria-describedby]"
 
     # Check skip link
     assert_selector "a[href='#custom_music_form']", visible: :hidden
@@ -82,7 +81,6 @@ class ContestRegistrationFocusTest < ApplicationSystemTestCase
     # Check search field attributes
     assert_selector "input[data-form-focus-target='field']"
     assert_selector "input[aria-label]"
-    assert_selector "input[aria-describedby]"
 
     # Check table accessibility
     assert_selector "table[role='table']"
@@ -128,22 +126,14 @@ class ContestRegistrationFocusTest < ApplicationSystemTestCase
   test "accessibility features are present" do
     visit new_contest_entry_path(@contest)
 
-    # Check ARIA labels and descriptions
-    assert_selector "[aria-describedby]"
+    # Check ARIA labels
     assert_selector "[aria-label]"
 
     # Check semantic HTML
     assert_selector "fieldset"
     assert_selector "legend"
 
-    # Check help text is properly associated
-    help_elements = all("[id$='_help']")
-    assert help_elements.length > 0, "Should have help text elements"
-
-    help_elements.each do |help_element|
-      help_id = help_element[:id]
-      assert_selector "[aria-describedby*='#{help_id}']",
-        message: "Help text #{help_id} should be referenced by aria-describedby"
-    end
+    # Check skip links
+    assert_selector "a[href='#contest_entry_form']", visible: :hidden
   end
 end

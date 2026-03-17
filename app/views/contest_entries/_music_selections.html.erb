@@ -33,24 +33,15 @@
         <%= link_to "Add Prescribed Music",
                     new_prescribed_contest_entry_music_selections_path(contest_id: @contest_entry.contest_id, entry_id: @contest_entry.id),
                     class: "btn-primary",
-                    data: { focus_manager_target: "autofocus" },
-                    "aria-describedby": "prescribed_help" %>
+                    data: { focus_manager_target: "autofocus" } %>
       <% end %>
       <% if @contest_entry.missing_custom_count > 0 %>
         <%= link_to "Add Custom Music",
                     new_contest_entry_music_selection_path(contest_id: @contest_entry.contest_id, entry_id: @contest_entry.id, type: "custom"),
                     class: @contest_entry.missing_prescribed_count > 0 ? "btn-secondary" : "btn-primary",
-                    data: @contest_entry.missing_prescribed_count > 0 ? {} : { focus_manager_target: "autofocus" },
-                    "aria-describedby": "custom_help" %>
+                    data: @contest_entry.missing_prescribed_count > 0 ? {} : { focus_manager_target: "autofocus" } %>
       <% end %>
     </div>
-    <div class="mt-2 text-xs text-gray-500">
-      <% if @contest_entry.missing_prescribed_count > 0 %>
-        <p id="prescribed_help">Select from approved pieces for your school class.</p>
-      <% end %>
-      <% if @contest_entry.missing_custom_count > 0 %>
-        <p id="custom_help">Enter your own piece title and composer.</p>
-      <% end %>
-    </div>
+
   <% end %>
 </div>

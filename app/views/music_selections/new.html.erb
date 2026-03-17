@@ -28,11 +28,7 @@
         <%= f.text_field :title, 
             class: "text-field w-full", 
             required: true,
-            data: { form_focus_target: "field" },
-            "aria-describedby": "title_help" %>
-        <p id="title_help" class="text-xs text-gray-500 mt-1">
-          Enter the full title of the musical piece.
-        </p>
+            data: { form_focus_target: "field" } %>
       </div>
 
       <div>
@@ -40,11 +36,7 @@
         <%= f.text_field :composer, 
             class: "text-field w-full", 
             required: true,
-            data: { form_focus_target: "field" },
-            "aria-describedby": "composer_help" %>
-        <p id="composer_help" class="text-xs text-gray-500 mt-1">
-          Enter the composer's name (Last, First or First Last format).
-        </p>
+            data: { form_focus_target: "field" } %>
       </div>
 
       <%= f.hidden_field :position, value: params[:position] %>
