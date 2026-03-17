@@ -24,7 +24,27 @@
       "temperature": 0.3,
       "instructions": [
         "AGENTS.md"
-      ]
+      ],
+      "permission": {
+        "task": {
+          "*": "allow",
+          "quality-gate": "allow",
+          "linter": "allow",
+          "test-runner": "allow"
+        }
+      }
+    },
+    "quality-gate": {
+      "description": "Pre-commit quality gate that runs linter, tests, and best practices checks. Blocks commits on failures.",
+      "mode": "subagent",
+      "model": "anthropic/claude-haiku-4-5",
+      "temperature": 0.0,
+      "permission": {
+        "task": {
+          "linter": "allow",
+          "test-runner": "allow"
+        }
+      }
     }
   }
 }

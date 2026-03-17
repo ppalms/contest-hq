@@ -21,10 +21,11 @@ Run code quality and security checks (rubocop, brakeman), parse output, and repo
 
 ## Responsibilities
 
-- Execute: `bin/rubocop -f github` and `bin/brakeman --no-pager`
+- Execute: `bin/rubocop -f github`, `bin/brakeman --no-pager`, and `rails_best_practices`
 - Parse output and categorize by severity
 - Report clear summaries with actionable fixes
 - Identify auto-correctable violations
+- Return structured exit codes (0=pass, 1=fail)
 
 ## Do NOT
 
@@ -37,7 +38,8 @@ Run code quality and security checks (rubocop, brakeman), parse output, and repo
 ```bash
 bin/rubocop -f github                    # Style check
 bin/brakeman --no-pager                  # Security scan
-bin/rubocop -f github && bin/brakeman --no-pager  # Both
+rails_best_practices                     # Best practices check
+bin/rubocop -f github && bin/brakeman --no-pager && rails_best_practices  # All checks
 ```
 
 ## Code Style Standards
@@ -56,6 +58,9 @@ Uses **rubocop-rails-omakase** (Rails defaults):
 PASSED: All quality checks passed
 - Rubocop: 0 offenses
 - Brakeman: 0 warnings
+- Rails Best Practices: 0 errors
+
+EXIT CODE: 0
 ```
 
 ### ⚠️ Style Violations
@@ -66,6 +71,7 @@ RUBOCOP: N offenses
    Description and suggested fix
 
 SUMMARY: N offenses, M auto-correctable
+EXIT CODE: 1
 ```
 
 ### 🔒 Security Issues
@@ -77,6 +83,18 @@ BRAKEMAN: N warnings
    Fix: [specific solution]
 
 SUMMARY: X high, Y medium, Z weak confidence
+EXIT CODE: 1
+```
+
+### 📋 Best Practices Violations
+```
+RAILS BEST PRACTICES: N errors
+
+1. ViolationType (path/to/file.rb:line)
+   Description and recommendation
+
+SUMMARY: N best practice violations
+EXIT CODE: 1
 ```
 
 ## Common Issues
@@ -92,3 +110,18 @@ These violations **block commits**:
 1. Brakeman high-confidence warnings
 2. Syntax errors
 3. Rubocop violations in changed files
+4. Rails best practices errors
+
+## Exit Codes
+
+Return structured exit codes for quality-gate integration:
+- **0**: All checks passed (no violations)
+- **1**: One or more checks failed (violations found)
+
+## Integration with Quality Gate
+
+When invoked by quality-gate agent:
+1. Run all checks (rubocop, brakeman, rails_best_practices)
+2. Aggregate results
+3. Report with file:line references
+4. Return exit code 0 (pass) or 1 (fail)
