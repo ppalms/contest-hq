@@ -8,16 +8,18 @@ class ContestsController < ApplicationController
 
   # GET /contests or /contests.json
   def index
-    # Get selected season or default to current season
+    # If no season specified, redirect with current season in query string
+    if params[:season_id].blank?
+      current_season = Season.current_season
+      if current_season
+        redirect_to contests_url(params.permit(:name).merge(season_id: current_season.id))
+        return
+      end
+    end
+
     @selected_season_id = params[:season_id]
     @seasons = Season.by_name
-
-    if @selected_season_id.present?
-      @selected_season = Season.find(@selected_season_id)
-    else
-      @selected_season = Season.current_season
-      @selected_season_id = @selected_season&.id
-    end
+    @selected_season = Season.find(@selected_season_id) if @selected_season_id.present?
 
     # Filter contests by season and search term
     contests_scope = Contest.joins(:season).order(:contest_start)
