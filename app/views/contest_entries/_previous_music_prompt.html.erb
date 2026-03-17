@@ -20,20 +20,27 @@
           <% end %>
         </ol>
       </div>
-      <div class="mt-4 flex gap-3">
+      <div class="mt-4 flex gap-3" role="group" aria-label="Previous music options">
         <%= button_to "Use These Pieces",
           contest_entry_copy_music_path(contest_id: @contest_entry.contest.id, entry_id: @contest_entry.id),
           method: :post,
-          class: "btn-primary" %>
+          class: "btn-primary",
+          data: { focus_manager_target: "autofocus" },
+          "aria-describedby": "copy_help" %>
         <%= button_to "Start Fresh",
           contest_entry_path(@contest_entry.contest, @contest_entry),
           method: :get,
           class: "btn-secondary",
+          "aria-describedby": "fresh_help",
           form: {
             data: {
               turbo_method: :get
             }
           } %>
+      </div>
+      <div class="mt-2 text-xs text-blue-700">
+        <p id="copy_help">Copy all music selections from your previous entry.</p>
+        <p id="fresh_help">Dismiss this prompt and add music manually.</p>
       </div>
     </div>
   </div>

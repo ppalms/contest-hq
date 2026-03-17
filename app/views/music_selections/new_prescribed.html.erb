@@ -1,6 +1,9 @@
 <% content_for :title, "Select Prescribed Music" %>
 
-<div class="pt-8 max-w-4xl mx-auto">
+<div class="pt-8 max-w-4xl mx-auto" data-controller="focus-manager">
+  <a href="#prescribed_search_form" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-3 py-2 rounded">
+    Skip to search form
+  </a>
   <div class="flex justify-between items-center mb-6">
     <div>
       <h1 class="text-2xl font-bold">Select Prescribed Music</h1>
@@ -10,34 +13,60 @@
     </div>
   </div>
 
-  <%= form_with url: new_prescribed_contest_entry_music_selections_path(contest_id: @contest_entry.contest_id, entry_id: @contest_entry.id, replace: params[:replace]), method: :get, class: "mb-6" do |f| %>
+  <%= form_with url: new_prescribed_contest_entry_music_selections_path(contest_id: @contest_entry.contest_id, entry_id: @contest_entry.id, replace: params[:replace]), method: :get, class: "mb-6", 
+                data: { controller: "form-focus" },
+                id: "prescribed_search_form",
+                role: "search",
+                "aria-label": "Search prescribed music" do |f| %>
     <div class="flex gap-3">
-      <%= text_field_tag :search, params[:search], class: "text-field flex-1", placeholder: "Search by title or composer..." %>
+      <%= text_field_tag :search, params[:search], 
+          class: "text-field flex-1", 
+          placeholder: "Search by title or composer...",
+          data: { form_focus_target: "field" },
+          "aria-label": "Search prescribed music",
+          "aria-describedby": "search_help" %>
       <%= hidden_field_tag :replace, params[:replace] if params[:replace].present? %>
-      <%= f.submit "Search", class: "btn-primary-sm" %>
+      <%= f.submit "Search", 
+          class: "btn-primary-sm",
+          data: { form_focus_target: "submit" } %>
     </div>
+    <p id="search_help" class="text-xs text-gray-500 mt-1">
+      Enter part of the title or composer name to find approved pieces for your school class.
+    </p>
   <% end %>
 
   <% if @prescribed_music.any? %>
     <div class="bg-white rounded-lg border overflow-hidden">
-      <table class="min-w-full divide-y divide-gray-200">
+      <table class="min-w-full divide-y divide-gray-200" role="table" aria-label="Prescribed music options">
         <thead class="bg-gray-50">
           <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Composer</th>
-            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Action</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Composer</th>
+            <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Action</th>
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
-          <% @prescribed_music.each do |music| %>
+          <% @prescribed_music.each_with_index do |music, index| %>
             <tr>
               <td class="px-6 py-4 whitespace-nowrap"><%= music.title %></td>
               <td class="px-6 py-4 whitespace-nowrap"><%= music.composer %></td>
               <td class="px-6 py-4 whitespace-nowrap text-right">
                 <% if params[:replace].present? %>
-                  <%= button_to "Select", contest_entry_music_selection_path(contest_id: @contest_entry.contest_id, entry_id: @contest_entry.id, id: params[:replace]), method: :patch, params: { music_selection: { prescribed_music_id: music.id } }, class: "btn-primary-sm" %>
+                  <%= button_to "Select", contest_entry_music_selection_path(contest_id: @contest_entry.contest_id, entry_id: @contest_entry.id, id: params[:replace]), 
+                      method: :patch, 
+                      params: { music_selection: { prescribed_music_id: music.id } }, 
+                      class: "btn-primary-sm",
+                      "aria-label": "Select #{music.title} by #{music.composer}",
+                      tabindex: index == 0 ? "0" : "-1",
+                      data: { form_focus_target: "field" } %>
                 <% else %>
-                  <%= button_to "Select", contest_entry_music_selections_path(contest_id: @contest_entry.contest_id, entry_id: @contest_entry.id), method: :post, params: { music_selection: { prescribed_music_id: music.id } }, class: "btn-primary-sm" %>
+                  <%= button_to "Select", contest_entry_music_selections_path(contest_id: @contest_entry.contest_id, entry_id: @contest_entry.id), 
+                      method: :post, 
+                      params: { music_selection: { prescribed_music_id: music.id } }, 
+                      class: "btn-primary-sm",
+                      "aria-label": "Select #{music.title} by #{music.composer}",
+                      tabindex: index == 0 ? "0" : "-1",
+                      data: { form_focus_target: "field" } %>
                 <% end %>
               </td>
             </tr>
@@ -56,6 +85,9 @@
   <% end %>
 
   <div class="mt-6">
-    <%= link_to "Cancel", contest_entry_path(@contest_entry.contest, @contest_entry), class: "btn-secondary" %>
+    <%= link_to "Cancel", 
+        contest_entry_path(@contest_entry.contest, @contest_entry), 
+        class: "btn-secondary",
+        data: { form_focus_target: "cancel" } %>
   </div>
 </div>
