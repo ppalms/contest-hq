@@ -33,6 +33,7 @@ Load context files based on your role and task:
 
 | Agent | Task Type | Load File |
 |-------|-----------|-----------|
+| **build** | Feature work, commits | `.opencode/context/tdd-workflow.md` |
 | **build** | Codebase navigation, pattern discovery | `.opencode/context/retrieval-strategy.md` |
 | **build** | Tool selection, file operations | `.opencode/context/tool-efficiency.md` |
 | **build** | Tasks >30 min, multi-session work | `.opencode/context/long-horizon-tasks.md` |
@@ -42,6 +43,7 @@ Load context files based on your role and task:
 | **code-search** | Before starting search | `.opencode/context/retrieval-strategy.md` |
 | **test-runner** | Rails testing reference | `.opencode/context/rails-reference.md` |
 | **linter** | Rails code style reference | `.opencode/context/rails-reference.md` |
+| **quality-gate** | Pre-commit validation | `.opencode/context/rails-reference.md` |
 | **all subagents** | Output formatting | `.opencode/context/subagent-coordination.md` |
 
 **When to load**:
@@ -72,20 +74,10 @@ set_current_user(users(:demo_admin_a))  # Sets Current context directly
 - **Ask clarifying questions** only about implementation details
 - **Request a plan** if none provided for complex work
 
-## Completion Workflow
-```bash
-# 1. Validate (all must pass)
-bin/rubocop -f github && bin/brakeman --no-pager && bin/rails test && bin/rails test:system
+## Feature Work & Commits
 
-# 2. Branch and commit
-git checkout -b feature/brief-description
-git add .
-git commit -m "Clear description of changes"
-git push -u origin feature/brief-description
-
-# 3. Create PR with summary:
-# - What changed and why
-# - Files modified
-# - Validation results (rubocop, brakeman, tests)
-# - Manual testing performed
-```
+For feature implementation and commits, load `.opencode/context/tdd-workflow.md` which covers:
+- TDD workflow (acceptance criteria → tests → implementation → refactor)
+- Quality gate integration (mandatory pre-commit validation)
+- Completion workflow and PR creation
+- Memory file integration for long tasks

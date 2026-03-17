@@ -1,7 +1,7 @@
 ---
 description: Search codebase for patterns, files, class definitions, method usage, and examples. Use for open-ended searches requiring multiple rounds of investigation. Finds existing implementations to guide new code. Do NOT use for simple file reads with known paths or making code changes.
 mode: subagent
-model: anthropic/claude-haiku-4-5
+model: anthropic/claude-haiku-4-20250307
 temperature: 0.1
 tools:
   edit: false

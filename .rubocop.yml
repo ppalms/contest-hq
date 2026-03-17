@@ -10,6 +10,7 @@ AllCops:
   Exclude:
     - 'app/views/**/*.erb'
     - 'app/views/**/*.html.erb'
+    - '.opencode/**/*'
 
 Layout/IndentationConsistency:
   Enabled: true

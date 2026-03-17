@@ -34,7 +34,7 @@ class ContestManagerTest < ActiveSupport::TestCase
     set_current_user(@demo_admin)
     # Use a manager not already assigned to this contest
     other_manager = users(:demo_manager_b)
-    
+
     # First assignment should work
     contest_manager1 = ContestManager.new(contest: @demo_contest, user: other_manager)
     assert contest_manager1.save

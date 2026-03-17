@@ -1,7 +1,7 @@
 ---
 description: Run Rails tests (bin/rails test, bin/rails test:system) and report results. Use when asked to run tests, validate code changes, or verify functionality. Parses test output and identifies failures. Do NOT use for making code fixes or running linters.
 mode: subagent
-model: anthropic/claude-haiku-4-5
+model: anthropic/claude-haiku-4-20250307
 temperature: 0.1
 tools:
   edit: false
@@ -43,6 +43,8 @@ bin/rails test:system                       # System tests (~6.5min)
 
 ## Reporting Format
 
+Start your response with either "PASSED" or "FAILED" as the first word.
+
 ### ✅ Success
 ```
 PASSED: All tests passed
@@ -67,8 +69,8 @@ SUMMARY: X runs, Y assertions, Z failures
 - **Fixture issues**: Invalid fixture data or missing reference
 - **System test timeouts**: UI element not found or async timing
 
-## Test Fixtures (Reference AGENTS.md)
+## Common Test Patterns
 
-All fixtures use password: `"Secret1*3*5*"`
-Accounts: `:demo`, `:customer`, `:ossaa`, `:contesthq`
-Users: `:sys_admin_a`, `:demo_admin_a`, `:demo_director_a`, `:demo_manager_a`
+- Integration tests: `sign_in_as(users(:demo_admin_a))`
+- Unit tests: `set_current_user(users(:demo_admin_a))`
+- All fixtures use password: `"Secret1*3*5*"`

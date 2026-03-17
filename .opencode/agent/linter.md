@@ -1,7 +1,7 @@
 ---
 description: Run code quality checks (bin/rubocop, bin/brakeman) and report issues. Use before commits, when validating code quality, or checking security. Required before any git commit. Do NOT use for making code fixes or running tests.
 mode: subagent
-model: anthropic/claude-haiku-4-5
+model: anthropic/claude-haiku-4-20250307
 temperature: 0.0
 tools:
   edit: false
@@ -37,19 +37,12 @@ Run code quality and security checks (rubocop, brakeman), parse output, and repo
 ```bash
 bin/rubocop -f github                    # Style check
 bin/brakeman --no-pager                  # Security scan
-bin/rubocop -f github && bin/brakeman --no-pager  # Both
+bin/rubocop -f github && bin/brakeman --no-pager  # All checks
 ```
 
-## Code Style Standards
-
-Uses **rubocop-rails-omakase** (Rails defaults):
-- 2 spaces, no tabs
-- `CamelCase` classes, `snake_case` methods
-- 120 char line length
-- No comments unless requested
-- Rails autoloading (avoid explicit requires)
-
 ## Reporting Format
+
+Start your response with either "PASSED" or "FAILED" as the first word.
 
 ### ✅ Success
 ```
@@ -58,25 +51,17 @@ PASSED: All quality checks passed
 - Brakeman: 0 warnings
 ```
 
-### ⚠️ Style Violations
+### ❌ Failures
 ```
-RUBOCOP: N offenses
+FAILED: Quality issues found
 
-1. ViolationType (path/to/file.rb:line)
-   Description and suggested fix
+Rubocop: N offenses
+- path/to/file.rb:line - ViolationType
 
-SUMMARY: N offenses, M auto-correctable
-```
+Brakeman: M warnings
+- path/to/file.rb:line - IssueType (SEVERITY)
 
-### 🔒 Security Issues
-```
-BRAKEMAN: N warnings
-
-1. IssueType (SEVERITY) - path/to/file.rb:line
-   Description
-   Fix: [specific solution]
-
-SUMMARY: X high, Y medium, Z weak confidence
+SUMMARY: N+M total issues, Y auto-correctable
 ```
 
 ## Common Issues
