@@ -52,7 +52,7 @@
   <div class="form-button-container">
     <% button_text = @contest_entry.id ? "Update" : "Continue" %>
     <%= form.submit button_text, 
-        class: "btn-primary", 
+        class: "btn-primary-sm", 
         data: { form_focus_target: "submit" } %>
     <%= link_to "Cancel",
     (
@@ -62,7 +62,7 @@
         contest_entry_path(@contest, @contest_entry)
       end
     ),
-    class: "btn-secondary",
+    class: "btn-secondary-sm",
     role: "button",
     data: { form_focus_target: "cancel" } %>
   </div>
