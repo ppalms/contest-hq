@@ -1,3 +1,4 @@
+<div data-controller="focus-manager" data-focus-manager-focus-on-connect-value="true">
 <%= render "shared/entity_detail",
       entity: @contest_entry,
       title: @contest_entry.large_ensemble.name,
@@ -6,7 +7,8 @@
         <% if @contest_entry.user == current_user %>
           <%= link_to "Edit",
           edit_contest_entry_path(@contest_entry.contest, @contest_entry),
-          class: "btn-primary-sm" %>
+          class: "btn-primary-sm",
+          data: { focus_manager_target: "firstField" } %>
           <%= button_to "Delete",
           contest_entry_path(@contest_entry.contest, @contest_entry),
           method: :delete,
@@ -19,3 +21,4 @@
         <% end %>
       <% end) do %>
 <% end %>
+</div>

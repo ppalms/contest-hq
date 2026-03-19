@@ -1,18 +1,23 @@
-<%= form_with(model: contest_entry, url: @contest_entry.new_record? ? contest_entries_path : contest_entry_path(@contest.id, @contest_entry.id)) do |form| %>
+<%= form_with(model: contest_entry, url: @contest_entry.new_record? ? contest_entries_path : contest_entry_path(@contest.id, @contest_entry.id), 
+                data: { controller: "form-focus", form_focus_skip_first_value: @eligible_ensembles.count == 1 },
+                id: "contest_entry_form",
+                role: "form",
+                "aria-label": "Contest registration form") do |form| %>
   <%= form.hidden_field :contest_id, value: @contest.id %>
 
   <% unless @contest_entry.id %>
     <div>
-      <%= form.label :large_ensemble_id, "Large ensemble" %>
+      <%= form.label :large_ensemble_id, "Large ensemble", class: "block text-sm font-medium text-gray-700 mb-1" %>
       <%= form.select :large_ensemble_id,
                   @eligible_ensembles.map { |t| [t.name, t.id] },
                   { include_blank: "Select a large ensemble" },
-                  { required: true, class: "text-field", id: "large_ensemble_id" } %>
+                  { required: true, class: "text-field", id: "large_ensemble_id", 
+                    data: { form_focus_target: "field" } } %>
     </div>
   <% end %>
 
-  <div class="space-y-4 border-t pt-4 mt-4">
-    <h3 class="text-lg font-medium text-gray-900">Preferred Performance Time (Optional)</h3>
+  <fieldset class="space-y-4 border-t pt-4 mt-4">
+    <legend class="text-lg font-medium text-gray-900">Preferred Performance Time (Optional)</legend>
     <p class="text-sm text-gray-600">
       Specify a preferred performance time for your large ensemble.
       <% if @contest.start_time && @contest.end_time %>
@@ -25,25 +30,30 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div>
-        <%= form.label :preferred_time_start, "Earliest preferred time" %>
-        <%= form.time_field :preferred_time_start, class: "text-field" %>
+        <%= form.label :preferred_time_start, "Earliest preferred time", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.time_field :preferred_time_start, 
+            class: "text-field", 
+            data: { form_focus_target: "field" } %>
       </div>
 
       <div>
-        <%= form.label :preferred_time_end, "Latest preferred time" %>
-        <%= form.time_field :preferred_time_end, class: "text-field" %>
+        <%= form.label :preferred_time_end, "Latest preferred time", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.time_field :preferred_time_end, 
+            class: "text-field",
+            data: { form_focus_target: "field" } %>
       </div>
     </div>
 
     <p class="text-xs text-gray-500">
-      Leave both fields blank for no preference, fill one field for a
-      minimum/maximum time, or fill both for a time range.
+      Leave blank for no preference, or set minimum/maximum times.
     </p>
-  </div>
+  </fieldset>
 
   <div class="form-button-container">
     <% button_text = @contest_entry.id ? "Update" : "Continue" %>
-    <%= form.submit button_text, class: "btn-primary" %>
+    <%= form.submit button_text, 
+        class: "btn-primary-sm", 
+        data: { form_focus_target: "submit" } %>
     <%= link_to "Cancel",
     (
       if @contest_entry.id == nil
@@ -52,8 +62,9 @@
         contest_entry_path(@contest, @contest_entry)
       end
     ),
-    class: "btn-secondary",
-    role: "button" %>
+    class: "btn-secondary-sm",
+    role: "button",
+    data: { form_focus_target: "cancel" } %>
   </div>
 
   <% if contest_entry.errors.any? %>
