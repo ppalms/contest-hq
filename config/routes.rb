@@ -9,6 +9,9 @@ Rails.application.routes.draw do
   get "landing", to: "public#landing"
   post "beta_signup", to: "beta_signups#create"
 
+  # Design system test pages
+  get "design-system/buttons", to: "design_system#buttons"
+
   # Account switching for sysadmins
   post "switch_account", to: "account_switching#switch"
   delete "switch_account", to: "account_switching#clear"

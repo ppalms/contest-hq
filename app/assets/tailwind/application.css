@@ -172,52 +172,160 @@
  */
 
 @utility btn-primary {
-  @apply rounded-lg py-3 px-5 block w-full sm:w-auto sm:inline-block transition font-medium cursor-pointer text-white;
+  @apply rounded-lg py-3 px-5 block w-full sm:w-auto sm:inline-block font-medium cursor-pointer text-white;
   background-color: rgb(var(--color-primary));
   border: 1px solid rgb(var(--color-primary-border));
-  border-bottom-width: 4px;
+  transform: translateY(-4px);
+  transition: all 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
+  box-shadow: 0 4px 0 rgb(var(--color-primary-border));
   
   &:hover {
     background-color: rgb(var(--color-primary-hover));
     border-color: rgb(var(--color-primary-border-hover));
+    transform: translateY(-6px);
+    transition: all 250ms cubic-bezier(0.3, 0.7, 0.4, 1.5);
+    box-shadow: 0 6px 0 rgb(var(--color-primary-border-hover));
+  }
+  
+  &:active {
+    transform: translateY(-2px);
+    transition: all 34ms;
+    box-shadow: 0 2px 0 rgb(var(--color-primary-border-hover));
+  }
+  
+  /* Accessibility: Respect reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    transform: none;
+    transition: none;
+    box-shadow: 0 2px 0 rgb(var(--color-primary-border));
+    
+    &:hover, &:active {
+      transform: none;
+      box-shadow: 0 2px 0 rgb(var(--color-primary-border-hover));
+    }
   }
 }
 
 @utility btn-primary-sm {
   @apply btn-primary py-2 text-sm font-semibold;
+  transform: translateY(-3px);
+  box-shadow: 0 3px 0 rgb(var(--color-primary-border));
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 0 rgb(var(--color-primary-border-hover));
+  }
+  
+  &:active {
+    transform: translateY(-1px);
+    box-shadow: 0 1px 0 rgb(var(--color-primary-border-hover));
+  }
 }
 
 @utility btn-secondary {
-  @apply rounded-lg py-3 px-5 block text-center sm:inline-block transition font-medium cursor-pointer;
+  @apply rounded-lg py-3 px-5 block text-center sm:inline-block font-medium cursor-pointer;
   background-color: rgb(var(--color-secondary));
   border: 1px solid rgb(var(--color-secondary-border));
-  border-bottom-width: 4px;
+  transform: translateY(-4px);
+  transition: all 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
+  box-shadow: 0 4px 0 rgb(var(--color-secondary-border));
   
   &:hover {
     background-color: rgb(var(--color-secondary-hover));
     border-color: rgb(var(--color-secondary-border-hover));
+    transform: translateY(-6px);
+    transition: all 250ms cubic-bezier(0.3, 0.7, 0.4, 1.5);
+    box-shadow: 0 6px 0 rgb(var(--color-secondary-border-hover));
+  }
+  
+  &:active {
+    transform: translateY(-2px);
+    transition: all 34ms;
+    box-shadow: 0 2px 0 rgb(var(--color-secondary-border-hover));
+  }
+  
+  /* Accessibility: Respect reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    transform: none;
+    transition: none;
+    box-shadow: 0 2px 0 rgb(var(--color-secondary-border));
+    
+    &:hover, &:active {
+      transform: none;
+      box-shadow: 0 2px 0 rgb(var(--color-secondary-border-hover));
+    }
   }
 }
 
 @utility btn-secondary-sm {
   @apply btn-secondary py-2 text-sm font-semibold;
+  transform: translateY(-3px);
+  box-shadow: 0 3px 0 rgb(var(--color-secondary-border));
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 0 rgb(var(--color-secondary-border-hover));
+  }
+  
+  &:active {
+    transform: translateY(-1px);
+    box-shadow: 0 1px 0 rgb(var(--color-secondary-border-hover));
+  }
 }
 
 @utility btn-danger {
-  @apply rounded-lg py-3 px-5 block w-full sm:w-auto sm:inline-block transition font-semibold cursor-pointer;
+  @apply rounded-lg py-3 px-5 block w-full sm:w-auto sm:inline-block font-semibold cursor-pointer;
   color: rgb(var(--color-danger-text));
+  background-color: white;
   border: 1px solid rgb(var(--color-danger-border));
-  border-bottom-width: 4px;
+  transform: translateY(-4px);
+  transition: all 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
+  box-shadow: 0 4px 0 rgb(var(--color-danger-border));
   
   &:hover {
     background-color: rgb(var(--color-danger-bg-hover));
     border-color: rgb(var(--color-danger-border-hover));
+    transform: translateY(-6px);
+    transition: all 250ms cubic-bezier(0.3, 0.7, 0.4, 1.5);
+    box-shadow: 0 6px 0 rgb(var(--color-danger-border-hover));
+  }
+  
+  &:active {
+    transform: translateY(-2px);
+    transition: all 34ms;
+    box-shadow: 0 2px 0 rgb(var(--color-danger-border-hover));
+  }
+  
+  /* Accessibility: Respect reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    transform: none;
+    transition: none;
+    box-shadow: 0 2px 0 rgb(var(--color-danger-border));
+    
+    &:hover, &:active {
+      transform: none;
+      box-shadow: 0 2px 0 rgb(var(--color-danger-border-hover));
+    }
   }
 }
 
 @utility btn-danger-sm {
   @apply btn-danger py-2 text-sm font-semibold;
+  transform: translateY(-3px);
+  box-shadow: 0 3px 0 rgb(var(--color-danger-border));
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 0 rgb(var(--color-danger-border-hover));
+  }
+  
+  &:active {
+    transform: translateY(-1px);
+    box-shadow: 0 1px 0 rgb(var(--color-danger-border-hover));
+  }
 }
+
+
 
 @utility simple-form {
   @apply flex flex-col gap-y-4 pt-4;
