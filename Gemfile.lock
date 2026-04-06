@@ -81,13 +81,13 @@ GEM
       ruby-next-core (~> 1.0)
     ast (2.4.3)
     authentication-zero (4.0.3)
-    aws-actionmailer-ses (1.0.0)
+    aws-actionmailer-ses (1.1.0)
       actionmailer (>= 7.1.0)
       aws-sdk-ses (~> 1, >= 1.50.0)
       aws-sdk-sesv2 (~> 1, >= 1.34.0)
     aws-eventstream (1.4.0)
-    aws-partitions (1.1213.0)
-    aws-sdk-core (3.242.0)
+    aws-partitions (1.1233.0)
+    aws-sdk-core (3.244.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
@@ -95,11 +95,11 @@ GEM
       bigdecimal
       jmespath (~> 1, >= 1.6.1)
       logger
-    aws-sdk-ses (1.90.0)
-      aws-sdk-core (~> 3, >= 3.231.0)
+    aws-sdk-ses (1.97.0)
+      aws-sdk-core (~> 3, >= 3.244.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-sesv2 (1.85.0)
-      aws-sdk-core (~> 3, >= 3.231.0)
+    aws-sdk-sesv2 (1.97.0)
+      aws-sdk-core (~> 3, >= 3.244.0)
       aws-sigv4 (~> 1.5)
     aws-sigv4 (1.12.1)
       aws-eventstream (~> 1, >= 1.0.2)
@@ -108,7 +108,7 @@ GEM
     bcrypt_pbkdf (1.1.2)
     bcrypt_pbkdf (1.1.2-arm64-darwin)
     bcrypt_pbkdf (1.1.2-x86_64-darwin)
-    bigdecimal (4.0.1)
+    bigdecimal (4.1.0)
     bindex (0.8.1)
     bootsnap (1.23.0)
       msgpack (~> 1.2)
@@ -465,7 +465,7 @@ PLATFORMS
 
 DEPENDENCIES
   authentication-zero (~> 4.0)
-  aws-actionmailer-ses (~> 1.0)
+  aws-actionmailer-ses (~> 1.1)
   bcrypt (~> 3.1.22)
   bootsnap
   brakeman
