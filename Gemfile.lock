@@ -229,7 +229,7 @@ GEM
     nokogiri (1.19.2-x86_64-linux-gnu)
       racc (~> 1.4)
     ostruct (0.6.3)
-    pagy (43.4.4)
+    pagy (43.5.0)
       json
       uri
       yaml
@@ -476,7 +476,7 @@ DEPENDENCIES
   kamal
   letter_opener
   minitest (~> 6.0)
-  pagy (~> 43.4)
+  pagy (~> 43.5)
   propshaft
   puma (>= 5.0)
   rails (= 8.1.3)
