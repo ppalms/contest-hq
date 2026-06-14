@@ -1,44 +1,27 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "plugin": ["superpowers@git+https://github.com/obra/superpowers.git"],
   "agent": {
     "plan": {
       "description": "Strategic planning and architecture analysis without code changes",
       "mode": "primary",
-      "model": "anthropic/claude-opus-4-20250514",
+      "model": "opencode/claude-opus-4-8",
       "temperature": 0.2,
-      "instructions": [
-        "PLANNING.md"
-      ],
-      "tools": {
-        "write": false,
-        "edit": false
-      },
       "permission": {
+        "edit": "deny",
         "bash": "deny"
       }
     },
     "build": {
       "description": "Full development with all tools enabled for code implementation",
       "mode": "primary",
-      "model": "anthropic/claude-sonnet-4-20250514",
+      "model": "opencode/claude-sonnet-4-6",
       "temperature": 0.3,
-      "instructions": [
-        "AGENTS.md"
-      ],
       "permission": {
         "task": {
-          "*": "allow",
-          "quality-gate": "allow",
-          "linter": "allow",
-          "test-runner": "allow"
+          "*": "allow"
         }
       }
-    },
-    "quality-gate": {
-      "description": "Pre-commit quality gate that runs linter, tests, and best practices checks. Blocks commits on failures.",
-      "mode": "subagent",
-      "model": "anthropic/claude-haiku-4-20250307",
-      "temperature": 0.0
     }
   }
 }

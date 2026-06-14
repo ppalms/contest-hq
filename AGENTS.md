@@ -33,23 +33,18 @@ Load context files based on your role and task:
 
 | Agent | Task Type | Load File |
 |-------|-----------|-----------|
-| **build** | Feature work, commits | `.opencode/context/tdd-workflow.md` |
-| **build** | Codebase navigation, pattern discovery | `.opencode/context/retrieval-strategy.md` |
-| **build** | Tool selection, file operations | `.opencode/context/tool-efficiency.md` |
-| **build** | Tasks >30 min, multi-session work | `.opencode/context/long-horizon-tasks.md` |
-| **build** | Context >100K tokens, compaction | `.opencode/context/context-monitoring.md` |
-| **build** | Delegating to subagents | `.opencode/context/subagent-coordination.md` |
+| **build** | Feature work, commits | `.opencode/context/subagent-coordination.md` |
+| **build** | Codebase navigation, pattern discovery | `.opencode/context/retrieval-and-tools.md` |
+| **build** | Tasks >30 min, multi-session work | `.opencode/context/memory-and-compaction.md` |
 | **build** | Rails fixtures, debug commands | `.opencode/context/rails-reference.md` |
-| **code-search** | Before starting search | `.opencode/context/retrieval-strategy.md` |
+| **code-search** | Before starting search | `.opencode/context/retrieval-and-tools.md` |
 | **test-runner** | Rails testing reference | `.opencode/context/rails-reference.md` |
-| **linter** | Rails code style reference | `.opencode/context/rails-reference.md` |
 | **quality-gate** | Pre-commit validation | `.opencode/context/rails-reference.md` |
-| **all subagents** | Output formatting | `.opencode/context/subagent-coordination.md` |
+| **all subagents** | Output formatting | `.opencode/context/subagent-output-contract.md` |
 
 **When to load**:
 - Load relevant files at task start based on table above
 - Build agent: Load multiple files for complex tasks
-- Subagents: Automatically loaded via frontmatter `instructions`
 
 ## Critical Patterns
 - **Models**: Must include `AccountScoped` for multi-tenant models
@@ -76,8 +71,24 @@ set_current_user(users(:demo_admin_a))  # Sets Current context directly
 
 ## Feature Work & Commits
 
-For feature implementation and commits, load `.opencode/context/tdd-workflow.md` which covers:
-- TDD workflow (acceptance criteria → tests → implementation → refactor)
-- Quality gate integration (mandatory pre-commit validation)
-- Completion workflow and PR creation
-- Memory file integration for long tasks
+### Relationship to superpowers
+The superpowers plugin provides the full development methodology: brainstorming → writing-plans → test-driven-development (RED-GREEN-REFACTOR) → subagent-driven-development → requesting-code-review → finishing-a-development-branch. This AGENTS.md adds project-specific gates on top of that workflow.
+
+### Acceptance Criteria Gate
+If no acceptance criteria are provided for a feature, STOP and prompt the user before writing tests:
+```
+⚠️ No acceptance criteria provided for this feature.
+
+To write effective tests, I need to understand:
+1. What specific behavior should this feature implement?
+2. What are the success conditions?
+3. What edge cases should be handled?
+
+Please provide acceptance criteria or user stories for this feature.
+```
+
+### Quality Gate (Required Before Commit)
+Invoke `@quality-gate` before any feature commit. Default scope = rubocop + brakeman + unit/integration tests. Request system tests explicitly for UI-affecting changes or pre-PR validation.
+
+**If quality gate PASSES**: Proceed to commit.
+**If quality gate FAILS**: Fix issues and retry. Do NOT commit until it passes.
