@@ -1,7 +1,5 @@
 # PLANNING.md - Strategic Planning Guide
 
-**For: Claude Sonnet 4.5 (planning mode)**
-
 ## Your Role
 Make architectural decisions and create execution plans. Don't write implementation code.
 

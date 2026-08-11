@@ -1,4 +1,4 @@
-# Context Retrieval Strategy
+# Context Retrieval & Tool Efficiency
 
 ## Progressive Disclosure
 1. **Start broad**: Use Glob to find files (`**/*_controller.rb`)
@@ -12,6 +12,15 @@
 - **Batch parallel reads**: Read multiple known files in single message
 - **Delegate complex searches**: Use @code-search for multi-round investigations
 - **Don't re-read**: Track what's already in context
+
+## Tool Selection Heuristics
+- **Known paths**: Use Read directly (`app/models/user.rb`)
+- **Pattern matching**: Use Glob for file discovery (`**/*_test.rb`)
+- **Content search**: Use Grep for code patterns (`include AccountScoped`)
+- **Complex searches**: Delegate to @code-search subagent
+- **Large files**: Read specific line ranges or use Bash head/tail
+- **Parallel operations**: Read multiple files in single message
+- **Avoid Bash for file ops**: Prefer Read/Glob/Grep over cat/find/grep
 
 ## Navigation Efficiency
 - File paths are lightweight identifiers - use them

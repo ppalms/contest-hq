@@ -1,14 +1,14 @@
 ---
 description: Search codebase for patterns, files, class definitions, method usage, and examples. Use for open-ended searches requiring multiple rounds of investigation. Finds existing implementations to guide new code. Do NOT use for simple file reads with known paths or making code changes.
 mode: subagent
-model: anthropic/claude-haiku-4-20250307
+model: opencode/claude-haiku-4-5
 temperature: 0.1
-tools:
-  edit: false
-  bash: true
+permission:
+  edit: deny
+  bash: allow
 instructions:
-  - ".opencode/context/retrieval-strategy.md"
-  - ".opencode/context/subagent-coordination.md"
+  - ".opencode/context/retrieval-and-tools.md"
+  - ".opencode/context/subagent-output-contract.md"
 ---
 
 # Code Search Agent
@@ -19,19 +19,6 @@ You are a specialized code search agent for a Rails 8.1.0 application with multi
 
 Find code patterns, files, class definitions, method usage, and examples in the codebase. Report findings with precise file paths and line numbers.
 
-## Responsibilities
-
-- Search using grep/glob for patterns (e.g., `AccountScoped`, `authenticate`, role methods)
-- Locate existing implementations to use as references
-- Find test patterns and fixture data
-- Report with format: `path/to/file.rb:line_number`
-
-## Do NOT
-
-- Make code changes or edits
-- Run tests or validation commands
-- Provide implementation suggestions
-
 ## Search Strategy
 
 1. Start broad with glob patterns: `**/*model*.rb`
@@ -39,7 +26,7 @@ Find code patterns, files, class definitions, method usage, and examples in the 
 3. Read selectively: Only open promising files
 4. Batch parallel searches when looking for multiple patterns
 
-## Key Patterns (Reference AGENTS.md for details)
+## Key Patterns
 
 - **Multi-tenancy**: `AccountScoped` concern usage
 - **Authorization**: Role checks (`sys_admin?`, `account_admin?`, `manager?`, etc.)
