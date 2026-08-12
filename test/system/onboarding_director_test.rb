@@ -52,6 +52,7 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
     click_on "Add Prescribed Music"
 
     # Search for and select Symphony No. 5
+    assert_selector "form#prescribed_search_form"
     fill_in "search", with: "Symphony"
     click_on "Search"
 
@@ -71,6 +72,8 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
 
     # Add a custom piece
     click_on "Add Custom Music"
+
+    assert_selector "form#custom_music_form"
 
     fill_in "Title", with: "Custom Piece"
     fill_in "Composer", with: "Custom Composer"

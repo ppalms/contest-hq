@@ -32,6 +32,8 @@ class SchoolsTest < ApplicationSystemTestCase
     visit organizations_school_url(@school)
     click_on "Edit", match: :first
 
+    assert_selector "form.wide-form"
+
     fill_in "Name", with: "New School Name"
     click_on "Update School"
 

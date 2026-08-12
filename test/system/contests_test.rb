@@ -31,6 +31,8 @@ class ContestsTest < ApplicationSystemTestCase
     visit contest_url(@contest)
     click_on "Edit", match: :first
 
+    assert_selector "form.wide-form"
+
     fill_in "Name", with: "New Demo Contest Name"
     click_on "Update Contest"
 
