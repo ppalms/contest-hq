@@ -28,18 +28,6 @@ demo_2023:
   account: demo
   ordinal: 1
 
-ossaa_2024:
-  name: "2024"
-  archived: false
-  account: ossaa
-  ordinal: 1
-
-ossaa_2023:
-  name: "2023"
-  archived: true
-  account: ossaa
-  ordinal: 2
-
 customer_2024:
   name: "2024"
   archived: false

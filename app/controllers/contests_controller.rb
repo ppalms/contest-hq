@@ -77,6 +77,9 @@ class ContestsController < ApplicationController
     add_breadcrumb(@contest.name, @contest)
   end
 
+  def schedule
+  end
+
   # PATCH/PUT /contests/1/times or /contests/1/times.json
   def set_times
     @contest = Contest.find(params[:contest_id])

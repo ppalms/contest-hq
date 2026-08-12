@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :accounts
+  resources :accounts, except: [ :destroy ]
   resources :users, only: [ :index, :show, :edit, :update ] do
     resources :schools, controller: "users/schools", only: [ :index, :create ]
   end
@@ -19,7 +19,6 @@ Rails.application.routes.draw do
   namespace :organizations do
     get "/", to: "index"
     resources :schools
-    resources :school_classes
   end
 
   resources :contests do
@@ -67,7 +66,7 @@ Rails.application.routes.draw do
   get  "sign_up", to: "registrations#new"
   post "sign_up", to: "registrations#create"
   post "users/:user_id/masquerade", to: "masquerades#create", as: :user_masquerade
-  resources :sessions, only: [ :index, :show, :destroy ]
+  resources :sessions, only: [ :index, :destroy ]
   resource  :password, only: [ :edit, :update ]
   namespace :identity do
     resource :email,              only: [ :edit, :update ]

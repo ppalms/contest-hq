@@ -33,31 +33,3 @@ customer_performance_class_f:
   account: customer
   ordinal: 6
 
-ossaa_first:
-  name: First
-  account: ossaa
-  ordinal: 1
-
-ossaa_second:
-  name: Second
-  abbreviation: E
-  account: ossaa
-  ordinal: 2
-
-ossaa_third:
-  name: Third
-  abbreviation: EE
-  account: ossaa
-  ordinal: 3
-
-ossaa_fourth:
-  name: Fourth
-  abbreviation: EEE
-  account: ossaa
-  ordinal: 4
-
-ossaa_fifth:
-  name: Fifth
-  abbreviation: EEEE
-  account: ossaa
-  ordinal: 5

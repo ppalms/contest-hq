@@ -160,6 +160,7 @@ class PrescribedMusicMultiAccountTest < ApplicationSystemTestCase
     click_on "Add Prescribed Music"
 
     # Search for prescribed music
+    assert_selector "form#prescribed_search_form"
     fill_in "search", with: "Concerto"
     click_on "Search"
 
@@ -208,6 +209,7 @@ class PrescribedMusicMultiAccountTest < ApplicationSystemTestCase
     click_on "Add Prescribed Music"
 
     # Search for music (should only find customer account music)
+    assert_selector "form#prescribed_search_form"
     fill_in "search", with: "No. 1"
     click_on "Search"
 
@@ -231,6 +233,9 @@ class PrescribedMusicMultiAccountTest < ApplicationSystemTestCase
 
     # Add custom music
     click_on "Add Custom Music"
+
+    assert_selector "form#custom_music_form"
+
     fill_in "Title", with: "Custom Piece No. 1"
     fill_in "Composer", with: "Custom Composer A"
     click_on "Add Music Selection"
@@ -263,6 +268,8 @@ class PrescribedMusicMultiAccountTest < ApplicationSystemTestCase
 
     # Add prescribed music
     click_on "Add Prescribed Music"
+
+    assert_selector "form#prescribed_search_form"
     fill_in "search", with: "Concerto"
     click_on "Search"
 
@@ -275,6 +282,9 @@ class PrescribedMusicMultiAccountTest < ApplicationSystemTestCase
 
     # Add first custom music
     click_on "Add Custom Music"
+
+    assert_selector "form#custom_music_form"
+
     fill_in "Title", with: "Custom Piece No. 1"
     fill_in "Composer", with: "Custom Composer A"
     click_on "Add Music Selection"
@@ -283,6 +293,9 @@ class PrescribedMusicMultiAccountTest < ApplicationSystemTestCase
 
     # Add second custom music
     click_on "Add Custom Music"
+
+    assert_selector "form#custom_music_form"
+
     fill_in "Title", with: "Custom Piece No. 2"
     fill_in "Composer", with: "Custom Composer B"
     click_on "Add Music Selection"

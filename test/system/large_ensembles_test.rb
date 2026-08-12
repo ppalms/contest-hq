@@ -25,6 +25,8 @@ class LargeEnsemblesTest < ApplicationSystemTestCase
     visit roster_large_ensemble_url(@large_ensemble)
     click_on "Edit", match: :first
 
+    assert_selector "form.wide-form"
+
     fill_in "Name", with: "New Large Ensemble Name"
     click_on "Update Large Ensemble"
 

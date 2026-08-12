@@ -18,7 +18,7 @@ class MusicSelectionsTest < ApplicationSystemTestCase
 
     click_on "Add Custom Music"
 
-    assert_text "Add Custom Music"
+    assert_selector "form#custom_music_form"
 
     fill_in "Title", with: "Symphony No. 5"
     fill_in "Composer", with: "Beethoven"
@@ -123,6 +123,8 @@ class MusicSelectionsTest < ApplicationSystemTestCase
 
     # Add a new one - should fill the gap at position 2
     click_on "Add Custom Music"
+
+    assert_selector "form#custom_music_form"
 
     fill_in "Title", with: "Custom Two"
     fill_in "Composer", with: "C2"

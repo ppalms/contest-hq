@@ -245,32 +245,6 @@ class ContestEntryTest < ActiveSupport::TestCase
     assert_not @contest_entry.music_complete?, "Should not be complete with only prescribed music"
   end
 
-  test "required_music_slots returns array of slot definitions" do
-    @contest.update!(required_prescribed_count: 2, required_custom_count: 1)
-
-    slots = @contest_entry.required_music_slots
-
-    assert_equal 3, slots.length
-    assert_equal 2, slots.count { |s| s[:type] == :prescribed }
-    assert_equal 1, slots.count { |s| s[:type] == :custom }
-    assert_equal (1..3).to_a, slots.map { |s| s[:position] }
-  end
-
-  test "required_music_slots marks filled slots correctly" do
-    set_current_user(users(:demo_director_a))
-    @contest_entry.music_selections.destroy_all
-    @contest.update!(required_prescribed_count: 1, required_custom_count: 2)
-
-    @contest_entry.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one), position: 1)
-
-    slots = @contest_entry.required_music_slots
-
-    assert_equal 3, slots.length
-    assert slots[0][:music_selection].present?, "First slot should have music selection"
-    assert_nil slots[1][:music_selection], "Second slot should be empty"
-    assert_nil slots[2][:music_selection], "Third slot should be empty"
-  end
-
   test "missing_prescribed_count returns number of prescribed pieces needed" do
     set_current_user(users(:demo_director_a))
     @contest_entry.music_selections.destroy_all

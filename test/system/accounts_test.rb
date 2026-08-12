@@ -28,6 +28,8 @@ class AccountsTest < ApplicationSystemTestCase
     visit account_url(@account)
     click_on "Edit", match: :first
 
+    assert_selector "form.wide-form"
+
     fill_in "Name", with: "New Account Name"
 
     click_on "Update Account"

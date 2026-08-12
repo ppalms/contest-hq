@@ -9,9 +9,6 @@ class SchedulesController < ApplicationController
     @selected_day = params[:day_id] ? @schedule.days.find(params[:day_id]) : @schedule.days.first
   end
 
-  def edit
-  end
-
   def generate
     start_time = DateTime.parse(params[:start_time]).utc
     end_time = DateTime.parse(params[:end_time]).utc
