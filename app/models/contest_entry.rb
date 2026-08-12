@@ -68,39 +68,6 @@ class ContestEntry < ApplicationRecord
     music_selections.select { |ms| ms.custom? }
   end
 
-  def required_music_slots
-    return [] unless contest
-
-    existing_selections = music_selections.order(:position).to_a
-    prescribed_count = existing_selections.count(&:prescribed?)
-    custom_count = existing_selections.count(&:custom?)
-
-    slots = []
-    (1..contest.total_required_music_count).each do |position|
-      music_selection = existing_selections.find { |ms| ms.position == position }
-
-      if music_selection
-        slot_type = music_selection.prescribed? ? :prescribed : :custom
-      else
-        if prescribed_count < contest.required_prescribed_count
-          slot_type = :prescribed
-          prescribed_count += 1
-        else
-          slot_type = :custom
-          custom_count += 1
-        end
-      end
-
-      slots << {
-        position: position,
-        type: slot_type,
-        music_selection: music_selection
-      }
-    end
-
-    slots
-  end
-
   def missing_prescribed_count
     return 0 unless contest
 

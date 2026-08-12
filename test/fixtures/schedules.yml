@@ -15,6 +15,3 @@ demo_state_schedule:
   account: demo
 
 # OSSAA account schedules
-ossaa_state_orchestra_schedule:
-  contest: ossaa_state_orchestra
-  account: ossaa

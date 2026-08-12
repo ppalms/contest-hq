@@ -62,8 +62,8 @@ class SchoolsTest < ApplicationSystemTestCase
   test "should not see other account's schools" do
     visit organizations_schools_url
 
-    # Can't see organization belonging to OSSAA account
-    assert_no_text "Lincoln High School"
+    # Can't see schools belonging to the customer account
+    assert_no_text "Santa Fe High School"
   end
 
   test "should not allow director to create" do

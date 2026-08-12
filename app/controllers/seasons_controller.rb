@@ -1,15 +1,11 @@
 class SeasonsController < ApplicationController
-  before_action :set_season, only: %i[ show edit update destroy ]
+  before_action :set_season, only: %i[ edit update destroy ]
   before_action -> { require_role "AccountAdmin" }
   before_action :set_breadcrumbs
 
   # GET /seasons
   def index
     @seasons = Season.by_name
-  end
-
-  # GET /seasons/1
-  def show
   end
 
   # GET /seasons/new

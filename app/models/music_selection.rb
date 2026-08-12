@@ -31,13 +31,6 @@ class MusicSelection < ApplicationRecord
     self.composer = prescribed_music.composer
   end
 
-  def set_default_position
-    return if position.present?
-
-    max_position = MusicSelection.unscoped.where(contest_entry_id: contest_entry.id).maximum(:position) || 0
-    self.position = max_position + 1
-  end
-
   def prescribed_music_matches_contest
     return unless prescribed_music && contest_entry
 
