@@ -13,6 +13,7 @@ class MusicSelectionsController < ApplicationController
   end
 
   def create
+    puts "[DIAG] create START method=#{request.method} params=#{params[:music_selection].inspect}"
     @music_selection = @contest_entry.music_selections.build(music_selection_params)
 
     if @music_selection.prescribed_music_id.present?
@@ -33,8 +34,10 @@ class MusicSelectionsController < ApplicationController
     end
 
     if @music_selection.save
+      puts "[DIAG] create SAVE OK id=#{@music_selection.id} account=#{@music_selection.account_id} pos=#{@music_selection.position} entry=#{@contest_entry.id}"
       redirect_to contest_entry_path(@contest_entry.contest, @contest_entry), notice: "Music selection added successfully."
     else
+      puts "[DIAG] create SAVE FAILED errors=#{@music_selection.errors.full_messages.inspect} pos=#{@music_selection.position.inspect} account=#{@music_selection.account_id.inspect} title=#{@music_selection.title.inspect} composer=#{@music_selection.composer.inspect} contest=#{@contest_entry.contest_id.inspect} entry=#{@contest_entry.id.inspect}"
       render :new, status: :unprocessable_entity
     end
   end
@@ -116,9 +119,9 @@ class MusicSelectionsController < ApplicationController
   end
 
   def next_available_position
-    # Find the first available position (fills gaps first)
     existing_positions = MusicSelection.where(contest_entry_id: @contest_entry.id).pluck(:position)
     max_allowed = @contest_entry.contest.total_required_music_count
+    puts "[DIAG] next_available_position existing=#{existing_positions.inspect} max=#{max_allowed}"
 
     (1..max_allowed).each do |position|
       return position unless existing_positions.include?(position)
@@ -136,7 +139,9 @@ class MusicSelectionsController < ApplicationController
 
   def at_max_custom?
     current_count = @contest_entry.music_selections.reload.count(&:custom?)
-    current_count >= @contest_entry.contest.required_custom_count
+    result = current_count >= @contest_entry.contest.required_custom_count
+    puts "[DIAG] at_max_custom? current=#{current_count} required=#{@contest_entry.contest.required_custom_count} result=#{result}"
+    result
   end
 
   def render_error(message)
