@@ -8,9 +8,13 @@ class Organizations::SchoolsController < ApplicationController
     @pagy, @schools = pagy(School.where("name LIKE ?", "%#{params[:name]}%").order(:name), limit: 6)
   end
 
+  def show
+  end
+
   def new
     if !current_user.admin?
       redirect_to organizations_schools_path, alert: "You do not have permission to create schools."
+      return
     end
 
     @school = School.new

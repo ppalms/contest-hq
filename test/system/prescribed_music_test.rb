@@ -14,6 +14,8 @@ class PrescribedMusicTest < ApplicationSystemTestCase
 
     click_on "Add Prescribed Music"
 
+    assert_selector "form.wide-form"
+
     fill_in "Title", with: "Test Symphony"
     fill_in "Composer", with: "Test Composer"
     select @season.name, from: "Season"
@@ -35,6 +37,8 @@ class PrescribedMusicTest < ApplicationSystemTestCase
     within "#prescribed_music_#{prescribed_music.id}" do
       click_on "Edit"
     end
+
+    assert_selector "form.wide-form"
 
     fill_in "Title", with: "Updated Symphony"
     click_on "Update"
@@ -100,6 +104,7 @@ class PrescribedMusicTest < ApplicationSystemTestCase
     click_on "Add Prescribed Music"
 
     # Search for prescribed music
+    assert_selector "form#prescribed_search_form"
     fill_in "search", with: "Rhapsody"
     click_on "Search"
 
@@ -157,6 +162,7 @@ class PrescribedMusicTest < ApplicationSystemTestCase
     click_on "Add Prescribed Music"
 
     # Search with lowercase "rhapsody" should find "Rhapsody in Blue"
+    assert_selector "form#prescribed_search_form"
     fill_in "search", with: "rhapsody"
     click_on "Search"
 
@@ -182,6 +188,7 @@ class PrescribedMusicTest < ApplicationSystemTestCase
     click_on "Add Prescribed Music"
 
     # Empty search should return all prescribed music for school_class_b
+    assert_selector "form#prescribed_search_form"
     fill_in "search", with: ""
     click_on "Search"
 

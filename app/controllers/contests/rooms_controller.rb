@@ -37,7 +37,7 @@ module Contests
           end
         end
       else
-        puts "Save failed: #{@room.errors.full_messages.inspect}"
+        Rails.logger.error "Save failed: #{@room.errors.full_messages.inspect}"
         render :new
       end
     end
@@ -68,7 +68,7 @@ module Contests
           end
         end
       else
-        puts "Save failed: #{@room.errors.full_messages.inspect}"
+        Rails.logger.error "Save failed: #{@room.errors.full_messages.inspect}"
         render :edit
       end
     end
@@ -96,7 +96,7 @@ module Contests
           end
         end
       else
-        puts "Save failed: #{@room.errors.full_messages.inspect}"
+        Rails.logger.error "Save failed: #{@room.errors.full_messages.inspect}"
         redirect_to contest_setup_path(@contest)
       end
     end
@@ -112,11 +112,9 @@ module Contests
     end
 
     def authorize_manager
-      # TODO: add contest/user association
-      # unless current_user.manager? && current_user.managed_contests&.exists?(params[:contest_id])
-      unless current_user.manager?
-            redirect_to contest_schedule_summary_path(@contest),
-              alert: "You must be a manager of this contest to access this area"
+      unless current_user.manages_contest(@contest)
+        redirect_to contest_schedule_summary_path(@contest),
+          alert: "You must be a manager of this contest to access this area"
       end
     end
 

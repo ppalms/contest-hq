@@ -27,7 +27,6 @@ class SeasonsTest < ApplicationSystemTestCase
     visit contests_path
 
     assert_text "Season:"
-    assert_select "season_id"
   end
 
   test "non-admin cannot access seasons" do

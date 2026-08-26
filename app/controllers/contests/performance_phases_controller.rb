@@ -33,35 +33,11 @@ module Contests
           end
         end
       else
-        puts "Save failed: #{@contest.errors.full_messages.inspect}"
+        Rails.logger.error "Save failed: #{@contest.errors.full_messages.inspect}"
         render :edit
       end
     end
 
-    def reorder
-      phase_ids = params[:phase_ids]
-
-      PerformancePhaseOrderer.reorder_phases(phase_ids, contest.id)
-
-      respond_to do |format|
-        format.html { redirect_to contest_setup_path(contest), notice: "Phases reordered successfully." }
-      end
-    rescue ActiveRecord::RecordNotFound
-      respond_to do |format|
-        format.html { redirect_to contest_setup_path(contest), alert: "Invalid phase order provided." }
-      end
-    end
-
-    def move
-      phase = PerformancePhase.find(params[:id])
-
-      if [ :up, :down ].include?(params[:direction].to_sym)
-        PerformancePhaseOrderer.move_phase(phase.id, params[:direction])
-        redirect_to contest_setup_path(phase.performance_phase), notice: "Phase moved successfully."
-      else
-        redirect_to contest_setup_path(phase.performance_phase), alert: "Invalid direction."
-      end
-    end
     private
 
     def set_contest
@@ -69,8 +45,7 @@ module Contests
     end
 
     def authorize_manager
-      # TODO: add contest/user association
-      unless current_user.manager?
+      unless current_user.manages_contest(@contest)
         redirect_to contest_schedule_summary_path(@contest),
           alert: "You must be a manager of this contest to access this area"
       end

@@ -11,6 +11,8 @@ class ContestEntryPreferencesTest < ApplicationSystemTestCase
     visit contest_path(@contest)
     click_on "Register"
 
+    assert_selector "form#contest_entry_form"
+
     select @large_ensemble.name, from: :large_ensemble_id
 
     # Fill in time preferences
@@ -35,6 +37,7 @@ class ContestEntryPreferencesTest < ApplicationSystemTestCase
     click_on "Edit", match: :first
 
     # Update preferences
+    assert_selector "form#contest_entry_form"
     fill_in "Earliest preferred time", with: "11:00"
     fill_in "Latest preferred time", with: "13:00"
 
@@ -47,6 +50,8 @@ class ContestEntryPreferencesTest < ApplicationSystemTestCase
   test "preferences are optional during registration" do
     visit contest_path(@contest)
     click_on "Register"
+
+    assert_selector "form#contest_entry_form"
 
     select @large_ensemble.name, from: :large_ensemble_id
 
