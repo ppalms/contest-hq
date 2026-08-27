@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   private
 
   def authenticate
-    User.unscoped_by_account do
+    User.unscoped do
       if session_record = Session.find_by_id(cookies.signed[:session_token])
         Current.session = session_record
       else

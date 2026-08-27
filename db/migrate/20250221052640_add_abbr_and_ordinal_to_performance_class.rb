@@ -5,11 +5,9 @@ class AddAbbrAndOrdinalToPerformanceClass < ActiveRecord::Migration[8.0]
 
     PerformanceClass.reset_column_information
 
-    subquery = PerformanceClass.select('DISTINCT ON (account_id) *').order(:account_id, :created_at).to_sql
-
-    PerformanceClass.find_by_sql(subquery).each do |performance_class|
-      PerformanceClass.where(account_id: performance_class.account_id).order(:created_at).each.with_index(1) do |pc, index|
-        pc.update_columns(ordinal: index)
+    PerformanceClass.unscoped.order(:account_id, :created_at).group_by(&:account_id).each do |_account_id, performance_classes|
+      performance_classes.each.with_index(1) do |performance_class, index|
+        performance_class.update_columns(ordinal: index)
       end
     end
 

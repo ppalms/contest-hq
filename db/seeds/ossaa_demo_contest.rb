@@ -9,6 +9,8 @@ ossaa_account = Account.find_or_create_by(name: "OSSAA") do |account|
   puts "  📋 Creating OSSAA account..."
 end
 
+Current.account = ossaa_account
+
 ossaa_season = Season.find_or_create_by(name: "2025", account: ossaa_account) do |season|
   season.archived = false
   puts "  📅 Creating OSSAA 2025 season..."
@@ -37,10 +39,8 @@ demo_contest = Contest.find_or_create_by(
 end
 
 if demo_contest.schedules.empty?
-  Current.account = ossaa_account
   demo_contest.create_schedule!
   puts "  📅 Creating contest schedule..."
-  Current.reset
 end
 
 school_classes = SchoolClass.where(account: ossaa_account)
@@ -314,3 +314,5 @@ total_music_selections = MusicSelection.joins(:contest_entry).where(contest_entr
 puts "   - Total music selections: #{total_music_selections}"
 
 puts "\n✨ Demo contest ready for scheduling workflow demonstration!"
+
+Current.reset

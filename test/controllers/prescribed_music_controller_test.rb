@@ -2,9 +2,10 @@ require "test_helper"
 
 class PrescribedMusicControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @prescribed_music = prescribed_musics(:demo_class_a_music_one)
     @admin = users(:demo_admin_a)
     @director = users(:demo_director_a)
+    set_current_user(@admin)
+    @prescribed_music = prescribed_musics(:demo_class_a_music_one)
   end
 
   test "should get index as admin" do

@@ -8,6 +8,8 @@ ossaa_account = Account.find_or_create_by(name: "OSSAA") do |account|
   puts "  📋 Creating OSSAA account..."
 end
 
+Current.account = ossaa_account
+
 # Create OSSAA School Classes
 school_classes_data = [
   { name: "6A", ordinal: 5 },
@@ -581,3 +583,5 @@ else
 end
 
 puts "   🏆 All OSSAA schools are now in your database!"
+
+Current.reset

@@ -3,10 +3,11 @@ require "test_helper"
 class Contests::ManagersControllerTest < ActionDispatch::IntegrationTest
   setup do
     @demo_admin = users(:demo_admin_a)
+    set_current_user(@demo_admin)
     @demo_contest = contests(:demo_contest_a)
     @demo_manager_a = users(:demo_manager_a)
     @demo_manager_b = users(:demo_manager_b)
-    @customer_admin = users(:customer_admin_a)
+    @customer_admin = User.unscoped { users(:customer_admin_a) }
   end
 
   test "new action only shows users with Manager role from current account" do
@@ -91,6 +92,18 @@ class Contests::ManagersControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to contest_managers_path(@demo_contest)
     assert @demo_contest.managers.include?(@demo_manager_b)
+  end
+
+  test "cannot assign user from another account as contest manager" do
+    sign_in_as(@demo_admin)
+
+    assert_no_difference "@demo_contest.managers.count" do
+      post contest_managers_path(@demo_contest), params: {
+        contest_manager: { user_id: @customer_admin.id }
+      }
+    end
+
+    assert_response :unprocessable_content
   end
 
   test "controller class exists and has required methods" do

@@ -16,7 +16,9 @@ class ActiveSupport::TestCase
 
   # For integration tests - signs in a user via HTTP request
   def sign_in_as(user)
-    post(sign_in_url, params: { email: user.email, password: "Secret1*3*5*" }); user
+    post(sign_in_url, params: { email: user.email, password: "Secret1*3*5*" })
+    Current.session = user.sessions.last
+    user
   end
 
   # For model tests - sets Current directly

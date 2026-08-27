@@ -53,4 +53,56 @@ class AccountScopedTest < ActiveSupport::TestCase
       end
     end
   end
+
+  test "scoped queries return nothing without Current context" do
+    Current.reset
+
+    assert_empty User.all
+    assert_empty Contest.all
+    assert_empty Season.all
+  end
+
+  test "regular user creating a record without account uses their own account" do
+    set_current_user(@demo_admin)
+
+    season = Season.create!(name: "Test Season")
+    assert_equal @demo_account, season.account
+  end
+
+  test "sysadmin creating a record without account uses selected account" do
+    set_current_user(@sysadmin)
+    Current.selected_account = @demo_account
+
+    season = Season.create!(name: "Test Season")
+    assert_equal @demo_account, season.account
+  end
+
+  test "rejects belongs_to association from another account" do
+    set_current_user(@demo_admin)
+    customer_contest = Contest.unscoped { contests(:customer_contest_a) }
+
+    entry = ContestEntry.new(
+      contest: customer_contest,
+      large_ensemble: large_ensembles(:demo_school_a_ensemble_a),
+      user: @demo_admin
+    )
+
+    assert_not entry.valid?
+    assert entry.errors[:contest].any?
+  end
+
+  test "allows belongs_to associations from the same account" do
+    set_current_user(@demo_admin)
+
+    entry = ContestEntry.new(
+      contest: contests(:demo_contest_a),
+      large_ensemble: large_ensembles(:demo_school_a_ensemble_a),
+      user: @demo_admin
+    )
+
+    assert entry.valid?
+    assert_empty entry.errors[:contest]
+    assert_empty entry.errors[:large_ensemble]
+    assert_empty entry.errors[:user]
+  end
 end

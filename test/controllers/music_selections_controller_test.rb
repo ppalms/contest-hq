@@ -3,10 +3,10 @@ require "test_helper"
 class MusicSelectionsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @user = users(:demo_director_a)
+    set_current_user(@user)
     @contest_entry = contest_entries(:contest_a_school_a_ensemble_b)
     @contest = @contest_entry.contest
     sign_in_as(@user)
-    set_current_user(@user)
 
     # Clean up any existing music selections to avoid position conflicts
     @contest_entry.music_selections.destroy_all

@@ -2,6 +2,7 @@ require "test_helper"
 
 class ContestEntryTest < ActiveSupport::TestCase
   setup do
+    set_current_user(users(:demo_director_a))
     @contest_entry = contest_entries(:contest_a_school_a_ensemble_b)
     @contest = @contest_entry.contest
   end

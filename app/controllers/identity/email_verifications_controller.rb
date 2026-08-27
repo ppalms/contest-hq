@@ -15,7 +15,7 @@ class Identity::EmailVerificationsController < ApplicationController
 
   private
     def set_user
-      @user = User.find_by_token_for!(:email_verification, params[:sid])
+      @user = User.unscoped { User.find_by_token_for!(:email_verification, params[:sid]) }
     rescue StandardError
       redirect_to edit_identity_email_path, alert: "That email verification link is invalid"
     end

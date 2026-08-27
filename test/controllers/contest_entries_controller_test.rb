@@ -2,9 +2,10 @@ require "test_helper"
 
 class ContestEntriesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @contest = contests(:demo_contest_a)
     @user_with_ensemble = users(:demo_director_a)
     @user_without_ensemble = users(:demo_director_c)
+    set_current_user(@user_with_ensemble)
+    @contest = contests(:demo_contest_a)
   end
 
   test "should redirect to new large ensemble when user has no ensembles" do
@@ -107,5 +108,18 @@ class ContestEntriesControllerTest < ActionDispatch::IntegrationTest
     assert_equal 3, entry2.music_selections.count
     assert_equal 1, entry2.music_selections.where.not(prescribed_music_id: nil).count
     assert_equal 2, entry2.music_selections.where(prescribed_music_id: nil).count
+  end
+
+  test "should reject cross-account large_ensemble_id" do
+    sign_in_as(@user_with_ensemble)
+    customer_ensemble = LargeEnsemble.unscoped { large_ensembles(:customer_school_a_ensemble_a) }
+
+    assert_no_difference "ContestEntry.count" do
+      post contest_entries_path(contest_id: @contest.id), params: {
+        contest_entry: { large_ensemble_id: customer_ensemble.id }
+      }
+    end
+
+    assert_response :unprocessable_content
   end
 end
