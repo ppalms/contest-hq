@@ -2,9 +2,12 @@ require "application_system_test_case"
 
 class ContestEntryPreferencesTest < ApplicationSystemTestCase
   setup do
-    log_in_as(users(:demo_director_a))
-    @contest = contests(:demo_contest_a)
-    @large_ensemble = large_ensembles(:demo_school_a_ensemble_c)
+    @user = create(:user, :director)
+    set_current_user(@user)
+    @contest = create(:contest, account: @user.account)
+    @large_ensemble = create(:large_ensemble, account: @user.account)
+
+    log_in_as(@user)
   end
 
   test "director can specify time preferences during registration" do
@@ -27,7 +30,9 @@ class ContestEntryPreferencesTest < ApplicationSystemTestCase
   end
 
   test "director can edit time preferences after registration" do
-    entry = contest_entries(:contest_a_school_a_ensemble_a)
+    entry = create(:contest_entry, contest: @contest, user: @user, large_ensemble: @large_ensemble, account: @user.account)
+    entry.update!(preferred_time_start: Time.utc(2000, 1, 1, 16, 0), preferred_time_end: Time.utc(2000, 1, 1, 21, 0))
+
     visit contest_entry_path(@contest, entry)
 
     # Should see current preferences

@@ -2,12 +2,13 @@ require "test_helper"
 
 class Contests::ManagersControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @demo_admin = users(:demo_admin_a)
+    @demo_admin = create(:user, :account_admin)
     set_current_user(@demo_admin)
-    @demo_contest = contests(:demo_contest_a)
-    @demo_manager_a = users(:demo_manager_a)
-    @demo_manager_b = users(:demo_manager_b)
-    @customer_admin = User.unscoped { users(:customer_admin_a) }
+    @demo_contest = create(:contest, account: @demo_admin.account)
+    @demo_manager_a = create(:user, :manager, account: @demo_admin.account, first_name: "Nobby", last_name: "Nobbs")
+    @demo_manager_b = create(:user, :manager, account: @demo_admin.account, first_name: "Samuel", last_name: "Vimes")
+    @customer_admin = create(:user, :account_admin)
+    create(:contest_manager, contest: @demo_contest, user: @demo_manager_a, account: @demo_admin.account)
   end
 
   test "new action only shows users with Manager role from current account" do
@@ -16,14 +17,11 @@ class Contests::ManagersControllerTest < ActionDispatch::IntegrationTest
     get new_contest_manager_path(@demo_contest)
     assert_response :success
 
-    # Should show managers from the same account
     assert_select "td", text: "#{@demo_manager_a.first_name} #{@demo_manager_a.last_name}"
     assert_select "td", text: "#{@demo_manager_b.first_name} #{@demo_manager_b.last_name}"
 
-    # Should NOT show account admins (even from the same account)
     assert_select "td", text: "#{@demo_admin.first_name} #{@demo_admin.last_name}", count: 0
 
-    # Should NOT show users from other accounts
     assert_select "td", text: "#{@customer_admin.first_name} #{@customer_admin.last_name}", count: 0
   end
 
@@ -33,23 +31,19 @@ class Contests::ManagersControllerTest < ActionDispatch::IntegrationTest
     get new_contest_manager_path(@demo_contest), params: { search: "Nobby" }
     assert_response :success
 
-    # Should show Nobby Nobbs (demo_manager_a)
     assert_select "td", text: "#{@demo_manager_a.first_name} #{@demo_manager_a.last_name}"
 
-    # Should NOT show Samuel Vimes (demo_manager_b) - doesn't match search
     assert_select "td", text: "#{@demo_manager_b.first_name} #{@demo_manager_b.last_name}", count: 0
   end
 
   test "new action with search by email only shows managers matching email" do
     sign_in_as(@demo_admin)
 
-    get new_contest_manager_path(@demo_contest), params: { search: "vimes@demo.org" }
+    get new_contest_manager_path(@demo_contest), params: { search: @demo_manager_b.email }
     assert_response :success
 
-    # Should show Samuel Vimes (demo_manager_b)
     assert_select "td", text: "#{@demo_manager_b.first_name} #{@demo_manager_b.last_name}"
 
-    # Should NOT show Nobby Nobbs (demo_manager_a) - doesn't match search
     assert_select "td", text: "#{@demo_manager_a.first_name} #{@demo_manager_a.last_name}", count: 0
   end
 
@@ -59,20 +53,16 @@ class Contests::ManagersControllerTest < ActionDispatch::IntegrationTest
     get contest_managers_path(@demo_contest)
     assert_response :success
 
-    # Should show demo_manager_a who is assigned to demo_contest_a
     assert_select "td", text: "#{@demo_manager_a.first_name} #{@demo_manager_a.last_name}"
 
-    # Should NOT show demo_manager_b who is assigned to a different contest
     assert_select "td", text: "#{@demo_manager_b.first_name} #{@demo_manager_b.last_name}", count: 0
 
-    # Should NOT show account admins
     assert_select "td", text: "#{@demo_admin.first_name} #{@demo_admin.last_name}", count: 0
   end
 
   test "cannot assign non-manager user as contest manager" do
     sign_in_as(@demo_admin)
 
-    # Try to assign an account admin (who doesn't have Manager role) to the contest
     assert_no_difference "@demo_contest.managers.count" do
       post contest_managers_path(@demo_contest), params: {
         contest_manager: { user_id: @demo_admin.id }
@@ -83,7 +73,6 @@ class Contests::ManagersControllerTest < ActionDispatch::IntegrationTest
   test "can assign manager user to contest" do
     sign_in_as(@demo_admin)
 
-    # Assign a user with Manager role to the contest
     assert_difference "@demo_contest.managers.count", 1 do
       post contest_managers_path(@demo_contest), params: {
         contest_manager: { user_id: @demo_manager_b.id }
@@ -109,7 +98,6 @@ class Contests::ManagersControllerTest < ActionDispatch::IntegrationTest
   test "controller class exists and has required methods" do
     controller = Contests::ManagersController.new
 
-    # Check that controller responds to expected methods
     assert_respond_to controller, :index
     assert_respond_to controller, :new
     assert_respond_to controller, :create

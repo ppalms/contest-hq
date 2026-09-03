@@ -2,10 +2,10 @@ require "test_helper"
 
 class AccountSwitchingControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @sys_admin = users(:sys_admin_a)
-    @demo_account = accounts(:demo)
-    @customer_account = accounts(:customer)
-    @demo_admin = users(:demo_admin_a)
+    @sys_admin = create(:user, :sys_admin)
+    @demo_account = create(:account, name: "Public Demo")
+    @customer_account = create(:account, name: "Customer")
+    @demo_admin = create(:user, :account_admin, account: @demo_account)
   end
 
   test "sysadmin can switch to specific account" do
@@ -22,10 +22,8 @@ class AccountSwitchingControllerTest < ActionDispatch::IntegrationTest
   test "sysadmin can switch to all accounts view" do
     sign_in_as @sys_admin
 
-    # First set a selected account
     post switch_account_path, params: { account_id: @demo_account.id }
 
-    # Then switch to all accounts
     post switch_account_path, params: { account_id: "" }
 
     assert_redirected_to root_path
@@ -37,11 +35,9 @@ class AccountSwitchingControllerTest < ActionDispatch::IntegrationTest
   test "sysadmin can clear account selection" do
     sign_in_as @sys_admin
 
-    # First set a selected account
     post switch_account_path, params: { account_id: @demo_account.id }
     assert_equal @demo_account.id, session[:selected_account_id]
 
-    # Clear the selection
     delete switch_account_path
 
     assert_redirected_to root_path
@@ -65,7 +61,6 @@ class AccountSwitchingControllerTest < ActionDispatch::IntegrationTest
 
     post switch_account_path, params: { account_id: @demo_account.id }
 
-    # Make another request and verify selected account is set
     get root_path
     assert_equal @demo_account.id, session[:selected_account_id]
   end

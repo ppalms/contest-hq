@@ -2,29 +2,19 @@ require "test_helper"
 
 class ScheduleGenerationServiceTest < ActiveSupport::TestCase
   setup do
-    set_current_user(users(:demo_admin_a))
-    @schedule = schedules(:demo_district_schedule)
-    @contest = @schedule.contest
-    @start_time = DateTime.parse("2024-10-23T08:00:00").utc
-    @end_time = DateTime.parse("2024-10-23T18:00:00").utc
+    @admin = create(:user, :account_admin)
+    set_current_user(@admin)
+    @contest = create(:contest, account: @admin.account)
+    @schedule = create(:schedule, contest: @contest, account: @admin.account)
+    create(:contest_entry, contest: @contest, account: @admin.account)
+    @start_time = DateTime.parse("2026-10-01T08:00:00").utc
+    @end_time = DateTime.parse("2026-10-01T18:00:00").utc
   end
 
   test "successfully generates schedule with valid data" do
-    room = Room.create!(
-      contest: @contest,
-      name: "Main Hall",
-      room_number: "100",
-      account: @contest.account
-    )
+    room = create(:room, contest: @contest, account: @contest.account)
 
-    PerformancePhase.create!(
-      contest: @contest,
-      room: room,
-      name: "Performance",
-      ordinal: 1,
-      duration: 20,
-      account: @contest.account
-    )
+    create(:performance_phase, contest: @contest, room: room, account: @contest.account)
 
     service = ScheduleGenerationService.new(@schedule, @start_time, @end_time)
     result = service.call
@@ -37,21 +27,9 @@ class ScheduleGenerationServiceTest < ActiveSupport::TestCase
   test "raises error when contest has already started" do
     @contest.update!(contest_start: 1.day.ago, contest_end: 1.day.from_now)
 
-    room = Room.create!(
-      contest: @contest,
-      name: "Main Hall",
-      room_number: "100",
-      account: @contest.account
-    )
+    room = create(:room, contest: @contest, account: @contest.account)
 
-    PerformancePhase.create!(
-      contest: @contest,
-      room: room,
-      name: "Performance",
-      ordinal: 1,
-      duration: 20,
-      account: @contest.account
-    )
+    create(:performance_phase, contest: @contest, room: room, account: @contest.account)
 
     service = ScheduleGenerationService.new(@schedule, @start_time, @end_time)
 
@@ -73,21 +51,8 @@ class ScheduleGenerationServiceTest < ActiveSupport::TestCase
   end
 
   test "raises error when performance phase has invalid duration" do
-    room = Room.create!(
-      contest: @contest,
-      name: "Main Hall",
-      room_number: "100",
-      account: @contest.account
-    )
-
-    phase = PerformancePhase.create!(
-      contest: @contest,
-      room: room,
-      name: "Performance",
-      ordinal: 1,
-      duration: 20,
-      account: @contest.account
-    )
+    room = create(:room, contest: @contest, account: @contest.account)
+    phase = create(:performance_phase, contest: @contest, room: room, account: @contest.account)
 
     phase.update_column(:duration, 0)
 
@@ -103,21 +68,9 @@ class ScheduleGenerationServiceTest < ActiveSupport::TestCase
   test "raises error when no contest entries exist" do
     @contest.contest_entries.destroy_all
 
-    room = Room.create!(
-      contest: @contest,
-      name: "Main Hall",
-      room_number: "100",
-      account: @contest.account
-    )
+    room = create(:room, contest: @contest, account: @contest.account)
 
-    PerformancePhase.create!(
-      contest: @contest,
-      room: room,
-      name: "Performance",
-      ordinal: 1,
-      duration: 20,
-      account: @contest.account
-    )
+    create(:performance_phase, contest: @contest, room: room, account: @contest.account)
 
     service = ScheduleGenerationService.new(@schedule, @start_time, @end_time)
 
@@ -129,21 +82,8 @@ class ScheduleGenerationServiceTest < ActiveSupport::TestCase
   end
 
   test "cleans up schedule days on failure" do
-    room = Room.create!(
-      contest: @contest,
-      name: "Main Hall",
-      room_number: "100",
-      account: @contest.account
-    )
-
-    phase = PerformancePhase.create!(
-      contest: @contest,
-      room: room,
-      name: "Performance",
-      ordinal: 1,
-      duration: 20,
-      account: @contest.account
-    )
+    room = create(:room, contest: @contest, account: @contest.account)
+    phase = create(:performance_phase, contest: @contest, room: room, account: @contest.account)
 
     phase.update_column(:duration, 0)
 
@@ -158,30 +98,9 @@ class ScheduleGenerationServiceTest < ActiveSupport::TestCase
   end
 
   test "creates blocks in ordinal order for multiple phases" do
-    room = Room.create!(
-      contest: @contest,
-      name: "Main Hall",
-      room_number: "100",
-      account: @contest.account
-    )
-
-    phase1 = PerformancePhase.create!(
-      contest: @contest,
-      room: room,
-      name: "Warm-up",
-      ordinal: 1,
-      duration: 10,
-      account: @contest.account
-    )
-
-    phase2 = PerformancePhase.create!(
-      contest: @contest,
-      room: room,
-      name: "Performance",
-      ordinal: 2,
-      duration: 20,
-      account: @contest.account
-    )
+    room = create(:room, contest: @contest, account: @contest.account)
+    phase1 = create(:performance_phase, contest: @contest, room: room, name: "Warm-up", ordinal: 1, duration: 10, account: @contest.account)
+    phase2 = create(:performance_phase, contest: @contest, room: room, name: "Performance", ordinal: 2, duration: 20, account: @contest.account)
 
     service = ScheduleGenerationService.new(@schedule, @start_time, @end_time)
     service.call
@@ -196,21 +115,9 @@ class ScheduleGenerationServiceTest < ActiveSupport::TestCase
   end
 
   test "creates sequential blocks for multiple entries" do
-    room = Room.create!(
-      contest: @contest,
-      name: "Main Hall",
-      room_number: "100",
-      account: @contest.account
-    )
-
-    PerformancePhase.create!(
-      contest: @contest,
-      room: room,
-      name: "Performance",
-      ordinal: 1,
-      duration: 20,
-      account: @contest.account
-    )
+    room = create(:room, contest: @contest, account: @contest.account)
+    create(:performance_phase, contest: @contest, room: room, account: @contest.account)
+    create(:contest_entry, contest: @contest, account: @contest.account)
 
     service = ScheduleGenerationService.new(@schedule, @start_time, @end_time)
     service.call

@@ -67,6 +67,9 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 
+  # Test data factories [https://github.com/thoughtbot/factory_bot_rails]
+  gem "factory_bot_rails"
+
   # Pin to Minitest 5.x for Rails 8.1 compatibility
   gem "minitest", "~> 6.0"
 end

@@ -1,78 +1,78 @@
 require "test_helper"
 
 class SchedulesControllerTest < ActionDispatch::IntegrationTest
-  test "manager can view schedule for contest they manage" do
-    sign_in_as users(:demo_manager_a)
+  setup do
+    @demo_admin = create(:user, :account_admin)
+    @demo_manager_a = create(:user, :manager, account: @demo_admin.account)
+    @demo_manager_b = create(:user, :manager, account: @demo_admin.account)
+    @demo_director_a = create(:user, :director, account: @demo_admin.account)
+    @customer_director_a = create(:user, :director)
 
-    get schedule_path(schedules(:demo_district_schedule))
+    @demo_contest = create(:contest, account: @demo_admin.account)
+    @demo_schedule = create(:schedule, contest: @demo_contest, account: @demo_admin.account)
+    create(:contest_manager, contest: @demo_contest, user: @demo_manager_a, account: @demo_admin.account)
+
+    set_current_user(@demo_director_a)
+    @ensemble = create(:large_ensemble, account: @demo_admin.account)
+    @entry = create(:contest_entry, contest: @demo_contest, user: @demo_director_a, large_ensemble: @ensemble, account: @demo_admin.account)
+  end
+
+  test "manager can view schedule for contest they manage" do
+    sign_in_as(@demo_manager_a)
+
+    get schedule_path(@demo_schedule)
 
     assert_response :success
   end
 
   test "manager cannot view schedule for contest they don't manage" do
-    sign_in_as users(:demo_manager_b)
+    sign_in_as(@demo_manager_b)
 
-    get schedule_path(schedules(:demo_district_schedule))
+    get schedule_path(@demo_schedule)
 
     assert_redirected_to root_path
     assert_equal "You do not have permission to view this schedule", flash[:alert]
   end
 
   test "director can view schedule for contest they have entries in" do
-    sign_in_as users(:demo_director_a)
+    sign_in_as(@demo_director_a)
 
-    get schedule_path(schedules(:demo_district_schedule))
+    get schedule_path(@demo_schedule)
 
     assert_response :success
   end
 
   test "admin can view any schedule" do
-    sign_in_as users(:demo_admin_a)
+    sign_in_as(@demo_admin)
 
-    get schedule_path(schedules(:demo_district_schedule))
+    get schedule_path(@demo_schedule)
 
     assert_response :success
   end
 
   test "user from different account cannot view schedule" do
-    sign_in_as users(:customer_director_a)
+    sign_in_as(@customer_director_a)
 
-    get schedule_path(schedules(:demo_district_schedule))
+    get schedule_path(@demo_schedule)
 
     assert_response :not_found
   end
 
   test "generate does not create duplicate time slots in same room" do
-    sign_in_as users(:demo_manager_a)
+    sign_in_as(@demo_manager_a)
 
-    schedule = schedules(:demo_district_schedule)
-    contest = schedule.contest
+    room = create(:room, contest: @demo_contest, account: @demo_admin.account)
+    create(:performance_phase, contest: @demo_contest, room: room, account: @demo_admin.account)
 
-    room = Room.create!(
-      contest: contest,
-      name: "Main Hall",
-      room_number: "100",
-      account: contest.account
-    )
-
-    phase = PerformancePhase.create!(
-      contest: contest,
-      room: room,
-      name: "Performance",
-      ordinal: 1,
-      duration: 20,
-      account: contest.account
-    )
-
-    post generate_schedule_path(schedule), params: {
-      start_time: "2024-10-23T08:00:00",
-      end_time: "2024-10-23T18:00:00"
+    post generate_schedule_path(@demo_schedule), params: {
+      start_time: "2026-10-01T08:00:00",
+      end_time: "2026-10-01T18:00:00"
     }, as: :turbo_stream
 
     assert_response :success
 
-    schedule.reload
-    blocks = ScheduleBlock.where(schedule_day: schedule.days).where(room: room)
+    @demo_schedule.reload
+    blocks = ScheduleBlock.where(schedule_day: @demo_schedule.days).where(room: room)
 
     blocks_by_time_and_room = blocks.group_by { |b| [ b.room_id, b.start_time ] }
     blocks_by_time_and_room.each do |key, group|
@@ -81,36 +81,20 @@ class SchedulesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "generate creates schedule blocks sequentially without overlaps" do
-    sign_in_as users(:demo_manager_a)
+    sign_in_as(@demo_manager_a)
 
-    schedule = schedules(:demo_district_schedule)
-    contest = schedule.contest
+    room = create(:room, contest: @demo_contest, account: @demo_admin.account)
+    create(:performance_phase, contest: @demo_contest, room: room, account: @demo_admin.account)
 
-    room = Room.create!(
-      contest: contest,
-      name: "Main Hall",
-      room_number: "100",
-      account: contest.account
-    )
-
-    phase = PerformancePhase.create!(
-      contest: contest,
-      room: room,
-      name: "Performance",
-      ordinal: 1,
-      duration: 20,
-      account: contest.account
-    )
-
-    post generate_schedule_path(schedule), params: {
-      start_time: "2024-10-23T08:00:00",
-      end_time: "2024-10-23T18:00:00"
+    post generate_schedule_path(@demo_schedule), params: {
+      start_time: "2026-10-01T08:00:00",
+      end_time: "2026-10-01T18:00:00"
     }, as: :turbo_stream
 
     assert_response :success
 
-    schedule.reload
-    blocks = ScheduleBlock.where(schedule_day: schedule.days).where(room: room).order(:start_time)
+    @demo_schedule.reload
+    blocks = ScheduleBlock.where(schedule_day: @demo_schedule.days).where(room: room).order(:start_time)
 
     blocks.each_cons(2) do |block1, block2|
       assert block1.end_time <= block2.start_time,
@@ -119,172 +103,97 @@ class SchedulesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "generate fails when contest has already started" do
-    sign_in_as users(:demo_manager_a)
+    sign_in_as(@demo_manager_a)
 
-    schedule = schedules(:demo_district_schedule)
-    contest = schedule.contest
+    @demo_contest.update!(contest_start: 1.day.ago, contest_end: 1.day.from_now)
 
-    contest.update!(contest_start: 1.day.ago, contest_end: 1.day.from_now)
+    room = create(:room, contest: @demo_contest, account: @demo_admin.account)
+    create(:performance_phase, contest: @demo_contest, room: room, account: @demo_admin.account)
 
-    room = Room.create!(
-      contest: contest,
-      name: "Main Hall",
-      room_number: "100",
-      account: contest.account
-    )
-
-    PerformancePhase.create!(
-      contest: contest,
-      room: room,
-      name: "Performance",
-      ordinal: 1,
-      duration: 20,
-      account: contest.account
-    )
-
-    post generate_schedule_path(schedule), params: {
-      start_time: "2024-10-23T08:00:00",
-      end_time: "2024-10-23T18:00:00"
+    post generate_schedule_path(@demo_schedule), params: {
+      start_time: "2026-10-01T08:00:00",
+      end_time: "2026-10-01T18:00:00"
     }, as: :turbo_stream
 
     assert_response :success
     assert_match(/Contest has already started/, flash[:alert])
 
-    schedule.reload
-    assert_equal 0, schedule.days.count, "Should not create schedule days when contest has started"
+    @demo_schedule.reload
+    assert_equal 0, @demo_schedule.days.count, "Should not create schedule days when contest has started"
   end
 
   test "generate fails when contest has no performance phases" do
-    sign_in_as users(:demo_manager_a)
+    sign_in_as(@demo_manager_a)
 
-    schedule = schedules(:demo_district_schedule)
-    contest = schedule.contest
-
-    post generate_schedule_path(schedule), params: {
-      start_time: "2024-10-23T08:00:00",
-      end_time: "2024-10-23T18:00:00"
+    post generate_schedule_path(@demo_schedule), params: {
+      start_time: "2026-10-01T08:00:00",
+      end_time: "2026-10-01T18:00:00"
     }, as: :turbo_stream
 
     assert_response :success
     assert_match(/must have at least one performance phase/, flash[:alert])
 
-    schedule.reload
-    assert_equal 0, schedule.days.count, "Should not create schedule days when no performance phases exist"
+    @demo_schedule.reload
+    assert_equal 0, @demo_schedule.days.count, "Should not create schedule days when no performance phases exist"
   end
 
   test "generate fails when contest has no entries" do
-    sign_in_as users(:demo_manager_a)
+    sign_in_as(@demo_manager_a)
 
-    schedule = schedules(:demo_district_schedule)
-    contest = schedule.contest
+    @demo_contest.contest_entries.destroy_all
 
-    contest.contest_entries.destroy_all
+    room = create(:room, contest: @demo_contest, account: @demo_admin.account)
+    create(:performance_phase, contest: @demo_contest, room: room, account: @demo_admin.account)
 
-    room = Room.create!(
-      contest: contest,
-      name: "Main Hall",
-      room_number: "100",
-      account: contest.account
-    )
-
-    PerformancePhase.create!(
-      contest: contest,
-      room: room,
-      name: "Performance",
-      ordinal: 1,
-      duration: 20,
-      account: contest.account
-    )
-
-    post generate_schedule_path(schedule), params: {
-      start_time: "2024-10-23T08:00:00",
-      end_time: "2024-10-23T18:00:00"
+    post generate_schedule_path(@demo_schedule), params: {
+      start_time: "2026-10-01T08:00:00",
+      end_time: "2026-10-01T18:00:00"
     }, as: :turbo_stream
 
     assert_response :success
     assert_match(/must have at least one entry/, flash[:alert])
 
-    schedule.reload
-    assert_equal 0, schedule.days.count, "Should not create schedule days when no entries exist"
+    @demo_schedule.reload
+    assert_equal 0, @demo_schedule.days.count, "Should not create schedule days when no entries exist"
   end
 
   test "generate rolls back all changes when validation fails" do
-    sign_in_as users(:demo_manager_a)
+    sign_in_as(@demo_manager_a)
 
-    schedule = schedules(:demo_district_schedule)
-    contest = schedule.contest
-
-    room = Room.create!(
-      contest: contest,
-      name: "Main Hall",
-      room_number: "100",
-      account: contest.account
-    )
-
-    phase = PerformancePhase.create!(
-      contest: contest,
-      room: room,
-      name: "Performance",
-      ordinal: 1,
-      duration: 20,
-      account: contest.account
-    )
+    room = create(:room, contest: @demo_contest, account: @demo_admin.account)
+    phase = create(:performance_phase, contest: @demo_contest, room: room, account: @demo_admin.account)
 
     phase.update_column(:duration, 0)
 
-    post generate_schedule_path(schedule), params: {
-      start_time: "2024-10-23T08:00:00",
-      end_time: "2024-10-23T18:00:00"
+    post generate_schedule_path(@demo_schedule), params: {
+      start_time: "2026-10-01T08:00:00",
+      end_time: "2026-10-01T18:00:00"
     }, as: :turbo_stream
 
     assert_response :success
     assert_match(/invalid duration/, flash[:alert])
 
-    schedule.reload
-    assert_equal 0, schedule.days.count, "Should rollback schedule days on validation failure"
-    assert_equal 0, ScheduleBlock.where(schedule_day: schedule.days).count, "Should rollback schedule blocks on validation failure"
+    @demo_schedule.reload
+    assert_equal 0, @demo_schedule.days.count, "Should rollback schedule days on validation failure"
+    assert_equal 0, ScheduleBlock.where(schedule_day: @demo_schedule.days).count, "Should rollback schedule blocks on validation failure"
   end
 
   test "generate uses performance phases in ordinal order" do
-    sign_in_as users(:demo_manager_a)
+    sign_in_as(@demo_manager_a)
 
-    schedule = schedules(:demo_district_schedule)
-    contest = schedule.contest
+    room = create(:room, contest: @demo_contest, account: @demo_admin.account)
+    phase1 = create(:performance_phase, contest: @demo_contest, room: room, account: @demo_admin.account, name: "Warm-up", ordinal: 1, duration: 10)
+    phase2 = create(:performance_phase, contest: @demo_contest, room: room, account: @demo_admin.account, name: "Performance", ordinal: 2, duration: 20)
 
-    room = Room.create!(
-      contest: contest,
-      name: "Main Hall",
-      room_number: "100",
-      account: contest.account
-    )
-
-    phase1 = PerformancePhase.create!(
-      contest: contest,
-      room: room,
-      name: "Warm-up",
-      ordinal: 1,
-      duration: 10,
-      account: contest.account
-    )
-
-    phase2 = PerformancePhase.create!(
-      contest: contest,
-      room: room,
-      name: "Performance",
-      ordinal: 2,
-      duration: 20,
-      account: contest.account
-    )
-
-    post generate_schedule_path(schedule), params: {
-      start_time: "2024-10-23T08:00:00",
-      end_time: "2024-10-23T18:00:00"
+    post generate_schedule_path(@demo_schedule), params: {
+      start_time: "2026-10-01T08:00:00",
+      end_time: "2026-10-01T18:00:00"
     }, as: :turbo_stream
 
     assert_response :success
 
-    schedule.reload
-    first_entry = contest.contest_entries.performance_order.first
+    @demo_schedule.reload
+    first_entry = @demo_contest.contest_entries.performance_order.first
     blocks = first_entry.schedule_blocks.order(:start_time)
 
     assert_equal 2, blocks.count

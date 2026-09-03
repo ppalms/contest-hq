@@ -17,9 +17,11 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   def log_in_as(user)
     visit sign_in_path
     fill_in "Email", with: user.email
-    fill_in "Password", with: "Secret1*3*5*"
+    fill_in "Password", with: TEST_PASSWORD
     click_on "Sign in"
     assert_text "Signed in successfully"
+    Current.account = user.account
+    user
   end
 
   # Wait for Stimulus controller to finish loading data via AJAX
@@ -27,29 +29,5 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   # @param timeout [Integer] Maximum seconds to wait (default: 5)
   def wait_for_ajax_load(controller_name, timeout: 5)
     assert_no_selector "[data-#{controller_name}-target='loadingIndicator']:not(.hidden)", wait: timeout
-  end
-
-  # Define a flaky test that will retry on failure
-  # Use sparingly - prefer fixing root cause over retrying
-  # This is a temporary safety net while addressing underlying issues
-  # @param name [String] Test name
-  # @param retries [Integer] Number of retry attempts (default: 2)
-  def self.flaky_test(name, retries: 2, &block)
-    test(name) do
-      attempts = 0
-      begin
-        instance_eval(&block)
-      rescue => e
-        attempts += 1
-        if attempts <= retries
-          puts "\n⚠️  Test '#{name}' failed, retrying (#{attempts}/#{retries})..."
-          puts "   Error: #{e.message}"
-          retry
-        else
-          puts "\n❌ Test '#{name}' failed after #{retries} retries"
-          raise e
-        end
-      end
-    end
   end
 end

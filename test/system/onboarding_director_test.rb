@@ -4,6 +4,14 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
   include LargeEnsemblesHelper
 
   setup do
+    @admin = create(:user, :account_admin)
+    @performance_class = create(:performance_class, account: @admin.account)
+    @school = create(:school, account: @admin.account, name: "Kennedy High School")
+    @season = create(:season, account: @admin.account, name: "2025", ordinal: 3)
+    @school_class = create(:school_class, account: @admin.account, name: "1-A", ordinal: 1)
+    @contest_b = create(:contest, account: @admin.account, season: @season, name: "Regional Orchestra")
+    @contest_b.school_classes << @school_class
+    create(:prescribed_music, account: @admin.account, season: @season, school_class: @school_class, title: "Symphony No. 5", composer: "Ludwig van Beethoven")
     invite_new_director("peggy@school.org")
   end
 
@@ -26,7 +34,7 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
     assigned_school = @new_director.schools.first
     assert_text assigned_school.name if assigned_school
 
-    select display_name_with_abbreviation(performance_classes(:demo_performance_class_a)), from: :performance_class_id
+    select display_name_with_abbreviation(@performance_class), from: :performance_class_id
     click_on "Create Large Ensemble"
     assert_text "Large ensemble was successfully created"
 
@@ -103,7 +111,7 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
   private
 
   def invite_new_director(email)
-    log_in_as(users(:demo_admin_a))
+    log_in_as(@admin)
     visit new_invitation_url
 
     fill_in "First name", with: "Nobby"

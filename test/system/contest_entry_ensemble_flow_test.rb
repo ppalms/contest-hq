@@ -4,8 +4,11 @@ class ContestEntryEnsembleFlowTest < ApplicationSystemTestCase
   include LargeEnsemblesHelper
 
   setup do
-    @contest = contests(:demo_contest_a)
-    @user_without_ensemble = users(:demo_director_c)
+    @admin = create(:user, :account_admin)
+    @contest = create(:contest, account: @admin.account)
+    @user_without_ensemble = create(:user, :director, account: @admin.account)
+    @performance_class = create(:performance_class, account: @admin.account)
+    @school = create(:school, account: @admin.account)
   end
 
   test "should prompt to create ensemble when user has none" do
@@ -18,8 +21,8 @@ class ContestEntryEnsembleFlowTest < ApplicationSystemTestCase
     assert_text "You need to create a large ensemble before you can register for the contest."
 
     fill_in "Name", with: "Test Ensemble"
-    select display_name_with_abbreviation(performance_classes(:demo_performance_class_a)), from: :performance_class_id
-    select schools(:demo_school_a).name, from: :school_id
+    select display_name_with_abbreviation(@performance_class), from: :performance_class_id
+    select @school.name, from: :school_id
     click_on "Create Large Ensemble"
 
     assert_text "Large ensemble was successfully created. Now you can register for the contest."

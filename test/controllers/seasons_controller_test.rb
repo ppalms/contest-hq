@@ -2,9 +2,9 @@ require "test_helper"
 
 class SeasonsControllerTest < ActionDispatch::IntegrationTest
   def setup
-    @user = users(:demo_admin_a)
+    @user = create(:user, :account_admin)
     sign_in_as(@user)
-    @season = seasons(:demo_2024)
+    @season = create(:season, account: @user.account)
   end
 
   test "should get index" do
@@ -49,7 +49,7 @@ class SeasonsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy season without contests" do
-    season_without_contests = Season.create!(name: "Empty Season", account: @season.account)
+    season_without_contests = create(:season, account: @user.account)
 
     assert_difference("Season.count", -1) do
       delete season_url(season_without_contests)
@@ -60,7 +60,7 @@ class SeasonsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not destroy season with contests" do
-    Contest.create!(name: "Test Contest", season: @season, account: @season.account)
+    create(:contest, season: @season, account: @user.account)
 
     assert_no_difference("Season.count") do
       delete season_url(@season)
@@ -72,7 +72,7 @@ class SeasonsControllerTest < ActionDispatch::IntegrationTest
 
   test "should require admin role" do
     sign_out
-    sign_in_as(users(:demo_director_a))
+    sign_in_as(create(:user, :director, account: @user.account))
 
     get seasons_url
     assert_response :redirect

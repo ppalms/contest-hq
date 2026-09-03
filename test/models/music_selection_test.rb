@@ -2,15 +2,20 @@ require "test_helper"
 
 class MusicSelectionTest < ActiveSupport::TestCase
   setup do
-    set_current_user(users(:demo_director_a))
-    @contest_entry = contest_entries(:contest_a_school_a_ensemble_b)
+    @director = create(:user, :director)
+    set_current_user(@director)
+    @contest_entry = create(:contest_entry, user: @director)
+    @prescribed = create(:prescribed_music,
+      account: @contest_entry.account,
+      season: @contest_entry.contest.season,
+      school_class: @contest_entry.large_ensemble.school.school_class)
   end
 
   test "prescribed? returns true when prescribed_music_id is present" do
     music = @contest_entry.music_selections.new(
       title: "March",
       composer: "Smith",
-      prescribed_music: prescribed_musics(:demo_class_a_music_one)
+      prescribed_music: @prescribed
     )
 
     assert music.prescribed?
@@ -38,49 +43,45 @@ class MusicSelectionTest < ActiveSupport::TestCase
     music = @contest_entry.music_selections.new(
       title: "March",
       composer: "Smith",
-      prescribed_music: prescribed_musics(:demo_class_a_music_one)
+      prescribed_music: @prescribed
     )
 
     assert_not music.custom?
   end
 
   test "populates title and composer from prescribed music" do
-    prescribed = prescribed_musics(:demo_2024_class_a_music_one)
-    music = @contest_entry.music_selections.create!(prescribed_music: prescribed)
+    music = @contest_entry.music_selections.create!(prescribed_music: @prescribed)
 
-    assert_equal prescribed.title, music.title
-    assert_equal prescribed.composer, music.composer
+    assert_equal @prescribed.title, music.title
+    assert_equal @prescribed.composer, music.composer
   end
 
   test "rejects prescribed music from wrong season" do
-    # demo_class_a_music_one is from demo_2025 season, but contest is demo_2024
-    prescribed = prescribed_musics(:demo_class_a_music_one)
+    wrong_season = create(:season, account: @contest_entry.account)
+    prescribed = create(:prescribed_music,
+      account: @contest_entry.account,
+      season: wrong_season,
+      school_class: @contest_entry.large_ensemble.school.school_class)
     music = @contest_entry.music_selections.new(prescribed_music: prescribed)
 
     assert_not music.valid?
-    assert_includes music.errors[:prescribed_music], "must be from the 2024 season"
+    assert_includes music.errors[:prescribed_music], "must be from the #{@contest_entry.contest.season.name} season"
   end
 
   test "rejects prescribed music from wrong school class" do
-    # demo_2024_class_b_music_one would be wrong class (B instead of A)
-    # First, let's create a class B prescribed music for 2024 season
-    prescribed = PrescribedMusic.create!(
-      title: "Test Class B Music",
-      composer: "Test Composer",
-      season: seasons(:demo_2024),
-      school_class: school_classes(:demo_school_class_b),
-      account: accounts(:demo)
-    )
+    wrong_class = create(:school_class, account: @contest_entry.account)
+    prescribed = create(:prescribed_music,
+      account: @contest_entry.account,
+      season: @contest_entry.contest.season,
+      school_class: wrong_class)
     music = @contest_entry.music_selections.new(prescribed_music: prescribed)
 
     assert_not music.valid?
-    assert_includes music.errors[:prescribed_music], "must be for 1-A schools"
+    assert_includes music.errors[:prescribed_music], "must be for #{@contest_entry.large_ensemble.school.school_class.name} schools"
   end
 
   test "accepts prescribed music with correct season and school class" do
-    # demo_2024_class_a_music_one has correct season (demo_2024) and class (A)
-    prescribed = prescribed_musics(:demo_2024_class_a_music_one)
-    music = @contest_entry.music_selections.new(prescribed_music: prescribed)
+    music = @contest_entry.music_selections.new(prescribed_music: @prescribed)
 
     assert music.valid?
   end
@@ -141,11 +142,13 @@ class MusicSelectionTest < ActiveSupport::TestCase
 
   test "prescribed music updates title and composer when changed" do
     @contest_entry.music_selections.destroy_all
-    old_prescribed = prescribed_musics(:demo_2024_class_a_music_one)
-    new_prescribed = prescribed_musics(:demo_2024_class_a_music_two)
+    new_prescribed = create(:prescribed_music,
+      account: @contest_entry.account,
+      season: @contest_entry.contest.season,
+      school_class: @contest_entry.large_ensemble.school.school_class)
 
-    selection = @contest_entry.music_selections.create!(prescribed_music_id: old_prescribed.id, position: 1)
-    assert_equal old_prescribed.title, selection.title
+    selection = @contest_entry.music_selections.create!(prescribed_music_id: @prescribed.id, position: 1)
+    assert_equal @prescribed.title, selection.title
 
     selection.update!(prescribed_music_id: new_prescribed.id)
     assert_equal new_prescribed.title, selection.title
@@ -160,7 +163,6 @@ class MusicSelectionTest < ActiveSupport::TestCase
 
     selection1.destroy
 
-    # Can now create a new selection at position 1
     selection3 = @contest_entry.music_selections.create!(title: "Third", composer: "C3", position: 1)
     assert_equal 1, selection3.position
   end
@@ -176,7 +178,7 @@ class MusicSelectionTest < ActiveSupport::TestCase
 
   test "allows same position across different contest entries" do
     @contest_entry.music_selections.destroy_all
-    other_entry = contest_entries(:contest_a_school_a_ensemble_a)
+    other_entry = create(:contest_entry, user: @director)
     other_entry.music_selections.destroy_all
 
     selection1 = @contest_entry.music_selections.create!(title: "First", composer: "C1", position: 1)

@@ -4,20 +4,26 @@ class UserSchoolAssociationsTest < ApplicationSystemTestCase
   include LargeEnsemblesHelper
 
   setup do
-    @admin = users(:demo_admin_a)
-    @director = users(:demo_director_b) # Director with school association
-    @school_a = schools(:demo_school_a)
-    @school_b = schools(:demo_school_b)
-    @school_c = schools(:demo_school_c)
-    @school_d = schools(:demo_school_d)
-    @performance_class = performance_classes(:demo_performance_class_a)
+    @admin = create(:user, :account_admin)
+    Current.account = @admin.account
+    @director = create(:user, :director, account: @admin.account)
+    @director_c = create(:user, :director, account: @admin.account)
+    @school_a = create(:school, account: @admin.account)
+    @school_b = create(:school, account: @admin.account)
+    @school_c = create(:school, account: @admin.account)
+    @school_d = create(:school, account: @admin.account)
+    @performance_class = create(:performance_class, account: @admin.account)
+    create(:school_director, user: @director, school: @school_a, account: @admin.account)
+    create(:school_director, user: @director, school: @school_b, account: @admin.account)
+    create(:school_director, user: @director, school: @school_c, account: @admin.account)
+    create(:school_director, user: @director, school: @school_d, account: @admin.account)
   end
 
   test "administrator can add school association to director" do
     log_in_as(@admin)
 
     # Find a director with no school associations initially
-    director_without_schools = users(:demo_director_c)
+    director_without_schools = @director_c
     director_without_schools.schools.clear
 
     # Navigate to user show page
@@ -65,7 +71,7 @@ class UserSchoolAssociationsTest < ApplicationSystemTestCase
   test "director can see associated school in large ensemble creation" do
     # Ensure director has at least one school
     unless @director.schools.include?(@school_c)
-      SchoolDirector.create!(user: @director, school: @school_c, account: @director.account)
+      create(:school_director, user: @director, school: @school_c, account: @director.account)
     end
 
     # Log in as director and check large ensemble creation
@@ -88,8 +94,8 @@ class UserSchoolAssociationsTest < ApplicationSystemTestCase
   test "director cannot see removed school in large ensemble creation" do
     # First ensure director has multiple schools
     @director.schools.clear
-    SchoolDirector.create!(user: @director, school: @school_b, account: @director.account)
-    SchoolDirector.create!(user: @director, school: @school_c, account: @director.account)
+    create(:school_director, user: @director, school: @school_b, account: @director.account)
+    create(:school_director, user: @director, school: @school_c, account: @director.account)
 
     # Verify director can see both schools initially
     log_in_as(@director)
@@ -128,7 +134,7 @@ class UserSchoolAssociationsTest < ApplicationSystemTestCase
 
   test "director with no school associations sees empty school dropdown" do
     # Ensure director has no schools
-    director_without_schools = users(:demo_director_c)
+    director_without_schools = @director_c
     director_without_schools.schools.clear
 
     log_in_as(director_without_schools)
@@ -153,7 +159,7 @@ class UserSchoolAssociationsTest < ApplicationSystemTestCase
     log_in_as(@admin)
 
     # Find a director with no schools
-    director_without_schools = users(:demo_director_c)
+    director_without_schools = @director_c
     director_without_schools.schools.clear
 
     # Navigate to user show page and add multiple schools

@@ -2,7 +2,7 @@ require "application_system_test_case"
 
 class SeasonsTest < ApplicationSystemTestCase
   def setup
-    @admin_user = users(:demo_admin_a)
+    @admin_user = create(:user, :account_admin)
     log_in_as(@admin_user)
   end
 
@@ -12,7 +12,6 @@ class SeasonsTest < ApplicationSystemTestCase
     assert_text "Contest Seasons"
     assert_link "New Season"
 
-    # Create a new season
     click_link "New Season"
     assert_text "New Season"
 
@@ -30,11 +29,10 @@ class SeasonsTest < ApplicationSystemTestCase
   end
 
   test "non-admin cannot access seasons" do
-    # Sign out admin and sign in as director
     find_button(@admin_user.last_name, match: :first).click
     find_button("Sign out", match: :first).click
 
-    log_in_as(users(:demo_director_a))
+    log_in_as(create(:user, :director, account: @admin_user.account))
 
     visit seasons_path
     assert_current_path root_path

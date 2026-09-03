@@ -2,9 +2,9 @@ require "test_helper"
 
 class CurrentTest < ActiveSupport::TestCase
   setup do
-    @user = users(:sys_admin_a)
-    @demo_account = accounts(:demo)
-    @customer_account = accounts(:customer)
+    @user = create(:user, :sys_admin)
+    @demo_account = create(:account)
+    @customer_account = create(:account)
     Current.reset
   end
 

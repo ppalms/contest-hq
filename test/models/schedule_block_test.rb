@@ -2,9 +2,10 @@ require "test_helper"
 
 class ScheduleBlockTest < ActiveSupport::TestCase
   setup do
-    set_current_user(users(:demo_admin_a))
-    @schedule = schedules(:demo_district_schedule)
-    @contest = @schedule.contest
+    @admin = create(:user, :account_admin)
+    set_current_user(@admin)
+    @contest = create(:contest, account: @admin.account)
+    @schedule = create(:schedule, account: @admin.account, contest: @contest)
 
     @schedule.initialize_days(
       DateTime.parse("2024-10-23T08:00:00").utc,
@@ -13,31 +14,13 @@ class ScheduleBlockTest < ActiveSupport::TestCase
 
     @day = @schedule.days.first
 
-    @room_a = Room.create!(
-      contest: @contest,
-      name: "Auditorium A",
-      room_number: "101",
-      account: @contest.account
-    )
+    @room_a = create(:room, contest: @contest, account: @admin.account, name: "Auditorium A", room_number: "101")
+    @room_b = create(:room, contest: @contest, account: @admin.account, name: "Auditorium B", room_number: "102")
 
-    @room_b = Room.create!(
-      contest: @contest,
-      name: "Auditorium B",
-      room_number: "102",
-      account: @contest.account
-    )
+    @phase = create(:performance_phase, contest: @contest, room: @room_a, account: @admin.account, name: "Performance", ordinal: 1, duration: 20)
 
-    @phase = PerformancePhase.create!(
-      contest: @contest,
-      room: @room_a,
-      name: "Performance",
-      ordinal: 1,
-      duration: 20,
-      account: @contest.account
-    )
-
-    @entry1 = contest_entries(:contest_a_school_a_ensemble_a)
-    @entry2 = contest_entries(:contest_a_school_a_ensemble_b)
+    @entry1 = create(:contest_entry, account: @admin.account, user: @admin)
+    @entry2 = create(:contest_entry, account: @admin.account, user: @admin)
   end
 
   test "prevents duplicate time slots in same room" do
@@ -206,11 +189,7 @@ class ScheduleBlockTest < ActiveSupport::TestCase
   end
 
   test "prevents overlap when creating multiple blocks in sequence" do
-    entry3 = @contest.contest_entries.create!(
-      large_ensemble: large_ensembles(:demo_school_a_ensemble_c),
-      user: users(:demo_director_a),
-      account: @contest.account
-    )
+    entry3 = create(:contest_entry, account: @admin.account, user: @admin)
 
     block1 = ScheduleBlock.create!(
       schedule_day: @day,

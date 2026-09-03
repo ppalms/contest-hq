@@ -2,9 +2,12 @@ require "application_system_test_case"
 
 class AccountSwitchingTest < ApplicationSystemTestCase
   setup do
-    @sys_admin = users(:sys_admin_a)
-    @demo_account = accounts(:demo)
-    @customer_account = accounts(:customer)
+    @sys_admin = create(:user, :sys_admin)
+    @demo_account = create(:account, name: "Public Demo")
+    @customer_account = create(:account, name: "Customer")
+    @demo_admin = create(:user, :account_admin, account: @demo_account)
+    @demo_director = create(:user, :director, account: @demo_account)
+    @customer_director = create(:user, :director, account: @customer_account)
     log_in_as(@sys_admin)
   end
 
@@ -63,11 +66,11 @@ class AccountSwitchingTest < ApplicationSystemTestCase
   end
 
   test "regular user should not see account switcher" do
-    log_in_as(users(:demo_admin_a))
+    log_in_as(@demo_admin)
     visit root_path
 
     # Click on profile dropdown
-    click_on "#{users(:demo_admin_a).first_name} #{users(:demo_admin_a).last_name}"
+    click_on "#{@demo_admin.first_name} #{@demo_admin.last_name}"
 
     # Should not see account switcher
     assert_no_text "Account Context"
@@ -82,13 +85,13 @@ class AccountSwitchingTest < ApplicationSystemTestCase
 
     # Visit different pages and ensure only demo account data is shown
     visit users_path
-    assert_text users(:demo_director_a).email
-    assert_no_text users(:customer_director_a).email
+    assert_text @demo_director.email
+    assert_no_text @customer_director.email
 
     # The account scoping should persist across requests
     visit root_path
     visit users_path
-    assert_text users(:demo_director_a).email
-    assert_no_text users(:customer_director_a).email
+    assert_text @demo_director.email
+    assert_no_text @customer_director.email
   end
 end

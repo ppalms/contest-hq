@@ -2,9 +2,10 @@ require "application_system_test_case"
 
 class ContestRegistrationFocusTest < ApplicationSystemTestCase
   setup do
-    @user = users(:demo_director_a)
-    @contest = contests(:demo_contest_a)
-    @large_ensemble = large_ensembles(:demo_school_a_ensemble_c)
+    @user = create(:user, :director)
+    set_current_user(@user)
+    @contest = create(:contest, account: @user.account)
+    @large_ensemble = create(:large_ensemble, account: @user.account)
 
     log_in_as(@user)
   end
@@ -28,13 +29,7 @@ class ContestRegistrationFocusTest < ApplicationSystemTestCase
   end
 
   test "custom music form has proper focus management" do
-    # Create a contest entry first
-    contest_entry = ContestEntry.create!(
-      contest: @contest,
-      large_ensemble: @large_ensemble,
-      user: @user,
-      account: @user.account
-    )
+    contest_entry = create(:contest_entry, contest: @contest, large_ensemble: @large_ensemble, user: @user, account: @user.account)
 
     visit new_contest_entry_music_selection_path(
       contest_id: @contest.id,
@@ -54,13 +49,7 @@ class ContestRegistrationFocusTest < ApplicationSystemTestCase
   end
 
   test "prescribed music search has proper focus management" do
-    # Create a contest entry first
-    contest_entry = ContestEntry.create!(
-      contest: @contest,
-      large_ensemble: @large_ensemble,
-      user: @user,
-      account: @user.account
-    )
+    contest_entry = create(:contest_entry, contest: @contest, large_ensemble: @large_ensemble, user: @user, account: @user.account)
 
     visit new_prescribed_contest_entry_music_selections_path(
       contest_id: @contest.id,
@@ -84,13 +73,7 @@ class ContestRegistrationFocusTest < ApplicationSystemTestCase
   end
 
   test "contest entry details page has proper focus management" do
-    # Create a contest entry first
-    contest_entry = ContestEntry.create!(
-      contest: @contest,
-      large_ensemble: @large_ensemble,
-      user: @user,
-      account: @user.account
-    )
+    contest_entry = create(:contest_entry, contest: @contest, large_ensemble: @large_ensemble, user: @user, account: @user.account)
 
     visit contest_entry_path(@contest, contest_entry)
 

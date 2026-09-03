@@ -4,16 +4,18 @@ class LargeEnsemblesTest < ApplicationSystemTestCase
   include LargeEnsemblesHelper
 
   setup do
-    log_in_as(users(:demo_director_a))
-    @large_ensemble = large_ensembles(:demo_school_a_ensemble_c)
+    @director = create(:user, :director)
+    set_current_user(@director)
+    @large_ensemble = create(:large_ensemble, account: @director.account, name: "Concert Band")
+    log_in_as(@director)
   end
 
   test "should create large ensemble" do
     visit roster_large_ensembles_url
     click_on "New Large Ensemble"
     fill_in "Name", with: "Ultra Symphonic Band"
-    select display_name_with_abbreviation(performance_classes(:demo_performance_class_a)), from: :performance_class_id
-    select schools(:demo_school_a).name, from: :school_id
+    select display_name_with_abbreviation(create(:performance_class, account: @director.account)), from: :performance_class_id
+    select create(:school, account: @director.account).name, from: :school_id
     click_on "Create Large Ensemble"
 
     assert_text "Large ensemble was successfully created"
@@ -55,7 +57,6 @@ class LargeEnsemblesTest < ApplicationSystemTestCase
   test "should only see own large ensemble" do
     visit roster_large_ensembles_url
 
-    # Other director's large ensemble
     assert_no_text "Wind Ensemble"
   end
 end

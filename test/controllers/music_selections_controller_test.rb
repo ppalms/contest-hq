@@ -2,14 +2,17 @@ require "test_helper"
 
 class MusicSelectionsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @user = users(:demo_director_a)
+    @user = create(:user, :director)
     set_current_user(@user)
-    @contest_entry = contest_entries(:contest_a_school_a_ensemble_b)
+    @contest_entry = create(:contest_entry, user: @user)
     @contest = @contest_entry.contest
     sign_in_as(@user)
 
-    # Clean up any existing music selections to avoid position conflicts
     @contest_entry.music_selections.destroy_all
+    create(:prescribed_music,
+      account: @contest_entry.account,
+      season: @contest_entry.contest.season,
+      school_class: @contest_entry.large_ensemble.school.school_class)
   end
 
   test "index shows all music selections for entry" do
@@ -41,7 +44,10 @@ class MusicSelectionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "create adds prescribed music selection" do
-    prescribed = prescribed_musics(:demo_2024_class_a_music_one)
+    prescribed = create(:prescribed_music,
+      account: @contest_entry.account,
+      season: @contest_entry.contest.season,
+      school_class: @contest_entry.large_ensemble.school.school_class)
 
     assert_difference "@contest_entry.music_selections.count", 1 do
       post contest_entry_music_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id), params: {
@@ -100,7 +106,6 @@ class MusicSelectionsControllerTest < ActionDispatch::IntegrationTest
     get new_prescribed_contest_entry_music_selections_path(contest_id: @contest.id, entry_id: @contest_entry.id, search: "")
     assert_response :success
 
-    # Should show music for the correct season and school class
     assert_select "table"
   end
 end

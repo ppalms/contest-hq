@@ -2,16 +2,15 @@ require "test_helper"
 
 class ContestManagerTest < ActiveSupport::TestCase
   setup do
-    @demo_contest = contests(:demo_contest_a)
-    @demo_manager = users(:demo_manager_a)
-    @demo_admin = users(:demo_admin_a)
-    @demo_director = users(:demo_director_a)
+    @demo_contest = create(:contest)
+    @demo_manager = create(:user, :manager, account: @demo_contest.account)
+    @demo_admin = create(:user, :account_admin, account: @demo_contest.account)
+    @demo_director = create(:user, :director, account: @demo_contest.account)
   end
 
   test "valid with manager role user" do
     set_current_user(@demo_admin)
-    # Use a manager not already assigned to this contest
-    other_manager = users(:demo_manager_b)
+    other_manager = create(:user, :manager, account: @demo_contest.account)
     contest_manager = ContestManager.new(contest: @demo_contest, user: other_manager)
     assert contest_manager.valid?
   end
@@ -32,14 +31,11 @@ class ContestManagerTest < ActiveSupport::TestCase
 
   test "must be unique per contest and user" do
     set_current_user(@demo_admin)
-    # Use a manager not already assigned to this contest
-    other_manager = users(:demo_manager_b)
+    other_manager = create(:user, :manager, account: @demo_contest.account)
 
-    # First assignment should work
     contest_manager1 = ContestManager.new(contest: @demo_contest, user: other_manager)
     assert contest_manager1.save
 
-    # Second assignment of same user to same contest should fail
     contest_manager2 = ContestManager.new(contest: @demo_contest, user: other_manager)
     assert_not contest_manager2.valid?
     assert_includes contest_manager2.errors[:contest_id], "has already been taken"

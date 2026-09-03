@@ -5,19 +5,21 @@ require "ostruct"
 
 Dir[Rails.root.join("test/support/**/*.rb")].each { |f| require f }
 
+TEST_PASSWORD = "Secret1*3*5*"
+
 class ActiveSupport::TestCase
+  include FactoryBot::Syntax::Methods
+
   # Run tests in parallel with specified workers
   parallelize(workers: :number_of_processors)
-
-  # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
-  fixtures :all
 
   # Add more helper methods to be used by all tests here...
 
   # For integration tests - signs in a user via HTTP request
   def sign_in_as(user)
-    post(sign_in_url, params: { email: user.email, password: "Secret1*3*5*" })
+    post(sign_in_url, params: { email: user.email, password: TEST_PASSWORD })
     Current.session = user.sessions.last
+    Current.account = user.account
     user
   end
 

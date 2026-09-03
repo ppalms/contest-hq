@@ -1,12 +1,13 @@
-# TODO: only manager can generate or reset schedule
-# TODO: all users can view schedule
-
 require "application_system_test_case"
 
 class SchedulingTest < ApplicationSystemTestCase
   setup do
-    log_in_as(users(:demo_manager_a))
-    @contest = contests(:demo_contest_a)
+    @admin = create(:user, :account_admin)
+    @manager = create(:user, :manager, account: @admin.account)
+    @contest = create(:contest, account: @admin.account)
+    create(:schedule, contest: @contest, account: @admin.account)
+    create(:contest_manager, contest: @contest, user: @manager, account: @admin.account)
+    log_in_as(@manager)
   end
 
   test "generate schedule button not visible if no setup" do

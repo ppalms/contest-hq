@@ -2,10 +2,11 @@ require "test_helper"
 
 class ContestEntriesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @user_with_ensemble = users(:demo_director_a)
-    @user_without_ensemble = users(:demo_director_c)
+    @user_with_ensemble = create(:user, :director)
     set_current_user(@user_with_ensemble)
-    @contest = contests(:demo_contest_a)
+    @ensemble = create(:large_ensemble, account: @user_with_ensemble.account)
+    @user_without_ensemble = create(:user, :director, account: @user_with_ensemble.account)
+    @contest = create(:contest, account: @user_with_ensemble.account)
   end
 
   test "should redirect to new large ensemble when user has no ensembles" do
@@ -37,10 +38,15 @@ class ContestEntriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should redirect when no ensembles are eligible for restricted contest" do
-    # demo_contest_c is restricted to 2A and 3A schools
-    restricted_contest = contests(:demo_contest_c)
+    account = @user_with_ensemble.account
+    restricted_contest = create(:contest, account: account)
+    class_2a = create(:school_class, name: "2-A", account: account)
+    class_3a = create(:school_class, name: "3-A", account: account)
+    restricted_contest.school_classes << [ class_2a, class_3a ]
 
-    # demo_director_a conducts ensembles from demo_school_a (1A school)
+    school_1a = create(:school, account: account, school_class: create(:school_class, name: "1-A", account: account))
+    create(:large_ensemble, account: account, school: school_1a)
+
     sign_in_as(@user_with_ensemble)
 
     get new_contest_entry_path(contest_id: restricted_contest.id)
@@ -51,11 +57,17 @@ class ContestEntriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should show new contest entry form when user has eligible ensembles for restricted contest" do
-    # demo_contest_c is restricted to 2A and 3A schools
-    restricted_contest = contests(:demo_contest_c)
+    account = @user_with_ensemble.account
+    restricted_contest = create(:contest, account: account)
+    class_2a = create(:school_class, name: "2-A", account: account)
+    class_3a = create(:school_class, name: "3-A", account: account)
+    restricted_contest.school_classes << [ class_2a, class_3a ]
 
-    # demo_director_b conducts ensembles from demo_school_b (2A school)
-    user_with_eligible_ensemble = users(:demo_director_b)
+    user_with_eligible_ensemble = create(:user, :director, account: account)
+    set_current_user(user_with_eligible_ensemble)
+    school_2a = create(:school, account: account, school_class: class_2a)
+    create(:large_ensemble, account: account, school: school_2a)
+
     sign_in_as(user_with_eligible_ensemble)
 
     get new_contest_entry_path(contest_id: restricted_contest.id)
@@ -69,15 +81,20 @@ class ContestEntriesControllerTest < ActionDispatch::IntegrationTest
     set_current_user(@user_with_ensemble)
 
     ensemble = @user_with_ensemble.conducted_ensembles.first
-    contest1 = @contest
-    contest2 = contests(:demo_contest_b)
+    season = create(:season, account: @user_with_ensemble.account)
+    contest1 = create(:contest, account: @user_with_ensemble.account, season: season)
+    contest2 = create(:contest, account: @user_with_ensemble.account, season: season)
 
-    entry1 = ContestEntry.create!(contest: contest1, user: @user_with_ensemble, large_ensemble: ensemble)
-    entry1.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one), position: 1)
+    entry1 = create(:contest_entry, contest: contest1, user: @user_with_ensemble, large_ensemble: ensemble)
+    prescribed = create(:prescribed_music,
+      account: @user_with_ensemble.account,
+      season: season,
+      school_class: ensemble.school.school_class)
+    entry1.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed, position: 1)
     entry1.music_selections.create!(title: "Symphony", composer: "Jones", position: 2)
     entry1.music_selections.create!(title: "Overture", composer: "Brown", position: 3)
 
-    entry2 = ContestEntry.create!(contest: contest2, user: @user_with_ensemble, large_ensemble: ensemble)
+    entry2 = create(:contest_entry, contest: contest2, user: @user_with_ensemble, large_ensemble: ensemble)
 
     get contest_entry_path(contest_id: contest2.id, id: entry2.id)
 
@@ -90,15 +107,20 @@ class ContestEntriesControllerTest < ActionDispatch::IntegrationTest
     set_current_user(@user_with_ensemble)
 
     ensemble = @user_with_ensemble.conducted_ensembles.first
-    contest1 = @contest
-    contest2 = contests(:demo_contest_b)
+    season = create(:season, account: @user_with_ensemble.account)
+    contest1 = create(:contest, account: @user_with_ensemble.account, season: season)
+    contest2 = create(:contest, account: @user_with_ensemble.account, season: season)
 
-    entry1 = ContestEntry.create!(contest: contest1, user: @user_with_ensemble, large_ensemble: ensemble)
-    entry1.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed_musics(:demo_2024_class_a_music_one), position: 1)
+    entry1 = create(:contest_entry, contest: contest1, user: @user_with_ensemble, large_ensemble: ensemble)
+    prescribed = create(:prescribed_music,
+      account: @user_with_ensemble.account,
+      season: season,
+      school_class: ensemble.school.school_class)
+    entry1.music_selections.create!(title: "March", composer: "Smith", prescribed_music: prescribed, position: 1)
     entry1.music_selections.create!(title: "Symphony", composer: "Jones", position: 2)
     entry1.music_selections.create!(title: "Overture", composer: "Brown", position: 3)
 
-    entry2 = ContestEntry.create!(contest: contest2, user: @user_with_ensemble, large_ensemble: ensemble)
+    entry2 = create(:contest_entry, contest: contest2, user: @user_with_ensemble, large_ensemble: ensemble)
 
     assert_equal 0, entry2.music_selections.count
 
@@ -112,7 +134,7 @@ class ContestEntriesControllerTest < ActionDispatch::IntegrationTest
 
   test "should reject cross-account large_ensemble_id" do
     sign_in_as(@user_with_ensemble)
-    customer_ensemble = LargeEnsemble.unscoped { large_ensembles(:customer_school_a_ensemble_a) }
+    customer_ensemble = create(:large_ensemble)
 
     assert_no_difference "ContestEntry.count" do
       post contest_entries_path(contest_id: @contest.id), params: {

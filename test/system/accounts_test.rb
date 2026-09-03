@@ -2,8 +2,9 @@ require "application_system_test_case"
 
 class AccountsTest < ApplicationSystemTestCase
   setup do
-    log_in_as(users(:sys_admin_a))
-    @account = accounts(:ossaa)
+    @sys_admin = create(:user, :sys_admin)
+    @account = create(:account, name: "OSSAA")
+    log_in_as(@sys_admin)
   end
 
   test "visiting the index" do

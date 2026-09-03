@@ -2,10 +2,11 @@ require "test_helper"
 
 class AccountScopedTest < ActiveSupport::TestCase
   setup do
-    @sysadmin = users(:sys_admin_a)
-    @demo_admin = users(:demo_admin_a)
-    @demo_account = accounts(:demo)
-    @customer_account = accounts(:customer)
+    @sysadmin = create(:user, :sys_admin)
+    @demo_admin = create(:user, :account_admin)
+    @demo_account = @demo_admin.account
+    @customer_account = create(:account)
+    create(:user, :account_admin, account: @customer_account)
     Current.reset
   end
 
@@ -33,7 +34,7 @@ class AccountScopedTest < ActiveSupport::TestCase
 
   test "regular user only sees their account users regardless of selected_account" do
     set_current_user(@demo_admin)
-    Current.selected_account = @customer_account  # This should be ignored
+    Current.selected_account = @customer_account
 
     users = User.all
     assert users.exists?(account: @demo_account)
@@ -44,13 +45,12 @@ class AccountScopedTest < ActiveSupport::TestCase
     set_current_user(@sysadmin)
     Current.selected_account = @demo_account
 
-    # Test with a model that includes AccountScoped
+    contest_manager = create(:contest_manager, account: @demo_account)
+
     contest_managers = ContestManager.all
-    # Should only see contest managers from the selected account
-    if contest_managers.any?
-      contest_managers.each do |cm|
-        assert_equal @demo_account, cm.account
-      end
+    assert contest_managers.any?
+    contest_managers.each do |cm|
+      assert_equal @demo_account, cm.account
     end
   end
 
@@ -79,11 +79,12 @@ class AccountScopedTest < ActiveSupport::TestCase
 
   test "rejects belongs_to association from another account" do
     set_current_user(@demo_admin)
-    customer_contest = Contest.unscoped { contests(:customer_contest_a) }
+    customer_contest = create(:contest, account: @customer_account)
+    ensemble = create(:large_ensemble, account: @demo_account)
 
     entry = ContestEntry.new(
       contest: customer_contest,
-      large_ensemble: large_ensembles(:demo_school_a_ensemble_a),
+      large_ensemble: ensemble,
       user: @demo_admin
     )
 
@@ -94,9 +95,12 @@ class AccountScopedTest < ActiveSupport::TestCase
   test "allows belongs_to associations from the same account" do
     set_current_user(@demo_admin)
 
+    contest = create(:contest, account: @demo_account)
+    ensemble = create(:large_ensemble, account: @demo_account)
+
     entry = ContestEntry.new(
-      contest: contests(:demo_contest_a),
-      large_ensemble: large_ensembles(:demo_school_a_ensemble_a),
+      contest: contest,
+      large_ensemble: ensemble,
       user: @demo_admin
     )
 

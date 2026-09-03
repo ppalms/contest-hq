@@ -2,69 +2,48 @@ require "application_system_test_case"
 
 class RescheduleTest < ApplicationSystemTestCase
   setup do
-    @manager = users(:demo_manager_a)
-    @contest = contests(:demo_contest_a)
-    @schedule = @contest.schedules.first
+    @admin = create(:user, :account_admin)
+    @manager = create(:user, :manager, account: @admin.account)
+    @director_a = create(:user, :director, account: @admin.account)
+    @director_b = create(:user, :director, account: @admin.account)
+    @contest = create(:contest, account: @admin.account)
+    @schedule = create(:schedule, contest: @contest, account: @admin.account)
+    create(:contest_manager, contest: @contest, user: @manager, account: @admin.account)
 
-    # Set account context for creating records
-    Current.account = @contest.account
+    set_current_user(@director_a)
+    @ensemble_a = create(:large_ensemble, account: @admin.account)
+    set_current_user(@director_b)
+    @ensemble_b = create(:large_ensemble, account: @admin.account)
+
+    @entry1 = create(:contest_entry, contest: @contest, user: @director_a, large_ensemble: @ensemble_a, account: @admin.account)
+    @entry2 = create(:contest_entry, contest: @contest, user: @director_b, large_ensemble: @ensemble_b, account: @admin.account)
+
+    @schedule_date = Date.new(2026, 1, 15)
+
+    @day = create(:schedule_day, schedule: @schedule, account: @admin.account,
+      schedule_date: @schedule_date,
+      start_time: @schedule_date.beginning_of_day + 8.hours,
+      end_time: @schedule_date.beginning_of_day + 17.hours)
+
+    @room = create(:room, contest: @contest, account: @admin.account, name: "Main Hall", room_number: "101")
+
+    @phase_warmup = create(:performance_phase, contest: @contest, room: @room, account: @admin.account, name: "Warm Up", ordinal: 1, duration: 20)
+    @phase_performance = create(:performance_phase, contest: @contest, room: @room, account: @admin.account, name: "Performance", ordinal: 2, duration: 20)
+
+    create(:schedule_block, schedule_day: @day, performance_phase: @phase_warmup, room: @room, contest_entry: @entry1, account: @admin.account,
+      start_time: @schedule_date.beginning_of_day + 8.hours,
+      end_time: @schedule_date.beginning_of_day + 8.hours + 20.minutes)
+    create(:schedule_block, schedule_day: @day, performance_phase: @phase_performance, room: @room, contest_entry: @entry1, account: @admin.account,
+      start_time: @schedule_date.beginning_of_day + 8.hours + 20.minutes,
+      end_time: @schedule_date.beginning_of_day + 8.hours + 40.minutes)
+    create(:schedule_block, schedule_day: @day, performance_phase: @phase_warmup, room: @room, contest_entry: @entry2, account: @admin.account,
+      start_time: @schedule_date.beginning_of_day + 8.hours + 40.minutes,
+      end_time: @schedule_date.beginning_of_day + 9.hours)
+    create(:schedule_block, schedule_day: @day, performance_phase: @phase_performance, room: @room, contest_entry: @entry2, account: @admin.account,
+      start_time: @schedule_date.beginning_of_day + 9.hours,
+      end_time: @schedule_date.beginning_of_day + 9.hours + 20.minutes)
 
     log_in_as(@manager)
-
-    @entry1 = contest_entries(:contest_a_school_a_ensemble_a)
-    @entry2 = contest_entries(:contest_a_school_a_ensemble_b)
-
-    @schedule_date = Date.new(2026, 1, 15)  # Fixed date for deterministic tests
-
-    @day = @schedule.days.create!(
-      schedule_date: @schedule_date,
-      start_time: @schedule_date.beginning_of_day + 8.hours,  # 8:00 AM UTC = 2:00 AM CST
-      end_time: @schedule_date.beginning_of_day + 17.hours    # 5:00 PM UTC = 11:00 AM CST
-    )
-
-    # Create a room first (required for performance phases)
-    @room = @contest.rooms.create!(name: "Main Hall", room_number: "101", account: @contest.account)
-
-    @phase_warmup = @contest.performance_phases.create!(name: "Warm Up", ordinal: 1, duration: 20, room: @room, account: @contest.account)
-    @phase_performance = @contest.performance_phases.create!(name: "Performance", ordinal: 2, duration: 20, room: @room, account: @contest.account)
-
-    @entry1.schedule_blocks.create!([
-      {
-        schedule_day: @day,
-        performance_phase: @phase_warmup,
-        room: @room,
-        start_time: @schedule_date.beginning_of_day + 8.hours,   # 8:00 AM UTC = 2:00 AM CST
-        end_time: @schedule_date.beginning_of_day + 8.hours + 20.minutes,    # 8:20 AM UTC = 2:20 AM CST
-        account: @schedule.account
-      },
-      {
-        schedule_day: @day,
-        performance_phase: @phase_performance,
-        room: @room,
-        start_time: @schedule_date.beginning_of_day + 8.hours + 20.minutes,  # 8:20 AM UTC = 2:20 AM CST
-        end_time: @schedule_date.beginning_of_day + 8.hours + 40.minutes,    # 8:40 AM UTC = 2:40 AM CST
-        account: @schedule.account
-      }
-    ])
-
-    @entry2.schedule_blocks.create!([
-      {
-        schedule_day: @day,
-        performance_phase: @phase_warmup,
-        room: @room,
-        start_time: @schedule_date.beginning_of_day + 8.hours + 40.minutes,  # 8:40 AM UTC = 2:40 AM CST
-        end_time: @schedule_date.beginning_of_day + 9.hours,     # 9:00 AM UTC = 3:00 AM CST
-        account: @schedule.account
-      },
-      {
-        schedule_day: @day,
-        performance_phase: @phase_performance,
-        room: @room,
-        start_time: @schedule_date.beginning_of_day + 9.hours,   # 9:00 AM UTC = 3:00 AM CST
-        end_time: @schedule_date.beginning_of_day + 9.hours + 20.minutes,    # 9:20 AM UTC = 3:20 AM CST
-        account: @schedule.account
-      }
-    ])
   end
 
   test "manager can navigate to reschedule page" do
@@ -230,8 +209,7 @@ class RescheduleTest < ApplicationSystemTestCase
   end
 
   test "non-manager cannot see reschedule button" do
-    director = users(:demo_director_a)
-    log_in_as(director)
+    log_in_as(@director_a)
 
     visit schedule_path(@schedule)
 
@@ -241,8 +219,7 @@ class RescheduleTest < ApplicationSystemTestCase
   end
 
   test "non-manager cannot access reschedule page" do
-    director = users(:demo_director_a)
-    log_in_as(director)
+    log_in_as(@director_a)
 
     visit reschedule_entry_path(@schedule, @entry1)
 
