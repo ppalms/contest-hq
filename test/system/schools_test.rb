@@ -2,8 +2,16 @@ require "application_system_test_case"
 
 class SchoolsTest < ApplicationSystemTestCase
   setup do
-    log_in_as(users(:demo_admin_a))
-    @school = schools(:demo_school_d)
+    @admin = create(:user, :account_admin)
+    set_current_user(@admin)
+    create(:school_class, account: @admin.account, name: "1-A", ordinal: 1)
+    @school = create(:school, account: @admin.account, name: "Central High School")
+    create(:school, account: @admin.account, name: "Washington High School")
+    create(:school, account: @admin.account, name: "Kennedy High School")
+    create(:school, account: @admin.account, name: "Memorial High School")
+    customer_account = create(:account, name: "Customer")
+    create(:school, account: customer_account, name: "Santa Fe High School")
+    log_in_as(@admin)
   end
 
   test "visiting the index" do
@@ -64,12 +72,11 @@ class SchoolsTest < ApplicationSystemTestCase
   test "should not see other account's schools" do
     visit organizations_schools_url
 
-    # Can't see schools belonging to the customer account
     assert_no_text "Santa Fe High School"
   end
 
   test "should not allow director to create" do
-    log_in_as(users(:demo_director_a))
+    log_in_as(create(:user, :director, account: @admin.account))
     visit organizations_schools_url
     assert_no_text "New School"
 
@@ -94,9 +101,7 @@ class SchoolsTest < ApplicationSystemTestCase
 
   test "schools should be sorted alphabetically by name" do
     visit organizations_schools_url
-    # Get all school names from the page
     school_names = all("p.font-semibold.text-gray-900").map(&:text)
-    # Verify they are sorted alphabetically
     assert_equal school_names.sort, school_names, "Schools should be sorted alphabetically by name"
   end
 end

@@ -2,8 +2,23 @@ require "application_system_test_case"
 
 class ContestsTest < ApplicationSystemTestCase
   setup do
-    log_in_as(users(:demo_admin_a))
-    @contest = contests(:demo_contest_c)
+    @admin = create(:user, :account_admin)
+    set_current_user(@admin)
+    @director = create(:user, :director, account: @admin.account)
+    @manager = create(:user, :manager, account: @admin.account)
+    @season = create(:season, account: @admin.account, name: "2026", ordinal: 100)
+    @contest = create(:contest, account: @admin.account, season: @season)
+    @contest_b = create(:contest, account: @admin.account, season: @season)
+    @customer_contest = create(:contest, account: create(:account, name: "Customer"))
+
+    create(:school_class, account: @admin.account, name: "1-A")
+    create(:school_class, account: @admin.account, name: "2-A")
+
+    create(:large_ensemble, account: @admin.account)
+
+    create(:contest_manager, contest: @contest, user: @manager, account: @admin.account)
+
+    log_in_as(@admin)
   end
 
   test "visiting the index" do
@@ -86,94 +101,87 @@ class ContestsTest < ApplicationSystemTestCase
   test "should not see other account's contests" do
     visit contests_url
 
-    assert_no_text contests(:customer_contest_a).name
+    assert_no_text @customer_contest.name
   end
 
   test "directors do not see new contest button" do
-    log_in_as(users(:demo_director_a))
+    log_in_as(@director)
     visit contests_url
     assert_no_text "New Contest"
   end
 
   test "director sees register button for eligible contest" do
-    # Director with a level A group
-    log_in_as(users(:demo_director_a))
+    log_in_as(@director)
 
-    # Contest allows level A groups
-    elibile_contest = contests(:demo_contest_b)
-    visit contest_url elibile_contest.id
+    visit contest_url @contest_b.id
     assert_text "Register"
   end
 
   # TODO: fix
   # test "director does not see register button for ineligible contest" do
-  #   # Director with a level A group
-  #   log_in_as(users(:demo_director_a))
-
-  #   # Contest does not allow level A groups
-  #   ineligible_contest = contests(:demo_contest_c)
+  #   log_in_as(@director)
+  #   ineligible_contest = @contest
   #   visit contest_url ineligible_contest.id
   #   assert_no_text "Register"
   # end
 
   test "director cannot view contest entry index" do
-    log_in_as(users(:demo_director_a))
-    visit contest_entries_url(contests(:demo_contest_b))
+    log_in_as(@director)
+    visit contest_entries_url(@contest_b)
     assert_text "Contests"
     assert_no_text "Contest Entries"
   end
 
   test "director only sees their own entries" do
-    log_in_as(users(:demo_director_a))
-    visit contest_url(contests(:demo_contest_a))
+    director = create(:user, :director, account: @admin.account, first_name: "Carrot", last_name: "Ironfoundersson")
+    ensemble = create(:large_ensemble, account: @admin.account, name: "Wind Ensemble")
+    create(:contest_entry, contest: @contest, user: director, large_ensemble: ensemble, account: @admin.account)
+
+    log_in_as(director)
+    visit contest_url(@contest)
     assert_text "Ironfoundersson"
     assert_text "Wind Ensemble"
   end
 
   test "manager list is visible on contest detail view for all users" do
-    # Test as Account Admin
-    log_in_as(users(:demo_admin_a))
-    visit contest_url(contests(:demo_contest_a))
+    manager = create(:user, :manager, account: @admin.account, first_name: "Nobby", last_name: "Nobbs")
+    create(:contest_manager, contest: @contest, user: manager, account: @admin.account)
+
+    log_in_as(@admin)
+    visit contest_url(@contest)
     assert_text "Managers"
     assert_text "Nobby Nobbs"
 
-    # Test as Director
-    log_in_as(users(:demo_director_a))
-    visit contest_url(contests(:demo_contest_a))
+    log_in_as(@director)
+    visit contest_url(@contest)
     assert_text "Managers"
     assert_text "Nobby Nobbs"
 
-    # Test as Manager
-    log_in_as(users(:demo_manager_a))
-    visit contest_url(contests(:demo_contest_a))
+    log_in_as(@manager)
+    visit contest_url(@contest)
     assert_text "Managers"
     assert_text "Nobby Nobbs"
   end
 
   test "only account admins can add or remove contest managers" do
-    # Account Admin can see Manage Managers link
-    log_in_as(users(:demo_admin_a))
-    visit contest_url(contests(:demo_contest_a))
+    log_in_as(@admin)
+    visit contest_url(@contest)
     assert_text "Assign Managers"
 
-    # Director cannot see Manage Managers link
-    log_in_as(users(:demo_director_a))
-    visit contest_url(contests(:demo_contest_a))
+    log_in_as(@director)
+    visit contest_url(@contest)
     assert_no_text "Assign Managers"
 
-    # Manager cannot see Manage Managers link
-    log_in_as(users(:demo_manager_a))
-    visit contest_url(contests(:demo_contest_a))
+    log_in_as(@manager)
+    visit contest_url(@contest)
     assert_no_text "Assign Managers"
 
-    # Director cannot access managers controller directly
-    log_in_as(users(:demo_director_a))
-    visit contest_managers_path(contests(:demo_contest_a))
-    assert_text "Contests" # Should redirect to home/contests due to authorization failure
+    log_in_as(@director)
+    visit contest_managers_path(@contest)
+    assert_text "Contests"
 
-    # Manager cannot access managers controller directly
-    log_in_as(users(:demo_manager_a))
-    visit contest_managers_path(contests(:demo_contest_a))
-    assert_text "Contests" # Should redirect to home/contests due to authorization failure
+    log_in_as(@manager)
+    visit contest_managers_path(@contest)
+    assert_text "Contests"
   end
 end

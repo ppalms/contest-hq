@@ -2,12 +2,16 @@ require "application_system_test_case"
 
 class MusicSelectionsTest < ApplicationSystemTestCase
   setup do
-    @user = users(:demo_director_b)
-    @entry = contest_entries(:contest_a_school_a_ensemble_b)
-    @contest = @entry.contest
-
-    # Clean up existing music selections
+    @user = create(:user, :director)
     set_current_user(@user)
+    @season = create(:season, account: @user.account, name: "2024", ordinal: 2)
+    @contest = create(:contest, account: @user.account, season: @season)
+    @ensemble = create(:large_ensemble, account: @user.account)
+    @entry = create(:contest_entry, contest: @contest, user: @user, large_ensemble: @ensemble, account: @user.account)
+    @school_class = @ensemble.school.school_class
+    @prescribed_music = create(:prescribed_music, account: @user.account, season: @season, school_class: @school_class, title: "American in Paris", composer: "George Gershwin")
+    @prescribed_music_two = create(:prescribed_music, account: @user.account, season: @season, school_class: @school_class, title: "Symphony No. 5", composer: "Ludwig van Beethoven")
+
     @entry.music_selections.destroy_all
 
     log_in_as(@user)
@@ -53,12 +57,7 @@ class MusicSelectionsTest < ApplicationSystemTestCase
   test "director can edit custom music" do
     # Create a custom music selection first
     set_current_user(@user)
-    selection = @entry.music_selections.create!(
-      title: "Original Title",
-      composer: "Original Composer",
-      position: 1,
-      account: @contest.account
-    )
+    selection = create(:music_selection, contest_entry: @entry, account: @contest.account, title: "Original Title", composer: "Original Composer", position: 1)
 
     visit contest_entry_path(@contest, @entry)
 
@@ -81,12 +80,7 @@ class MusicSelectionsTest < ApplicationSystemTestCase
   test "director can delete music selection" do
     # Create a music selection first
     set_current_user(@user)
-    selection = @entry.music_selections.create!(
-      title: "To Be Deleted",
-      composer: "Test Composer",
-      position: 1,
-      account: @contest.account
-    )
+    selection = create(:music_selection, contest_entry: @entry, account: @contest.account, title: "To Be Deleted", composer: "Test Composer", position: 1)
 
     visit contest_entry_path(@contest, @entry)
 
@@ -112,9 +106,9 @@ class MusicSelectionsTest < ApplicationSystemTestCase
   test "director can delete and readd music selection filling gaps" do
     # Create two selections (1 prescribed, 1 custom) - still need 1 more custom
     set_current_user(@user)
-    prescribed = prescribed_musics(:demo_2024_class_a_music_one)
-    @entry.music_selections.create!(prescribed_music: prescribed, position: 1, account: @contest.account)
-    @entry.music_selections.create!(title: "Custom One", composer: "C1", position: 3, account: @contest.account)
+    prescribed = @prescribed_music
+    create(:music_selection, contest_entry: @entry, prescribed_music: prescribed, position: 1, account: @contest.account)
+    create(:music_selection, contest_entry: @entry, account: @contest.account, title: "Custom One", composer: "C1", position: 3)
 
     visit contest_entry_path(@contest, @entry)
 
@@ -146,12 +140,8 @@ class MusicSelectionsTest < ApplicationSystemTestCase
   test "director can replace prescribed music with different prescribed music" do
     # Create a prescribed music selection first
     set_current_user(@user)
-    old_prescribed = prescribed_musics(:demo_2024_class_a_music_one)
-    selection = @entry.music_selections.create!(
-      prescribed_music: old_prescribed,
-      position: 1,
-      account: @contest.account
-    )
+    old_prescribed = @prescribed_music
+    selection = create(:music_selection, contest_entry: @entry, prescribed_music: old_prescribed, position: 1, account: @contest.account)
 
     visit contest_entry_path(@contest, @entry)
 

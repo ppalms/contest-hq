@@ -2,18 +2,21 @@ require "application_system_test_case"
 
 class PrescribedMusicMultiAccountTest < ApplicationSystemTestCase
   setup do
-    @demo_admin = users(:demo_admin_a)
-    @customer_admin = users(:customer_admin_a)
-    @customer_director = users(:customer_director_a)
+    @demo_account = create(:account, name: "Public Demo")
+    @customer_account = create(:account, name: "Customer")
+    @demo_admin = create(:user, :account_admin, account: @demo_account)
+    @customer_admin = create(:user, :account_admin, account: @customer_account)
+    @customer_director = create(:user, :director, account: @customer_account)
 
-    @demo_season = seasons(:demo_2025)
-    @customer_season = seasons(:customer_2024)
+    @demo_season = create(:season, account: @demo_account, name: "2025", ordinal: 3)
+    @customer_season = create(:season, account: @customer_account, name: "2024", ordinal: 1)
 
-    @demo_school_class = school_classes(:demo_school_class_a)
-    @customer_school_class = school_classes(:customer_school_class_f)
+    @demo_school_class = create(:school_class, account: @demo_account, name: "1-A", ordinal: 1)
 
-    @customer_contest = contests(:customer_contest_a)
-    @customer_ensemble = large_ensembles(:customer_school_a_ensemble_a)
+    @customer_contest = create(:contest, account: @customer_account, season: @customer_season)
+    set_current_user(@customer_director)
+    @customer_ensemble = create(:large_ensemble, account: @customer_account)
+    @customer_school_class = @customer_ensemble.school.school_class
   end
 
   test "demo admin can create prescribed music for their account" do
@@ -36,13 +39,7 @@ class PrescribedMusicMultiAccountTest < ApplicationSystemTestCase
 
   test "customer admin cannot see demo account prescribed music" do
     # Create music for demo account
-    PrescribedMusic.create!(
-      title: "Demo Symphony No. 1",
-      composer: "Demo Composer A",
-      season: @demo_season,
-      school_class: @demo_school_class,
-      account: @demo_admin.account
-    )
+    create(:prescribed_music, title: "Demo Symphony No. 1", composer: "Demo Composer A", season: @demo_season, school_class: @demo_school_class, account: @demo_admin.account)
 
     log_in_as(@customer_admin)
     visit prescribed_music_index_url
@@ -72,13 +69,7 @@ class PrescribedMusicMultiAccountTest < ApplicationSystemTestCase
 
   test "demo admin cannot see customer account prescribed music" do
     # Create music for customer account
-    PrescribedMusic.create!(
-      title: "Customer Concerto No. 1",
-      composer: "Customer Composer A",
-      season: @customer_season,
-      school_class: @customer_school_class,
-      account: @customer_admin.account
-    )
+    create(:prescribed_music, title: "Customer Concerto No. 1", composer: "Customer Composer A", season: @customer_season, school_class: @customer_school_class, account: @customer_admin.account)
 
     log_in_as(@demo_admin)
     visit prescribed_music_index_url
@@ -90,13 +81,7 @@ class PrescribedMusicMultiAccountTest < ApplicationSystemTestCase
 
   test "customer director can view their account prescribed music" do
     # Create music for customer account
-    PrescribedMusic.create!(
-      title: "Customer Concerto No. 1",
-      composer: "Customer Composer A",
-      season: @customer_season,
-      school_class: @customer_school_class,
-      account: @customer_admin.account
-    )
+    create(:prescribed_music, title: "Customer Concerto No. 1", composer: "Customer Composer A", season: @customer_season, school_class: @customer_school_class, account: @customer_admin.account)
 
     log_in_as(@customer_director)
     visit prescribed_music_index_url
@@ -108,13 +93,7 @@ class PrescribedMusicMultiAccountTest < ApplicationSystemTestCase
 
   test "customer director cannot see demo account prescribed music" do
     # Create music for demo account
-    PrescribedMusic.create!(
-      title: "Demo Symphony No. 1",
-      composer: "Demo Composer A",
-      season: @demo_season,
-      school_class: @demo_school_class,
-      account: @demo_admin.account
-    )
+    create(:prescribed_music, title: "Demo Symphony No. 1", composer: "Demo Composer A", season: @demo_season, school_class: @demo_school_class, account: @demo_admin.account)
 
     log_in_as(@customer_director)
     visit prescribed_music_index_url
@@ -134,13 +113,7 @@ class PrescribedMusicMultiAccountTest < ApplicationSystemTestCase
 
   test "director can search and select prescribed music for contest entry" do
     # Create prescribed music for customer account
-    music = PrescribedMusic.create!(
-      title: "Customer Concerto No. 2",
-      composer: "Customer Composer B",
-      season: @customer_season,
-      school_class: @customer_school_class,
-      account: @customer_admin.account
-    )
+    music = create(:prescribed_music, title: "Customer Concerto No. 2", composer: "Customer Composer B", season: @customer_season, school_class: @customer_school_class, account: @customer_admin.account)
 
     log_in_as(@customer_director)
     visit contest_url(@customer_contest)
@@ -181,21 +154,8 @@ class PrescribedMusicMultiAccountTest < ApplicationSystemTestCase
 
   test "director search only returns their account prescribed music" do
     # Create music for both accounts
-    demo_music = PrescribedMusic.create!(
-      title: "Demo Symphony No. 1",
-      composer: "Demo Composer A",
-      season: @demo_season,
-      school_class: @demo_school_class,
-      account: @demo_admin.account
-    )
-
-    customer_music = PrescribedMusic.create!(
-      title: "Customer Concerto No. 1",
-      composer: "Customer Composer A",
-      season: @customer_season,
-      school_class: @customer_school_class,
-      account: @customer_admin.account
-    )
+    demo_music = create(:prescribed_music, title: "Demo Symphony No. 1", composer: "Demo Composer A", season: @demo_season, school_class: @demo_school_class, account: @demo_admin.account)
+    customer_music = create(:prescribed_music, title: "Customer Concerto No. 1", composer: "Customer Composer A", season: @customer_season, school_class: @customer_school_class, account: @customer_admin.account)
 
     log_in_as(@customer_director)
     visit contest_url(@customer_contest)
@@ -248,13 +208,7 @@ class PrescribedMusicMultiAccountTest < ApplicationSystemTestCase
 
   test "director can add multiple music selections to contest entry" do
     # Create prescribed music for customer account
-    music = PrescribedMusic.create!(
-      title: "Customer Concerto No. 2",
-      composer: "Customer Composer B",
-      season: @customer_season,
-      school_class: @customer_school_class,
-      account: @customer_admin.account
-    )
+    music = create(:prescribed_music, title: "Customer Concerto No. 2", composer: "Customer Composer B", season: @customer_season, school_class: @customer_school_class, account: @customer_admin.account)
 
     log_in_as(@customer_director)
     visit contest_url(@customer_contest)
@@ -309,37 +263,10 @@ class PrescribedMusicMultiAccountTest < ApplicationSystemTestCase
 
   test "multi-account isolation is maintained across all operations" do
     # Create music for both accounts
-    demo_music1 = PrescribedMusic.create!(
-      title: "Demo Symphony No. 1",
-      composer: "Demo Composer A",
-      season: @demo_season,
-      school_class: @demo_school_class,
-      account: @demo_admin.account
-    )
-
-    demo_music2 = PrescribedMusic.create!(
-      title: "Demo Symphony No. 2",
-      composer: "Demo Composer B",
-      season: @demo_season,
-      school_class: @demo_school_class,
-      account: @demo_admin.account
-    )
-
-    customer_music1 = PrescribedMusic.create!(
-      title: "Customer Concerto No. 1",
-      composer: "Customer Composer A",
-      season: @customer_season,
-      school_class: @customer_school_class,
-      account: @customer_admin.account
-    )
-
-    customer_music2 = PrescribedMusic.create!(
-      title: "Customer Concerto No. 2",
-      composer: "Customer Composer B",
-      season: @customer_season,
-      school_class: @customer_school_class,
-      account: @customer_admin.account
-    )
+    demo_music1 = create(:prescribed_music, title: "Demo Symphony No. 1", composer: "Demo Composer A", season: @demo_season, school_class: @demo_school_class, account: @demo_admin.account)
+    demo_music2 = create(:prescribed_music, title: "Demo Symphony No. 2", composer: "Demo Composer B", season: @demo_season, school_class: @demo_school_class, account: @demo_admin.account)
+    customer_music1 = create(:prescribed_music, title: "Customer Concerto No. 1", composer: "Customer Composer A", season: @customer_season, school_class: @customer_school_class, account: @customer_admin.account)
+    customer_music2 = create(:prescribed_music, title: "Customer Concerto No. 2", composer: "Customer Composer B", season: @customer_season, school_class: @customer_school_class, account: @customer_admin.account)
 
     # Verify demo admin sees only their music
     log_in_as(@demo_admin)

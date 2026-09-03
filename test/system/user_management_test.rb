@@ -2,7 +2,23 @@ require "application_system_test_case"
 
 class UserManagementTest < ApplicationSystemTestCase
   setup do
-    log_in_as(users(:sys_admin_a))
+    {
+      "SysAdmin" => "System Admin",
+      "AccountAdmin" => "Account Admin",
+      "Director" => "Director",
+      "Manager" => "Manager",
+      "Judge" => "Judge"
+    }.each { |name, display_name| create(:role, name: name, display_name: display_name) }
+
+    @contesthq_account = create(:account, name: "Contest HQ")
+    @sys_admin = create(:user, :sys_admin, account: @contesthq_account)
+    @demo_account = create(:account, name: "Public Demo")
+    @demo_admin = create(:user, :account_admin, account: @demo_account)
+    @demo_director = create(:user, :director, account: @demo_admin.account)
+    @customer_director = create(:user, :director, account: create(:account, name: "Customer"))
+    create(:school, account: @contesthq_account)
+    create(:school, account: @demo_account)
+    log_in_as(@sys_admin)
   end
 
   test "sysadmin role should display sysadmin dashboard" do
@@ -13,14 +29,14 @@ class UserManagementTest < ApplicationSystemTestCase
   end
 
   test "account admin role should display account admin dashboard" do
-    log_in_as(users(:demo_admin_a))
+    log_in_as(@demo_admin)
     visit root_url
 
     assert_text "Users"
   end
 
   test "director role should display director dashboard" do
-    log_in_as(users(:demo_director_a))
+    log_in_as(@demo_director)
     visit root_url
 
     assert_text "My Entries"
@@ -29,10 +45,10 @@ class UserManagementTest < ApplicationSystemTestCase
   end
 
   test "should allow multiple roles" do
-    log_in_as(users(:demo_admin_a))
+    log_in_as(@demo_admin)
 
     # Find a user with only Director role
-    director = users(:demo_director_a)
+    director = @demo_director
 
     # Visit the edit page
     visit edit_user_url(director)
@@ -52,6 +68,7 @@ class UserManagementTest < ApplicationSystemTestCase
   end
 
   test "should allow sys admin to invite account admin" do
+    Current.account = @contesthq_account
     visit new_invitation_url
 
     fill_in "First name", with: "New Account"
@@ -71,7 +88,7 @@ class UserManagementTest < ApplicationSystemTestCase
     click_on "Add Selected"
 
     assert_text "Invitation email has been sent to admin@somewhere.org"
-    new_user = User.find_by(email: "admin@somewhere.org")
+    new_user = User.unscoped.find_by(email: "admin@somewhere.org")
     signed_id = new_user.generate_token_for(:password_reset)
     visit edit_identity_password_reset_url(sid: signed_id)
 
@@ -86,7 +103,8 @@ class UserManagementTest < ApplicationSystemTestCase
   end
 
   test "should allow account admin to invite director" do
-    log_in_as(users(:demo_admin_a))
+    log_in_as(@demo_admin)
+    Current.account = @demo_admin.account
     visit new_invitation_url
     fill_in "First name", with: "New"
     fill_in "Last name", with: "Director"
@@ -105,7 +123,7 @@ class UserManagementTest < ApplicationSystemTestCase
     click_on "Add Selected"
 
     assert_text "Invitation email has been sent to director@somewhere.org"
-    new_user = User.find_by(email: "director@somewhere.org")
+    new_user = User.unscoped.find_by(email: "director@somewhere.org")
     signed_id = new_user.generate_token_for(:password_reset)
     visit edit_identity_password_reset_url(sid: signed_id)
 
@@ -120,21 +138,21 @@ class UserManagementTest < ApplicationSystemTestCase
   end
 
   test "should not allow account admin to invite account admin" do
-    log_in_as(users(:demo_admin_a))
+    log_in_as(@demo_admin)
     visit new_invitation_url
     assert_no_text "AccountAdmin"
   end
 
   test "should only see users from own account" do
-    log_in_as(users(:demo_admin_a))
-    assert_no_text users(:customer_director_a).email
+    log_in_as(@demo_admin)
+    assert_no_text @customer_director.email
 
     visit users_url
-    assert_no_text users(:customer_director_a).email
+    assert_no_text @customer_director.email
   end
 
   test "should not see sys admin user in dashboard" do
-    log_in_as(users(:demo_admin_a))
-    assert_no_text users(:sys_admin_a).email
+    log_in_as(@demo_admin)
+    assert_no_text @sys_admin.email
   end
 end

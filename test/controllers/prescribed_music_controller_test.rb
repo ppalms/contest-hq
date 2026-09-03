@@ -2,9 +2,12 @@ require "test_helper"
 
 class PrescribedMusicControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @prescribed_music = prescribed_musics(:demo_class_a_music_one)
-    @admin = users(:demo_admin_a)
-    @director = users(:demo_director_a)
+    @admin = create(:user, :account_admin)
+    @director = create(:user, :director, account: @admin.account)
+    set_current_user(@admin)
+    @season = create(:season, account: @admin.account)
+    @school_class = create(:school_class, account: @admin.account, name: "1-A")
+    @prescribed_music = create(:prescribed_music, account: @admin.account, season: @season, school_class: @school_class)
   end
 
   test "should get index as admin" do
@@ -25,16 +28,16 @@ class PrescribedMusicControllerTest < ActionDispatch::IntegrationTest
 
   test "should filter by season" do
     sign_in_as(@admin)
-    get prescribed_music_index_url(season_id: seasons(:demo_2025).id)
+    get prescribed_music_index_url(season_id: @season.id)
     assert_response :success
-    assert_select "h3", text: school_classes(:demo_school_class_a).name
+    assert_select "h3", text: @school_class.name
   end
 
   test "should filter by school class" do
     sign_in_as(@admin)
     get prescribed_music_index_url(
-      season_id: seasons(:demo_2025).id,
-      school_class_id: school_classes(:demo_school_class_a).id
+      season_id: @season.id,
+      school_class_id: @school_class.id
     )
     assert_response :success
   end
@@ -59,13 +62,13 @@ class PrescribedMusicControllerTest < ActionDispatch::IntegrationTest
         prescribed_music: {
           title: "New Symphony",
           composer: "New Composer",
-          season_id: seasons(:demo_2025).id,
-          school_class_id: school_classes(:demo_school_class_a).id
+          season_id: @season.id,
+          school_class_id: @school_class.id
         }
       }
     end
 
-    assert_redirected_to prescribed_music_index_url(season_id: seasons(:demo_2025).id)
+    assert_redirected_to prescribed_music_index_url(season_id: @season.id)
   end
 
   test "should not create prescribed_music as director" do
@@ -75,8 +78,8 @@ class PrescribedMusicControllerTest < ActionDispatch::IntegrationTest
         prescribed_music: {
           title: "New Symphony",
           composer: "New Composer",
-          season_id: seasons(:demo_2025).id,
-          school_class_id: school_classes(:demo_school_class_a).id
+          season_id: @season.id,
+          school_class_id: @school_class.id
         }
       }
     end

@@ -2,10 +2,10 @@ require "test_helper"
 
 class ContestsControllerTest < ActionDispatch::IntegrationTest
   def setup
-    @user = users(:demo_admin_a)
+    @user = create(:user, :account_admin)
     sign_in_as(@user)
-    @season = seasons(:demo_2025)
-    @contest = contests(:demo_contest_c)
+    @season = create(:season, account: @user.account)
+    @contest = create(:contest, account: @user.account, season: @season)
   end
 
   test "should get index" do
@@ -17,34 +17,30 @@ class ContestsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should filter contests by season" do
-    next_season = Season.create!(name: "2026", account: @season.account)
-    Contest.create!(
+    next_season = create(:season, account: @user.account)
+    create(:contest,
       name: "Future Contest",
       season: next_season,
-      account: @season.account,
-      contest_start: Date.current + 1.year
-    )
+      account: @user.account,
+      contest_start: Date.current + 1.year,
+      contest_end: Date.current + 1.year + 1.day)
 
-    # Test filtering by first season
     get contests_url, params: { season_id: @season.id }
     assert_response :success
     assert_select "select#season_id option[selected][value=?]", @season.id.to_s
 
-    # Test filtering by second season
     get contests_url, params: { season_id: next_season.id }
     assert_response :success
     assert_select "select#season_id option[selected][value=?]", next_season.id.to_s
   end
 
   test "should default to current season" do
-    # Mark our season as current (non-archived)
     @season.update!(archived: false)
 
     get contests_url
     assert_response :redirect
     follow_redirect!
     assert_response :success
-    # Should show the current season
     assert_select "select#season_id option[selected][value=?]", @season.id.to_s
   end
 

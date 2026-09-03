@@ -59,6 +59,9 @@ jobs:
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y google-chrome-stable curl libjemalloc2 libvips
 
+      - name: Remove mismatched chromedriver so Selenium Manager downloads a matching one
+        run: sudo rm -f /usr/bin/chromedriver
+
       - name: Checkout code
         uses: actions/checkout@v7
 

@@ -2,9 +2,21 @@ require "application_system_test_case"
 
 class RescheduleMultidayTest < ApplicationSystemTestCase
   setup do
-    @contest = contests(:demo_contest_a)
-    @manager = users(:demo_manager_a)
-    Current.account = @contest.account
+    @admin = create(:user, :account_admin)
+    @manager = create(:user, :manager, account: @admin.account)
+    @director_a = create(:user, :director, account: @admin.account)
+    @director_b = create(:user, :director, account: @admin.account)
+    @contest = create(:contest, account: @admin.account)
+    @schedule = create(:schedule, contest: @contest, account: @admin.account)
+    create(:contest_manager, contest: @contest, user: @manager, account: @admin.account)
+
+    set_current_user(@director_a)
+    @ensemble_a = create(:large_ensemble, account: @admin.account)
+    set_current_user(@director_b)
+    @ensemble_b = create(:large_ensemble, account: @admin.account)
+
+    @entry1 = create(:contest_entry, contest: @contest, user: @director_a, large_ensemble: @ensemble_a, account: @admin.account)
+    @entry2 = create(:contest_entry, contest: @contest, user: @director_b, large_ensemble: @ensemble_b, account: @admin.account)
 
     @multi_day = setup_multi_day_schedule(contest: @contest, num_days: 3)
     @schedule = @multi_day[:schedule]
@@ -13,9 +25,6 @@ class RescheduleMultidayTest < ApplicationSystemTestCase
     @day3 = @multi_day[:days][2]
     @room = @multi_day[:room]
     @phase = @multi_day[:phase]
-
-    @entry1 = contest_entries(:contest_a_school_a_ensemble_a)
-    @entry2 = contest_entries(:contest_a_school_a_ensemble_b)
 
     log_in_as(@manager)
   end
