@@ -19,8 +19,8 @@ class ContestEntryPreferencesTest < ApplicationSystemTestCase
     select @large_ensemble.name, from: :large_ensemble_id
 
     # Fill in time preferences
-    fill_in "Earliest preferred time", with: "13:00"
-    fill_in "Latest preferred time", with: "14:00"
+    page.execute_script("document.getElementById('contest_entry_preferred_time_start').value = '13:00'")
+    page.execute_script("document.getElementById('contest_entry_preferred_time_end').value = '14:00'")
 
     click_on "Continue"
 
@@ -43,8 +43,8 @@ class ContestEntryPreferencesTest < ApplicationSystemTestCase
 
     # Update preferences
     assert_selector "form#contest_entry_form"
-    fill_in "Earliest preferred time", with: "11:00"
-    fill_in "Latest preferred time", with: "13:00"
+    page.execute_script("document.getElementById('contest_entry_preferred_time_start').value = '11:00'")
+    page.execute_script("document.getElementById('contest_entry_preferred_time_end').value = '13:00'")
 
     click_on "Update"
 
