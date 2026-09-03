@@ -4,11 +4,20 @@ class OnboardingDirectorTest < ApplicationSystemTestCase
   include LargeEnsemblesHelper
 
   setup do
+    {
+      "SysAdmin" => "System Admin",
+      "AccountAdmin" => "Account Admin",
+      "Director" => "Director",
+      "Manager" => "Manager",
+      "Judge" => "Judge"
+    }.each { |name, display_name| create(:role, name: name, display_name: display_name) }
+
     @admin = create(:user, :account_admin)
+    set_current_user(@admin)
     @performance_class = create(:performance_class, account: @admin.account)
-    @school = create(:school, account: @admin.account, name: "Kennedy High School")
-    @season = create(:season, account: @admin.account, name: "2025", ordinal: 3)
     @school_class = create(:school_class, account: @admin.account, name: "1-A", ordinal: 1)
+    @school = create(:school, account: @admin.account, name: "Kennedy High School", school_class: @school_class)
+    @season = create(:season, account: @admin.account, name: "2025", ordinal: 3)
     @contest_b = create(:contest, account: @admin.account, season: @season, name: "Regional Orchestra")
     @contest_b.school_classes << @school_class
     create(:prescribed_music, account: @admin.account, season: @season, school_class: @school_class, title: "Symphony No. 5", composer: "Ludwig van Beethoven")

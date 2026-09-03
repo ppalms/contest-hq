@@ -3,13 +3,14 @@ require "application_system_test_case"
 class SchoolsTest < ApplicationSystemTestCase
   setup do
     @admin = create(:user, :account_admin)
+    set_current_user(@admin)
+    create(:school_class, account: @admin.account, name: "1-A", ordinal: 1)
     @school = create(:school, account: @admin.account, name: "Central High School")
     create(:school, account: @admin.account, name: "Washington High School")
     create(:school, account: @admin.account, name: "Kennedy High School")
     create(:school, account: @admin.account, name: "Memorial High School")
     customer_account = create(:account, name: "Customer")
     create(:school, account: customer_account, name: "Santa Fe High School")
-    create(:school_class, account: @admin.account, name: "1-A", ordinal: 1)
     log_in_as(@admin)
   end
 

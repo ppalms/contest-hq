@@ -5,10 +5,12 @@ class ContestEntryEnsembleFlowTest < ApplicationSystemTestCase
 
   setup do
     @admin = create(:user, :account_admin)
+    set_current_user(@admin)
     @contest = create(:contest, account: @admin.account)
     @user_without_ensemble = create(:user, :director, account: @admin.account)
     @performance_class = create(:performance_class, account: @admin.account)
     @school = create(:school, account: @admin.account)
+    create(:school_director, user: @user_without_ensemble, school: @school, account: @admin.account)
   end
 
   test "should prompt to create ensemble when user has none" do

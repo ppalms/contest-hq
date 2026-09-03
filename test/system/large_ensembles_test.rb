@@ -6,7 +6,10 @@ class LargeEnsemblesTest < ApplicationSystemTestCase
   setup do
     @director = create(:user, :director)
     set_current_user(@director)
-    @large_ensemble = create(:large_ensemble, account: @director.account, name: "Concert Band")
+    @performance_class = create(:performance_class, account: @director.account)
+    @school = create(:school, account: @director.account)
+    create(:school_director, user: @director, school: @school, account: @director.account)
+    @large_ensemble = create(:large_ensemble, account: @director.account, name: "Concert Band", school: @school)
     log_in_as(@director)
   end
 
@@ -14,8 +17,8 @@ class LargeEnsemblesTest < ApplicationSystemTestCase
     visit roster_large_ensembles_url
     click_on "New Large Ensemble"
     fill_in "Name", with: "Ultra Symphonic Band"
-    select display_name_with_abbreviation(create(:performance_class, account: @director.account)), from: :performance_class_id
-    select create(:school, account: @director.account).name, from: :school_id
+    select display_name_with_abbreviation(@performance_class), from: :performance_class_id
+    select @school.name, from: :school_id
     click_on "Create Large Ensemble"
 
     assert_text "Large ensemble was successfully created"

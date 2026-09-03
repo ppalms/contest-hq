@@ -38,8 +38,8 @@ class AccountSwitchingTest < ApplicationSystemTestCase
     assert_text "Switched to Public Demo"
 
     # Should now only see demo account users
-    assert_text "@demo.org" # Should see demo users
-    assert_no_text "@school.org" # Should not see customer users
+    assert_text @demo_director.email # Should see demo users
+    assert_no_text @customer_director.email # Should not see customer users
 
     # Title should reflect selected account
     assert_text "Public Demo Contest HQ"

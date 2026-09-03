@@ -4,12 +4,13 @@ class MusicSelectionsTest < ApplicationSystemTestCase
   setup do
     @user = create(:user, :director)
     set_current_user(@user)
-    @contest = create(:contest, account: @user.account)
+    @season = create(:season, account: @user.account, name: "2024", ordinal: 2)
+    @contest = create(:contest, account: @user.account, season: @season)
     @ensemble = create(:large_ensemble, account: @user.account)
     @entry = create(:contest_entry, contest: @contest, user: @user, large_ensemble: @ensemble, account: @user.account)
-    @season = create(:season, account: @user.account, name: "2024", ordinal: 2)
-    @school_class = create(:school_class, account: @user.account, name: "1-A", ordinal: 1)
-    @prescribed_music = create(:prescribed_music, account: @user.account, season: @season, school_class: @school_class, title: "Symphony No. 5", composer: "Ludwig van Beethoven")
+    @school_class = @ensemble.school.school_class
+    @prescribed_music = create(:prescribed_music, account: @user.account, season: @season, school_class: @school_class, title: "American in Paris", composer: "George Gershwin")
+    @prescribed_music_two = create(:prescribed_music, account: @user.account, season: @season, school_class: @school_class, title: "Symphony No. 5", composer: "Ludwig van Beethoven")
 
     @entry.music_selections.destroy_all
 

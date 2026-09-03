@@ -12,11 +12,11 @@ class PrescribedMusicMultiAccountTest < ApplicationSystemTestCase
     @customer_season = create(:season, account: @customer_account, name: "2024", ordinal: 1)
 
     @demo_school_class = create(:school_class, account: @demo_account, name: "1-A", ordinal: 1)
-    @customer_school_class = create(:school_class, account: @customer_account, name: "6-A", ordinal: 6)
 
     @customer_contest = create(:contest, account: @customer_account, season: @customer_season)
     set_current_user(@customer_director)
     @customer_ensemble = create(:large_ensemble, account: @customer_account)
+    @customer_school_class = @customer_ensemble.school.school_class
   end
 
   test "demo admin can create prescribed music for their account" do

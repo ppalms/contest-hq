@@ -2,11 +2,22 @@ require "application_system_test_case"
 
 class UserManagementTest < ApplicationSystemTestCase
   setup do
+    {
+      "SysAdmin" => "System Admin",
+      "AccountAdmin" => "Account Admin",
+      "Director" => "Director",
+      "Manager" => "Manager",
+      "Judge" => "Judge"
+    }.each { |name, display_name| create(:role, name: name, display_name: display_name) }
+
     @contesthq_account = create(:account, name: "Contest HQ")
     @sys_admin = create(:user, :sys_admin, account: @contesthq_account)
-    @demo_admin = create(:user, :account_admin, account: create(:account, name: "Public Demo"))
+    @demo_account = create(:account, name: "Public Demo")
+    @demo_admin = create(:user, :account_admin, account: @demo_account)
     @demo_director = create(:user, :director, account: @demo_admin.account)
     @customer_director = create(:user, :director, account: create(:account, name: "Customer"))
+    create(:school, account: @contesthq_account)
+    create(:school, account: @demo_account)
     log_in_as(@sys_admin)
   end
 

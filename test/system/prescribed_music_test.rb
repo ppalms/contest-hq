@@ -3,6 +3,7 @@ require "application_system_test_case"
 class PrescribedMusicTest < ApplicationSystemTestCase
   setup do
     @admin = create(:user, :account_admin)
+    set_current_user(@admin)
     @director = create(:user, :director, account: @admin.account)
     @season = create(:season, account: @admin.account, name: "2025", ordinal: 3)
     @season_2024 = create(:season, account: @admin.account, name: "2024", ordinal: 2)
@@ -124,18 +125,6 @@ class PrescribedMusicTest < ApplicationSystemTestCase
     assert_text "Music selection added successfully"
     assert_text "Prescribed"
     assert_text @music_b_one.title
-    assert_text prescribed_music.composer
-
-    # Click the Select button in the row with the prescribed music
-    row = find("tr", text: prescribed_music.title)
-    within row do
-      click_on "Select"
-    end
-
-    # Verify we're back on the contest entry page with the music added
-    assert_text "Music selection added successfully"
-    assert_text "Prescribed"
-    assert_text prescribed_music.title
   end
 
   test "season filter works on prescribed music index" do

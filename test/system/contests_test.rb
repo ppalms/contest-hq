@@ -3,10 +3,12 @@ require "application_system_test_case"
 class ContestsTest < ApplicationSystemTestCase
   setup do
     @admin = create(:user, :account_admin)
+    set_current_user(@admin)
     @director = create(:user, :director, account: @admin.account)
     @manager = create(:user, :manager, account: @admin.account)
-    @contest = create(:contest, account: @admin.account)
-    @contest_b = create(:contest, account: @admin.account)
+    @season = create(:season, account: @admin.account, name: "2026", ordinal: 100)
+    @contest = create(:contest, account: @admin.account, season: @season)
+    @contest_b = create(:contest, account: @admin.account, season: @season)
     @customer_contest = create(:contest, account: create(:account, name: "Customer"))
 
     create(:school_class, account: @admin.account, name: "1-A")
