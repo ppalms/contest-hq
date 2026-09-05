@@ -13,5 +13,4 @@
 - **Pre-commit gate** (all checks at once): @quality-gate
 - **Parallel invocation**: Launch multiple subagents for independent tasks
 
-## Note on superpowers
-Parallel coordination patterns are also covered by superpowers `dispatching-parallel-agents` and `subagent-driven-development` skills. This file provides the project-specific subagent roster.
+Primary agents dispatch subagents directly for independent work. This file provides the project-specific subagent roster.

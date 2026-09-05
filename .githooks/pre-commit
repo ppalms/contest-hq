@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+set -e
+bin/rubocop -f github
+bin/brakeman --no-pager
