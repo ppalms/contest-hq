@@ -24,9 +24,6 @@ FileUtils.chdir APP_ROOT do
   #   FileUtils.cp "config/database.yml.sample", "config/database.yml"
   # end
 
-  puts "\n== Starting PostgreSQL with Docker =="
-  system! "docker compose up -d db --wait"
-
   puts "\n== Preparing database =="
   system! "bin/rails db:prepare"
 

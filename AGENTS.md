@@ -69,6 +69,4 @@ A pre-commit hook in `.githooks/pre-commit` (wired via `bin/setup`) enforces rub
 
 ## Known Issues
 
-- **`bin/setup` provisions PostgreSQL via Docker Compose** (`docker compose up -d db --wait`), but the actual stack is SQLite3 multi-database (primary, cache, queue, cable) — see `config/database.yml` and `rails-reference.md`. The PostgreSQL step is a leftover and wastes setup time / requires Docker for no reason. Fix: remove the docker step and the `puts "\n== Starting PostgreSQL with Docker =="` block from `bin/setup`.
-
 - **Quality gate below does not run system tests by default** — system tests are slow and CI covers them separately. If a change touches UI flows, invoke `@quality-gate` with an explicit request for `test:system`.
