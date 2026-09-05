@@ -63,7 +63,9 @@ Rails.application.routes.draw do
   resource :invitation, only: [ :new, :create ]
   get  "sign_in", to: "sessions#new"
   post "sign_in", to: "sessions#create"
-  post "users/:user_id/masquerade", to: "masquerades#create", as: :user_masquerade
+  if Rails.env.development?
+    post "users/:user_id/masquerade", to: "masquerades#create", as: :user_masquerade
+  end
   resources :sessions, only: [ :index, :destroy ]
   resource  :password, only: [ :edit, :update ]
   namespace :identity do

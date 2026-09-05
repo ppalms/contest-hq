@@ -15,6 +15,6 @@ class MasqueradesController < ApplicationController
     end
 
     def authorize
-      redirect_to(root_path, alert: "You must be in development") unless Rails.env.development?
+      head :forbidden unless Rails.env.development?
     end
 end
