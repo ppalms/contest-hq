@@ -32,6 +32,7 @@ export default class extends Controller {
       this.formTarget.addEventListener('submit', this.handleSubmit.bind(this))
     }
     
+    this.requestSequence = 0
     if (this.daySelectTarget.value) {
       this.dayChanged({ target: this.daySelectTarget })
     }
@@ -40,6 +41,7 @@ export default class extends Controller {
   async dayChanged(event) {
     const dayId = event.target.value
     const selectedTimeSlot = this.timeSlotSelectTarget.dataset.selectedTimeSlot
+    const requestId = ++this.requestSequence
     
     this.timeSlotSelectTarget.innerHTML = '<option value="">Choose a time slot</option>'
     this.timeSlotSelectTarget.disabled = true
@@ -58,7 +60,9 @@ export default class extends Controller {
         `/schedules/${this.scheduleIdValue}/day_time_slots/${dayId}?contest_entry_id=${this.contestEntryIdValue}`
       )
       const data = await response.json()
-      
+
+      if (requestId !== this.requestSequence) return
+
       data.time_slots.forEach(slot => {
         const option = document.createElement('option')
         option.value = slot.time_value
@@ -90,10 +94,13 @@ export default class extends Controller {
         this.timeSlotSelectTarget.dispatchEvent(new Event('change'))
       }
     } catch (error) {
+      if (requestId !== this.requestSequence) return
       console.error('Error fetching time slots:', error)
       this.showError('Failed to load time slots. Please try again.')
     } finally {
-      this.hideLoading()
+      if (requestId === this.requestSequence) {
+        this.hideLoading()
+      }
     }
   }
   

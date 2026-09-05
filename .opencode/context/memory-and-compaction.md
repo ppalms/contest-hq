@@ -37,5 +37,5 @@ For tasks spanning >30 minutes or multiple sessions.
 - Proactively compact before hitting limits
 - Keep working set focused and relevant
 
-## Note on superpowers
-Brainstorming design documents and writing-plans outputs from superpowers may supersede ad-hoc NOTES.md for design capture. Prefer the structured superpowers artifacts when available.
+## Design capture
+The plan agent's output (user story, glossary, acceptance scenarios) carries design decisions. Prefer promoting those to a design doc over ad-hoc NOTES.md entries.

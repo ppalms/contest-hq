@@ -1,0 +1,34 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  // Temporarily disabled while we build our own workflow.
+  // Re-enable by uncommenting the plugin line and renaming to opencode.json:
+  // "plugin": ["superpowers@git+https://github.com/obra/superpowers.git"],
+  "instructions": [
+    ".opencode/context/rails-reference.md",
+    ".opencode/context/retrieval-and-tools.md",
+    ".opencode/context/subagent-coordination.md",
+    ".opencode/context/memory-and-compaction.md",
+    ".opencode/context/quality-commands.md"
+  ],
+  "agent": {
+    "plan": {
+      "model": "opencode/claude-sonnet-5",
+      "temperature": 0.2,
+      "prompt": "{file:./PLANNING.md}",
+      "permission": {
+        "edit": "deny",
+        "bash": "deny"
+      }
+    },
+    "build": {
+      "permission": {
+        "task": {
+          "*": "allow"
+        }
+      }
+    }
+  },
+  "watcher": {
+    "ignore": [".git/**"]
+  }
+}
