@@ -7,7 +7,7 @@ image: ppalms/contest_hq
 # Deploy to these servers.
 servers:
   web:
-    - 157.180.79.212
+    - 46.224.163.112
   # job:
   #   hosts:
   #     - 192.168.0.1
@@ -22,7 +22,7 @@ deploy_timeout: 150
 #
 # Note: If using Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption.
 proxy:
-  ssl: true
+  ssl: false          # Caddy terminates TLS on 443 and proxies to this proxy
   host: contesthq.app
   
   # Configure health check for container readiness
@@ -31,6 +31,15 @@ proxy:
     interval: 10    # Check every 10 seconds
     path: /up       # Health check endpoint
     timeout: 10     # Timeout for each health check request
+
+  # Loopback only, on ports Caddy does not want. https_port must not be 443:
+  # publish is all-or-nothing, so leaving it at the default would fight Caddy.
+  run:
+    http_port: 8080
+    https_port: 8443
+    publish: true
+    bind_ips:
+      - 127.0.0.1
 
 # Credentials for your image host.
 registry:
@@ -81,9 +90,9 @@ volumes:
 # See monitoring/prometheus.yml for configuration
 accessories:
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v3.9.1
     hosts:
-      - 157.180.79.212
+      - 46.224.163.112
     files:
       - monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
     cmd: >
@@ -100,10 +109,9 @@ accessories:
       user: "0:0"
   
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:12.3.2
     hosts:
-      - 157.180.79.212
-    port: 3000
+      - 46.224.163.112
     env:
       clear:
         GF_SECURITY_ADMIN_USER: admin
@@ -119,7 +127,7 @@ accessories:
       - grafana-data:/var/lib/grafana
     proxy:
       host: metrics.contesthq.app
-      ssl: true
+      ssl: false            # reached through Caddy, like the app
       app_port: 3000
 
 # Bridge fingerprinted assets, like JS and CSS, between versions to avoid
