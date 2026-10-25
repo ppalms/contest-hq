@@ -152,8 +152,11 @@ builder:
 # Uses SSH agent for authentication (no hardcoded keys)
 # - Locally: Set SSH_AUTH_SOCK=~/.1password/agent.sock (added to ~/.bashrc)
 # - CI: webfactory/ssh-agent action sets SSH_AUTH_SOCK automatically
+# The old VM has a deploy user; the shared box has no such user, and a
+# docker-group account is root-equivalent anyway. Port 2222 is that host's sshd.
 ssh:
-  user: deploy
+  user: root
+  port: "2222"
 
 # Accessory services not needed with SQLite
 #   db:
