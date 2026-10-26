@@ -24,6 +24,11 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
+  # No app here attaches files, and libvips is installed in the image without ruby-vips, so
+  # Active Storage warns about a processor nothing uses. Add gem "ruby-vips" and drop this
+  # line if image variants ever arrive.
+  config.active_storage.variant_processor = :disabled
+
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
   config.assume_ssl = true
 
