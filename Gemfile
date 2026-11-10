@@ -71,7 +71,7 @@ group :test do
   gem "factory_bot_rails"
 
   # Pin to Minitest 5.x for Rails 8.1 compatibility
-  gem "minitest", "~> 6.0"
+  gem "minitest", "~> 6.1"
 end
 
 gem "authentication-zero", "~> 4.0"
